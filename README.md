@@ -56,6 +56,8 @@ The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes fol
 
 **Themes for ONEMenu**
 
+![header](themes1.png)
+
 ++ Create a new folder with the theme name and place the next resources inside:.<br>
 
 **font.ttf**        Font ttf for your Theme (Optional).<br>
@@ -183,7 +185,7 @@ Recommended website: ([Colors Hex](https://www.w3schools.com/colors/colors_hexad
 ONEMenu Themes must be placed in the next path:.<br>
 ux0:data/ONEMENU/themes/yournameTheme
 
--------------------------------------------------------------------------------------------------------------
+![header](themes2.png)
 
 # Language
 
