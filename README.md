@@ -138,6 +138,7 @@ The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes fol
 **theme.ini**
 
 This .ini file stores the text printing colors according to file extension.<br>
+*Change only the Hex-Dec part for the desired color. (ABGR format)<br>
 
 TITLE = "Name of your theme".<br>
 AUTHOR = "Name of Author".<br>
@@ -179,7 +180,7 @@ LOWBATTERYCOLOR	= 0xFF0000B3<br>
 GRADRECTCOLOR	= 0x64330066<br>
 GRADSHADOWCOLOR = 0xC8FFFFFF<br>
 
-*Change only the Hex-Dec part for the desired color. (ARGB format)<br>
+*Change only the Hex-Dec part for the desired color. (ABGR format)<br>
 Recommended website: ([Colors Hex](https://www.w3schools.com/colors/colors_hexadecimal.asp)).<br>
 
 ONEMenu Themes must be placed in the next path:.<br>
