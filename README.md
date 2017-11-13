@@ -4,8 +4,8 @@ App Manager Plus has evolved to Onemenu for psvita! so, App manager Plus will no
 
 ![header](1MENUVITA.png)
 
-**OneMenu** for PSVita is a simple to use UI which separates the installed games and apps into categories, Onemenu comes with a built in file explorer which has many advanced features
-such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db...
+**OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories...<br>
+Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db...
 
 # Controls:
 
