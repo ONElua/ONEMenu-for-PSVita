@@ -1,0 +1,177 @@
+--Texts
+strings = {
+
+-------------	Explorer	---------------------------------------------------------------------------------
+back =			"Indietro ",
+copyfile =		"Copia: ",
+delfile =		"Elimina: ",
+dir =			"<DIR>",
+creatfolder =	"Crea una cartella",
+newfolder =		"Nuova cartella",
+pass =			"Utilizzare la Password ?",
+ospass =		"PASS",
+
+--SubMenu
+copy =			"Copia",
+delete =		"Elimina",
+makedir =		"Crea una directory",
+rename =		"Rinomina",
+extract =		"Estrai",
+cancel =		"Cancella",
+insvpkfromdir = "Installa un Gioco",
+instheme =		"Installa un CTema",
+extractto =		"Estrai il contenuto su",
+paste =			"Incolla",
+move =			"Muovi",
+size =			"Formato",
+scanvpks =		"Effettua una scansione del contenuto(VPK/ISO/CSO)",
+export =		"Esporta",
+themes =		"Temi ONEMenu",
+cthemesman =	"Temi personalizzati per il LiveArea",
+ftp =			"FTP",
+restarthb =		"Riavvia 1Menu",
+reset =			"Resetta",
+off =			"Spegni",
+
+items =			"Seleziona Elementi: ",
+
+------------	Ftp 		---------------------------------------------------------------------------------
+textftp =		"Inserire l'indirizzo IP sul dispositivo o PC",
+closeftp =		"Premere START per chiudere la connessione FTP",
+loseftp =		"Connessione FTP chiusa",
+  
+------------	USB 		---------------------------------------------------------------------------------
+usb =			"USB",
+connectusb =	"Connettere il dispositivo con un cavo USB ",
+usbconnection = "Connessione USB Stabilita",
+cancelusb =		"Disabilitato",
+usbmode =		"Modalità connessione USB",
+usbfail =		"Errore... Connessione Fallita",
+sd2vita =		"Sd2Vita",
+memcard =		"Memory Card",
+gamecard =		"Game Card",
+
+imgerror =		"Errore!! Immagine non supportata",
+
+background =	"Background: Premere Triangolo",
+
+-- ## Music Player ##
+playing =		"Riproduzione",
+paused =		"Pausa",
+time =			"Tempo: ",
+tags =			"xx:xx:xx",
+sounderror =	"Errore!! Suono non valido",
+
+--ONEMenu
+switch =		"Sei sicuro di voler spostare ",
+nomemory =		"Memoria insufficiente ......",
+appremove =		"Sei sicuro di voler disinstallare ",
+delclon	=		"Cancella questo CLONE ",
+manual =		"Vuoi realmente eliminarlo Manualmente",
+notmanual =		"Eliminazione effettuata manualmente",
+notfindmanual =	"Manuale non trovato",
+removemanual =	"Eliminazione Manuale",
+free =			"Libero",
+pressremove =	"Disinstalla",
+switchapp =		"Sposta Apps",
+empty =			"Vuoto/Errore",
+toexplorer =	"File explorer",
+partitions =	"Partizioni",
+version =		"Versione",
+size_ind =		"Dimensione",
+clon =			"Clona",
+plugins =		"Plugins",
+getsize =		"Calcolo in corso...",
+slides =		"Slides: ",
+pic1 =			"Visualizza PIC1s: ",
+up =			"Su",
+down =			"Giù",
+yes =			"Si",
+no =			"No",
+start =			"START",
+
+--LiveArea Apps
+liveareapps =	"LiveArea Apps",
+noliveareapps =	"LiveArea Apps Non disponibile",
+
+--SearchingVpks
+vpktittle =		"Installare i Vpk ",
+wait =			"Attendere prego...",
+nofinds =		"Nessun file trovato",
+reloadfull =	"Scansione completa di ux0/ur0/uma0",
+moveiso2ux0 =	"Gioco sposato su ux0:pspemu/ISO",
+moveiso2ur0 =	"Gioco spostato su ur0:pspemu/ISO",
+moveiso2uma0 =	"Gioco spostato su uma0:pspemu/ISO",
+
+-------------		Callbacks		-------------------------------------------------------------------------
+unsafe =		"Insicuro: ",
+file =			"File: ",
+percent =		"Percentuale: ",
+percent_total = "Percentuale Totale: ",
+total_size =	"Spazio Totale: ",
+movefiles =		"File",
+updatedb =		"Aggiornamento db...",
+
+--onAppInstall
+searchunsafe =	"Cerca i file VPK non sicuri o pericolosi!",
+unsafevpk =		"Permessi estesi e accesso a informazioni personali richieste! \nIl file VPK non è da una fonte attendibile! \nInstallare a proprio rischio?",
+dangerousvpk =	"Pericolo!!! Alto rischio di danneggiare la tua console \nse installi questo VPK! \nIl file VPK non è da una fonte attendibile! \nInstallare a proprio rischio?",
+vpkunpack =		"Spacchettamento del file vpk in corso...",
+install =		"Installazione in corso...",
+
+--onExtractFiles
+extraction =	"Estrazione in corso...",
+
+--onScanningFiles
+scanning =		"Scansione in corso...",
+size_unpk =		"Dimensione di spacchettamento : ",
+-------------------------------------------------------------------------------------------------------------
+
+--Launch PBP or VPK
+launchpbp =		"Avviare il gioco/app ",
+confirm =		"X: Accettare  |  O: Cancellare",
+warningvpk =	"\nPERICOLOSO ACCESSO TOTALE\nVPK INSICURO",
+warningvpk2 =	"PERICOLOSO ACCESO TOTALE",
+safevpk =		"VPK SICURO",
+total_sizevpk = "Spazio Totale del file VPK: ",
+installvpk =	"INSTALLARE VPK",
+installgame =	"INSTALLARE APP",
+alertunsafe =	"VPK NON SICURO!!!!",
+alertdang =		"VPK PERICOLOSO!!!!",
+installvpkdir =	"INSTALLARE IL FILE VPK IN UNA DIRECTORY",
+launchbin =		"Lanciare l' App ",
+errorinstall =	"C'è stato un errore nell'installazione",
+
+------------	ThemesONEMenu	----------------------------------------------------------------------------
+themesappman =	"Temi per ONEMenu",
+themesdone =	"Installazione Effettuata!",
+notthemesmenu =	"Non ci sono ancora temi per Onemenu",
+reload =		"Ricaricare il Tema Originale",
+settinsthemes =	"Andare sulle impostazioni del Tema ?",
+themeactual =	"Attuale: ",
+
+reloadconfig =	"Ricarica file TaiHen Config",
+configtxt =		"TaiHen Config Ricaricato",
+
+------------	CustomThemesLivearea		-----------------------------------------------------------------
+customthemes =	"Temi Personalizzati del LiveArea",
+notthemes =		"Nessun tema / Errore nella lista dei temi!",
+deltheme =		"Disinstallare il Tema Personalizzato da app.db",
+delfilestheme =	"Eliminare il file del Tema Personalizzato ?",
+
+------------	Advanced	---------------------------------------------------------------------------------
+advanced =		"Avanzato",
+refreshdb =		"Aggiorna app.db",
+rebuilddb =		"Ricostruisci app.db",
+restartupdb =	"La tua PSVita verrà riavviata ...\ne il tuo database verrà aggiornato",
+restartredb =	"La tua PSVita verrà riavviata ...\ne il tuo database verrà ricostruito",
+restart =		"La PSVita verrà riavviata...",
+shutdown =		"La PSVita si spegnerà...",
+
+result =		"\nRisultato: ",
+count =			"Totale: ",
+sizeis =		"La dimensione è: ",
+opensettings =	"Aprire l' App Mp3/Galleria/Video ?",
+filesfolders =	"Cartelle/File",
+
+}

@@ -1,0 +1,177 @@
+--Texts
+strings = {
+
+-------------	Explorer	---------------------------------------------------------------------------------
+back =			"Retour ",
+copyfile =		"Copié: ",
+delfile =		"Supprimé: ",
+dir =			"<DIR>",
+creatfolder =	"Créer Dossier",
+newfolder =		"Nouveau Dossier",
+pass =			"Utilisez un Mot de Passe ?",
+ospass =		"MOT DE PASSE",
+
+--SubMenu
+copy =			"Copier",
+delete =		"Supprimer",
+makedir =		"CréerDossier",
+rename =		"Renommer",
+extract =		"Extraire",
+cancel =		"Annuler",
+insvpkfromdir = "Installer Jeu",
+instheme =		"Installer CThème",
+extractto =		"Extraire Vers",
+paste =			"Coller",
+move =			"Déplacer",
+size =			"Taille",
+scanvpks =		"Content Scanner (VPK/ISO/CSO)",
+export =		"Exportez",
+themes =		"Thèmes ONEMenu",
+cthemesman =	"LiveArea CustomThèmes",
+ftp =			"FTP",
+restarthb =		"Redémarrer 1Menu",
+reset =			"Power Reset",
+off =			"Shutdown",
+
+items =			"Eléments Sel: ",
+
+------------	Ftp 		---------------------------------------------------------------------------------
+textftp =		"Entrez cette adresse FTP sur votre appareil ou votre PC",
+closeftp =		"Appuyez sur START pour arrêter la connexion FTP",
+loseftp =		"Connexion FTP Arrêté",
+
+------------	USB 		---------------------------------------------------------------------------------
+usb =			"USB",
+connectusb =	"Connectez un cable USB",
+usbconnection = "Connexion USB Activé",
+cancelusb =		"Désactivé",
+usbmode =		"Connexion Mode USB",
+usbfail =		"Erreur... Connexion Echoué",
+sd2vita =		"Sd2Vita",
+memcard =		"Memory Card",
+gamecard =		"Game Card",
+
+imgerror =		"Erreur Image non supporté",
+
+background =	"Background: Press Triangle",
+
+-- ## Music Player ##
+playing =		"Joue",
+paused =		"Pause",
+time =			"Temps : ",
+tags =			"xx:xx:xx",
+sounderror =	"Erreur Musique Invalide",
+
+--ONEMenu
+switch =		"Vraiment envie de switch ",
+nomemory =		"Pas assez de mémoire...",
+appremove =		"Vraiment envie de Désinstaller ",
+delclon	=		"Supprimer ce CLON: ",
+manual =		"Voulez vous vraiment supprimer ce manuel",
+notmanual =		"Le Manuel a été supprimé !",
+notfindmanual =	"Le manuel n'existe pas",
+removemanual =	"Supprimer Manuel",
+free =			"Free",
+pressremove =	"Désinstaller",
+switchapp =		"Déplacer Apps",
+empty =			"Vide/Erreur",
+toexplorer =	"Explorateur",
+partitions =	"Partitions",
+version =		"Version",
+size_ind =		"Size",
+clon =			"Clon",
+plugins =		"Plugins",
+getsize =		"Calculs...",
+slides =		"Vignettes : ",
+pic1 =			"Montrer PIC1s: ",
+up =			"Haut",
+down =			"Bas",
+yes =			"Oui",
+no =			"Non",
+start =			"START",
+
+--LiveArea Apps
+liveareapps =	"LiveArea Apps",
+noliveareapps =	"LiveArea Apps Unavailable",
+
+--SearchingVpks
+vpktittle =		"Recherches Vpks",
+wait =			"Merci de patienter...",
+nofinds =		"Aucun fichiers trouvés",
+reloadfull =	"Tout scanner dans ux0/ur0/uma0",
+moveiso2ux0 =	"Déplacer Jeux vers ux0:pspemu/ISO",
+moveiso2ur0 =	"Déplacer Jeux vers ur0:pspemu/ISO",
+moveiso2uma0 =	"Déplacer Jeux vers uma0:pspemu/ISO",
+
+-------------		Callbacks		-------------------------------------------------------------------------
+unsafe =		"Peu sur : ",
+file =			"Fichier : ",
+percent =		"Pourcentage : ",
+percent_total = "Pourcentage Total : ",
+total_size =	"Taille Total : ",
+movefiles =		"File",
+updatedb =		"Update db...",
+
+--onAppInstall
+searchunsafe =	"Cherche dans le vpk, Non sur ou des fichiers Dangereux !",
+unsafevpk =		"Accès aux permissions étendus et information personnel requis ! \nA utilisez avec précaution pour les packets venant de sources non sur ! \nVoulez vous vraiment l'installer à vos risques et périls ?",
+dangerousvpk =	"Attention !! Il y a de haut risque de brick de votre appareil\nsi ce VPK est installé ! \nA utilisez avec précaution pour les packets venant de sources non sur ! \nVoulez vous vraiment l'installer à vos risques et périls ?",
+vpkunpack =		"Décompression vpk...",
+install =		"Installation...",
+
+--onExtractFiles
+extraction =	"Extraction...",
+
+--onScanningFiles
+scanning =		"Balayage...",
+size_unpk =		"Taille Décompressé : ",
+-------------------------------------------------------------------------------------------------------------
+
+--Launch PBP or VPK
+launchpbp =		"Lancer jeu/app ",
+confirm =		"Accepter",
+warningvpk =	"\nATTENTION ACCES TOTAL\nVPK NON SUR",
+warningvpk2 =	"ATTENTION ACCES TOTAL",
+safevpk =		"VPK SAFE",
+total_sizevpk = "Taille Total VPK : ",
+installvpk =	"INSTALLER VPK",
+installgame =	"INSTALLER APP",
+alertunsafe =	"VPK NON SUR!!!!",
+alertdang =		"VPK DANGEREUX!!!!",
+installvpkdir =	"INSTALLER VPK DEPUIS DIR",
+launchbin =		"Lancer app ",
+errorinstall =	"Une erreur est survenue pendant l'installation",
+
+------------	ThemesONEMenu	----------------------------------------------------------------------------
+themesappman =	"Thèmes pour ONEMenu",
+themesdone =	"Installation Completé!",
+notthemesmenu =	"Pas de foin Temas disponibles para Onemenu",
+reload =		"Recharger le Theme Original",
+settinsthemes =	"Allez aux paramètres des Thèmes ?",
+themeactual =	"Now: ",
+
+reloadconfig =	"Config TaiHen",
+configtxt =		"Recharger ConfigTxt taiHEN",
+
+------------	ThemesLivearea		-------------------------------------------------------------------------
+customthemes =	"CustomThemes LiveArea",
+notthemes =		"Vide/Erreur dans la liste des thèmes !",
+deltheme =		"Désinstaller un CustomTheme dans app.db",
+delfilestheme =	"Supprimer des fichiers depuis CustomTheme ?",
+
+------------	Advanced	---------------------------------------------------------------------------------
+advanced =		"Avancés »,
+refreshdb =		"Mettre à jour app.db",
+rebuilddb =		"Reconstruire app.db",
+restartupdb =	"Votre PSVita va Redémarrer...\net votre base de donnée va être mis à jour",
+restartredb =	"Votre PSVita va Redémarrer...\net votre base de donnée va être reconstruite",
+restart =		"Votre PSVita va Redémarrer...",
+shutdown =		"Votre PSVita va s’Eteindre...",
+
+result =		"\nRésultat : ",
+count =			"Nombre : ",
+sizeis =		"La taille est de : ",
+opensettings =	"Ouvrir le Lecteur MP3/Galerie/Video ?",
+filesfolders =	"Fichiers/Dossiers",
+
+}
