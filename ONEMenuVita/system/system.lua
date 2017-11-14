@@ -42,6 +42,10 @@ function system.refresh()
 		local i = #system.data
 		while i > 0 do
 			if uri[system.data[i].id] then system.data[i].uri = uri[system.data[i].id] else system.data[i].uri = false end
+			if system.data[i].id == "NPXS10012" then
+				if __LANG == "RUSSIAN" then	system.data[i].title = "Соединение PS3" end
+				if __LANG == "JAPANESE" then system.data[i].title = "PS3 リモートプレイ" end
+			end
 			i -= 1
 		end
 		system.len = #system.data
