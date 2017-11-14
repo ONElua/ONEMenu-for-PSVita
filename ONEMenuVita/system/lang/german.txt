@@ -1,0 +1,177 @@
+--Texts
+strings = {
+
+-------------	Explorer	---------------------------------------------------------------------------------
+back =			"Zurück ",
+copyfile =		"Kopiere: ",
+delfile =		"Lösche: ",
+dir =			"<DIR>",
+creatfolder =	"Erstelle Ordner",
+newfolder =		"Neuer Ordner",
+pass =			"Passwort benutzen ?",
+ospass =		"PASS",
+
+--SubMenu
+copy =			"Kopieren",
+delete =		"Löschen",
+makedir =		"Neuen Ordner erstellen",
+rename =		"Umbenennen",
+extract =		"Extrahieren",
+cancel =		"Abbrechen",
+insvpkfromdir = "Spiel installieren",
+instheme =		"CustomTheme installieren",
+extractto =		"Extrahiere zu",
+paste =			"Einfügen",
+move =			"Verschieben",
+size =			"Größe",
+scanvpks =		"Content Scanner (VPK/ISO/CSO)",
+export =		"Exportieren",
+themes =		"ONEMenu Themes",
+cthemesman =	"LiveArea CustomThemes",
+ftp =			"FTP",
+restarthb =		"1Menu Neustarten",
+reset =			"Neustarten",
+off =			"Ausschalten",
+
+items =			"Sel Items: ",
+
+------------	Ftp 		---------------------------------------------------------------------------------
+textftp =		"Gib diese FTP addresse in deinem FTP Client an",
+closeftp =		"START drücken um FTP verbindung abzubrechen",
+loseftp =		"FTP Verbindung abgebrochen",
+
+------------	USB 		---------------------------------------------------------------------------------
+usb =			"USB",
+connectusb =	"Schließe ein USB Kabel an",
+usbconnection = "USB Verbindung aktiv",
+cancelusb =		"Abbrechen",
+usbmode =		"USB Verbindungs Modus",
+usbfail =		"Fehler... Verbindung fehlgeschlagen",
+sd2vita =		"Sd2Vita",
+memcard =		"Speicherkarte",
+gamecard =		"Spielkarte",
+
+imgerror =		"Fehler Bild nicht unterstützt",
+
+background =	"Hintergrund: Drücke Dreieck",
+
+-- ## Music Player ##
+playing =		"Wird abgespielt",
+paused =		"Pausiert",
+time =			"Zeit: ",
+tags =			"xx:xx:xx",
+sounderror =	"Ton nicht unterstützt",
+
+--ONEMenu
+switch =		"Wirklich verschieben ",
+nomemory =		"Nicht genügend speicher...",
+appremove =		"Wirklich deinstallieren ",
+delclon	=		"Delete this CLON: ",
+manual =		"Sicher das du diese Anleitung entfernen möchtest",
+notmanual =		"Anleitung entfernt!",
+notfindmanual =	"Anleitung nicht vorhanden",
+removemanual =	"Anleitung löschen",
+free =			"Frei",
+pressremove =	"Deinstallieren",
+switchapp =		"Switch Apps",
+empty =			"Leer/Fehler",
+toexplorer =	"Explorer",
+partitions =	"Partitionen",
+version =		"Version",
+size_ind =		"Größe",
+clon =			"Clon",
+plugins =		"Plugins",
+getsize =		"Berechne...",
+slides =		"Slides: ",
+pic1 =			"PIC1 Anzeigen: ",
+up =			"Hoch",
+down =			"Runter",
+yes =			"Ja",
+no =			"Nein",
+start =			"START",
+
+--LiveArea Apps
+liveareapps =	"LiveArea Apps",
+noliveareapps =	"LiveArea Apps nicht Verfügbar",
+
+--SearchingVpks
+vpktittle =		"Vpks Suche",
+wait =			"Bitte Warten...",
+nofinds =		"Keine Dateien gefunden",
+reloadfull =	"Kompletter ux0/ur0/uma0 Scan",
+moveiso2ux0 =	"Spiel zu ux0:pspemu/ISO verschieben",
+moveiso2ur0 =	"Spiel zu ur0:pspemu/ISO verschieben",
+moveiso2uma0 =	"Spiel zu uma0:pspemu/ISO verschieben",
+
+-------------		Callbacks		-------------------------------------------------------------------------
+unsafe =		"Unsafe: ",
+file =			"Datei: ",
+percent =		"Prozent: ",
+percent_total = "Prozent insgesamt: ",
+total_size =	"Gesamtgröße: ",
+movefiles =		"Datei",
+updatedb =		"Update db...",
+
+--onAppInstall
+searchunsafe =	"Durchsuche vpk nach, Gefährlichen Dateien!",
+unsafevpk =		"Erweiterte rechte and eventuell Persönliche informationen benötigt! \n\nBenutzen mit unbekannten quellen auf eigene gefahr! \n\nWillst du das wirklich installieren?",
+dangerousvpk =	"Achtung!!! Hohes Risiko von beschädigung dieses gerätes wenn du diese VPK installierst! \n\nBenutzen mit unbekannten quellen auf eigene gefahr! \n\nWillst du das wirklich installieren?",
+vpkunpack =		"Extrahiere vpk...",
+install =		"Installiere...",
+
+--onExtractFiles
+extraction =	"Extrahiere...",
+
+--onScanningFiles
+scanning =		"Scannvorgang...",
+size_unpk =		"Extrahierte Größe: ",
+-------------------------------------------------------------------------------------------------------------
+
+--Launch PBP or VPK
+launchpbp =		"Spiel/App Starten ",
+confirm =		"Akzeptieren",
+warningvpk =	"\nWARNING TOTAL ACCESS\nUNSAFE VPK",
+warningvpk2 =	"WARNING TOTAL ACCESS",
+safevpk =		"VPK SAFE",
+total_sizevpk = "VPK Gesamtgröße: ",
+installvpk =	"INSTALL VPK",
+installgame =	"INSTALL APP",
+alertunsafe =	"VPK UNSAFE!!!!",
+alertdang =		"VPK DANGEOROUS!!!!",
+installvpkdir =	"INSTALL VPK FROM DIR",
+launchbin =		"App starten ",
+errorinstall =	"Beim installieren ist ein Fehler aufgetreten",
+
+------------	ThemesONEMenu	----------------------------------------------------------------------------
+themesappman =	"Themes für ONEMenu",
+themesdone =	"Installation Abgeschlossen!",
+notthemesmenu =	"Keine themes für Onemenu vorhanden",
+reload =		"Original Theme neu laden",
+settinsthemes =	"Zu Theme Einstellungen ?",
+themeactual =	"Jetzt: ",
+
+reloadconfig =	"TaiHen Config",
+configtxt =		"taiHEN ConfigTxt neuladen",
+
+------------	ThemesLivearea		-------------------------------------------------------------------------
+customthemes =	"CustomThemes LiveArea",
+notthemes =		"Leer/Fehler in der Theme liste!",
+deltheme =		"CustomTheme von app.db entfernen",
+delfilestheme =	"Dateien vom CustomTheme löschen ?",
+
+------------	Advanced	---------------------------------------------------------------------------------
+advanced =		"Advanced",
+refreshdb =		"Update app.db",
+rebuilddb =		"Rebuild app.db",
+restartupdb =	"Deine PSVita wird neugestartet...\nund die app database wird aktualisiert",
+restartredb =	"Deine PSVita wird neugestartet...\nund die app database wird neu aufgebaut",
+restart =		"Deine PSVita wird neugestartet...",
+shutdown =		"Deine PSVita wird heruntergefahren...",
+
+result =		"\nErgebnis: ",
+count =			"Anzahl: ",
+sizeis =		"Größe: ",
+opensettings =	"Öffne Mp3 Player/Gallery/Video ?",
+filesfolders =	"Dateien/Ordner",
+
+}
