@@ -9,6 +9,21 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 
 # Controls:
 
+### Changelog 1.01 ###
+Please update your translations...Two new lines were added:<br>
+*PGF Font*<br>
+*PVF Font*<br>
+
+- [FIX] Incorrect display of LiveArea app names.<br>
+- [FIX] PS Button lock when using FTP and USB mode.<br>
+- [FIX] Some errors in the internal code.<br>
+- [FIX] Standard format month/day/year.<br>
+- [NEW] Support to change the type of font (PGF<->PVF) in advanced options.<br>
+- 3 added shortcuts:<br>
+- L + R + Up: Restart ONEMenu.<br>
+- L + R + Down: Restart PSvita.<br>
+- L + R + Square: Shutdown PSvita.<br>
+
 ![header](1MENUVITA2.png)
 
 **ONEMenu icons list:**
