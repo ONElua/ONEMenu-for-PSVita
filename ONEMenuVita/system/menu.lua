@@ -230,6 +230,6 @@ function focus_icon()
 		avatar:blit(800,5)
 	end
 	
-	screen.print(955,520,os.date("%r  %d/%m/%y"),1,theme.style.DATETIMECOLOR,color.gray,__ARIGHT)
+	screen.print(955,520,os.date(_time.."  %m/%d/%y"),1,theme.style.DATETIMECOLOR,color.gray,__ARIGHT)
 
 end

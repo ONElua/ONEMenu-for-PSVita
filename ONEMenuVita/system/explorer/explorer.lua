@@ -77,7 +77,9 @@ function explorer.listshow(posy)
 
 end
 
+--Cycle Main for Explorer Files: show_explorer_list()
 function show_explorer_list()
+
 	explorer.refresh(true)
 	buttons.interval(10,10)
 	while true do
@@ -119,7 +121,7 @@ function show_explorer_list()
 			screen.print(10+movx,80,"...".."\n"..strings.back,1.1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 		end
 
-		screen.print(10+movx,515,os.date("%r  %d/%m/%y"),1,theme.style.DATETIMECOLOR,color.gray,__ALEFT)
+		screen.print(10+movx,515,os.date(_time.."  %m/%d/%y"),1,theme.style.DATETIMECOLOR,color.gray,__ALEFT)
 
 		menu_ctx.run()
 		screen.flip()
@@ -139,8 +141,9 @@ function ctrls_explorer_list()
 	if menu_ctx.open then return end
 
 	if buttons[cancel] then -- return directory
-			if (Root[Dev]=="ux0:" or Root[Dev]=="ux0:/") or (Root[Dev]=="ur0:" or Root[Dev]=="ur0:/") or
-				(Root[Dev]=="uma0:" or Root[Dev]=="uma0:/") then return end
+		if (Root[Dev]=="ux0:" or Root[Dev]=="ux0:/") or (Root[Dev]=="ur0:" or Root[Dev]=="ur0:/") or (Root[Dev]=="gro0:" or Root[Dev]=="gro0:/") or
+			(Root[Dev]=="grw0:" or Root[Dev]=="grw0:/") or (Root[Dev]=="imc0:" or Root[Dev]=="imc0:/") or (Root[Dev]=="uma0:" or Root[Dev]=="uma0:/") then return end
+
 		Root[Dev]=files.nofile(Root[Dev])
 		explorer.refresh(false)
 
@@ -221,8 +224,6 @@ function handle_files(cnt)
 
 end
 
--- ## Menu Contextual ##
- 
 __ACTION_WAIT_NOTHING = 0
 __ACTION_WAIT_PASTE = 1
 __ACTION_WAIT_EXTRACT = 2
@@ -619,6 +620,7 @@ local filesexport_callback = function ()
 end
 
 local ftp_callback = function ()
+	buttons.homepopup(0)
     local pos_menu = menu_ctx.scroll.sel
     menu_ctx.wakefunct2()
     if startftp() then
@@ -629,11 +631,12 @@ local ftp_callback = function ()
         explorer.action = 0
         multi={}
     end
-   
+   buttons.homepopup(1)
     menu_ctx.scroll.sel = pos_menu
 end
  
 local usb_callback = function ()
+	buttons.homepopup(0)
 	menu_ctx.wakefunct2()
 	local result = usbMassStorage()
     if result == true then
@@ -644,6 +647,7 @@ local usb_callback = function ()
         explorer.action = 0
         multi={}
     end
+	buttons.homepopup(1)
 end
  
 local advanced_callback = function ()

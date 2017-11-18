@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="01.01">
+    <![CDATA[
+- [FIX] Incorrect display of LiveArea app names.<br>
+- [FIX] PS Button lock when using FTP and USB mode.<br>
+- [FIX] Some errors in the internal code.<br>
+- [FIX] Standard format month/day/year.<br>
+    ]]>
+  </changes>
   <changes app_ver="01.00">
     <![CDATA[
 - Initial release 'POC'.<br>

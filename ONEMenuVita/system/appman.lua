@@ -50,19 +50,11 @@ function appman.refresh()
 		local list = game.list(__GAME_LIST_ALL)
 		table.sort(list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
 
-		local i = #list
-		while i > 0 do
-			if not files.exists(list[i].path) or (list[i].id == "1MENUVITA") then
-				table.remove(list,i)
-			end
-			i -= 1
-		end
-
 		--id, type, version, dev, path, title
 		appman.len = #list
 		for i=1,appman.len do
-			list[i].flag = 1					--ux0
 
+			list[i].flag = 1					--ux0
 			if list[i].dev == "ur0" then
 				list[i].flag = 0
 			elseif list[i].dev == "uma0" then

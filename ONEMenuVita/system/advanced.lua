@@ -11,6 +11,15 @@
 
 menuadv = {}
 
+local font_callback = function ()
+	if not __USERFNT then
+		if __FNT == 2 then __FNT = 3 else __FNT = 2 end 
+		write_config()
+		font.setdefault(__FNT)
+		menuadv.wakefunct()
+	end
+end
+
 local themesAppManager_callback = function ()
 	menuadv.wakefunct()
 	theme.manager()
@@ -67,6 +76,11 @@ function menuadv.wakefunct()
 		{ text = strings.themes,      	funct = themesAppManager_callback },
 		{ text = strings.cthemesman,   	funct = themesLiveArea_callback },
 	}
+		if __FNT == 3 then 
+			table.insert(menuadv.options, { text = "< "..strings.pvf.." >",		funct = font_callback })
+		else
+			table.insert(menuadv.options, { text = "< "..strings.pgf.." >",		funct = font_callback })
+		end
 end
 
 menuadv.wakefunct()
@@ -84,7 +98,10 @@ function advanced_options()
 		if buttons.up or buttons.analogly < -60 then scroll:up() end
 		if buttons.down or buttons.analogly > 60 then scroll:down() end
 
-		if buttons[accept] then
+		if buttons[accept] and scroll.sel != 7 then
+			menuadv.options[scroll.sel].funct()
+		end
+		if (buttons.left or buttons.right) and scroll.sel == 7 then
 			menuadv.options[scroll.sel].funct()
 		end
 

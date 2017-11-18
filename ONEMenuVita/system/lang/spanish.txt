@@ -167,6 +167,8 @@ restartupdb =	"Tú PSVita se reiniciará...\ny tu base de datos será Actualizad
 restartredb =	"Tú PSVita se reiniciará...\nY tu base de datos será Reconstruida",
 restart =		"Tú PSVita se reiniciará...",
 shutdown =		"Tu PSVita se Apagara...",
+pgf =			"PGF Font",
+pvf =			"PVF Font",
 
 result =		"\nResultado: ",
 count =			"Total: ",

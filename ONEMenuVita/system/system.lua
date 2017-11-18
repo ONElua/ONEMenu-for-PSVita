@@ -9,7 +9,6 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
-
 uri = {}
 uri["NPXS10000"] = "near:"
 uri["NPXS10001"] = "pspy:"
@@ -19,7 +18,7 @@ uri["NPXS10003"] = "wbapp0:"
 --uri["NPXS10006"] = "pspr:"			--friends
 --uri["NPXS10007"] = ""					--welcome park
 uri["NPXS10008"] = "pstc:"
-uri["NPXS10009"] = "music:"
+uri["NPXS10009"] = "music:" 
 uri["NPXS10010"] = "video:"
 --uri["NPXS10012"] = ""					--uso distancia PS3
 --uri["NPXS10013"] = ""					--enlace ps4
@@ -38,17 +37,12 @@ function system.refresh()
 
 		system.data = game.list(__GAME_LIST_SYS)
 		table.sort(system.data, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-
-		local i = #system.data
-		while i > 0 do
-			if uri[system.data[i].id] then system.data[i].uri = uri[system.data[i].id] else system.data[i].uri = false end
-			if system.data[i].id == "NPXS10012" then
-				if __LANG == "RUSSIAN" then	system.data[i].title = "Соединение PS3" end
-				if __LANG == "JAPANESE" then system.data[i].title = "PS3 リモートプレイ" end
-			end
-			i -= 1
-		end
 		system.len = #system.data
+
+		for i=1, system.len do
+			if uri[system.data[i].id] then system.data[i].uri = uri[system.data[i].id] end
+			if system.data[i].title	then system.data[i].title = system.data[i].title:gsub("\n"," ") end
+		end
 	end
 
 end
@@ -65,7 +59,6 @@ function system.run()
 		buttons.read()
 
 		if theme.data["themesmanager"] then theme.data["themesmanager"]:blit(0,0) end
-
 		screen.print(480,15,strings.liveareapps,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
 
 		if system.len > 0 then
@@ -83,7 +76,7 @@ function system.run()
 				y+=26
 			end
 
-			if preview then	preview:blit(770,90) end
+			if preview then	preview:blit(770,90) end 
 
 			screen.print(10,520,system.data[scroll.sel].id,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		else
@@ -96,12 +89,11 @@ function system.run()
 		if system.len > 0 then
 
 			if buttons.up or buttons.analogly<-60 then 
-				preview = nil
-				scroll:up()
+				if scroll:up() then	preview = nil end
 			end
-			if buttons.down or buttons.analogly>60 then 
-				preview = nil
-				scroll:down()
+
+			if buttons.down or buttons.analogly>60 then
+				if scroll:down() then preview = nil	end
 			end
 
 			if buttons[accept] then
@@ -110,7 +102,7 @@ function system.run()
 
 		end
 
-		if buttons[cancel] then
+		if buttons.start then
 			os.delay(50)
 			break
 		end
