@@ -109,6 +109,7 @@ function system.run()
 
 		if (buttons.held.l and buttons.held.r and buttons.up) and reboot then os.restart() end
 		if (buttons.held.l and buttons.held.r and buttons.down) and reboot then power.restart() end
-		
+		if (buttons.held.l and buttons.held.r and buttons.square) and reboot then power.shutdown() end
+
 	end
 end

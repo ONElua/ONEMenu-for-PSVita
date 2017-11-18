@@ -18,8 +18,13 @@ if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _ti
 __LANG = os.language()
 if not files.exists("ux0:data/onemenu/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/") end
 
-if files.exists("ux0:data/onemenu/lang/"..__LANG..".txt") then dofile("ux0:data/onemenu/lang/"..__LANG..".txt")
-else 
+--135v1,137v1.01
+if files.exists("ux0:data/onemenu/lang/"..__LANG..".txt") then
+	dofile("ux0:data/onemenu/lang/"..__LANG..".txt")
+	local cont = 0
+	for key,value in pairs(strings) do cont += 1 end
+	if cont < 137 then dofile("system/lang/english_us.txt") end
+else
 	if files.exists("system/lang/"..__LANG..".txt") then dofile("system/lang/"..__LANG..".txt") 
 	else dofile("system/lang/english_us.txt") end
 end

@@ -6,6 +6,11 @@
 - [FIX] PS Button lock when using FTP and USB mode.<br>
 - [FIX] Some errors in the internal code.<br>
 - [FIX] Standard format month/day/year.<br>
+- [NEW] Support to change the type of font (PGF<->PVF) in advanced options.<br>
+- 3 added shortcuts:<br>
+- L + R + Up: Restart ONEMenu.<br>
+- L + R + Down: Restart PSvita.<br>
+- L + R + Square: Shutdown PSvita.<br>
     ]]>
   </changes>
   <changes app_ver="01.00">
