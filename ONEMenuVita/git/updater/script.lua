@@ -8,6 +8,7 @@
 buttons.homepopup(0)
 
 color.loadpalette()
+splash = image.load("git/updater/Splash.png")
 
 args = os.arg()
 if args:len() == 0 then
@@ -24,12 +25,14 @@ end
 function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 
     if step == 1 then												-- Only msg of state
+		if splash then splash:blit(0,0) end--Only for ONEMenu....use your own image in your HB
 		draw.fillrect(0,0,960,30, color.green:a(100))
 		screen.print(10,10,"Search in vpk, Unsafe or Dangerous files!")
 		screen.flip()
 	elseif step == 2 then											-- Warning Vpk confirmation!
 		return 10 -- Ok
 	elseif step == 3 then											-- Unpack
+		if splash then splash:blit(0,0) end--Only for ONEMenu....use your own image in your HB
 		draw.fillrect(0,0,960,30, color.green:a(100))
 		screen.print(10,10,"Unpack vpk...")
 		screen.print(925,10,"Percent Total: "..math.floor((totalwritten*100)/totalsize).." %",1.0,color.white, color.black, __ARIGHT)
@@ -38,6 +41,7 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 		draw.fillrect(0,544-30,(totalwritten*960)/totalsize,30, color.new(0,255,0))
 		screen.flip()
 	elseif step == 4 then											-- Promote or install
+		if splash then splash:blit(0,0) end--Only for ONEMenu....use your own image in your HB
 		draw.fillrect(0,0,960,30, color.green:a(100))
 		screen.print(10,10,"Installing...")
 		screen.flip()
