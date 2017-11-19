@@ -28,7 +28,9 @@ end
 
 local cont = 0
 for key,value in pairs(strings) do cont += 1 end
-if cont < 137 then dofile("system/lang/english_us.txt") end
+if cont < 137 then
+files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/")
+dofile("system/lang/english_us.txt") end
 
 __PATHINI = "ux0:data/onemenu/config.ini"
 if not files.exists(__PATHINI) then
