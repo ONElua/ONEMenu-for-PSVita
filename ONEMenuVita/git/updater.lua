@@ -28,7 +28,7 @@ function screen.flip()
 			end
 			local onNetGetFileOld = onNetGetFile
 			function onNetGetFile(size,written,speed)
-				if back then back:blit(0,0) end
+				if theme.data["back"] then theme.data["back"]:blit(0,0) end--Only for ONEMenu....use your own image in your HB
 				screen.print(10,10,"Downloading Update...")
 				screen.print(10,30,"Size: "..tostring(size).." Written: "..tostring(written).." Speed: "..tostring(speed).."Kb/s")
 				screen.print(10,50,"Porcent: "..math.floor((written*100)/size).."%")
