@@ -167,8 +167,8 @@ restartupdb =	"La tua PSVita verrà riavviata ...\ne il tuo database verrà aggi
 restartredb =	"La tua PSVita verrà riavviata ...\ne il tuo database verrà ricostruito",
 restart =		"La PSVita verrà riavviata...",
 shutdown =		"La PSVita si spegnerà...",
-pgf =			"PGF Font",
-pvf =			"PVF Font",
+pgf =			"Font PGF",
+pvf =			"Font PVF",
 
 result =		"\nRisultato: ",
 count =			"Totale: ",
