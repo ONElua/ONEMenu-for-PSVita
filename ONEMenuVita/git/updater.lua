@@ -10,7 +10,7 @@ end
 
 UPDATE_PORT = channel.new("UPDATE_PORT")
 
-splash = image.load("git/updater/Splash.png")
+splash = image.load("git/Splash.png")
 local scr_flip = screen.flip
 function screen.flip()
 	scr_flip()
@@ -44,7 +44,7 @@ function screen.flip()
 				files.mkdir("ux0:/data/1luapkg")
 				files.copy("eboot.bin","ux0:/data/1luapkg")
 				files.copy("git/updater/script.lua","ux0:/data/1luapkg/")
-				files.copy("git/updater/Splash.png","ux0:/data/1luapkg/")
+				files.copy("git/Splash.png","ux0:/data/1luapkg/")
 				files.copy("git/updater/param.sfo","ux0:/data/1luapkg/sce_sys/")
 				game.installdir("ux0:/data/1luapkg")
 				files.delete("ux0:/data/1luapkg")

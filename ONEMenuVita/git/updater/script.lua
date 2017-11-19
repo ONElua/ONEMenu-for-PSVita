@@ -8,7 +8,7 @@
 buttons.homepopup(0)
 
 color.loadpalette()
-splash = image.load("git/updater/Splash.png")
+splash = image.load("Splash.png")
 
 args = os.arg()
 if args:len() == 0 then
