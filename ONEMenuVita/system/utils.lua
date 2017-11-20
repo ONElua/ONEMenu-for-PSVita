@@ -9,6 +9,9 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
+--135v1,137v1.01
+__STRINGS = 137
+
 -- Create a folder work
 files.mkdir("ux0:data/onemenu/themes/")
 files.mkdir("ux0:data/onemenu/lang/")
@@ -16,21 +19,23 @@ files.mkdir("ux0:data/onemenu/lang/")
 if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
 	 
 __LANG = os.language()
-if not files.exists("ux0:data/onemenu/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/") end
-
---135v1,137v1.01
-if files.exists("ux0:data/onemenu/lang/"..__LANG..".txt") then
-	dofile("ux0:data/onemenu/lang/"..__LANG..".txt")
+if not files.exists("ux0:data/onemenu/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/")
 else
-	if files.exists("system/lang/"..__LANG..".txt") then dofile("system/lang/"..__LANG..".txt") 
-	else dofile("system/lang/english_us.txt") end
+	dofile("ux0:data/onemenu/lang/english_us.txt")
+	local cont = 0
+	for key,value in pairs(strings) do cont += 1 end
+	if cont < __STRINGS then files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/") end
 end
 
-local cont = 0
-for key,value in pairs(strings) do cont += 1 end
-if cont < 137 then
-files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/")
-dofile("system/lang/english_us.txt") end
+if files.exists("ux0:data/onemenu/lang/"..__LANG..".txt") then
+	dofile("ux0:data/onemenu/lang/"..__LANG..".txt")
+	local cont = 0
+	for key,value in pairs(strings) do cont += 1 end
+	if cont < __STRINGS then dofile("system/lang/english_us.txt") end
+else
+	if files.exists("system/lang/"..__LANG..".txt") then dofile("system/lang/"..__LANG..".txt")
+	else dofile("system/lang/english_us.txt") end
+end
 
 __PATHINI = "ux0:data/onemenu/config.ini"
 if not files.exists(__PATHINI) then
