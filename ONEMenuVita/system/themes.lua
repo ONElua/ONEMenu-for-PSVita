@@ -12,6 +12,7 @@
 __THEME = "default"
 __SLIDES = 100
 __PIC1 = 0
+__USERFNT = false
 
 theme = { -- Module theme :P
 	data = {}, -- Handle of imgs xD
@@ -34,6 +35,7 @@ function theme.load()
 	__SLIDES = tonumber(ini.read(__PATHINI,"slides","pos",100))
 	__BACKG = ini.read(__PATHINI,"backg","img","")
 	__PIC1 = tonumber(ini.read(__PATHINI,"pics","show","0"))
+	__FNT = tonumber(ini.read(__PATHINI,"font","type","2"))
 
 	local path = root_themes..id.."/"
 	if not files.exists(path) then
@@ -59,9 +61,8 @@ function theme.load()
 		{name="adrbb"},
 		{name="icodef"},
 
-		--{name="jump", sound=true},
-		--{name="slide", sound=true},
-
+		--{name="jump", sound=true}, 
+--		{name="slide", sound=true}, 
 	}
 	-- Load Resources :D
 	theme.data["back"] = image.load(__BACKG)
@@ -140,7 +141,7 @@ parseTheme(path.."theme.ini",theme.style)
 		sfo = theme.style.SFOCOLOR,
 	}
 
-	fnt = nil
+	fnt, __USERFNT = nil,false
 	if files.exists(string.format("%s%s",path,"font.ttf")) then
 		fnt = font.load(string.format("%s%s",path,"font.ttf"))
 	elseif files.exists(string.format("%s%s",path,"font.pgf")) then
@@ -148,7 +149,10 @@ parseTheme(path.."theme.ini",theme.style)
 	elseif files.exists(string.format("%s%s",path,"font.pvf")) then
 		fnt = font.load(string.format("%s%s",path,"font.pvf"))
 	end
-	if fnt then font.setdefault(fnt) else font.setdefault() end
+
+	if fnt then	font.setdefault(fnt)
+		__USERFNT = true
+	else font.setdefault(__FNT) end
 
 	flag_themes = true
 end
@@ -174,7 +178,7 @@ function reload_theme()
 
 	theme.load()
 end
-			
+
 function theme.manager()
 
 	local thlist = files.listdirs(root_themes)
@@ -232,7 +236,7 @@ function theme.manager()
 
 		if __THEME != "default" then
 			if theme.data["buttons2"] then
-				theme.data["buttons2"]:blitsprite(950-string.len(strings.reload),515,1)--start
+				theme.data["buttons2"]:blitsprite(960-30,515,1)--start
 			end
 			screen.print(960-40,520,strings.reload,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
 		end

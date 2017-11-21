@@ -163,7 +163,7 @@ function show_msg_vpk(obj_vpk)
 
 	if result == 1 then
 		reboot=false
-			if os.message(strings.delete+"\n"+obj_vpk.path+" ? ",1)==1 then
+			if os.message(strings.delete+"\n\n"+obj_vpk.path+" ? ",1)==1 then
 				files.delete(obj_vpk.path)
 				vpkdel=true
 			end

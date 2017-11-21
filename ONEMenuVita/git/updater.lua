@@ -10,6 +10,7 @@ end
 
 UPDATE_PORT = channel.new("UPDATE_PORT")
 
+splash = image.load("git/Splash.png")
 local scr_flip = screen.flip
 function screen.flip()
 	scr_flip()
@@ -28,7 +29,7 @@ function screen.flip()
 			end
 			local onNetGetFileOld = onNetGetFile
 			function onNetGetFile(size,written,speed)
-				if back then back:blit(0,0) end
+				if splash then splash:blit(0,0) end--Only for ONEMenu....use your own image in your HB
 				screen.print(10,10,"Downloading Update...")
 				screen.print(10,30,"Size: "..tostring(size).." Written: "..tostring(written).." Speed: "..tostring(speed).."Kb/s")
 				screen.print(10,50,"Porcent: "..math.floor((written*100)/size).."%")
@@ -43,6 +44,7 @@ function screen.flip()
 				files.mkdir("ux0:/data/1luapkg")
 				files.copy("eboot.bin","ux0:/data/1luapkg")
 				files.copy("git/updater/script.lua","ux0:/data/1luapkg/")
+				files.copy("git/Splash.png","ux0:/data/1luapkg/")
 				files.copy("git/updater/param.sfo","ux0:/data/1luapkg/sce_sys/")
 				game.installdir("ux0:/data/1luapkg")
 				files.delete("ux0:/data/1luapkg")

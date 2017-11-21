@@ -9,16 +9,31 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
+--135v1,137v1.01
+__STRINGS = 137
+
 -- Create a folder work
 files.mkdir("ux0:data/onemenu/themes/")
 files.mkdir("ux0:data/onemenu/lang/")
 
+if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
+	 
 __LANG = os.language()
-if not files.exists("ux0:data/onemenu/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/") end
+if not files.exists("ux0:data/onemenu/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/")
+else
+	dofile("ux0:data/onemenu/lang/english_us.txt")
+	local cont = 0
+	for key,value in pairs(strings) do cont += 1 end
+	if cont < __STRINGS then files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/") end
+end
 
-if files.exists("ux0:data/onemenu/lang/"..__LANG..".txt") then dofile("ux0:data/onemenu/lang/"..__LANG..".txt")
-else 
-	if files.exists("system/lang/"..__LANG..".txt") then dofile("system/lang/"..__LANG..".txt") 
+if files.exists("ux0:data/onemenu/lang/"..__LANG..".txt") then
+	dofile("ux0:data/onemenu/lang/"..__LANG..".txt")
+	local cont = 0
+	for key,value in pairs(strings) do cont += 1 end
+	if cont < __STRINGS then dofile("system/lang/english_us.txt") end
+else
+	if files.exists("system/lang/"..__LANG..".txt") then dofile("system/lang/"..__LANG..".txt")
 	else dofile("system/lang/english_us.txt") end
 end
 
@@ -41,7 +56,7 @@ __ID = os.titleid()
 vpkdel,_print,game_move = false,true,false
 
 Dev = 1
-partitions = {"ux0:","ur0:","uma0:","gro0:","grw0:", }
+partitions = {"ux0:","ur0:","uma0:","gro0:","grw0:", "imc0:", }
 Root,Root2 ={},{}
 
 local i=1
@@ -158,16 +173,18 @@ function newScroll(a,b,c)
 	end
 
 	function obj:up()
-		if obj.sel>obj.ini then obj.sel=obj.sel-1
+		if obj.sel>obj.ini then obj.sel=obj.sel-1 return true
 		elseif obj.ini-1>=obj.minim then
 			obj.ini,obj.sel,obj.lim=obj.ini-1,obj.sel-1,obj.lim-1
+			return true
 		end
 	end
 
 	function obj:down()
-		if obj.sel<obj.lim then obj.sel=obj.sel+1
+		if obj.sel<obj.lim then obj.sel=obj.sel+1 return true
 		elseif obj.lim+1<=obj.maxim then
 			obj.ini,obj.sel,obj.lim=obj.ini+1,obj.sel+1,obj.lim+1
+			return true
 		end
 	end
 
@@ -210,6 +227,7 @@ function write_config()
 	ini.write(__PATHINI,"backg","img",__BACKG)
 	ini.write(__PATHINI,"slides","pos",__SLIDES)
 	ini.write(__PATHINI,"pics","show",__PIC1)
+	ini.write(__PATHINI,"font","type",__FNT)
 end
 
 function message_wait()
