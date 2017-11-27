@@ -156,12 +156,17 @@ The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes fol
 
 *Label Categories*
 
-**PSVita.png**		PSVita/Hbs Games (250*66).<br>
+**PSVITA.png**		PSVita Games (250*66).<br>
+
 **HBVITA.png**		Homebrews Vita (250*66).<br>
-**PSM.png**			PSM Games (250*66).<br>
+
+**PSM.png**		PSM Games (250*66).<br>
+
 **RETRO.png**		PSP & PS1 Games (250*66).<br>
+
 **ADRBB.png**		Adrenaline Bubbles Games (250*66).<br>
-**FAV.png**			Favorite Games (250*66).<br>
+
+**FAV.png**		Favorite Games (250*66).<br>
 
 # Create a ini file
 
@@ -190,7 +195,7 @@ PATHCOLOR       = 0xA09999FF
 DATETIMECOLOR   = 0xFF7300E6
 
 *#Folder/File count in the file explorer.*<br>
-COUNTCOLOR		= 0XFF0000FF
+COUNTCOLOR	= 0XFF0000FF
 
 *#Draw the bars in the callbacks section.*<br>
 CBACKSBARCOLOR	= 0x64FFFFFF
