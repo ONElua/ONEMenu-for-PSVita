@@ -42,14 +42,14 @@ function customthemes()
 
 			if theme.data["themesmanager"] then theme.data["themesmanager"]:blit(0,0) end
 
-			screen.print(480,15,strings.customthemes,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
+			screen.print(480,15,strings.customthemes,1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 
 			if list.len > 0 then
 				if buttons.up or buttons.analogly < -60 then livetheme:up() end
 				if buttons.down or buttons.analogly > 60 then livetheme:down() end
 
 				if buttons.square then
-					if os.message(strings.deltheme.."\n"..list[livetheme.sel].info.title.." ?",1)==1 then
+					if os.message(strings.deltheme.."\n\n"..list[livetheme.sel].info.title.." ?",1)==1 then
 						themes.delete(list[livetheme.sel].id)
 						if os.message(strings.delfilestheme,1)==1 then
 							files.delete(list[livetheme.sel].id)

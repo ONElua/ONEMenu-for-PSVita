@@ -9,73 +9,85 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
---135v1,137v1.01
-__STRINGS = 137
-
 -- Create a folder work
-files.mkdir("ux0:data/onemenu/themes/")
-files.mkdir("ux0:data/onemenu/lang/")
+files.mkdir("ux0:data/ONEMENU/themes/")
+files.mkdir("ux0:data/ONEMENU/lang/")
 
-if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
-	 
-__LANG = os.language()
-if not files.exists("ux0:data/onemenu/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/")
-else
-	dofile("ux0:data/onemenu/lang/english_us.txt")
-	local cont = 0
-	for key,value in pairs(strings) do cont += 1 end
-	if cont < __STRINGS then files.copy("system/lang/english_us.txt","ux0:data/onemenu/lang/") end
-end
+--Constants
+__PATHINI		= "ux0:data/ONEMENU/config.ini"
+__PATH_FAVS		= "ux0:data/ONEMENU/favs.txt"
+__PATHTHEMES	= "ux0:data/ONEMENU/themes/"
+__PROFILE		= "ur0:user/00/np/myprofile.dat"
+__LANG			= os.language()
+__ID			= os.titleid()
 
-if files.exists("ux0:data/onemenu/lang/"..__LANG..".txt") then
-	dofile("ux0:data/onemenu/lang/"..__LANG..".txt")
-	local cont = 0
-	for key,value in pairs(strings) do cont += 1 end
-	if cont < __STRINGS then dofile("system/lang/english_us.txt") end
-else
-	if files.exists("system/lang/"..__LANG..".txt") then dofile("system/lang/"..__LANG..".txt")
-	else dofile("system/lang/english_us.txt") end
-end
-
-__PATHINI = "ux0:data/onemenu/config.ini"
-if not files.exists(__PATHINI) then
-	ini.write(__PATHINI,"theme","id","default")
-	ini.write(__PATHINI,"slides","pos","100")
-end
-
--- Create a globals
 SYMBOL_CROSS	= string.char(0xe2)..string.char(0x95)..string.char(0xb3)
 SYMBOL_SQUARE	= string.char(0xe2)..string.char(0x96)..string.char(0xa1)
 SYMBOL_TRIANGLE	= string.char(0xe2)..string.char(0x96)..string.char(0xb3)
 SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
 
-__AVATAR = "ur0:user/00/np/myprofile.dat"
-avatar = nil
-
-__ID = os.titleid()
-vpkdel,_print,game_move = false,true,false
-
-Dev = 1
-partitions = {"ux0:","ur0:","uma0:","gro0:","grw0:", "imc0:", }
-Root,Root2 ={},{}
-
-local i=1
-while files.exists(partitions[i]) do
-	table.insert(Root,partitions[i])
-	table.insert(Root2,partitions[i])
-	i+=1
-end
-infosize = os.devinfo(Root[Dev])
-
-accept,cancel = "cross","circle"
-textXO = "O: "
-accept_x = 1
-if buttons.assign()==0 then
-	accept,cancel = "circle","cross"
-	textXO = "X: "
-	accept_x = 0
+--Primero checamos traducciones
+__STRINGS		= 146								--135v1,137v1.01,145vbeta
+if not files.exists("ux0:data/ONEMENU/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/ONEMENU/lang/")
+else
+	dofile("ux0:data/ONEMENU/lang/english_us.txt")
+	local cont_strings = 0
+	for key,value in pairs(strings) do cont_strings += 1 end
+	if cont_strings < __STRINGS then files.copy("system/lang/english_us.txt","ux0:data/ONEMENU/lang/") end
 end
 
+if files.exists("ux0:data/ONEMENU/lang/"..__LANG..".txt") then
+	dofile("ux0:data/ONEMENU/lang/"..__LANG..".txt")
+	local cont_strings = 0
+	for key,value in pairs(strings) do cont_strings += 1 end
+	if cont_strings < __STRINGS then dofile("system/lang/english_us.txt") end
+else
+	if files.exists("system/lang/"..__LANG..".txt") then dofile("system/lang/"..__LANG..".txt")
+	else dofile("system/lang/english_us.txt") end
+end
+
+--Conseguir avatar (Requerido Wifi solo la 1era vez)
+function getavatar(path)
+
+	f = io.open(path)
+	if f then
+		local profile,tmp = "",""
+		f:seek ("cur", 0x38)
+		tmp = f:read(1)
+		profile = tmp
+		while tmp != "0x00" do
+			tmp = f:read(1)
+			if tmp then
+				profile = profile..tmp
+			else
+				break
+			end
+		end
+		f:close()
+
+		local databin = nil
+		databin = http.get(profile)
+		if databin then
+			avatar = image.loadfromdata(databin,__PNG)
+			if avatar then
+				avatar:resize(35,35)
+				image.save(avatar, "ux0:data/ONEMENU/avatar.png")
+			end
+		end
+		databin = nil
+	end
+end
+if files.exists("ux0:data/ONEMENU/avatar.png") then
+	avatar = image.load("ux0:data/ONEMENU/avatar.png")
+	if avatar then avatar:resize(35,35) end
+else
+	local wstrength = wlan.strength()
+	if wstrength then
+		if wstrength > 55 then getavatar(__PROFILE) end
+	end
+end
+
+--Globals
 infoux0, infour0, infouma0 = {},{},{}
 function infodevices()
 	infoux0 = os.devinfo("ux0:")
@@ -100,51 +112,25 @@ function infodevices()
 
 end
 
-function files.readlinesSFO(path)
-	local sfo = game.info(path)
-	if not sfo then return nil end
-	local data = {}
-	for k,v in pairs(sfo) do
-		table.insert(data,tostring(k).." = "..tostring(v))
-	end
-	return data
-end
+apps = {}
+function write_favs(pathini)
+    local file = io.open(pathini, "w+")
+	file:write("apps = {\n")
 
-function files.readlines(path,index) -- Lee una table o string si se especifica linea
-	if files.exists(path) then
-		local contenido = {}
-		for linea in io.lines(path) do
-			table.insert(contenido,linea)
-		end
-
-		if index == nil then return contenido
-		else return contenido[index] end
-	end
-end
-
-function files.listsort(path)
-	local tmp1 = files.listdirs(path)
-
-	if tmp1 then
-		table.sort(tmp1,function(a,b) return string.lower(a.name)<string.lower(b.name) end)
-	else
-		tmp1 = {}
-	end
-
-	local tmp2 = files.listfiles(path)
-
-	if tmp2 then
-		table.sort(tmp2,function(a,b) return string.lower(a.name)<string.lower(b.name) end)
-		for s,t in pairs(tmp2) do
-			t.sizenum = t.size
-			t.size = files.sizeformat(t.size)
-			table.insert(tmp1,t)-- esto es por que son subtablas, realmente no puedo hacer un cont con tmp2
+	for i=1,#apps do
+		if i==#apps then
+			file:write(string.format('"%s"\n', tostring(apps[i])))
+		else
+			file:write(string.format('"%s",\n', tostring(apps[i])))
 		end
 	end
-
-	return tmp1
-
+	file:write("}")
+	file:close()
 end
+
+--Checamos lista de Favoritos
+if files.exists(__PATH_FAVS) then dofile(__PATH_FAVS) else
+write_favs(__PATH_FAVS) end
 
 --[[
 	## Library Scroll ##
@@ -228,6 +214,7 @@ function write_config()
 	ini.write(__PATHINI,"slides","pos",__SLIDES)
 	ini.write(__PATHINI,"pics","show",__PIC1)
 	ini.write(__PATHINI,"font","type",__FNT)
+	ini.write(__PATHINI,"favs","scan",__FAV)
 end
 
 function message_wait()
@@ -241,30 +228,15 @@ function message_wait()
 	screen.flip()
 end
 
-function getavatar(path)
-
-	f = io.open(path)
-	if f then
-		local profile,tmp = "",""
-		f:seek ("cur", 0x38)
-		tmp = f:read(1)
-		profile = tmp
-		while tmp != "0x00" do
-			tmp = f:read(1)
-			if tmp then
-				profile = profile..tmp
-			else
-				break
-			end
-		end
-		f:close()
-
-		local databin = nil
-		databin = http.get(profile)
-		if databin then
-			avatar = image.loadfromdata(databin,__PNG)
-			if avatar then avatar:resize(35,35) end
-		end
-		databin = nil
+function splash_efect(pics,delay,vel)
+	pics:center()
+	for i = 0, 255, vel do
+		pics:blit(__DISPLAYW/2,__DISPLAYH/2,i)
+		screen.flip()
+	end
+	os.delay(delay)
+	for i = 255, 0, -vel do
+		pics:blit(__DISPLAYW/2,__DISPLAYH/2,i)
+		screen.flip()
 	end
 end

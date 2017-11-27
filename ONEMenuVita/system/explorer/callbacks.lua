@@ -15,7 +15,7 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
     if step == 1 then -- Only msg of state
     	if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-		draw.fillrect(0,0,960,30, color.shine)
+		draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
 		screen.print(10,10,strings.searchunsafe)
 
 		screen.flip()
@@ -27,7 +27,7 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 				return 10 -- Ok code
 			elseif buttons[cancel] then
 				buttons.read() -- Flush
-				return 0; -- Any other code xD
+				return 0 -- Any other code 
 			end
 
 			if theme.data["back"] then theme.data["back"]:blit(0,0)	end
@@ -48,12 +48,12 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 	elseif step == 3 then -- Unpack :P
 		if theme.data["back"] then theme.data["back"]:blit(0,0)	end
 
-		draw.fillrect(0,0,960,30, color.shine)
+		draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
 
 		screen.print(10,10,strings.vpkunpack)
-		screen.print(925,10,strings.percent_total..math.floor((totalwritten*100)/totalsize).." %",1.0,color.white, color.black, __ARIGHT)
-		screen.print(10,35,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-		screen.print(10,55,strings.percent..math.floor((written*100)/size_argv).." %")
+		screen.print(925,10,strings.percent_total..math.floor((totalwritten*100)/totalsize).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+		screen.print(10,70,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+		screen.print(10,90,strings.percent..math.floor((written*100)/size_argv).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 		
 		draw.fillrect(0,544-30,(totalwritten*960)/totalsize,30, color.new(0,255,0))
 
@@ -61,7 +61,7 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 	elseif step == 4 then -- Promote o install :P
 		if theme.data["back"] then theme.data["back"]:blit(0,0)	end
 
-		draw.fillrect(0,0,960,30, color.shine)
+		draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
 		screen.print(10,10,strings.install)
 		screen.flip()
 	end
@@ -71,23 +71,23 @@ end
 function onExtractFiles(size,written,file,totalsize,totalwritten)
 
 	if theme.data["back"] then theme.data["back"]:blit(0,0)	end
-	draw.fillrect(0,0,__DISPLAYW,30, color.shine)
+	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 	if explorer.dst then
-		screen.print(10,10,strings.extraction+" <--> "+explorer.dst)
+		screen.print(10,10,strings.extraction+" <- -> "+explorer.dst)
 	else
 		screen.print(10,10,strings.extraction)
 	end
 
-	screen.print(925,10,strings.percent_total..math.floor((totalwritten*100)/totalsize).." %",1.0,color.white, color.black, __ARIGHT)
-	screen.print(10,35,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-	screen.print(10,55,strings.percent..math.floor((written*100)/size).." %")
+	screen.print(925,10,strings.percent_total..math.floor((totalwritten*100)/totalsize).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+	screen.print(10,70,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+	screen.print(10,90,strings.percent..math.floor((written*100)/size).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
 	screen.flip()
 	
 	buttons.read()
 	if buttons[cancel] then return 0 end
-	return 1;
+	return 1
 end
 
 function onScanningFiles(file,unsize,position,unsafe)
@@ -95,7 +95,7 @@ function onScanningFiles(file,unsize,position,unsafe)
 		if theme.data["back"] then theme.data["back"]:blit(0,0)	end
 	else bufftmp:blit(0,0) end
 
-	draw.fillrect(0,0,__DISPLAYW,30, color.shine)
+	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 	local ccc=color.white
 	if unsafe==1 then ccc=color.yellow elseif unsafe==2 then ccc=color.red end
@@ -105,7 +105,7 @@ function onScanningFiles(file,unsize,position,unsafe)
 	screen.print(__DISPLAYW/2,y+7,strings.file..tostring(file),1,ccc,color.black,__ACENTER)
 	screen.print(__DISPLAYW/2,y+37,strings.unsafe..tostring(unsafe),1,ccc,color.black,__ACENTER)
 
-	draw.fillrect(x,y,420,420,color.shine)
+	draw.fillrect(x,y,420,420,theme.style.CBACKSBARCOLOR)
 	draw.rect(x,y,420,420,color.black)
 
 	if not angle then angle = 0 end
@@ -127,27 +127,28 @@ function onCopyFiles(size,written,file)
 	if _print then
 
 		if theme.data["back"] then theme.data["back"]:blit(0,0)	end
-		draw.fillrect(0,0,__DISPLAYW,30, color.shine)
+		draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 		if explorer.dst then
-			screen.print(10,10,strings.copyfile+" <--> "+explorer.dst)
+			screen.print(10,10,strings.copyfile+" <- -> "+explorer.dst)
 		else
 			screen.print(10,10,strings.copyfile)
 		end
 
-		screen.print(945,10,math.floor((written*100)/size).." %",1.0,color.white, color.black, __ARIGHT)
-		screen.print(10,35,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+		screen.print(945,10,math.floor((written*100)/size).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+		screen.print(10,70,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
 		if game_move then
 			if file != fileant then	cont+=1 end
 
-			if cont != files_move then
-				screen.print(480,415,strings.movefiles.." ( "..(cont).." / "..files_move.." )",1,color.white,color.blue, __ACENTER)
+			if cont <= files_move or cont == files_move+1 then
+				if cont == files_move+1 then cont = files_move end
+				screen.print(480,415,strings.movefiles.." ( "..(cont).." / "..files_move.." )",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ACENTER)
+				draw.rect(0, 440, 960, 24, theme.style.CBACKSBARCOLOR)
+				draw.fillrect(0,440, (cont*960)/files_move,24, theme.style.CBACKSBARCOLOR)
 			else
 				screen.print(480,415,strings.updatedb,1,color.white,color.blue, __ACENTER)
 			end
-			draw.rect(0, 440, 960, 24, color.shine)
-			draw.fillrect(0,440, ((cont)*960)/files_move,24, color.shine:a(185))
 
 			fileant = file
 		end
@@ -160,10 +161,10 @@ end
 function onDeleteFiles(file)
 	if not game_move then
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
-		draw.fillrect(0,0,__DISPLAYW,30, color.shine)
+		draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 		screen.print(10,10,strings.delfile,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-		screen.print(10,35,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+		screen.print(10,70,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
 		screen.flip()
 

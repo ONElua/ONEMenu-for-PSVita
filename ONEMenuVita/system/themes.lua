@@ -9,39 +9,27 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
-__THEME = "default"
-__SLIDES = 100
-__PIC1 = 0
-__USERFNT = false
-
-theme = { -- Module theme :P
-	data = {}, -- Handle of imgs xD
-	style = {}, -- Handle of colors xD
+theme = {
+	data = {},	-- Handle of imgs
+	style = {},	-- Handle of colors
 }
 
--- Local Values :D
-local root_themes = "ux0:data/ONEMENU/themes/" -- Path of themes folder...
-
-flag_themes = false
 function theme.load()
 
-	if flag_themes then
+	if theme.data["back"] then
 		theme.data = {}
 		theme.style = {}
 		collectgarbage("collect")
 	end
-	local id = ini.read(__PATHINI,"theme","id","default") -- Get the id of theme pack xD
-	__THEME = id
-	__SLIDES = tonumber(ini.read(__PATHINI,"slides","pos",100))
+
+	-- Get the id of theme pack
+	__THEME = ini.read(__PATHINI,"theme","id","default")
 	__BACKG = ini.read(__PATHINI,"backg","img","")
+	__SLIDES = tonumber(ini.read(__PATHINI,"slides","pos",100))
 	__PIC1 = tonumber(ini.read(__PATHINI,"pics","show","0"))
 	__FNT = tonumber(ini.read(__PATHINI,"font","type","2"))
+	__FAV = tonumber(ini.read(__PATHINI,"favs","scan","0"))
 
-	local path = root_themes..id.."/"
-	if not files.exists(path) then
-		path = "system/theme/default/"
-	end
-	-- Removed callbacks, and rename searchvpk to generic list
 	local elements = {
 		{name="menu"},
 		{name="list"},
@@ -52,19 +40,23 @@ function theme.load()
 		{name="icons",sprite=true, w=16,h=16}, 		-- 112x16
 		{name="buttons1",sprite=true, w=20,h=20}, 	-- 120*20
 		{name="buttons2",sprite=true, w=30,h=20}, 	-- 120*20
-		--new
-		{name="wifi",sprite=true, w=22,h=22},
+		{name="wifi",sprite=true, w=22,h=22},		-- 132*22
 		{name="psvita"},
+		{name="hbvita"},
 		{name="psm"},
-		{name="psp"},
-		{name="ps1"},
+		{name="retro"},
 		{name="adrbb"},
+		{name="fav"},
 		{name="icodef"},
 
-		--{name="jump", sound=true}, 
---		{name="slide", sound=true}, 
+		--splash solo se carga una vez...
+		{name="splash"},
 	}
-	-- Load Resources :D
+
+	local path = __PATHTHEMES..__THEME.."/"
+	if not files.exists(path) then path = "system/theme/default/" end
+
+	--Primero checamos si tienen una img de fondo para el back
 	theme.data["back"] = image.load(__BACKG)
 	if theme.data["back"] then 
 		if (image.getrealw(theme.data["back"]) < __DISPLAYW or image.getrealh(theme.data["back"]) < __DISPLAYH) or
@@ -75,27 +67,19 @@ function theme.load()
 		if files.exists(path.."back.png") then theme.data["back"] = image.load(path.."back.png")
 		else theme.data["back"] = image.load("system/theme/default/back.png") end
 	end
-	
+
+	-- Load Resources
+	local path_img = "system/theme/default/"
 	for i=1,#elements do
-		if files.exists(string.format("%s%s.png",path,elements[i].name)) or files.exists(string.format("%s%s.ogg",path,elements[i].name)) then
-			if elements[i].sound then
-				theme.data[elements[i].name] = sound.load(string.format("%s%s.ogg",path,elements[i].name))--,1)
-			elseif elements[i].sprite then
-				theme.data[elements[i].name] = image.load(string.format("%s%s.png",path,elements[i].name),elements[i].w,elements[i].h)
-			else
-				theme.data[elements[i].name] = image.load(string.format("%s%s.png",path,elements[i].name))
-			end
+		if files.exists(string.format("%s%s.png",path,elements[i].name)) then path_img = path else path_img = "system/theme/default/" end
+		if elements[i].sprite then
+			theme.data[elements[i].name] = image.load(string.format("%s%s.png",path_img,elements[i].name),elements[i].w,elements[i].h)
 		else
-			if elements[i].sound then
-				theme.data[elements[i].name] = sound.load(string.format("%s%s.ogg","system/theme/default/",elements[i].name))--,1)
-			elseif elements[i].sprite then
-				theme.data[elements[i].name] = image.load(string.format("%s%s.png","system/theme/default/",elements[i].name),elements[i].w,elements[i].h)
-			else
-				theme.data[elements[i].name] = image.load(string.format("%s%s.png","system/theme/default/",elements[i].name))
-			end
+			theme.data[elements[i].name] = image.load(string.format("%s%s.png",path_img,elements[i].name))
 		end
 	end
 
+	--Colores por defecto = tema por default
 	theme.style = {
 		TXTCOLOR		= 0xFFFFFFFF,
 		TXTBKGCOLOR		= 0x64000000,
@@ -103,6 +87,8 @@ function theme.load()
 		TITLECOLOR      = 0xFF9999FF,
 		PATHCOLOR       = 0xA09999FF,
 		DATETIMECOLOR   = 0xFF7300E6,
+		COUNTCOLOR		= 0XFF0000FF,
+		CBACKSBARCOLOR	= 0xC8FFFFFF,
 		SELCOLOR        = 0x64530689,
 		SFOCOLOR        = 0XFFFF07FF,
 		BINCOLOR        = 0XFF0041C3,
@@ -118,28 +104,20 @@ function theme.load()
 		GRADSHADOWCOLOR = 0xC8FFFFFF,
 	}
 
-function parseTheme(filename,default)
-	for line in io.lines(filename) do
-		if not line:find("#") and not (line:len()==0) then --ignorar líneas con # o en blanco
-			local k,v = line:match("(.+)=(.+)")
-				if tonumber(v) then --filtrar valores no numéricos
-					local tmpk=""
-						for i=1,k:len() do if string.byte(k:sub(i,i))>47 then tmpk=tmpk..k:sub(i,i) end end --limpieza de index!
-					default[tmpk] = tonumber(v) --No hace falta limpiar el valor, se limpia solo creo xD
-				end
+	function parseTheme(filename,default)
+		for line in io.lines(filename) do
+			if not line:find("#") and not (line:len()==0) then --ignorar líneas con # o en blanco
+				local k,v = line:match("(.+)=(.+)")
+					if tonumber(v) then --filtrar valores no numéricos
+						local tmpk=""
+							for i=1,k:len() do if string.byte(k:sub(i,i))>47 then tmpk=tmpk..k:sub(i,i) end end --limpieza de index!
+						default[tmpk] = tonumber(v) --No hace falta limpiar el valor, se limpia solo
+					end
+			end
 		end
 	end
-end
 
-parseTheme(path.."theme.ini",theme.style)
-
--- TODO: move this to correct script :P
-	isopened = { png = theme.style.IMAGECOLOR, jpg = theme.style.IMAGECOLOR, gif = theme.style.IMAGECOLOR, bmp = theme.style.IMAGECOLOR,
-		mp3 = theme.style.MUSICCOLOR, ogg = theme.style.MUSICCOLOR, wav = theme.style.MUSICCOLOR,
-		iso = theme.style.BINCOLOR, pbp = theme.style.BINCOLOR, cso = theme.style.BINCOLOR, dax = theme.style.BINCOLOR, bin = theme.style.BINCOLOR, suprx = theme.style.BINCOLOR, skprx = theme.style.BINCOLOR,
-		zip = theme.style.ARCHIVECOLOR, rar = theme.style.ARCHIVECOLOR, vpk = theme.style.ARCHIVECOLOR, gz = theme.style.ARCHIVECOLOR,
-		sfo = theme.style.SFOCOLOR,
-	}
+	parseTheme(path.."theme.ini",theme.style)
 
 	fnt, __USERFNT = nil,false
 	if files.exists(string.format("%s%s",path,"font.ttf")) then
@@ -154,15 +132,10 @@ parseTheme(path.."theme.ini",theme.style)
 		__USERFNT = true
 	else font.setdefault(__FNT) end
 
-	flag_themes = true
 end
 	
-theme.load()
-
--- TODO: add option to reload a default theme :P
---	 Add scroll xD :P
-
 function reload_theme()
+
 	write_config()
 
 	local vbuff = screen.toimage()
@@ -181,8 +154,8 @@ end
 
 function theme.manager()
 
-	local thlist = files.listdirs(root_themes)
-	if not thlist then os.message(strings.notthemesmenu.."\n\nux0:data/ONEMENU/themes/") return end
+	local thlist = files.listdirs(__PATHTHEMES)
+	if not thlist then os.message(strings.notthemesmenu.."\n\n"..__PATHTHEMES) return end
 
 	local list = {}
 	for i=1,#thlist do
@@ -196,7 +169,7 @@ function theme.manager()
 	end
 
 	local theme_list = newScroll(list,15)
-	if theme_list.maxim <= 0 then os.message(strings.notthemesmenu.."\n\nux0:data/ONEMENU/themes/") return end
+	if theme_list.maxim <= 0 then os.message(strings.notthemesmenu.."\n\n"..__PATHTHEMES) return end
 	while true do
 
 		buttons.read()
@@ -218,6 +191,7 @@ function theme.manager()
 
 		if theme.data["themesmanager"] then theme.data["themesmanager"]:blit(0,0) end
 
+		--Print info
 		screen.print(480,15,strings.themesappman,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
 		local y = 70
 		for i=theme_list.ini,theme_list.lim do
@@ -234,12 +208,10 @@ function theme.manager()
 
 		screen.print(15,520,strings.themeactual..__THEME,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
 
-		if __THEME != "default" then
-			if theme.data["buttons2"] then
-				theme.data["buttons2"]:blitsprite(960-30,515,1)--start
-			end
-			screen.print(960-40,520,strings.reload,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
+		if theme.data["buttons2"] then
+			theme.data["buttons2"]:blitsprite(960-30,515,1)--start
 		end
+		screen.print(960-40,520,strings.reload,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
 	
 		screen.flip()
 

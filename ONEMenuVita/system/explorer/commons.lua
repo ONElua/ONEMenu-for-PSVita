@@ -10,6 +10,60 @@
 ]]
 
 --Functions Commons
+if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
+
+vpkdel,_print,game_move = false,true,false			--for callbacks
+
+accept,cancel = "cross","circle"
+textXO = "O: "
+accept_x = 1
+if buttons.assign()==0 then
+	accept,cancel = "circle","cross"
+	textXO = "X: "
+	accept_x = 0
+end
+
+Dev = 1
+partitions = {"ux0:","ur0:","uma0:","gro0:","grw0:", "imc0:", }
+Root,Root2 ={},{}
+
+local i=1
+while files.exists(partitions[i]) do
+	table.insert(Root,partitions[i])
+	table.insert(Root2,partitions[i])
+	i+=1
+end
+infosize = os.devinfo(Root[Dev])
+
+function files.listsort(path)
+	local tmp1 = files.listdirs(path)
+
+	if tmp1 then
+		table.sort(tmp1,function(a,b) return string.lower(a.name)<string.lower(b.name) end)
+	else
+		tmp1 = {}
+	end
+
+	local tmp2 = files.listfiles(path)
+
+	if tmp2 then
+		table.sort(tmp2,function(a,b) return string.lower(a.name)<string.lower(b.name) end)
+		for s,t in pairs(tmp2) do
+			t.sizenum = t.size
+			t.size = files.sizeformat(t.size)
+			table.insert(tmp1,t)-- esto es por que son subtablas, realmente no puedo hacer un cont con tmp2
+		end
+	end
+
+	return tmp1
+
+end
+
+function shortcuts()
+	if (buttons.held.l and buttons.held.r and buttons.up) and reboot then os.restart() end
+	if (buttons.held.l and buttons.held.r and buttons.down) and reboot then power.restart() end
+	if (buttons.held.l and buttons.held.r and buttons.square) and reboot then power.shutdown() end
+end
 
 --===============================   vpk      ==========================================================================
 function show_scan(infovpk)
@@ -33,7 +87,7 @@ function show_scan(infovpk)
 		buttons.read()
 		bufftmp:blit(0,0)
 
-		draw.fillrect(x,y,420,420,color.new(0x2f,0x2f,0x2f,0xff))--color.shine)
+		draw.fillrect(x,y,420,420,color.new(0x2f,0x2f,0x2f,0xff))
 		draw.framerect(x,y,420,420,color.black, color.shine,6)
 
 		screen.print(960/2,y+35,infovpk.name,1,color.black,color.blue,__ACENTER)
@@ -169,13 +223,11 @@ function show_msg_vpk(obj_vpk)
 			end
 		reboot=true
 
-		if os.message(strings.launchpbp+"\n"+scan_vpk.sfo.TITLE+" ?",1) == 1 then
+		if os.message(strings.launchpbp.."\n\n"..scan_vpk.sfo.TITLE+" ?",1) == 1 then
 			if game.exists(scan_vpk.sfo.TITLE_ID) then game.launch(scan_vpk.sfo.TITLE_ID) end
 		end
 
 		tmp_vpk.path = string.format("ux0:app/%s",scan_vpk.sfo.TITLE_ID)
-		tmp_vpk.flag = 1
-		tmp_vpk.color = color.green
 		tmp_vpk.dev = "ux0"
 
 		--Size
@@ -203,7 +255,10 @@ function show_msg_vpk(obj_vpk)
 		tmp_vpk.title = scan_vpk.sfo.TITLE or scan_vpk.sfo.TITLE_ID
 
 		--Update appman[x].list
-		if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5 else index = 1 end
+		local index = 1
+		if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 4 else
+			if scan_vpk.sfo.CONTENT_ID:len() > 9 then index = 1	else index = 2 end
+		end
 
 		--Search game in appman[index].list
 		local search = 0
@@ -215,11 +270,9 @@ function show_msg_vpk(obj_vpk)
 			table.insert(appman[index].list, tmp_vpk)
 			table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
 			appman[index].scroll:set(appman[index].list,limit)
-			plugman.load()
+			--plugman.load()
 		else
 			--update
-			appman[index].list[search].flag = 1
-			appman[index].list[search].color = color.green
 			appman[index].list[search].dev = "ux0"
 			appman[index].list[search].img = tmp_vpk.img
 			--appman[index].list[search].img:resize(120,120)
@@ -242,7 +295,7 @@ function show_msg_vpk(obj_vpk)
 	end
 
 	bufftmp:blit(0,0)
-	buttons.read()--flush xD
+	buttons.read()--flush 
 	--return res
 end
 
@@ -268,7 +321,7 @@ function show_msg_pbp(handle)
 		buttons.read()
 		bufftmp:blit(0,0)
 
-		draw.fillrect(x,y,420,420,color.new(0x2f,0x2f,0x2f,0xff))--color.shine
+		draw.fillrect(x,y,420,420,color.new(0x2f,0x2f,0x2f,0xff))
 		draw.rect(x,y,420,420,color.white)
 
 		if sfo then
@@ -308,7 +361,7 @@ function show_msg_pbp(handle)
 	end
 
 	bufftmp:blit(0,0)
-	buttons.read()--flush xD
+	buttons.read()--flush 
 	return res
 	
 end
@@ -466,14 +519,36 @@ function visorimg(path)
 end
 
 -- ## File-Viewer ## --
+function files.readlinesSFO(path)
+	local sfo = game.info(path)
+	if not sfo then return nil end
+	local data = {}
+	for k,v in pairs(sfo) do
+		table.insert(data,tostring(k).." = "..tostring(v))
+	end
+	return data
+end
+
+function files.readlines(path,index) -- Lee una table o string si se especifica linea
+	if files.exists(path) then
+		local contenido = {}
+		for linea in io.lines(path) do
+			table.insert(contenido,linea)
+		end
+
+		if index == nil then return contenido
+		else return contenido[index] end
+	end
+end
+
 function visortxt(handle)
-	local cont = nil
-	if handle.ext == "sfo" then cont = files.readlinesSFO(handle.path)
-	else cont = files.readlines(handle.path) end
+	local cont_file = nil
+	if handle.ext == "sfo" then cont_file = files.readlinesSFO(handle.path)
+	else cont_file = files.readlines(handle.path) end
 
-	if cont == nil then return end
+	if cont_file == nil then return end
 
-	local srcn = newScroll(cont,16)
+	local srcn = newScroll(cont_file,16)
 	while true do
 		buttons.read()
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
@@ -488,7 +563,7 @@ function visortxt(handle)
 		local y = 70
 		for i=srcn.ini,srcn.lim do
 			if i == srcn.sel then draw.fillrect(10,y,__DISPLAYW-50,20,theme.style.SELCOLOR) end
-			screen.print(15,y,cont[i],1,color.white)
+			screen.print(15,y,cont_file[i],1,color.white)
 			y+=26
 		end
 		screen.flip()

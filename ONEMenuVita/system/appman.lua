@@ -9,127 +9,141 @@
    Collaborators: BaltazaR4 & Wzjk.
 ]]
 
-function splash(pics,delay,vel)
-	pics:center()
-	for i = 0, 255, vel do
-		pics:blit(__DISPLAYW/2,__DISPLAYH/2,i)
-		screen.flip()
+function isTouched(x,y,sx,sy)
+    for i=1,touch.front.count do
+		if math.minmax(touch.front[i].x,x,x+sx)==touch.front[i].x and math.minmax(touch.front[i].y,y,y+sy)==touch.front[i].y then
+			return true
+		end
 	end
-	os.delay(delay)
-	for i = 255, 0, -vel do
-		pics:blit(__DISPLAYW/2,__DISPLAYH/2,i)
-		screen.flip()
-	end
+	return false
 end
 
-default_icon = theme.data["icodef"]
-label = {
+categories = {
 	{ img = theme.data["psvita"] },
+	{ img = theme.data["hbvita"] },
 	{ img = theme.data["psm"] },
-	{ img = theme.data["psp"]},
-	{ img = theme.data["ps1"] },
+	{ img = theme.data["retro"]},
 	{ img = theme.data["adrbb"]},
+	{ img = theme.data["fav"] },
 }
 
 cat,limit,movx=1,7,0
 elev = 0
 
 appman = {}
-for i=1,5 do table.insert(appman, { list={}, scroll, slide = { img = nil, x=0 , acel=7, w= 0 } } ) end
+for i=1,#categories do table.insert(appman, { list={}, scroll, slide = { img = nil, x=0 , acel=7, w= 0 } } ) end
 appman.len = 0
 
-function appman.refresh()
-	if appman.len == 0 then
-		os.cpu(444)
+function fillappman(obj)
+	
+	local index=1
 
-		local wstrength = wlan.strength()
-		if wstrength then
-			if wstrength > 55 and not avatar then getavatar(__AVATAR) end
+	if obj.type == "mb" then
+		if __FAV == 1 then index = 6 else index = 3 end
+		obj.resize = true
+		obj.path_img = "ur0:appmeta/"..obj.id.."/pic0.png"
+
+	elseif obj.type == "EG" or obj.type == "ME" then
+		if __FAV == 1 then index = 6 else index = 4 end
+		obj.resize = true
+		obj.path_img = "ur0:appmeta/"..obj.id.."/livearea/contents/startup.png"
+
+	else
+
+		if files.exists(obj.path.."/data/boot.inf") or obj.id == "PSPEMUCFW" then
+			if __FAV == 1 then index = 6 else index = 5 end
+		else
+			local sfo = game.info(obj.path.."/sce_sys/param.sfo")
+			if sfo.CONTENT_ID:len() > 9 then
+				if __FAV == 1 then index = 6 else index = 1 end
+			else
+				if __FAV == 1 then index = 6 else index = 2 end
+			end
 		end
 
-		local list = game.list(__GAME_LIST_ALL)
-		table.sort(list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+		obj.path_img = "ur0:appmeta/"..obj.id.."/icon0.png"
+
+	end
+
+	obj.img = image.copy(theme.data["icodef"])
+	if __FAV == 1 then
+		obj.img:resize(120,120)
+	else
+		if obj.resize then obj.img:resize(120,100) else obj.img:resize(120,120) end
+	end
+
+	table.insert(appman[index].list,obj)
+
+end
+
+function appman.refresh()
+
+	--Solo se escanea en cada inicio de 1menu
+	if appman.len == 0 then
+
+		local gpu = os.gpuclock()
+		os.cpu(444)
+		os.gpuclock(166)
 
 		--id, type, version, dev, path, title
+		local list = game.list(__GAME_LIST_ALL)
+		table.sort(list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+
 		appman.len = #list
 		for i=1,appman.len do
 
-			list[i].flag = 1					--ux0
-			if list[i].dev == "ur0" then
-				list[i].flag = 0
-			elseif list[i].dev == "uma0" then
-				list[i].flag = 2
-			end
-
-			list[i].size = nil
-			list[i].sizef = nil
-			list[i].clon = false
-			list[i].basegame = false
-
-			local img = nil
-			--gd,gp PSVITA:1	mb PSM:2	EG PSP:3	ME PSX:4	AdrenalineBubbles:5
-			local index=1
-			if list[i].type == "EG" or list[i].type == "ME" then
-				index=4
-
-				img = game.geticon0(string.format("%s/pboot.pbp",list[i].path))--pboot
-				if not img then
-					img = image.load(string.format("ur0:appmeta/%s/livearea/contents/startup.png",list[i].id))
-					if not img then	img = game.geticon0(string.format("%s/eboot.pbp",list[i].path)) end--icon0 normal
+			if files.exists(list[i].path) then
+				list[i].fav = false
+				for j=1,#apps do
+					if list[i].id == apps[j] then list[i].fav = true end
 				end
 
-				--Clon
-				list[i].basegame = true
-				if list[i].type == "EG" then
-					index=3
-					local sceid = game.sceid(string.format("%s/__sce_ebootpbp",list[i].path))
-					if sceid and sceid != "---" then
-						if sceid != list[i].id then
-							list[i].clon = true
-						end
+				if __ID != list[i].id then
+					if __FAV == 1 and #apps>0 then
+						if list[i].fav then	fillappman(list[i])	end--Scan only Favs
+					else
+						__FAV=0
+						fillappman(list[i])
 					end
 				end
-
-			elseif list[i].type == "mb" then--PSM
-				index=2
-				img = image.load(string.format("%s/pic0.png","ur0:appmeta/"..list[i].id))
-			else
-				if files.exists(list[i].path.."/data/boot.inf") or list[i].id == "PSPEMUCFW" then index = 5 end
-				game.mount(list[i].id)
-					img = image.load(string.format("%s/sce_sys/icon0.png",list[i].path))
-				game.umount()
-			end
-			if not img then img = image.copy(theme.data["icodef"]) end
-
-			list[i].img = img
-			if list[i].img then
-				--only PSP/PSM
-				if list[i].type == "EG" or index==2 then list[i].img:resize(120,100) else list[i].img:resize(120,120) end
-				list[i].img:setfilter(__LINEAR, __LINEAR)
 			end
 
-			table.insert(appman[index].list,list[i])
+		end
 
-			if theme.data["back"] then theme.data["back"]:blit(0,0) end
-			if not explorer.list then
-				screen.print(10,15,list[i].id)
-				screen.flip()
-			end
+		if __FAV == 1 then cat = 6 else	cat = 1	end
 
-		end--for
 		os.cpu(333)
+		os.gpuclock(gpu)
 	end
 
+	--Sorteamos contenido
+	if __FAV == 0 then
+		if #appman[3].list > 0 then--PSM
+			table.sort(appman[3].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+		end
+
+		if #appman[5].list > 0 then--PSP(X)
+			table.sort(appman[5].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+		end
+	else
+		if #appman[6].list > 0 then
+			table.sort(appman[6].list, function (a,b) return string.lower(a.type)<string.lower(b.type) end)
+			table.sort(appman[6].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+		end
+	end
+
+	--Asignamos limites y las img para nuestras categorias
 	for i=1,#appman do
 		appman[i].scroll = newScroll(appman[i].list,limit)
-		appman[i].slide.img = label[i].img
+		appman[i].slide.img = categories[i].img
 		if appman[i].slide.img then
 			appman[i].slide.w = appman[i].slide.img:getw()
 		end
 	end
 
-	infodevices()
+	theme.data["splash"] = nil
 
+	infodevices()
 end
 
 reboot = true
@@ -139,21 +153,16 @@ function appman.ctrls()
 	if not submenu_ctx.close then return end
 
 	if (buttons.right or buttons.held.r or buttons.analoglx > 60) and submenu_ctx.x == -submenu_ctx.w then
-		if appman[cat].scroll:down_menu() then
-			if (buttons.right and theme.data["slide"]) then theme.data["slide"]:stop() theme.data["slide"]:play() end
-			elev=0
-		end
+		if appman[cat].scroll:down_menu() then elev=0 end
 	end
 
 	if (buttons.left or buttons.held.l or buttons.analoglx < -60) and submenu_ctx.x == -submenu_ctx.w then
-		if appman[cat].scroll:up_menu() then
-			if (buttons.left and theme.data["slide"]) then theme.data["slide"]:stop() theme.data["slide"]:play() end
-			elev=0
-		end
+		if appman[cat].scroll:up_menu() then elev=0 end
 	end
 
-	if (buttons.up or buttons.down) and submenu_ctx.x == -submenu_ctx.w then
+	if (buttons.up or buttons.down) and submenu_ctx.x == -submenu_ctx.w and cat!=6 then
 
+		local tmp_cat = cat
 		if buttons.up then
 			cat-=1
 			if cat < 1 then cat = #appman end
@@ -161,10 +170,6 @@ function appman.ctrls()
 				cat-=1
 				if cat < 1 then cat = #appman end
 			end
-		end
-
-		if theme.data["jump"] then
-			theme.data["jump"]:stop() theme.data["jump"]:play()
 		end
 
 		if buttons.down then
@@ -176,40 +181,75 @@ function appman.ctrls()
 			end
 		end
 
-		elev=0
+		if tmp_cat != cat then elev=0 end
 	end
 
 	--tmp0.CATEGORY: ISO/CSO UG, PSN EG, HBs MG, PS1 ME
-	if buttons[accept] then
-		if __ID != appman[cat].list[focus_index].id then
-			if appman[cat].list[focus_index].type == "EG" or appman[cat].list[focus_index].type == "ME" then
-				gameboot = game.getpic1(string.format("%s/eboot.pbp",appman[cat].list[focus_index].path))
-				if not gameboot then gameboot = game.getpic0(string.format("%s/eboot.pbp",appman[cat].list[focus_index].path)) end
-			else
-				gameboot = game.bg0(appman[cat].list[focus_index].path)
-			end
-			if gameboot then
-				screen.flip()
-				splash(gameboot,10,3)
-			end
-			if appman[cat].list[focus_index].type == "ME" then game.open(appman[cat].list[focus_index].id)
-			else game.launch(appman[cat].list[focus_index].id) end
-		else os.restart() end
+	if buttons[accept] or isTouched(95,148,151,228) then
+
+		local gameboot = image.load(string.format("%s/pic0.png","ur0:appmeta/"..appman[cat].list[focus_index].id))
+
+		if not gameboot then gameboot = game.bg0(appman[cat].list[focus_index].id) end
+
+		if gameboot then
+			screen.flip()
+			splash_efect(gameboot,10,3)
+		end
+
+		if appman[cat].list[focus_index].type == "ME" then game.open(appman[cat].list[focus_index].id)
+		else game.launch(appman[cat].list[focus_index].id) end
 	end
 
 end
 
+IMAGE_PORT_I = channel.new("IMAGE_PORT_I")
+IMAGE_PORT_O = channel.new("IMAGE_PORT_O")
+THID_IMAGE = thread.new("system/thread_img.lua")
+
+local search_icon,cont_icons = false,0
 function appman.launch()
 
-	cat=1
 	appman.refresh()
-	plugman.load() -- Reload plugs, because can change any in ftp, explorer
 
 	buttons.interval(10,10)
 	while true do
+
+		--Este for es una belleza!!!!
+	if not search_icon then
+		local gpu = os.gpuclock()
+		os.gpuclock(166)
+		for i=1, #appman do
+			for j=1, #appman[i].list do
+
+				if not appman[i].list[j].ready then
+					appman[i].list[j].ready = true
+					IMAGE_PORT_O:push( { i=i, j=j, fav = __FAV, path = appman[i].list[j].path_img, resize = appman[i].list[j].resize } ) -- Enviamos peticion
+				end
+
+				if IMAGE_PORT_I:available() > 0 then -- De tal manera que si se quedo un previo, lo pueda setear..
+					local entry = IMAGE_PORT_I:pop() -- Recibimos peticiones..
+
+					if appman[entry.i].list[entry.j].path_img == entry.path then -- Por si lo borran o cambio etc..
+						if entry.img then
+							appman[entry.i].list[entry.j].img = entry.img
+						end
+					end
+				end
+
+			end
+		end
+		if cont_icons == appman.len then
+			os.delay(50)
+			os.gpuclock(gpu)
+			search_icon = true
+		end
+	end
+
 		buttons.read()
+		touch.read()
 
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
+		if math.minmax(tonumber(os.date("%d%m")),2412,2512)== tonumber(os.date("%d%m")) then stars.render() end
 
 		if appman.len > 0 then
 			main_draw()
@@ -228,13 +268,11 @@ function appman.launch()
 			show_explorer_list()
 		end
 
-		if (buttons.held.l and buttons.held.r and buttons.up) and reboot then os.restart() end
-		if (buttons.held.l and buttons.held.r and buttons.down) and reboot then power.restart() end
-		if (buttons.held.l and buttons.held.r and buttons.square) and reboot then power.shutdown() end
-
 		if buttons.start and not submenu_ctx.open then
 			system.run()
 		end
+
+		shortcuts()
 
 	end
 end
@@ -244,25 +282,23 @@ end
 local manual_callback = function ()
 
 	local pathmanual = ""
-	if appman[cat].list[focus_index].type == "EG" or appman[cat].list[focus_index].type == "ME" then	--manual PSP/PS1
-		pathmanual = string.format("%s/document.dat",appman[cat].list[focus_index].path)
-	else
-		pathmanual = string.format("%s/sce_sys/manual/",appman[cat].list[focus_index].path)
-	end
+	pathmanual = appman[cat].list[focus_index].path.."/sce_sys/manual/"
 
 	if files.exists(pathmanual) then
-		local size_manual = files.size(pathmanual)
-		reboot=false
-			files.delete(pathmanual)
-		reboot=true
+		if os.message(strings.manual,1) == 1 then
+			local size_manual = files.size(pathmanual)
+			reboot=false
+				files.delete(pathmanual)
+			reboot=true
 
-		--update size
-		appman[cat].list[focus_index].size = files.size(appman[cat].list[focus_index].path)
-		appman[cat].list[focus_index].sizef = files.sizeformat(appman[cat].list[focus_index].size or 0)
+			--update size
+			appman[cat].list[focus_index].size = files.size(appman[cat].list[focus_index].path)
+			appman[cat].list[focus_index].sizef = files.sizeformat(appman[cat].list[focus_index].size or 0)
 
-		infodevices()
+			infodevices()
 
-		os.message(files.sizeformat(size_manual).." "..strings.free)
+			os.message(files.sizeformat(size_manual).." "..strings.free)
+		end
 	else
 		os.message(strings.notfindmanual)
 	end
@@ -271,74 +307,56 @@ end
 
 local uninstall_callback = function ()
 
-	if appman[cat].list[focus_index].clon then
-		if os.message(strings.delclon+appman[cat].list[focus_index].id+" ?",1) == 1 then
-			buttons.homepopup(0)
-			reboot=false
-				files.delete("ur0:appmeta/"+appman[cat].list[focus_index].id)
-				files.delete("ux0:pspemu/PSP/GAME/"+appman[cat].list[focus_index].id)
-			os.delay(1500)
-			_print=false
-			os.updatedb()
-			os.message(strings.restartupdb)
-			os.delay(3500)
-			buttons.homepopup(1)
-			power.restart()
-		end
-	else
-		if appman[cat].list[focus_index].flag == 1 and __ID != appman[cat].list[focus_index].id then
-			if os.message(strings.appremove + appman[cat].list[focus_index].id + "?",1) == 1 then
-				if theme.data["back"] then theme.data["back"]:blit(0,0) end
-				message_wait()
-				buttons.homepopup(0)
-				reboot=false
+	if os.message(strings.appremove + appman[cat].list[focus_index].id + "?",1) == 1 then
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait()
+		buttons.homepopup(0)
+		reboot=false
 
-				local result_rmv = game.delete(appman[cat].list[focus_index].id)
-				buttons.homepopup(1)
-				reboot=true
-				if result_rmv == 1 then
+		local result_rmv = game.delete(appman[cat].list[focus_index].id)
+		buttons.homepopup(1)
+		reboot=true
+		if result_rmv == 1 then
 
-					if theme.data["back"] then theme.data["back"]:blit(0,0) end
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-					table.remove(appman[cat].list, appman[cat].scroll.sel)
-					appman[cat].scroll.maxim=#appman[cat].list
+		table.remove(appman[cat].list, appman[cat].scroll.sel)
+		appman[cat].scroll.maxim=#appman[cat].list
 						
-					if #appman[cat].list < 1 then
-						while #appman[cat].list < 1 do
-							cat += 1
-							if cat > #appman then cat = 1 end
-						end
-					else
-
-						if appman[cat].scroll.sel==appman[cat].scroll.lim then
-							if appman[cat].scroll.ini != 1 then appman[cat].scroll.ini-=1 end
-							appman[cat].scroll.sel-=1
-							appman[cat].scroll.lim=appman[cat].scroll.sel
-						elseif appman[cat].scroll.lim>#appman[cat].list then
-							appman[cat].scroll.lim-=1
-						end
-					end
-					appman.len -= 1
-					infodevices()
-				end
-				submenu_ctx.close = true
+		if #appman[cat].list < 1 then
+			while #appman[cat].list < 1 do
+				cat += 1
+				if cat > #appman then cat = 1 end
 			end
+		else
+
+			if appman[cat].scroll.sel==appman[cat].scroll.lim then
+				if appman[cat].scroll.ini != 1 then appman[cat].scroll.ini-=1 end
+					appman[cat].scroll.sel-=1
+					appman[cat].scroll.lim=appman[cat].scroll.sel
+				elseif appman[cat].scroll.lim>#appman[cat].list then
+					appman[cat].scroll.lim-=1
+				end
+			end
+			appman.len -= 1
+			infodevices()
 		end
+		submenu_ctx.close = true
 	end
 
 end
-	
+
 local switch_callback = function ()
 
-	if cat != 1 and cat != 5 then return end
+	if appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG" or appman[cat].list[focus_index].type == "ME" then return end
 
 	local mov = 1
 	local loc1,loc2,v1,v2 = "ur0","uma0",1,1
-	if appman[cat].list[focus_index].flag == 0 then
+	if appman[cat].list[focus_index].dev == "ur0" then
 		loc1,loc2,v1,v2 = "ux0","uma0",2,5
-	elseif appman[cat].list[focus_index].flag == 1 then
+	elseif appman[cat].list[focus_index].flag == "ux0" then
 		loc1,loc2,v1,v2 = "ur0","uma0",1,3
-	elseif appman[cat].list[focus_index].flag == 2 then
+	elseif appman[cat].list[focus_index].flag == "uma0" then
 		loc1,loc2,v1,v2 = "ux0","ur0",4,6
 	end
 
@@ -396,31 +414,23 @@ local switch_callback = function ()
 				total_size,folders,filess = files.size(appman[cat].list[focus_index].path)
 				files_move,cont = folders+filess,0
 				local result = game.move(appman[cat].list[focus_index].id, mov, total_size)
-				total_size = 0
-				files_move,cont = folders+filess,0
+				total_size,files_move, cont = 0,0,0
+				fileant = ""
 			game_move=false
 
 		buttons.homepopup(1)
 		reboot=true
 		buttons.read()--fflush
+		os.delay(100)
 
 		if result ==1 then
-
-			if __ID == appman[cat].list[focus_index].id then
-				os.message(strings.restart)
-				power.restart()
-			end
-
 			if mov == 1 or mov == 6 then
-				appman[cat].list[focus_index].flag = 0
 				appman[cat].list[focus_index].path = "ur0:app/"..appman[cat].list[focus_index].id
 				appman[cat].list[focus_index].dev = "ur0"
 			elseif mov == 2 or mov == 4 then
-				appman[cat].list[focus_index].flag = 1
 				appman[cat].list[focus_index].path = "ux0:app/"..appman[cat].list[focus_index].id
 				appman[cat].list[focus_index].dev = "ux0"
 			elseif mov == 3 or mov == 5 then
-				appman[cat].list[focus_index].flag = 2
 				appman[cat].list[focus_index].path = "uma0:app/"..appman[cat].list[focus_index].id
 				appman[cat].list[focus_index].dev = "uma0"
 			end
@@ -458,6 +468,27 @@ local pic1_callback = function ()
 	submenu_ctx.scroll.sel = pos_menu
 end
 
+local fav_callback = function ()
+
+	appman[cat].list[focus_index].fav = not appman[cat].list[focus_index].fav
+	submenu_ctx.wakefunct()
+
+	if appman[cat].list[focus_index].fav then
+		favs = strings.yes
+		table.insert(apps, appman[cat].list[focus_index].id)
+	else
+		favs = strings.no
+		for j=1,#apps do
+			if appman[cat].list[focus_index].id == apps[j] then
+				table.remove(apps, j)
+			end
+		end
+	end
+
+	write_favs(__PATH_FAVS)
+	submenu_ctx.close = true
+end
+
 submenu_ctx = {
 	h = 450,				-- Height of menu
 	w = 355,				-- Width of menu
@@ -470,9 +501,10 @@ submenu_ctx = {
 	scroll = newScroll(),	-- Scroll of menu options.
 }
 
+favs=""
 function submenu_ctx.wakefunct()
 
-	if __SLIDES == 100 then var = strings.up else var = strings.down end
+	if __SLIDES == 100 then var = strings.original else var = strings.ps4 end
 	if __PIC1 == 1 then showpic = strings.yes else showpic = strings.no end
 
 	submenu_ctx.options = { -- Handle Option Text and Option Function
@@ -481,6 +513,7 @@ function submenu_ctx.wakefunct()
 		{ text = strings.switchapp, 	state = true, funct = switch_callback },
 		{ text = strings.slides..var,	state = true, funct = slides_callback },
 		{ text = strings.pic1..showpic,	state = true, funct = pic1_callback },
+		{ text = strings.fav..favs,		state = true, funct = fav_callback },
 	}
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
 end
@@ -488,11 +521,7 @@ end
 submenu_ctx.wakefunct()
 
 function submenu_ctx.run()
-	if buttons[submenu_ctx.ctrl] then submenu_ctx.close = not submenu_ctx.close
-		if theme.data["jump"] then
-			theme.data["jump"]:stop() theme.data["jump"]:play()
-		end
-	end -- Open/Close Menu
+	if buttons[submenu_ctx.ctrl] then submenu_ctx.close = not submenu_ctx.close end -- Open/Close Menu
 	if submenu_ctx.close then submenu_ctx.wakefunct() end
 	submenu_ctx.draw()
 	submenu_ctx.buttons()
@@ -504,16 +533,21 @@ THID_SIZE = thread.new("system/thread_size.lua")
 
 function submenu_ctx.draw()
 
-	--gd,gp PSVITA:1	mb PSM:2	EG PSP:3	ME PSX:4	AdrenalineBubbles:5
+	if appman[cat].list[focus_index].fav then favs = strings.yes else favs = strings.no end
+
+	--gd,gp PSVITA:1	hbsvita2	mb PSM:3	EG PSP & ME PSX: 4		AdrenalineBubbles:5
 	if not submenu_ctx.close and not pic1 then
 
 		if __PIC1 == 1 then
-			if cat == 3 or cat == 4 then
-				pic1 = image.load(string.format("ur0:appmeta/%s/livearea/contents/bg0.png",appman[cat].list[focus_index].id))
-			else
-				pic1 = game.bg0(appman[cat].list[focus_index].path)
+			if appman[cat].list[focus_index].type == "mb" then
+				pic1 = game.bg0(appman[cat].list[focus_index].id)
 				if not pic1 then
 					pic1 = image.load(string.format("%s/pic0.png","ur0:appmeta/"..appman[cat].list[focus_index].id))
+				end
+			else
+				pic1 = image.load(string.format("%s/pic0.png","ur0:appmeta/"..appman[cat].list[focus_index].id))
+				if not pic1 then
+					pic1 = game.bg0(appman[cat].list[focus_index].id)--id al recompilar
 				end
 			end
 		end
@@ -551,7 +585,7 @@ function submenu_ctx.draw()
 				else draw.fillrect(5,h-2,215,23,theme.style.SELCOLOR) end
 			end
 			if submenu_ctx.options[i].state then
-				screen.print(12, h, submenu_ctx.options[i].text, 1, cc,theme.style.TXTBKGCOLOR, __ALEFT)--cc,color.blue
+				screen.print(12, h, submenu_ctx.options[i].text, 1, cc,theme.style.TXTBKGCOLOR, __ALEFT)
 				h += 25
 			end
 		end
@@ -561,23 +595,7 @@ function submenu_ctx.draw()
 		screen.print(10,h, strings.version..": "..appman[cat].list[focus_index].version or "", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		h += 20
 		screen.print(10,h, strings.size_ind..": "..(appman[cat].list[focus_index].sizef or strings.getsize), 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
-		h += 20
-
-		if appman[cat].list[focus_index].clon then
-			screen.print(15,h,strings.clon,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			h+=20
-		end
-
-		if plugman.list[appman[cat].list[focus_index].id] then
-			screen.print(10,h, strings.plugins..": ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			h += 20
-			for i=1, #plugman.list[appman[cat].list[focus_index].id] do
-				local ccc = color.green
-				if not files.exists(plugman.list[appman[cat].list[focus_index].id][i].path) then ccc=color.red end
-				screen.print(10,h,plugman.list[appman[cat].list[focus_index].id][i].name or "",1.0,ccc,color.gray,__ALEFT)
-				h += 20
-			end
-		end
+		--h += 20
 
 		h = 480
 		draw.fillrect(10,h, 330, 15, color.gray)

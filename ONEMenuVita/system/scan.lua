@@ -138,7 +138,7 @@ function scan(full)
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
 
 		screen.print(480,15,strings.vpktittle,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
-		screen.print(950,15,strings.count + list_vpks.len,1,color.red,theme.style.TXTBKGCOLOR,__ARIGHT)
+		screen.print(950,15,strings.count + list_vpks.len,1,theme.style.COUNTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
 
 		if list_vpks.len > 0 then
 			if buttons.up or buttons.analogly < -60 then srcn:up() end
@@ -218,9 +218,7 @@ function scan(full)
 			os.delay(55) break
 		end
 
-		if (buttons.held.l and buttons.held.r and buttons.up) and reboot then os.restart() end
-		if (buttons.held.l and buttons.held.r and buttons.down) and reboot then power.restart() end
-		if (buttons.held.l and buttons.held.r and buttons.square) and reboot then power.shutdown() end
+		shortcuts()
 
 		screen.flip()
 

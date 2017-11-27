@@ -18,6 +18,13 @@ rar=5,zip=5,vpk=5,gz=5,
 cso=6,iso=6,dax=6
 }
 
+isopened = { png = theme.style.IMAGECOLOR, jpg = theme.style.IMAGECOLOR, gif = theme.style.IMAGECOLOR, bmp = theme.style.IMAGECOLOR,
+	mp3 = theme.style.MUSICCOLOR, ogg = theme.style.MUSICCOLOR, wav = theme.style.MUSICCOLOR,
+	iso = theme.style.BINCOLOR, pbp = theme.style.BINCOLOR, cso = theme.style.BINCOLOR, dax = theme.style.BINCOLOR, bin = theme.style.BINCOLOR, suprx = theme.style.BINCOLOR, skprx = theme.style.BINCOLOR,
+	zip = theme.style.ARCHIVECOLOR, rar = theme.style.ARCHIVECOLOR, vpk = theme.style.ARCHIVECOLOR, gz = theme.style.ARCHIVECOLOR,
+	sfo = theme.style.SFOCOLOR,
+}
+
 -- Create two scrolls :P
 scroll = {
    list = newScroll(),
@@ -64,7 +71,7 @@ function explorer.listshow(posy)
 			if icons_mimes[explorer.list[i].ext] then theme.data["icons"]:blitsprite(10+movx, posy, icons_mimes[explorer.list[i].ext]) -- mime type
 			else theme.data["icons"]:blitsprite(10+movx, posy, 0) end -- file unk
 		else
-			theme.data["icons"]:blitsprite(10+movx, posy, 1) -- folder xD
+			theme.data["icons"]:blitsprite(10+movx, posy, 1) -- folder 
 		end
 
 		if explorer.list[i].multi then draw.fillrect(5+movx, posy-3, len_selector, 22, theme.style.MARKEDCOLOR) end
@@ -98,7 +105,7 @@ function show_explorer_list()
 
 		screen.print(5+movx,26,files.sizeformat(infosize.max or 0).."/"..files.sizeformat(infosize.free or 0),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 
-		screen.print(940+movx,5,scroll.list.maxim,1,color.new(255,69,0),color.black,__ARIGHT)
+		screen.print(940+movx,5,scroll.list.maxim,1,theme.style.COUNTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)--color.new(255,69,0),color.black
 
 		if (multi and #multi > 0) and action then
 			if movx==0 then
@@ -113,12 +120,12 @@ function show_explorer_list()
 			if scroll.list.maxim >= maxim_files then -- Draw Scroll Bar
 				local pos_height = math.max(h/scroll.list.maxim, maxim_files)
 				--Bar Scroll
-				draw.fillrect(920+movx, y-2, 8, h, color.new(255,255,255,100))
+				draw.fillrect(920+movx, y-2, 8, h, color.shine)--color.new(255,255,255,100))
 				draw.fillrect(920+movx, y-2 + ((h-pos_height)/(scroll.list.maxim-1))*(scroll.list.sel-1), 8, pos_height, color.new(0,255,0))
 			end
 			explorer.listshow(y)
 		else
-			screen.print(10+movx,80,"...".."\n"..strings.back,1.1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+			screen.print(10+movx,80,"...".."\n\n"..strings.back,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 		end
 
 		screen.print(10+movx,515,os.date(_time.."  %m/%d/%y"),1,theme.style.DATETIMECOLOR,color.gray,__ALEFT)
@@ -197,9 +204,7 @@ function ctrls_explorer_list()
 		appman.launch()
 	end
 
-	if (buttons.held.l and buttons.held.r and buttons.up) and reboot then os.restart() end
-	if (buttons.held.l and buttons.held.r and buttons.down) and reboot then power.restart() end
-	if (buttons.held.l and buttons.held.r and buttons.square) and reboot then power.shutdown() end
+	shortcuts()
 
 end
 
@@ -280,7 +285,7 @@ local paste_callback = function ()
         if #multi>0 then
             reboot=false
             for i=1,#multi do
-                if os.message(multi[i]+"\n"+strings.pass,1)==1 then
+                if os.message(multi[i]+"\n\n"+strings.pass,1)==1 then
                     local pass = osk.init(strings.ospass, "" , 50)
                     if pass then
                         buttons.homepopup(0)
@@ -312,7 +317,7 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
     if #explorer.list > 0 then
         if explorer.list[scroll.list.sel].multi then
             if #multi>0 then
-                if os.message(strings.delete.." "..#multi.."\n"..strings.filesfolders.."(s) ?",1) == 1 then
+                if os.message(strings.delete.." "..#multi.."\n\n"..strings.filesfolders.."(s) ?",1) == 1 then
                     reboot=false
                         for i=1,#multi do files.delete(multi[i]) end
                     reboot=true
@@ -405,7 +410,7 @@ local installgame_callback = function ()
             buttons.read()
             bufftmp:blit(0,0)
  
-            draw.fillrect(x,y,420,420, theme.style.SELCOLOR)--color.shine)
+            draw.fillrect(x,y,420,420, theme.style.SELCOLOR)
             draw.framerect(x,y,420,420,color.black, color.shine,6)
    
             if info then
@@ -448,13 +453,11 @@ local installgame_callback = function ()
  
 		bufftmp = nil
 		if result ==1 then
-			if os.message(strings.launchpbp+"\n"+info.TITLE_ID+" ?",1) == 1 then
+			if os.message(strings.launchpbp+"\n\n"+info.TITLE_ID+" ?",1) == 1 then
 				if game.exists(info.TITLE_ID) then game.launch(info.TITLE_ID) end
 			end
 
 			tmp_vpk.path = string.format("ux0:app/%s",info.TITLE_ID)
-			tmp_vpk.flag = 1
-			tmp_vpk.color = color.green
 			tmp_vpk.dev = "ux0"
 
 			--Size
@@ -478,7 +481,10 @@ local installgame_callback = function ()
 			tmp_vpk.title = info.TITLE or info.TITLE_ID
 
 			--Update appman[x].list
-			if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5 else index = 1 end
+			local index = 1
+			if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 4 else
+				if info.CONTENT_ID:len() > 9 then index = 1	else index = 2 end
+			end
 
 			--Search game in appman[index].list
 			local search = 0
@@ -490,11 +496,9 @@ local installgame_callback = function ()
 				table.insert(appman[index].list, tmp_vpk)
 				table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
 				appman[index].scroll:set(appman[index].list,limit)
-				plugman.load()
+				--plugman.load()
 			else
 				--update
-				appman[index].list[search].flag = 1
-				appman[index].list[search].color = color.green
 				appman[index].list[search].dev = "ux0"
 				appman[index].list[search].img = tmp_vpk.img
 
@@ -570,15 +574,15 @@ local sizedir_callback = function ()
 				for i=1,#multi do
 					sizedir += files.size(multi[i])
 				end--for
-				os.message(strings.total_size+"\n"+strings.sizeis+files.sizeformat(sizedir or "-1",3))
+				os.message(strings.total_size+"\n\n"+strings.sizeis+files.sizeformat(sizedir or "-1",3))
 			end
 		else
 			if not explorer.list[scroll.list.sel].size then                -- Its Dir
 				message_wait()
 				sizedir = files.size(explorer.list[scroll.list.sel].path)
-				os.message(explorer.list[scroll.list.sel].name+"\n"+strings.sizeis+files.sizeformat(sizedir or "-1"))
+				os.message(explorer.list[scroll.list.sel].name+"\n\n"+strings.sizeis+files.sizeformat(sizedir or "-1"))
 			else
-				os.message(explorer.list[scroll.list.sel].name+"\n"+strings.sizeis+explorer.list[scroll.list.sel].size)
+				os.message(explorer.list[scroll.list.sel].name+"\n\n"+strings.sizeis+explorer.list[scroll.list.sel].size)
 			end
 		end
 --clean

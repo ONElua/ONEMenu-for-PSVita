@@ -9,6 +9,22 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 
 # Controls:
 
+### Changelog 2.00 ###
+- Icons and games list loading time reduced everytime Onemenu is started.<br>
+- New categorie "Favorites".<br>
+- "Favorites" section at advanced submenu.<br>
+- Categorie PS Vita games/homebrews got separated into "PSVita" and "Homebrews Vita".<br>
+- PSP and PSX content unified into one categorie : "Retro Games".<br>
+- Lines added to english_ux.txt ...Dont forget to update your translations.<br>
+- Now your avatar icon gets downloaded to ux0:data/onemenu so it can get loaded offline.<br>
+
+- Images PSP.PNG y PS1.PNG got eliminated and instead the image RETRO.PNG has been added for the categorie PS Retro games (for PSP and PS1 games).<br>
+- Added the image HBVITA.PNG for Homebrews PSVita categorie.<br>
+
+- Added two lines on the theme ini file :<br>
+	COUNTCOLOR to print the folder/file count in the file explorer.<br>
+	CBACKSBARCOLOR to draw the bars in the callbacks section.<br>
+
 ### Changelog 1.01 ###
 Please update your translations...Two new lines were added:<br>
 *PGF Font*<br>
@@ -100,6 +116,8 @@ The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes fol
 
   1. position 7				For battery charging.
 
+  1. position 8				For Favorites.
+
 
 **buttons2.png**    Image Sprites (120*20)
   
@@ -138,16 +156,13 @@ The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes fol
 
 *Label Categories*
 
-**PSVita.png**    PSVita/Hbs Games (250*66).<br>
+**PSVita.png**		PSVita/Hbs Games (250*66).<br>
+**HBVITA.png**		Homebrews Vita (250*66).<br>
+**PSM.png**			PSM Games (250*66).<br>
+**RETRO.png**		PSP & PS1 Games (250*66).<br>
+**ADRBB.png**		Adrenaline Bubbles Games (250*66).<br>
+**FAV.png**			Favorite Games (250*66).<br>
 
-**PSM.png**    PSM Games (250*66).<br>
-
-**PSP.png**    PSP/Hbs Games (250*66).<br>
-
-**PS1.png**    PS1 Games (250*66).<br>
-
-**adrbb.png**    Adrenaline Bubbles Games (250*66).<br>
-  
 # Create a ini file
 
 **theme.ini**
@@ -174,7 +189,13 @@ PATHCOLOR       = 0xA09999FF
 *#Date and time indicator text color.*<br>
 DATETIMECOLOR   = 0xFF7300E6
 
-#File type text color for File Explorer.<br>
+*#Folder/File count in the file explorer.*<br>
+COUNTCOLOR		= 0XFF0000FF
+
+*#Draw the bars in the callbacks section.*<br>
+CBACKSBARCOLOR	= 0x64FFFFFF
+
+#File type text color for File Explorer.*<br>
 SELCOLOR        = 0x64530689<br>
 SFOCOLOR        = 0XFFFF07FF<br>
 BINCOLOR        = 0XFF0041C3<br>
@@ -182,7 +203,7 @@ MUSICCOLOR      = 0xFFFFFF00<br>
 IMAGECOLOR      = 0xFF00FF00<br>
 ARCHIVECOLOR    = 0xFFFF00CC<br>
 MARKEDCOLOR     = 0x2AFF00FF<br>
-FTPCOLOR	= 0xFFFF66FF<br>
+FTPCOLOR		= 0xFFFF66FF<br>
 
 *#Battery percentage text color.*<br>
 PERCENTCOLOR	= 0x6426004D
@@ -237,7 +258,9 @@ ux0:data/ONEMenu/lang/
 *TheFloW* Pkg installer & USB Modules.<br>
 *Yifan-lu, XYZ and Davee* and every coder and dev contributing to Vitasdk.<br>
 *Team Molecule* for Henkaku.<br>
+*WZ-JK* For Graphics.<br>
 Testers:<br>
 *([thehero_](https://twitter.com/TheheroGAC)).*<br>
 *([Applelo1](https://twitter.com/Applelo1)).*<br>
 *([Tuto Pro Play](https://twitter.com/Tuto_Pro_Play)).*<br>
+

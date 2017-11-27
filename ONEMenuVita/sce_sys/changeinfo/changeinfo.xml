@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="02.00">
+    <![CDATA[
+- [NEW] Icons and games list loading time reduced everytime Onemenu is started.<br>
+- [NEW] New categorie "Favorites".<br>
+- [NEW] "Favorites" section at advanced submenu.<br>
+- [NEW] Categorie PS Vita games/homebrews got separated into "PSVita" and "Homebrews Vita".<br>
+- [NEW] PSP and PSX content unified into one categorie : "Retro Games".<br>
+- [NEW] Lines added to english_ux.txt ...Dont forget to update your translations.<br>
+- [NEW] Now your avatar icon gets downloaded to ux0:data/onemenu so it can get loaded offline.<br>
+    ]]>
+  </changes>
   <changes app_ver="01.01">
     <![CDATA[
 - [FIX] Incorrect display of LiveArea app names.<br>
