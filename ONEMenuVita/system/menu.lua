@@ -18,7 +18,7 @@ function slides_efect()
 			appman[i].slide.acel=1
 			appman[i].slide.x-=8
 
-			if appman[i].slide.x < -(appman[i].slide.w) then appman[i].slide.x =- appman[i].slide.w end
+			if appman[i].slide.x < -(appman[i].slide.w) then appman[i].slide.x = -appman[i].slide.w end
 			if appman[i].slide.img then
 				appman[i].slide.img:blit(960 + appman[i].slide.x, __SLIDES)
 			end
@@ -40,8 +40,8 @@ end
 
 function main_draw()
 
-	x_neg = -30
-	x_init = 40
+	x_neg = -35
+	x_init = 45
 	focus_x = 210
 	movx = submenu_ctx.x+submenu_ctx.w
 

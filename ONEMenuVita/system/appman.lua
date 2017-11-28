@@ -19,15 +19,15 @@ function isTouched(x,y,sx,sy)
 end
 
 categories = {
-	{ img = theme.data["psvita"] },
-	{ img = theme.data["hbvita"] },
-	{ img = theme.data["psm"] },
-	{ img = theme.data["retro"]},
-	{ img = theme.data["adrbb"]},
-	{ img = theme.data["fav"] },
+	{ img = theme.data["psvita"] },	--cat 1
+	{ img = theme.data["hbvita"] },	--cat 2
+	{ img = theme.data["psm"] },	--cat 3
+	{ img = theme.data["retro"]},	--cat 4
+	{ img = theme.data["adrbb"]},	--cat 5
+	{ img = theme.data["fav"] },	--cat 6
 }
 
-cat,limit,movx=1,7,0
+cat,limit,movx=0,7,0
 elev = 0
 
 appman = {}
@@ -42,20 +42,22 @@ function fillappman(obj)
 		if __FAV == 1 then index = 6 else index = 3 end
 		obj.resize = true
 		obj.path_img = "ur0:appmeta/"..obj.id.."/pic0.png"
-
 	elseif obj.type == "EG" or obj.type == "ME" then
 		if __FAV == 1 then index = 6 else index = 4 end
 		obj.resize = true
 		obj.path_img = "ur0:appmeta/"..obj.id.."/livearea/contents/startup.png"
-
 	else
 
 		if files.exists(obj.path.."/data/boot.inf") or obj.id == "PSPEMUCFW" then
 			if __FAV == 1 then index = 6 else index = 5 end
 		else
 			local sfo = game.info(obj.path.."/sce_sys/param.sfo")
-			if sfo.CONTENT_ID:len() > 9 then
-				if __FAV == 1 then index = 6 else index = 1 end
+			if sfo and sfo.CONTENT_ID then
+				if sfo.CONTENT_ID:len() > 9 then
+					if __FAV == 1 then index = 6 else index = 1 end
+				else
+					if __FAV == 1 then index = 6 else index = 2 end
+				end
 			else
 				if __FAV == 1 then index = 6 else index = 2 end
 			end
@@ -72,6 +74,7 @@ function fillappman(obj)
 		if obj.resize then obj.img:resize(120,100) else obj.img:resize(120,120) end
 	end
 
+	appman.len += 1
 	table.insert(appman[index].list,obj)
 
 end
@@ -89,8 +92,7 @@ function appman.refresh()
 		local list = game.list(__GAME_LIST_ALL)
 		table.sort(list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
 
-		appman.len = #list
-		for i=1,appman.len do
+		for i=1,#list do
 
 			if files.exists(list[i].path) then
 				list[i].fav = false
@@ -98,19 +100,25 @@ function appman.refresh()
 					if list[i].id == apps[j] then list[i].fav = true end
 				end
 
-				if __ID != list[i].id then
 					if __FAV == 1 and #apps>0 then
 						if list[i].fav then	fillappman(list[i])	end--Scan only Favs
 					else
 						__FAV=0
 						fillappman(list[i])
 					end
-				end
 			end
 
 		end
 
-		if __FAV == 1 then cat = 6 else	cat = 1	end
+		if __FAV == 1 then cat = 6
+		else
+			local tmp=1
+			while tmp<5 do
+				if #appman[tmp].list > 0 then cat=tmp break end
+				tmp+=1
+			end
+			if cat == 0 then appman.len = 0 end
+		end
 
 		os.cpu(333)
 		os.gpuclock(gpu)
@@ -210,14 +218,12 @@ local search_icon,cont_icons = false,0
 function appman.launch()
 
 	appman.refresh()
-
 	buttons.interval(10,10)
 	while true do
 
 		--Este for es una belleza!!!!
 	if not search_icon then
-		local gpu = os.gpuclock()
-		os.gpuclock(166)
+		os.cpu(444)
 		for i=1, #appman do
 			for j=1, #appman[i].list do
 
@@ -233,14 +239,14 @@ function appman.launch()
 						if entry.img then
 							appman[entry.i].list[entry.j].img = entry.img
 						end
+						cont_icons += 1
 					end
 				end
 
 			end
 		end
 		if cont_icons == appman.len then
-			os.delay(50)
-			os.gpuclock(gpu)
+			os.cpu(333)
 			search_icon = true
 		end
 	end
@@ -259,7 +265,7 @@ function appman.launch()
 		end
 
 		screen.flip()
-		
+
 		if appman.len > 0 then
 			appman.ctrls()
 		end
@@ -306,44 +312,44 @@ local manual_callback = function ()
 end
 
 local uninstall_callback = function ()
+	if appman[cat].list[focus_index].id != __ID then
+		if os.message(strings.appremove + appman[cat].list[focus_index].id + "?",1) == 1 then
+			if theme.data["back"] then theme.data["back"]:blit(0,0) end
+			message_wait()
+			buttons.homepopup(0)
+			reboot=false
 
-	if os.message(strings.appremove + appman[cat].list[focus_index].id + "?",1) == 1 then
-		if theme.data["back"] then theme.data["back"]:blit(0,0) end
-		message_wait()
-		buttons.homepopup(0)
-		reboot=false
+			local result_rmv = game.delete(appman[cat].list[focus_index].id)
+			buttons.homepopup(1)
+			reboot=true
+			if result_rmv == 1 then
 
-		local result_rmv = game.delete(appman[cat].list[focus_index].id)
-		buttons.homepopup(1)
-		reboot=true
-		if result_rmv == 1 then
+			if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-		if theme.data["back"] then theme.data["back"]:blit(0,0) end
-
-		table.remove(appman[cat].list, appman[cat].scroll.sel)
-		appman[cat].scroll.maxim=#appman[cat].list
-						
-		if #appman[cat].list < 1 then
-			while #appman[cat].list < 1 do
-				cat += 1
-				if cat > #appman then cat = 1 end
-			end
-		else
-
-			if appman[cat].scroll.sel==appman[cat].scroll.lim then
-				if appman[cat].scroll.ini != 1 then appman[cat].scroll.ini-=1 end
-					appman[cat].scroll.sel-=1
-					appman[cat].scroll.lim=appman[cat].scroll.sel
-				elseif appman[cat].scroll.lim>#appman[cat].list then
-					appman[cat].scroll.lim-=1
+			table.remove(appman[cat].list, appman[cat].scroll.sel)
+			appman[cat].scroll.maxim=#appman[cat].list
+			
+			if #appman[cat].list < 1 then
+				while #appman[cat].list < 1 do
+					cat += 1
+					if cat > #appman then cat = 1 end
 				end
-			end
-			appman.len -= 1
-			infodevices()
-		end
-		submenu_ctx.close = true
-	end
+			else
 
+				if appman[cat].scroll.sel==appman[cat].scroll.lim then
+					if appman[cat].scroll.ini != 1 then appman[cat].scroll.ini-=1 end
+						appman[cat].scroll.sel-=1
+						appman[cat].scroll.lim=appman[cat].scroll.sel
+					elseif appman[cat].scroll.lim>#appman[cat].list then
+						appman[cat].scroll.lim-=1
+					end
+				end
+				appman.len -= 1
+				infodevices()
+			end
+			submenu_ctx.close = true
+		end
+	end
 end
 
 local switch_callback = function ()
@@ -433,6 +439,10 @@ local switch_callback = function ()
 			elseif mov == 3 or mov == 5 then
 				appman[cat].list[focus_index].path = "uma0:app/"..appman[cat].list[focus_index].id
 				appman[cat].list[focus_index].dev = "uma0"
+			end
+			if appman[cat].list[focus_index].id == __ID then
+				os.message(strings.restart)
+				power.restart()
 			end
 
 		elseif result ==-4 then os.message(strings.nomemory) end

@@ -41,7 +41,6 @@ function screen.flip()
 				files.copy("eboot.bin","ux0:/data/1luapkg")
 				files.copy("git/updater/script.lua","ux0:/data/1luapkg/")
 				files.copy("git/updater/param.sfo","ux0:/data/1luapkg/sce_sys/")
-				files.delete("ux0:data/ONEMENU/config.ini")
 				game.installdir("ux0:/data/1luapkg")
 				files.delete("ux0:/data/1luapkg")
 				game.launch(string.format("ONEUPDATE&%s&%s",os.titleid(),path)) -- Goto installer extern!

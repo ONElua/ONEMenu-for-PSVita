@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="02.01">
+    <![CDATA[
+- Fix and more Fix errors.<br>
+    ]]>
+  </changes>
   <changes app_ver="02.00">
     <![CDATA[
 - [NEW] Icons and games list loading time reduced everytime Onemenu is started.<br>

@@ -90,9 +90,9 @@ function show_scan(infovpk)
 		draw.fillrect(x,y,420,420,color.new(0x2f,0x2f,0x2f,0xff))
 		draw.framerect(x,y,420,420,color.black, color.shine,6)
 
-		screen.print(960/2,y+35,infovpk.name,1,color.black,color.blue,__ACENTER)
-		screen.print(960/2,y+85,strings.total_sizevpk..tostring(realsize),1,color.black,color.blue,__ACENTER)
-		screen.print(960/2,y+115,strings.count..tostring(vpk.len),1,color.black,color.blue,__ACENTER)
+		screen.print(960/2,y+35,infovpk.name,1,color.white,color.blue,__ACENTER)
+		screen.print(960/2,y+85,strings.total_sizevpk..tostring(realsize),1,color.white,color.blue,__ACENTER)
+		screen.print(960/2,y+115,strings.count..tostring(vpk.len),1,color.white,color.blue,__ACENTER)
 		screen.flip()
 
 		if buttons[accept] or buttons[cancel] then
@@ -112,7 +112,7 @@ function show_msg_vpk(obj_vpk)
 		if not #scan_vpk or #scan_vpk<=0 then return end
 	reboot=true
 
-	local bin_pos,icon_pos,sfo_pos=-1,-1,-1
+	local bin_pos,icon_pos,sfo_pos = -1,-1,-1
 	local unsafe=0
 	local dang,dangname=false,""
 

@@ -210,7 +210,7 @@ end
 
 function write_config()
 	ini.write(__PATHINI,"theme","id",__THEME)
-	ini.write(__PATHINI,"backg","img",__BACKG)
+	ini.write(__PATHINI,"backg","img",__BACKG) 
 	ini.write(__PATHINI,"slides","pos",__SLIDES)
 	ini.write(__PATHINI,"pics","show",__PIC1)
 	ini.write(__PATHINI,"font","type",__FNT)

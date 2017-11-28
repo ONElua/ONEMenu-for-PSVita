@@ -37,8 +37,6 @@ maxim_files=16
 backl, explorer, multi = {},{},{} -- All explorer functions
 slidex=0
 
-__BACKG = ""
-
 -- ## Explorer Drawer List ## --
 function explorer.listshow(posy)
 
