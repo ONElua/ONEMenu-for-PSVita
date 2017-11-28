@@ -2,14 +2,17 @@
 
 App Manager Plus has evolved to Onemenu for psvita! so, App manager Plus will no longer be updated.
 
-![header](1MENUVITA.png)
+![header](screenshots/1MENUVITA.png)
 
 **OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories...<br>
 Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db...
 
-![header](1MENUVITA5.png)
+![header](screenshots/1MENUVITA5.png)
 
 # Controls:
+
+### Changelog 2.01 ###
+- Fix and more Fix errors.<br>
 
 ### Changelog 2.00 ###
 - Icons and games list loading time reduced everytime Onemenu is started.<br>
@@ -42,7 +45,7 @@ Please update your translations...Two new lines were added:<br>
 - L + R + Down: Restart PSvita.<br>
 - L + R + Square: Shutdown PSvita.<br>
 
-![header](1MENUVITA2.png)
+![header](screenshots/1MENUVITA2.png)
 
 **ONEMenu icons list:**
 
@@ -66,11 +69,11 @@ Open Submenu:<br>
 
 **Show PICS**				Allows to show the selected game PIC in the submenu.<br>
 
-![header](1MENUVITA3.png)
+![header](screenshots/1MENUVITA3.png)
 
 **Explorer Files**
 
-![header](1MENUVITA4.png)
+![header](screenshots/1MENUVITA4.png)
 
 **Triangle:**
 
@@ -89,7 +92,7 @@ The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes fol
 
 **Themes for ONEMenu**
 
-![header](themes1.png)
+![header](screenshots/themes1.png)
 
 ++ Create a new folder with the theme name and place the next resources inside:.<br>
 
@@ -229,7 +232,7 @@ Recommended website: ([Colors Hex](https://www.w3schools.com/colors/colors_hexad
 ONEMenu Themes must be placed in the next path:.<br>
 ux0:data/ONEMENU/themes/yournameTheme
 
-![header](themes2.png)
+![header](screenshots/themes2.png)
 
 # Language
 
