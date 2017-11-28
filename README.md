@@ -12,7 +12,7 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 # Controls:
 
 ### Changelog 2.01 ###
-- Fix and more Fix errors.<br>
+- Fix some bugs.<br>
 
 ### Changelog 2.00 ###
 - Icons and games list loading time reduced everytime Onemenu is started.<br>
