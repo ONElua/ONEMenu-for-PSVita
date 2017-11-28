@@ -57,17 +57,15 @@ Fast scrolling.<br>
 Opens a submenu with a list of system apps.<br>
 **Triangle:**<br>
 Open Submenu:<br>
+* Uninstall:		Allows to uninstall selected app/game.
+* Remove manual:	Allows to eliminate the game/app manual.
+* Switch app:		Allows to move the selected app/game between the 3 available partitions (ux0-ur0-uma0).
 
-	Uninstall		Allows to uninstall selected app/game.
-	Remove manual		Allows to eliminate the game/app manual.
-	Switch app		Allows to move the selected app/game between the 3 available partitions (ux0-ur0-uma0).
+* Slides
+	- Original: Clasic Menu style with mirrored icons and the category slides above the icons list.
+	- PS4 XMB: Simple menu similar to PS4 with the category slide below, this option does not have the icons reflections.
 
-**Slides**					2 options:.<br>
-
-	Up: Clasic Menu style with mirrored icons and the category slides above the icons list.
-	Down: Simple menu similar to PS4 with the category slide below, this option does not have the icons reflections.
-
-**Show PICS**				Allows to show the selected game PIC in the submenu.<br>
+* Show PICS:		Allows to show the selected game PIC in the submenu.<br>
 
 ![header](screenshots/1MENUVITA3.png)
 
@@ -76,12 +74,10 @@ Open Submenu:<br>
 ![header](screenshots/1MENUVITA4.png)
 
 **Triangle:**
-
-	Opens SubMenu1 with basic functions as Copy, Move, Install games as vpk or folder, Install CustomThemes, etc...
+*	Opens SubMenu1 with basic functions as Copy, Move, Install games as vpk or folder, Install CustomThemes, etc...
 
 **Start:**
-
-	Opens SubMenu2 with advanced functions as FTP and USB connection, Restart or Shutdown the PSVita, Update and/or Rebuild Database (app.db), Option for vpks/isos/cso Search, Change Available Themes for ONEMenu and Uninstall CustomThemes.
+*	Opens SubMenu2 with advanced functions as FTP and USB connection, Restart or Shutdown the PSVita, Update and/or Rebuild Database (app.db), Option for vpks/isos/cso Search, Change Available Themes for ONEMenu and Uninstall CustomThemes.
 
 ### NOTE:<br>
 When a CustomTheme is installed the corresponding folder and files are moved to ux0:data/customtheme and for uninstalling any of these CustomThemes you'll be given the option to eliminate the folder and files of the CustomTheme, if you choose not to eliminate them, then the resources of said CustomTheme will be moved to the path ux0:data/uninstall_customtheme for reinstalling in the futured.<br>
