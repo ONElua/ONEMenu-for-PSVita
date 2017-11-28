@@ -9,12 +9,12 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 
 ![header](screenshots/1MENUVITA5.png)
 
-# Controls:
+# Changelog:
 
-### Changelog 2.01 ###
+### v2.01 ###
 - Fix some bugs.<br>
 
-### Changelog 2.00 ###
+### v2.00 ###
 - Icons and games list loading time reduced everytime Onemenu is started.<br>
 - New categorie "Favorites".<br>
 - "Favorites" section at advanced submenu.<br>
@@ -30,7 +30,7 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 	COUNTCOLOR to print the folder/file count in the file explorer.<br>
 	CBACKSBARCOLOR to draw the bars in the callbacks section.<br>
 
-### Changelog 1.01 ###
+### v1.01 ###
 Please update your translations...Two new lines were added:<br>
 *PGF Font*<br>
 *PVF Font*<br>
@@ -47,7 +47,11 @@ Please update your translations...Two new lines were added:<br>
 
 ![header](screenshots/1MENUVITA2.png)
 
+# Controls:
+
 **ONEMenu icons list:**
+
+![header](screenshots/1MENUVITA3.png)
 
 **UP/Down:**<br>
 Category change (5 categories available: Vita/Hb games, PSM Games, PSP/Hbs Games, PS1 Games, Adrenaline Bubbles).<br>
@@ -66,8 +70,6 @@ Open Submenu:<br>
 	- PS4 XMB: Simple menu similar to PS4 with the category slide below, this option does not have the icons reflections.
 
 * Show PICS:		Allows to show the selected game PIC in the submenu.<br>
-
-![header](screenshots/1MENUVITA3.png)
 
 **Explorer Files**
 
