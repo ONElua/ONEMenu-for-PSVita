@@ -14,6 +14,8 @@ theme = {
 	style = {},	-- Handle of colors
 }
 
+enable_favs=""
+local themesimg = nil
 function theme.load()
 
 	if theme.data["back"] then
@@ -30,28 +32,36 @@ function theme.load()
 	__FNT = tonumber(ini.read(__PATHINI,"font","type","2"))
 	__FAV = tonumber(ini.read(__PATHINI,"favs","scan","0"))
 
+
+	if __FAV == 1 and #apps>0 then
+		enable_favs = strings.yes
+	else
+		__FAV=0
+		enable_favs = strings.no
+	end
+
 	local elements = {
-		{name="menu"},
 		{name="list"},
-		{name="themesmanager"},
-		{name="ftp"},
-		{name="music"},
-		{name="cover"},
 		{name="icons",sprite=true, w=16,h=16}, 		-- 112x16
 		{name="buttons1",sprite=true, w=20,h=20}, 	-- 120*20
 		{name="buttons2",sprite=true, w=30,h=20}, 	-- 120*20
 		{name="wifi",sprite=true, w=22,h=22},		-- 132*22
+
 		{name="psvita"},
 		{name="hbvita"},
 		{name="psm"},
 		{name="retro"},
 		{name="adrbb"},
-		{name="fav"},
+
 		{name="icodef"},
 
 		--splash solo se carga una vez...
 		{name="splash"},
+
+		{name="jump", sound=true},
+		{name="slide", sound=true},
 	}
+	--table.insert(elements, {name = "algo"})
 
 	local path = __PATHTHEMES..__THEME.."/"
 	if not files.exists(path) then path = "system/theme/default/" end
@@ -70,9 +80,14 @@ function theme.load()
 
 	-- Load Resources
 	local path_img = "system/theme/default/"
+	local path_snd = "system/theme/default/"
 	for i=1,#elements do
-		if files.exists(string.format("%s%s.png",path,elements[i].name)) then path_img = path else path_img = "system/theme/default/" end
-		if elements[i].sprite then
+		if files.exists(string.format("%s%s.png",path,elements[i].name)) or files.exists(string.format("%s%s.ogg",path,elements[i].name)) then
+			path_img = path else path_img = "system/theme/default/" end
+
+		if elements[i].sound then
+			theme.data[elements[i].name] = sound.load(string.format("%s%s.ogg",path_img,elements[i].name))--,1)
+		elseif elements[i].sprite then
 			theme.data[elements[i].name] = image.load(string.format("%s%s.png",path_img,elements[i].name),elements[i].w,elements[i].h)
 		else
 			theme.data[elements[i].name] = image.load(string.format("%s%s.png",path_img,elements[i].name))
@@ -143,13 +158,20 @@ function reload_theme()
 	local w,h = screen.textwidth(titlew,1) + 30,70
 	local x,y = 480 - (w/2), 272 - (h/2)
 
-	if vbuff then vbuff:blit(0,0) elseif theme.data["themesmanager"] then theme.data["themesmanager"]:blit(0,0) end
+	if vbuff then vbuff:blit(0,0) end
 	draw.fillrect(x,y,w,h,theme.style.BARCOLOR)
 	draw.rect(x,y,w,h,color.white)
 		screen.print(480,y+13, strings.wait,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 	screen.flip()
 
 	theme.load()
+
+	local manager_path = __PATHTHEMES..__THEME.."/themesmanager.png"
+	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
+
+	themesimg = image.load(manager_path)
+
+
 end
 
 function theme.manager()
@@ -170,6 +192,11 @@ function theme.manager()
 
 	local theme_list = newScroll(list,15)
 	if theme_list.maxim <= 0 then os.message(strings.notthemesmenu.."\n\n"..__PATHTHEMES) return end
+	
+	local manager_path = __PATHTHEMES..__THEME.."/themesmanager.png"
+	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
+	themesimg = image.load(manager_path)
+
 	while true do
 
 		buttons.read()
@@ -189,7 +216,7 @@ function theme.manager()
 			reload_theme()
 		end
 
-		if theme.data["themesmanager"] then theme.data["themesmanager"]:blit(0,0) end
+		if themesimg then themesimg:blit(0,0) end
 
 		--Print info
 		screen.print(480,15,strings.themesappman,1,theme.style.TITLECOLOR,color.gray,__ACENTER)

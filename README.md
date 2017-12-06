@@ -9,12 +9,21 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 
 ![header](screenshots/1MENUVITA5.png)
 
-# Changelog:
+# Controls:
 
-### v2.01 ###
+### Changelog 2.02 ###
+- Now you can edit .txt files in a simple way.<br>
+- Text editor controls: Left : Remove line, Right : Add line.<br>
+- Added sound effects for ui transitions.<br>
+- System apps are alphabetically shown.<br>
+- Scan favorites option added to apps menu (direct access to same option at advanced settings).<br>
+- You can launch the selected game with double touch.<br>
+- Please update your translations...New lines were added.<br>
+
+### Changelog 2.01 ###
 - Fix some bugs.<br>
 
-### v2.00 ###
+### Changelog 2.00 ###
 - Icons and games list loading time reduced everytime Onemenu is started.<br>
 - New categorie "Favorites".<br>
 - "Favorites" section at advanced submenu.<br>
@@ -30,7 +39,7 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 	COUNTCOLOR to print the folder/file count in the file explorer.<br>
 	CBACKSBARCOLOR to draw the bars in the callbacks section.<br>
 
-### v1.01 ###
+### Changelog 1.01 ###
 Please update your translations...Two new lines were added:<br>
 *PGF Font*<br>
 *PVF Font*<br>
@@ -47,11 +56,7 @@ Please update your translations...Two new lines were added:<br>
 
 ![header](screenshots/1MENUVITA2.png)
 
-# Controls:
-
 **ONEMenu icons list:**
-
-![header](screenshots/1MENUVITA3.png)
 
 **UP/Down:**<br>
 Category change (5 categories available: Vita/Hb games, PSM Games, PSP/Hbs Games, PS1 Games, Adrenaline Bubbles).<br>
@@ -61,25 +66,31 @@ Fast scrolling.<br>
 Opens a submenu with a list of system apps.<br>
 **Triangle:**<br>
 Open Submenu:<br>
-* Uninstall:		Allows to uninstall selected app/game.
-* Remove manual:	Allows to eliminate the game/app manual.
-* Switch app:		Allows to move the selected app/game between the 3 available partitions (ux0-ur0-uma0).
 
-* Slides
-	- Original: Clasic Menu style with mirrored icons and the category slides above the icons list.
-	- PS4 XMB: Simple menu similar to PS4 with the category slide below, this option does not have the icons reflections.
+	Uninstall		Allows to uninstall selected app/game.
+	Remove manual		Allows to eliminate the game/app manual.
+	Switch app		Allows to move the selected app/game between the 3 available partitions (ux0-ur0-uma0).
 
-* Show PICS:		Allows to show the selected game PIC in the submenu.<br>
+**Slides**					2 options:.<br>
+
+	Up: Clasic Menu style with mirrored icons and the category slides above the icons list.
+	Down: Simple menu similar to PS4 with the category slide below, this option does not have the icons reflections.
+
+**Show PICS**				Allows to show the selected game PIC in the submenu.<br>
+
+![header](screenshots/1MENUVITA3.png)
 
 **Explorer Files**
 
 ![header](screenshots/1MENUVITA4.png)
 
 **Triangle:**
-*	Opens SubMenu1 with basic functions as Copy, Move, Install games as vpk or folder, Install CustomThemes, etc...
+
+	Opens SubMenu1 with basic functions as Copy, Move, Install games as vpk or folder, Install CustomThemes, etc...
 
 **Start:**
-*	Opens SubMenu2 with advanced functions as FTP and USB connection, Restart or Shutdown the PSVita, Update and/or Rebuild Database (app.db), Option for vpks/isos/cso Search, Change Available Themes for ONEMenu and Uninstall CustomThemes.
+
+	Opens SubMenu2 with advanced functions as FTP and USB connection, Restart or Shutdown the PSVita, Update and/or Rebuild Database (app.db), Option for vpks/isos/cso Search, Change Available Themes for ONEMenu and Uninstall CustomThemes.
 
 ### NOTE:<br>
 When a CustomTheme is installed the corresponding folder and files are moved to ux0:data/customtheme and for uninstalling any of these CustomThemes you'll be given the option to eliminate the folder and files of the CustomTheme, if you choose not to eliminate them, then the resources of said CustomTheme will be moved to the path ux0:data/uninstall_customtheme for reinstalling in the futured.<br>

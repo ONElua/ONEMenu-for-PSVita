@@ -35,12 +35,18 @@ function customthemes()
 
 		if list.len<=0 then os.message(strings.notthemes) return end
 
+		local themesimg = nil
+		local manager_path = __PATHTHEMES..__THEME.."/themesmanager.png"
+		if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
+		themesimg = image.load(manager_path)
+
 		local livetheme = newScroll(list,15)
 		while true do
 
 			buttons.read()
 
-			if theme.data["themesmanager"] then theme.data["themesmanager"]:blit(0,0) end
+			--if theme.data["themesmanager"] then theme.data["themesmanager"]:blit(0,0) end
+			if themesimg then themesimg:blit(0,0) end
 
 			screen.print(480,15,strings.customthemes,1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 
@@ -85,8 +91,10 @@ function customthemes()
 
 			screen.flip()
 
-			if buttons[cancel] then collectgarbage("collect")
-				os.delay(20)
+			if buttons[cancel] then
+				themesimg = nil
+				collectgarbage("collect")
+				os.delay(80)
 				break
 			end
 		end

@@ -224,7 +224,10 @@ function show_msg_vpk(obj_vpk)
 		reboot=true
 
 		if os.message(strings.launchpbp.."\n\n"..scan_vpk.sfo.TITLE+" ?",1) == 1 then
-			if game.exists(scan_vpk.sfo.TITLE_ID) then game.launch(scan_vpk.sfo.TITLE_ID) end
+			if game.exists(scan_vpk.sfo.TITLE_ID) then
+				if scan_vpk.sfo.CATEGORY == "ME" then game.open(scan_vpk.sfo.TITLE_ID)
+				else game.launch(scan_vpk.sfo.TITLE_ID) end
+			end
 		end
 
 		tmp_vpk.path = string.format("ux0:app/%s",scan_vpk.sfo.TITLE_ID)
@@ -241,7 +244,7 @@ function show_msg_vpk(obj_vpk)
 		tmp_vpk.clon = false
 		tmp_vpk.basegame = false
 
-		if not tmp_vpk.img then tmp_vpk.img = image.copy(theme.data["icodef"]) end
+		if not tmp_vpk.img then tmp_vpk.img = theme.data["icodef"] end
 		if tmp_vpk.img then
 			tmp_vpk.img:reset()
 			tmp_vpk.img:resize(120,120)
@@ -256,7 +259,7 @@ function show_msg_vpk(obj_vpk)
 
 		--Update appman[x].list
 		local index = 1
-		if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 4 else
+		if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5 else
 			if scan_vpk.sfo.CONTENT_ID:len() > 9 then index = 1	else index = 2 end
 		end
 
@@ -356,7 +359,11 @@ function show_msg_pbp(handle)
 		screen.flip()
 
 		if buttons[cancel] then break end
-		if buttons[accept] and launch then game.launch(sfo.DISC_ID) end 
+
+		if buttons[accept] and launch then
+			if sfo.CATEGORY == "ME" then game.open(sfo.DISC_ID)
+			else game.launch(sfo.DISC_ID) end
+		end 
 
 	end
 
@@ -368,30 +375,41 @@ end
 
 -- ## Music Player ##
 function MusicPlayer(handle)
-	local isMp3 = ((files.ext(handle.path) or "") == "mp3")
+
+	local coverpath = __PATHTHEMES..__THEME.."/cover.png"
+	if not files.exists(coverpath) then coverpath = "system/theme/default/cover.png" end
+	local coverimg = image.load(coverpath)
+
+	local musicpath = __PATHTHEMES..__THEME.."/music.png"
+	if not files.exists(musicpath) then musicpath = "system/theme/default/music.png" end
+	local musicimg = image.load(musicpath)
+
+	local isMp3 = ((handle.ext or "") == "mp3")
 	local id3 = nil
 
-	if isMp3 then id3 = sound.getid3(handle.path)	end 
+	if isMp3 then id3 = sound.getid3(handle.path) end 
 
 	local snd = sound.load(handle.path)
 	if snd then
 		snd:play(1)
 		while true do
-			if theme.data["music"] then theme.data["music"]:blit(0,0) end
+			if musicimg then musicimg:blit(0,0) end
 			buttons.read()
 
 			screen.print(10,10,tostring(handle.name),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
-			if id3 and id3.cover then
-				if id3.cover:getw() > 350 or id3.cover:geth() > 350 then
-					id3.cover:scale( math.floor( (350*100)/math.max(id3.cover:getw(), id3.cover:geth()) ) )
+			if id3 then
+				if id3.cover then
+					if id3.cover:getw() > 350 or id3.cover:geth() > 350 then
+						id3.cover:scale( math.floor( (350*100)/math.max(id3.cover:getw(), id3.cover:geth()) ) )
+					end
+					id3.cover:center()
+					id3.cover:blit(175+35,175+100)
 				end
-				id3.cover:center()
-				id3.cover:blit(175+35,175+100)
 			else
-				if theme.data["cover"] then
-					theme.data["cover"]:center()
-					theme.data["cover"]:blit(175+35,175+100)
+				if coverimg then
+					coverimg:center()
+					coverimg:blit(175+35,175+100)
 				end
 			end
 
@@ -417,11 +435,13 @@ function MusicPlayer(handle)
 				end
 				draw.rect(425,145,350,10,color.white)
 
-				if id3 and id3.title then
-					screen.print(425,175, id3.title,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-				end
-				if id3 and id3.artist then
-					screen.print(425,195, id3.artist,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+				if id3 then
+					screen.clip(425, 170, 945-425,500-170)
+						screen.print(425,175, id3.title or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+						screen.print(425,200, id3.album or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+						screen.print(425,225, id3.artist or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+						screen.print(425,250, id3.genre or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+					screen.clip()
 				end
 			end
 			
@@ -442,9 +462,9 @@ function MusicPlayer(handle)
 		end
 
 		snd:stop()
-		snd = nil
+		snd,coverimg,musicimg = nil,nil,nil
 		collectgarbage("collect")
-		os.delay(150)
+		os.delay(250)
 	else
 		os.message(strings.sounderror)
 	end
@@ -519,6 +539,15 @@ function visorimg(path)
 end
 
 -- ## File-Viewer ## --
+
+function write_txt(pathini, tb)
+    local file = io.open(pathini, "w+")
+	for s,t in pairs(tb) do
+		file:write(string.format('%s\n', tostring(t)))
+	end
+	file:close()
+end
+
 function files.readlinesSFO(path)
 	local sfo = game.info(path)
 	if not sfo then return nil end
@@ -548,12 +577,25 @@ function visortxt(handle)
 
 	if cont_file == nil then return end
 
-	local srcn = newScroll(cont_file,16)
+	local change,limit = false,16
+	local srcn = newScroll(cont_file,limit)
+	local xscr = 80
 	while true do
 		buttons.read()
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
 
 		if buttons[cancel] then
+			if change then
+				if os.message(strings.savechanges,1) == 1 then
+					write_txt(handle.path, cont_file)
+					local info = files.info(handle.path)
+					if info then
+						handle.size = files.sizeformat(info.size or 0)
+						handle.mtime = info.mtime
+					end
+					infodevices()
+				end
+			end
 			break
 		end
 
@@ -562,34 +604,84 @@ function visortxt(handle)
 		screen.print(10,15,(handle.name or handle.path))
 		local y = 70
 		for i=srcn.ini,srcn.lim do
-			if i == srcn.sel then draw.fillrect(10,y,__DISPLAYW-50,20,theme.style.SELCOLOR) end
-			screen.print(15,y,cont_file[i],1,color.white)
+			if i == srcn.sel then draw.fillrect(5,y,__DISPLAYW-15,20,theme.style.SELCOLOR) end
+			screen.print(5,y,string.format("%04d",i)+') ',1,color.white) 
+			if screen.textwidth(cont_file[i]) > 860 then
+				xscr = screen.print(xscr, y, cont_file[i],1,color.white,color.gray,__SLEFT,860)
+			else
+				screen.print(xscr,y,cont_file[i],1,color.white,color.gray,__ALEFT) 
+			end
 			y+=26
 		end
 		screen.flip()
+
+		if buttons[accept] and (handle.ext == "txt" or handle.ext == "lua" or handle.ext == "ini") then
+			local ln_tmp = cont_file[srcn.sel]
+			local ln = osk.init(strings.editline, cont_file[srcn.sel], 512, __DEFAULT, __TEXT)
+			if ln then
+				if ln != ln_tmp then change = true end
+				cont_file[srcn.sel] = ln
+			end
+		end
+
+		if buttons.right and (handle.ext == "txt" or handle.ext == "lua" or handle.ext == "ini") then--add line
+			if srcn.sel < srcn.lim then
+				table.insert(cont_file,srcn.sel+1,"")
+			else
+				table.insert(cont_file,"")
+			end
+
+			local ln = srcn.sel
+			srcn:set(cont_file,16)
+			for i=1, math.max(ln,0) do
+				srcn:down()
+			end
+			change = true
+		end
+
+		if buttons.left and (handle.ext == "txt" or handle.ext == "lua" or handle.ext == "ini") then--remove line
+			if srcn.maxim-1 >= 1 then
+				table.remove(cont_file,srcn.sel)
+				local ln = srcn.sel
+				srcn:set(cont_file,16)
+				for i=1, math.max(ln-1,0) do
+					srcn:down()
+				end
+			else
+				cont_file[srcn.sel] =""
+			end
+			change = true
+		end
+
 	end
+
 	buttons.read()
 end
 
 function startftp()
+
 	local init = false
 	if not wlan.isconnected() then wlan.connect() end
 	if wlan.isconnected() then init=ftp.init() end
 
 	if not init then return false end
 
+	local ftppath = __PATHTHEMES..__THEME.."/ftp.png"
+	if not files.exists(ftppath) then ftppath = "system/theme/default/ftp.png" end
+	local ftpimg = image.load(ftppath)
+
 	while ftp.state() do
 		reboot=false
 		power.tick(1)
 		buttons.read()
-		if theme.data["ftp"] then theme.data["ftp"]:blit(0,0) end
+		if ftpimg then ftpimg:blit(0,0) end
 		screen.print(960/2,300,strings.textftp,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		screen.print(327,333,"FTP://"+tostring(wlan.getip())..":1337",1,theme.style.FTPCOLOR,color.black)
 		screen.print(960/2,375,strings.closeftp,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		screen.flip()
 
 		if buttons.start then
-			if theme.data["ftp"] then theme.data["ftp"]:blit(0,0) end
+			if ftpimg then ftpimg:blit(0,0) end
 			screen.print(960/2,300,strings.textftp,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 			screen.print(327,333,"FTP://"+tostring(wlan.getip())..":1337",1,theme.style.FTPCOLOR,color.black)
 			screen.print(960/2,375,strings.loseftp,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
@@ -598,7 +690,10 @@ function startftp()
 			os.delay(100)
 		end
 	end
+
 	reboot=true
+	ftpimg=nil
+
 	return true
 end
 
@@ -657,13 +752,13 @@ function usbMassStorage()
 			if buttons.cross then mode_usb = 2
 			elseif buttons.square then mode_usb = 0
 			elseif buttons.triangle then mode_usb = 1
-			else return end
+			else return false end
 			break
 		end
 	end--while
 
 	local conexion = usb.start(mode_usb)
-	if conexion == -1 then os.message(strings.usbfail,0) return end
+	if conexion == -1 then os.message(strings.usbfail,0) return false end
 
 	local titlew = string.format(strings.usbconnection)
 	local w,h = screen.textwidth(titlew,1) + 30,70
@@ -686,4 +781,5 @@ function usbMassStorage()
 	explorer.refresh(true)
 	explorer.action = 0
 	multi={}
+	return true
 end

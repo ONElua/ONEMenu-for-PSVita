@@ -55,6 +55,10 @@ imgerror =		"Errore!! Immagine non supportata",
 
 background =	"Background: Premere Triangolo",
 
+-- ## Visor TXT ##
+editline =		"Edit line",
+savechanges =	"Would you like to save changes?",
+
 -- ## Music Player ##
 playing =		"Riproduzione",
 paused =		"Pausa",
@@ -84,7 +88,7 @@ plugins =		"Plugins",
 getsize =		"Calcolo in corso...",
 slides =		"Slides: ",
 pic1 =			"Visualizza PIC1s: ",
-fav =			"Preferito: ",
+fav =			"Mark Preferito: ",
 up =			"Su",
 down =			"Giù",
 original=		"Originale",
@@ -176,10 +180,11 @@ favorites =		"Sezione Preferiti",
 
 ------------	Favorites	---------------------------------------------------------------------------------
 nofavorites =	"Questa funzione non può essere attivata...\n\nHai bisogno di almeno 1 preferito",
-delfavorites =	"Rimuovi dai preferiti",
+delfavorites =	"Rimuovi dai preferiti ?",
 activate =		"Effettua la scansione solo dei preferiti: ",
 removefav =		"Pulisci la lista dei preferiti",
 emptyfav =		"Vuoi davvero svuotare\nla lista dei preferiti ?",
+togglescan =	"Scan Preferiti: ",
 
 result =		"\nRisultato: ",
 count =			"Totale: ",

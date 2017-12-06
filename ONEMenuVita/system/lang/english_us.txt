@@ -55,6 +55,10 @@ imgerror =		"Error Image not supported",
 
 background =	"Background: Press Triangle",
 
+-- ## Visor TXT ##
+editline =		"Edit line",
+savechanges =	"Would you like to save changes?",
+
 -- ## Music Player ##
 playing =		"Playing",
 paused =		"Paused",
@@ -73,7 +77,7 @@ notfindmanual =	"Manual not exist",
 removemanual =	"Remove manual",
 free =			"Free",
 pressremove =	"Uninstall",
-switchapp =		"Switch Apps",
+switchapp =		"Move App",
 empty =			"Empty/Error",
 toexplorer =	"Explorer",
 partitions =	"Partitions",
@@ -84,7 +88,7 @@ plugins =		"Plugins",
 getsize =		"Calculating...",
 slides =		"Style ", 
 pic1 =			"Show PIC1s: ",
-fav =			"Favourite: ",
+fav =			"Mark Favourite: ",
 up =			"Up",
 down =			"Down",
 original=		"Original",
@@ -176,10 +180,11 @@ favorites =		"Favorites Section",
 
 ------------	Favorites	---------------------------------------------------------------------------------
 nofavorites =	"This function can't be activated...\n\nNeed at least 1 favorite",
-delfavorites =	"Remove from favorites",
+delfavorites =	"Remove from favorites ?",
 activate =		"Scanning Only for favorites: ",
 removefav =		"Clean up Favorites list",
 emptyfav =		"You really want to empty\nthe Favorites list ?",
+togglescan =	"Scan Favorites: ",
 
 result =		"\nResult: ",
 count =			"Count: ",

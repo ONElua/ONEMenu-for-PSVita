@@ -184,11 +184,8 @@ function focus_icon()
 
 			if submenu_ctx.close then
 
-				if cat == 6 then fill = 150
-				else
-					if appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG"	or appman[cat].list[focus_index].type == "ME" then
-					fill = 170 else fill = 150 end
-				end
+				if appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG"	or appman[cat].list[focus_index].type == "ME" then
+				fill = 170 else fill = 150 end
 
 				draw.rect(95,fill, appman[cat].list[focus_index].img:getw()+10, 230,color.shine)
 				draw.gradrect(95,fill, appman[cat].list[focus_index].img:getw()+10, 230, theme.style.GRADRECTCOLOR, theme.style.GRADSHADOWCOLOR, __DIAGONAL)--__DOUBLEVER

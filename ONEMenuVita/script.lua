@@ -9,6 +9,7 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
+--os.debug()
 game.close()
 color.loadpalette()
 
@@ -22,8 +23,8 @@ dofile("system/themes.lua")									-- Load Theme Application
 theme.load()
 
 --Show splash ...
-if theme.data["splash"] then
-	theme.data["splash"]:blit(0,0)
+if theme.data["splash"] then--"splash" 
+	theme.data["splash"]:blit(0,0) 
 	screen.flip()
 end
 

@@ -9,11 +9,17 @@
    Collaborators: BaltazaR4 & Wzjk.
 ]]
 
+
 function isTouched(x,y,sx,sy)
+--[[
     for i=1,touch.front.count do
 		if math.minmax(touch.front[i].x,x,x+sx)==touch.front[i].x and math.minmax(touch.front[i].y,y,y+sy)==touch.front[i].y then
 			return true
 		end
+	end
+	]]
+	if math.minmax(touch.front[1].x,x,x+sx)==touch.front[1].x and math.minmax(touch.front[1].y,y,y+sy)==touch.front[1].y then
+		return true
 	end
 	return false
 end
@@ -24,11 +30,12 @@ categories = {
 	{ img = theme.data["psm"] },	--cat 3
 	{ img = theme.data["retro"]},	--cat 4
 	{ img = theme.data["adrbb"]},	--cat 5
-	{ img = theme.data["fav"] },	--cat 6
+	--{ img = theme.data["fav"] },	--cat 6
 }
 
 cat,limit,movx=0,7,0
 elev = 0
+favs=""
 
 appman = {}
 for i=1,#categories do table.insert(appman, { list={}, scroll, slide = { img = nil, x=0 , acel=7, w= 0 } } ) end
@@ -39,27 +46,23 @@ function fillappman(obj)
 	local index=1
 
 	if obj.type == "mb" then
-		if __FAV == 1 then index = 6 else index = 3 end
+		index = 3
 		obj.resize = true
 		obj.path_img = "ur0:appmeta/"..obj.id.."/pic0.png"
 	elseif obj.type == "EG" or obj.type == "ME" then
-		if __FAV == 1 then index = 6 else index = 4 end
+		index = 4
 		obj.resize = true
 		obj.path_img = "ur0:appmeta/"..obj.id.."/livearea/contents/startup.png"
 	else
 
 		if files.exists(obj.path.."/data/boot.inf") or obj.id == "PSPEMUCFW" then
-			if __FAV == 1 then index = 6 else index = 5 end
+			index = 5
 		else
 			local sfo = game.info(obj.path.."/sce_sys/param.sfo")
 			if sfo and sfo.CONTENT_ID then
-				if sfo.CONTENT_ID:len() > 9 then
-					if __FAV == 1 then index = 6 else index = 1 end
-				else
-					if __FAV == 1 then index = 6 else index = 2 end
-				end
+				if sfo.CONTENT_ID:len() > 9 then index = 1 else	index = 2 end
 			else
-				if __FAV == 1 then index = 6 else index = 2 end
+				index = 2
 			end
 		end
 
@@ -67,12 +70,13 @@ function fillappman(obj)
 
 	end
 
-	obj.img = image.copy(theme.data["icodef"])
+	obj.img = theme.data["icodef"]
 	if __FAV == 1 then
 		obj.img:resize(120,120)
 	else
 		if obj.resize then obj.img:resize(120,100) else obj.img:resize(120,120) end
 	end
+	obj.img:setfilter(__LINEAR, __LINEAR)
 
 	appman.len += 1
 	table.insert(appman[index].list,obj)
@@ -84,15 +88,14 @@ function appman.refresh()
 	--Solo se escanea en cada inicio de 1menu
 	if appman.len == 0 then
 
-		local gpu = os.gpuclock()
-		os.cpu(444)
-		os.gpuclock(166)
-
 		--id, type, version, dev, path, title
 		local list = game.list(__GAME_LIST_ALL)
+		--type: EG, gd,mb,ME
 		table.sort(list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
 
 		for i=1,#list do
+
+			if list[i].title then list[i].title = list[i].title:gsub("\n"," ") end
 
 			if files.exists(list[i].path) then
 				list[i].fav = false
@@ -100,44 +103,31 @@ function appman.refresh()
 					if list[i].id == apps[j] then list[i].fav = true end
 				end
 
-					if __FAV == 1 and #apps>0 then
-						if list[i].fav then	fillappman(list[i])	end--Scan only Favs
-					else
-						__FAV=0
-						fillappman(list[i])
-					end
+				if __FAV == 1 then
+					if list[i].fav then fillappman(list[i]) end--Scan only Favs
+				else
+					fillappman(list[i])
+				end
 			end
 
 		end
 
-		if __FAV == 1 then cat = 6
-		else
-			local tmp=1
-			while tmp<5 do
-				if #appman[tmp].list > 0 then cat=tmp break end
-				tmp+=1
-			end
-			if cat == 0 then appman.len = 0 end
+		local tmp=1
+		while tmp<#categories do
+			if #appman[tmp].list > 0 then cat=tmp break end
+			tmp+=1
 		end
+		if cat == 0 then appman.len = 0 end
 
-		os.cpu(333)
-		os.gpuclock(gpu)
 	end
 
 	--Sorteamos contenido
-	if __FAV == 0 then
-		if #appman[3].list > 0 then--PSM
-			table.sort(appman[3].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-		end
+	if #appman[3].list > 0 then--PSM
+		table.sort(appman[3].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+	end
 
-		if #appman[5].list > 0 then--PSP(X)
-			table.sort(appman[5].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-		end
-	else
-		if #appman[6].list > 0 then
-			table.sort(appman[6].list, function (a,b) return string.lower(a.type)<string.lower(b.type) end)
-			table.sort(appman[6].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-		end
+	if #appman[5].list > 0 then--PSP(X)
+		table.sort(appman[5].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
 	end
 
 	--Asignamos limites y las img para nuestras categorias
@@ -149,26 +139,47 @@ function appman.refresh()
 		end
 	end
 
-	theme.data["splash"] = nil
+	if theme.data["splash"] then theme.data["splash"] = nil end
 
 	infodevices()
 end
 
+function launch_game()
+	local gameboot = image.load(string.format("%s/pic0.png","ur0:appmeta/"..appman[cat].list[focus_index].id))
+
+	if not gameboot then gameboot = game.bg0(appman[cat].list[focus_index].id) end
+
+	if gameboot then
+		screen.flip()
+		splash_efect(gameboot,10,3)
+	end
+
+	if appman[cat].list[focus_index].type == "ME" then game.open(appman[cat].list[focus_index].id)
+	else game.launch(appman[cat].list[focus_index].id) end
+end
+
 reboot = true
+local crono, clicked = timer.new(), false -- Timer and Oldstate to click actions.
 function appman.ctrls()
 
 	if submenu_ctx.open then return end
 	if not submenu_ctx.close then return end
 
 	if (buttons.right or buttons.held.r or buttons.analoglx > 60) and submenu_ctx.x == -submenu_ctx.w then
-		if appman[cat].scroll:down_menu() then elev=0 end
+		if appman[cat].scroll:down_menu() then
+			if (buttons.right and theme.data["slide"]) then theme.data["slide"]:play() end
+			elev=0
+		end
 	end
 
 	if (buttons.left or buttons.held.l or buttons.analoglx < -60) and submenu_ctx.x == -submenu_ctx.w then
-		if appman[cat].scroll:up_menu() then elev=0 end
+		if appman[cat].scroll:up_menu() then
+			if (buttons.left and theme.data["slide"]) then theme.data["slide"]:play() end
+			elev=0
+		end
 	end
 
-	if (buttons.up or buttons.down) and submenu_ctx.x == -submenu_ctx.w and cat!=6 then
+	if (buttons.up or buttons.down) and submenu_ctx.x == -submenu_ctx.w then
 
 		local tmp_cat = cat
 		if buttons.up then
@@ -189,23 +200,31 @@ function appman.ctrls()
 			end
 		end
 
-		if tmp_cat != cat then elev=0 end
+		if tmp_cat != cat then
+			if ((buttons.up or buttons.down) and theme.data["jump"]) then theme.data["jump"]:play() end
+			elev=0
+		end
 	end
 
 	--tmp0.CATEGORY: ISO/CSO UG, PSN EG, HBs MG, PS1 ME
-	if buttons[accept] or isTouched(95,148,151,228) then
-
-		local gameboot = image.load(string.format("%s/pic0.png","ur0:appmeta/"..appman[cat].list[focus_index].id))
-
-		if not gameboot then gameboot = game.bg0(appman[cat].list[focus_index].id) end
-
-		if gameboot then
-			screen.flip()
-			splash_efect(gameboot,10,3)
+	if buttons[accept] then launch_game() end
+	if isTouched(100,180,200,120) and touch.front[1].pressed then
+		if clicked then
+			clicked = false
+			if crono:time() <= 300 then -- Double click and in time to Go.
+				-- Your action here.
+				launch_game()
+			end
+		else
+			-- Your action here.
+			clicked = true
+			crono:reset()
+			crono:start()
 		end
+	end
 
-		if appman[cat].list[focus_index].type == "ME" then game.open(appman[cat].list[focus_index].id)
-		else game.launch(appman[cat].list[focus_index].id) end
+	if crono:time() > 300 then -- First click, but long time to double click...
+		clicked = false
 	end
 
 end
@@ -255,7 +274,7 @@ function appman.launch()
 		touch.read()
 
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
-		if math.minmax(tonumber(os.date("%d%m")),2412,2512)== tonumber(os.date("%d%m")) then stars.render() end
+		if math.minmax(tonumber(os.date("%d%m")),2312,2512)== tonumber(os.date("%d%m")) then stars.render() end
 
 		if appman.len > 0 then
 			main_draw()
@@ -499,6 +518,26 @@ local fav_callback = function ()
 	submenu_ctx.close = true
 end
 
+local togglefavs_callback = function ()
+
+	local pos_menu = submenu_ctx.scroll.sel
+
+	if __FAV == 1 then
+		__FAV,enable_favs = 0,strings.no
+		write_config()
+	else
+		if #apps > 0 then
+			__FAV,enable_favs = 1,strings.yes
+			write_config()
+		else
+			os.message(strings.nofavorites)
+		end
+	end
+
+	submenu_ctx.wakefunct()
+	submenu_ctx.scroll.sel = pos_menu
+end
+
 submenu_ctx = {
 	h = 450,				-- Height of menu
 	w = 355,				-- Width of menu
@@ -511,7 +550,6 @@ submenu_ctx = {
 	scroll = newScroll(),	-- Scroll of menu options.
 }
 
-favs=""
 function submenu_ctx.wakefunct()
 
 	if __SLIDES == 100 then var = strings.original else var = strings.ps4 end
@@ -524,6 +562,7 @@ function submenu_ctx.wakefunct()
 		{ text = strings.slides..var,	state = true, funct = slides_callback },
 		{ text = strings.pic1..showpic,	state = true, funct = pic1_callback },
 		{ text = strings.fav..favs,		state = true, funct = fav_callback },
+		{ text = strings.togglescan..enable_favs, state = true, funct = togglefavs_callback },
 	}
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
 end
@@ -541,6 +580,7 @@ SIZES_PORT_I = channel.new("SIZES_PORT_I")
 SIZES_PORT_O = channel.new("SIZES_PORT_O")
 THID_SIZE = thread.new("system/thread_size.lua")
 
+local xprint = 12
 function submenu_ctx.draw()
 
 	if appman[cat].list[focus_index].fav then favs = strings.yes else favs = strings.no end
@@ -589,13 +629,21 @@ function submenu_ctx.draw()
 		submenu_ctx.open = true
 		local h = submenu_ctx.y + 30 -- Punto de origen de las opciones
 		for i=submenu_ctx.scroll.ini,submenu_ctx.scroll.lim do
-			if i==submenu_ctx.scroll.sel then cc=color.green else cc=color.white end
 			if i==submenu_ctx.scroll.sel then 
-				if (i!=3) then draw.fillrect(5,h-2,330,23,theme.style.SELCOLOR)
+				if (i!=3) then draw.fillrect(5,h-2,335,23,theme.style.SELCOLOR)
 				else draw.fillrect(5,h-2,215,23,theme.style.SELCOLOR) end
+				cc=color.green
+			else
+				cc=color.white
 			end
+
 			if submenu_ctx.options[i].state then
-				screen.print(12, h, submenu_ctx.options[i].text, 1, cc,theme.style.TXTBKGCOLOR, __ALEFT)
+				if screen.textwidth(submenu_ctx.options[i].text) > 320 then
+					xprint = screen.print(xprint, h, submenu_ctx.options[i].text, 1, cc,theme.style.TXTBKGCOLOR, __SLEFT,320)
+				else
+					screen.print(xprint, h, submenu_ctx.options[i].text, 1, cc,theme.style.TXTBKGCOLOR, __ALEFT)
+				end
+				
 				h += 25
 			end
 		end

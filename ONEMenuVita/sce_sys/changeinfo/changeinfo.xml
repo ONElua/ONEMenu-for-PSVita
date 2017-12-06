@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="02.02">
+    <![CDATA[
+- [NEW] Now you can edit .txt files in a simple way.<br>
+- [NEW] Text editor controls: Left : Remove line, Right : Add line.<br>
+- [NEW] Added sound effects for ui transitions.<br>
+- [NEW] System apps are alphabetically shown.<br>
+- [NEW] Scan favorites option added to apps menu (direct access to same option at advanced settings).<br>
+- [NEW] You can run the selected game with double touch.<br>
+- [NEW] Please update your translations...New lines were added.<br>
+    ]]>
+  </changes>
   <changes app_ver="02.01">
     <![CDATA[
-- Fix and more Fix errors.<br>
+- Fix some bugs.<br>
     ]]>
   </changes>
   <changes app_ver="02.00">

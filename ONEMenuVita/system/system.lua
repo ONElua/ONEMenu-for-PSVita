@@ -36,7 +36,7 @@ function system.refresh()
 	if system.len == 0 then
 
 		system.data = game.list(__GAME_LIST_SYS)
-		table.sort(system.data, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+		table.sort(system.data, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
 		system.len = #system.data
 
 		for i=1, system.len do
@@ -51,14 +51,20 @@ end
 function system.run()
 
 	system.refresh()
-	
+
+	local themesimg = nil
 	local scroll = newScroll(system.data,15)
+
+	local manager_path = __PATHTHEMES..__THEME.."/themesmanager.png"
+	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
+	themesimg = image.load(manager_path)
 
 	buttons.interval(10,10)
 	while true do
 		buttons.read()
 
-		if theme.data["themesmanager"] then theme.data["themesmanager"]:blit(0,0) end
+		if themesimg then themesimg:blit(0,0) end
+		if math.minmax(tonumber(os.date("%d%m")),2312,2512)== tonumber(os.date("%d%m")) then stars.render() end
 		screen.print(480,15,strings.liveareapps,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
 
 		if system.len > 0 then
@@ -103,7 +109,8 @@ function system.run()
 		end
 
 		if buttons.start then
-			os.delay(50)
+			themesimg = nil
+			os.delay(80)
 			break
 		end
 

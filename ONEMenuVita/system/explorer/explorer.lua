@@ -41,7 +41,7 @@ slidex=0
 function explorer.listshow(posy)
 
 	if movx==0 then
-		if scroll.list.maxim >= maxim_files then len_selector = __DISPLAYW-45 else len_selector = __DISPLAYW-11 end
+		if scroll.list.maxim >= maxim_files then len_selector = __DISPLAYW-40 else len_selector = __DISPLAYW-10 end
 	else
 		len_selector = __DISPLAYW-173
 	end
@@ -75,7 +75,7 @@ function explorer.listshow(posy)
 		if explorer.list[i].multi then draw.fillrect(5+movx, posy-3, len_selector, 22, theme.style.MARKEDCOLOR) end
 
 		screen.print(((905-250)+movx)+slidex, posy, explorer.list[i].size or strings.dir, 1, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-		screen.print((905+movx)+slidex, posy, explorer.list[i].mtime, 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+		screen.print((910+movx)+slidex, posy, explorer.list[i].mtime, 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
 		posy += 26
 
 	end--for
@@ -118,8 +118,8 @@ function show_explorer_list()
 			if scroll.list.maxim >= maxim_files then -- Draw Scroll Bar
 				local pos_height = math.max(h/scroll.list.maxim, maxim_files)
 				--Bar Scroll
-				draw.fillrect(920+movx, y-2, 8, h, color.shine)--color.new(255,255,255,100))
-				draw.fillrect(920+movx, y-2 + ((h-pos_height)/(scroll.list.maxim-1))*(scroll.list.sel-1), 8, pos_height, color.new(0,255,0))
+				draw.fillrect(930+movx, y-2, 8, h, color.shine)--color.new(255,255,255,100))
+				draw.fillrect(930+movx, y-2 + ((h-pos_height)/(scroll.list.maxim-1))*(scroll.list.sel-1), 8, pos_height, color.new(0,255,0))
 			end
 			explorer.listshow(y)
 		else
@@ -199,6 +199,7 @@ function ctrls_explorer_list()
 	end
 
 	if buttons.select and menu_ctx.open==false then
+		if __FAV == 1 then enable_favs = strings.yes else enable_favs = strings.no end
 		appman.launch()
 	end
 
@@ -220,7 +221,7 @@ function handle_files(cnt)
 		show_scan(cnt)
 	elseif extension == "pbp" or extension == "iso" or extension == "cso" then 
 		show_msg_pbp(cnt)
-	elseif extension == "mp3" or extension == "wav" or extension == "ogg" or extension == "it" then
+	elseif extension == "mp3" or extension == "wav" or extension == "ogg" then
 		MusicPlayer(cnt)
 	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "trp" or extension == "inf" then 
 		visortxt(cnt)
@@ -452,7 +453,10 @@ local installgame_callback = function ()
 		bufftmp = nil
 		if result ==1 then
 			if os.message(strings.launchpbp+"\n\n"+info.TITLE_ID+" ?",1) == 1 then
-				if game.exists(info.TITLE_ID) then game.launch(info.TITLE_ID) end
+				if game.exists(info.TITLE_ID) then
+					if info.CATEGORY == "ME" then game.open(info.TITLE_ID)
+					else game.launch(info.TITLE_ID) end
+				end
 			end
 
 			tmp_vpk.path = string.format("ux0:app/%s",info.TITLE_ID)
@@ -465,7 +469,7 @@ local installgame_callback = function ()
 			tmp_vpk.clon = false
 			tmp_vpk.basegame = false
  
-			if not tmp_vpk.img then tmp_vpk.img = image.copy(theme.data["icodef"]) end
+			if not tmp_vpk.img then tmp_vpk.img = theme.data["icodef"] end
 			if tmp_vpk.img then
 				tmp_vpk.img:reset()
 				tmp_vpk.img:resize(120,120)
@@ -480,7 +484,7 @@ local installgame_callback = function ()
 
 			--Update appman[x].list
 			local index = 1
-			if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 4 else
+			if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5 else
 				if info.CONTENT_ID:len() > 9 then index = 1	else index = 2 end
 			end
 
@@ -634,23 +638,17 @@ local ftp_callback = function ()
         explorer.action = 0
         multi={}
     end
-   buttons.homepopup(1)
+	buttons.homepopup(1)
     menu_ctx.scroll.sel = pos_menu
 end
  
 local usb_callback = function ()
 	buttons.homepopup(0)
+	local pos_menu = menu_ctx.scroll.sel
 	menu_ctx.wakefunct2()
-	local result = usbMassStorage()
-    if result == true then
---clean
-        menu_ctx.close = true
-        action = false
-        explorer.refresh(true)
-        explorer.action = 0
-        multi={}
-    end
+	usbMassStorage()
 	buttons.homepopup(1)
+	menu_ctx.scroll.sel = pos_menu
 end
  
 local advanced_callback = function ()
@@ -693,10 +691,10 @@ local cancel_callback = function ()
 end
  
 menu_ctx = { -- Creamos un objeto menu contextual
-    h = (maxim_files*26)-2, -- Height of menu
-    w = 160, -- Width of menu
+    h = 450,--(maxim_files*26)-2, -- Height of menu
+    w = 170, -- Width of menu
     x = -160, -- X origin of menu
-    y = 45, -- Y origin of menu
+    y = 55, -- Y origin of menu
     open = false, -- Is open the menu?
     close = true,
     speed = 10, -- Speed of Effect Open/Close.
@@ -760,7 +758,8 @@ function menu_ctx.run()
     menu_ctx.draw()
     menu_ctx.buttons()
 end
- 
+
+local x_print = 5
 function menu_ctx.draw()
 
     if not menu_ctx.close and menu_ctx.x < 0 then
@@ -768,24 +767,25 @@ function menu_ctx.draw()
     elseif menu_ctx.close and menu_ctx.x > -menu_ctx.w then
         menu_ctx.x -= menu_ctx.speed
     end
- 
-    if menu_ctx.x > -menu_ctx.w then
-        if theme.data["menu"] then
-            theme.data["menu"]:blit(menu_ctx.x, menu_ctx.y)
-        else
-            draw.fillrect(menu_ctx.x, menu_ctx.y, menu_ctx.w, menu_ctx.h, theme.style.BARCOLOR)
-        end
-    end
- 
+
+	if menu_ctx.x > -menu_ctx.w then
+		draw.fillrect(menu_ctx.x, menu_ctx.y, menu_ctx.w, menu_ctx.h, theme.style.BARCOLOR)
+	end
+
     if menu_ctx.x >= 0 then
         menu_ctx.open = true
         local h = menu_ctx.y + 30 -- Punto de origen de las opciones
         for i=menu_ctx.scroll.ini,menu_ctx.scroll.lim do
-            if i==menu_ctx.scroll.sel then cc=color.green else cc=theme.style.TXTCOLOR end
-            if menu_ctx.options[i].state then
-                screen.print(5, h, menu_ctx.options[i].text, 1, cc, color.blue, __ALEFT)
-                h += 25
-            end
+			if i==menu_ctx.scroll.sel then cc=color.green else cc=theme.style.TXTCOLOR end
+
+			if menu_ctx.options[i].state then
+				if screen.textwidth(menu_ctx.options[i].text) > 155 then
+					x_print = screen.print(x_print, h, menu_ctx.options[i].text, 1, cc, color.blue, __SLEFT,155)
+				else
+					screen.print(x_print, h, menu_ctx.options[i].text, 1, cc, color.blue, __ALEFT)
+				end
+			end
+			h += 25
         end
     else
         menu_ctx.open = false

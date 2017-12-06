@@ -55,6 +55,10 @@ imgerror =		"Error Imagen no soportada",
 
 background =	"Background: Presiona Triangulo",
 
+-- ## Visor TXT ##
+editline =		"Edit line",
+savechanges =	"Deseas guardar el archivo con los nuevos cambios ?",
+
 -- ## Music Player ##
 playing =		"Reproduciendo",
 paused =		"Pausado",
@@ -82,9 +86,9 @@ size_ind =		"Tamaño",
 clon =			"Clon",
 plugins =		"Plugins",
 getsize = 		"Calculando...",
-slides =		"Style: ",
+slides =		"Tema: ",
 pic1 =			"Mostrar PIC1s: ",
-fav =			"Favorito: ",
+fav =			"Marcar Favorito: ",
 up =			"Arriba",
 down =			"Abajo",
 original=		"Original",
@@ -176,10 +180,11 @@ favorites =		"Sección Favoritos",
 
 ------------	Favorites	---------------------------------------------------------------------------------
 nofavorites =	"Está función no puede activarse...\n\nMinimo 1 Favorito",
-delfavorites =	"Quitar de Favoritos",
+delfavorites =	"Quitar de Favoritos ?",
 activate =		"Escanear solo Favoritos: ",
 removefav =		"Limpiar lista de Favoritos",
 emptyfav =		"Realmente deseas limpiar la lista de Favoritos ?",
+togglescan =	"Scan Favoritos: ",
 
 result =		"\nResultado: ",
 count =			"Total: ",

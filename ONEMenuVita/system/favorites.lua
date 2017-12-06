@@ -28,9 +28,6 @@ function favorites_manager()
 			if buttons.up or buttons.analogly < -60 then srcn:up() end
 			if buttons.down or buttons.analogly > 60 then srcn:down() end
 
-			if buttons.square then--remover de favoritos
-			end
-
 			local y = 70
 			for i=srcn.ini,srcn.lim do
 				if i == srcn.sel then draw.fillrect(10,y-2,930,23,theme.style.SELCOLOR) end
@@ -75,21 +72,22 @@ function favorites_manager()
 		end
 
 		if buttons.square and srcn.maxim > 0 then
-
-			for i=1, #appman do
-				for j=1, #appman[i].list do
-					if appman[i].list[j].id == apps[srcn.sel] then appman[i].list[j].fav = false end
+			if os.message(strings.delfavorites,1) == 1 then
+				for i=1, #appman do
+					for j=1, #appman[i].list do
+						if appman[i].list[j].id == apps[srcn.sel] then appman[i].list[j].fav = false end
+					end
 				end
-			end
-			table.remove(apps,srcn.sel)
-			srcn:set(apps,15)
+				table.remove(apps,srcn.sel)
+				srcn:set(apps,15)
 
-			write_favs(__PATH_FAVS)
-			
-			if srcn.maxim <=0 then
-				if __FAV == 1 then __FAV,fav = 0,strings.no end
+				write_favs(__PATH_FAVS)
+
+				if srcn.maxim <=0 then
+					if __FAV == 1 then __FAV,fav = 0,strings.no end
+				end
+				write_config()
 			end
-			write_config()
 		end
 
 		if theme.data["buttons2"] then

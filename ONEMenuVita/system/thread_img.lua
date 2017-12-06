@@ -35,7 +35,8 @@ while true do
 		end
 
 		IMAGE_PORT_O:push(entry)
+		if entry.img then entry.img:lost() end
 	end
 
-	os.delay(16) -- ONE frame
+	os.delay(40) -- ONE frame
 end
