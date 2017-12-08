@@ -580,6 +580,7 @@ function visortxt(handle)
 	local change,limit = false,16
 	local srcn = newScroll(cont_file,limit)
 	local xscr = 80
+	buttons.interval(8,8)
 	while true do
 		buttons.read()
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
@@ -604,10 +605,16 @@ function visortxt(handle)
 		screen.print(10,15,(handle.name or handle.path))
 		local y = 70
 		for i=srcn.ini,srcn.lim do
+
 			if i == srcn.sel then draw.fillrect(5,y,__DISPLAYW-15,20,theme.style.SELCOLOR) end
-			screen.print(5,y,string.format("%04d",i)+') ',1,color.white) 
-			if screen.textwidth(cont_file[i]) > 860 then
-				xscr = screen.print(xscr, y, cont_file[i],1,color.white,color.gray,__SLEFT,860)
+			         screen.print(5,y,string.format("%04d",i)+') ',1,color.white) 
+			if i == srcn.sel then
+				if screen.textwidth(cont_file[i]) > 860 then
+					xscr = screen.print(xscr, y, cont_file[i],1,color.white,color.gray,__SLEFT,860)
+				else
+					screen.print(xscr,y,cont_file[i],1,color.white,color.gray,__ALEFT) 
+					xscr=80
+				end
 			else
 				screen.print(xscr,y,cont_file[i],1,color.white,color.gray,__ALEFT) 
 			end
@@ -654,7 +661,7 @@ function visortxt(handle)
 		end
 
 	end
-
+	buttons.interval(10,10)
 	buttons.read()
 end
 
