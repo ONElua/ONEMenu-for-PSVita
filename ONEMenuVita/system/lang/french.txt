@@ -56,8 +56,8 @@ imgerror =		"Erreur : image non supportée",
 background =	"Installer comme fond d'écran : appuyez sur Triangle",
 
 -- ## Visor TXT ##
-editline =		"Edit line",
-savechanges =	"Would you like to save changes?",
+editline =		"Editeur de texte",
+savechanges =	"\nVoulez-vous sauvegarder les changements ?",
 
 -- ## Music Player ##
 playing =		"Lecture en cours...",
@@ -88,7 +88,7 @@ plugins =		"Plugins",
 getsize =		"Calcul de la taille en cours...",
 slides =		"Vignettes : ",
 pic1 =			"Montrer PIC1: ",
-fav =			"Mark Favoris: ",
+fav =			"Mettre en Favoris: ",
 up =			"Haut",
 down =			"Bas",
 original=		"Original",
@@ -184,7 +184,7 @@ delfavorites =	"Supprimer des favoris ?",
 activate =		"Scanner uniquement les favoris: ",
 removefav =		"Nettoyer la liste des favoris",
 emptyfav =		"Voulez-vous vraiment vider la\nliste des favoris ?",
-togglescan =	"Scan Favors: ",
+togglescan =	"Menu des Favoris uniquement: ",
 
 result =		"\nRésultat : ",
 count =			"Nombre : ",
