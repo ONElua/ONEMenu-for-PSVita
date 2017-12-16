@@ -56,8 +56,8 @@ imgerror =		"Errore!! Immagine non supportata",
 background =	"Background: Premere Triangolo",
 
 -- ## Visor TXT ##
-editline =		"Edit line",
-savechanges =	"Would you like to save changes?",
+editline =		"Modifica la stringa",
+savechanges =	"Vuoi salvare le modifiche?",
 
 -- ## Music Player ##
 playing =		"Riproduzione",
