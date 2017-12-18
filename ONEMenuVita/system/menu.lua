@@ -52,20 +52,29 @@ function main_draw()
 		else
 			if appman[cat].scroll.sel>1 then
 				if i==appman[cat].scroll.ini then
-					blit_icons(i,x_neg)					--Blitea el icono anterior al seleccionado, mas cerca al 0 blitea mas a la derecha
+					if not pic1_crono then
+						blit_icons(i,x_neg)				--Blitea el icono anterior al seleccionado, mas cerca al 0 blitea mas a la derecha
+					end
 				else
+					if not pic1_crono then
+						blit_icons(i,x_init)
+						x_init+=130
+					end
+				end
+			else
+				if not pic1_crono then
 					blit_icons(i,x_init)
 					x_init+=130
 				end
-			else
-				blit_icons(i,x_init)
-				x_init+=130
 			end
 		end
 	end
 
 	focus_icon()
-	slides_efect()
+
+	if not pic1_crono then
+		slides_efect()
+	end
 
 end
 
@@ -89,7 +98,7 @@ function blit_icons(i,x1)
 					y2_init = y_init+100+10
 				else y_init = 170 end
 			end
-			appman[cat].list[i].img:blit(x1,y_init,175)
+			appman[cat].list[i].img:blit(x1,y_init,210)--175
 
 			--Blit for favorites
 			if appman[cat].list[i].fav then
@@ -113,33 +122,45 @@ end
 -- Blit Focus_index
 function focus_icon()
 
-	if __SLIDES == 100 or not submenu_ctx.close then
+	if pic1_crono then
+		
+		if pic_alpha < 255 then
+			pic_alpha += 08
+			if not angle then angle = 0 end
+			angle += 24
+			if angle > 360 then angle = 0 end
+			draw.framearc(925, 470, 23, theme.style.TXTCOLOR, 0, 360, 20, 30)
+			draw.framearc(925, 470, 23, theme.style.TXTBKGCOLOR, angle, 90, 20, 30)--gira
+		end
+		pic1_crono:blit(960/2, 544/2, pic_alpha)
+	end
+
+	if __SLIDES == 100 or not submenu_ctx.close or pic1_crono then
 		screen.print(10,15, appman[cat].list[focus_index].title,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 	end
-
+	
 	--Blit icons specials...battery, wifi, avatar...
-	if batt.lifepercent()<30 then cbat = color.red else cbat = theme.style.PERCENTCOLOR end
-	screen.print(925,15,batt.lifepercent().."%",1,cbat,color.gray,__ARIGHT)
-	if not batt.charging() then
-		if batt.lifepercent()<30 then cbat = theme.style.LOWBATTERYCOLOR else cbat = theme.style.BATTERYCOLOR end
-		draw.fillrect(938,5+25,13,math.map(batt.lifepercent(), 0, 100, 0, -20 ), cbat)
-		theme.data["buttons1"]:blitsprite(935,10,6)
-	else
-		theme.data["buttons1"]:blitsprite(935,10,7)
-	end
+	blit_icons_specials()
 
-	if os.getreg("/CONFIG/SYSTEM/", "flight_mode", 1) == 1 then
-		theme.data["wifi"]:blitsprite(850,10,5)
-	else
-		local frame = wlan.strength()
-		if frame then
-			theme.data["wifi"]:blitsprite(850,10,math.ceil(frame/25))
-		else
-			theme.data["wifi"]:blitsprite(850,10,0)
+	if submenu_ctx.close and not pic1_crono then
+		if show_pic and __PIC1==1 then
+			if appman[cat].list[focus_index].type == "mb" then
+				pic1_crono = game.bg0(appman[cat].list[focus_index].id)
+				if not pic1_crono then
+					pic1_crono = image.load("ur0:appmeta/"..appman[cat].list[focus_index].id.."/pic0.png")
+				end
+			else
+				pic1_crono = image.load("ur0:appmeta/"..appman[cat].list[focus_index].id.."/pic0.png")
+				if not pic1_crono then
+					pic1_crono = game.bg0(appman[cat].list[focus_index].id)--id al recompilar
+				end
+			end
+			if pic1_crono then
+				pic1_crono:resize(960,460)
+				pic1_crono:center()
+			end
 		end
 	end
-
-	if avatar then avatar:blit(800,5) end
 
 	if appman[cat].list[focus_index].img then
 
@@ -150,11 +171,7 @@ function focus_icon()
 		end
 
 		if submenu_ctx.open and __PIC1 == 1 then
-			if pic1 then
-				pic1:resize(960,460)
-				pic1:center()
-				pic1:blit(960/2, 544/2,185)
-			end
+			if pic1 then pic1:blit(960/2, 544/2,185) end
 		end
 
 		--Resize +20
@@ -187,15 +204,17 @@ function focus_icon()
 				if appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG"	or appman[cat].list[focus_index].type == "ME" then
 				fill = 170 else fill = 150 end
 
+				if not pic1_crono then
+					screen.print(255,350, appman[cat].list[focus_index].title,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+					
+					local wtext = screen.textwidth(appman[cat].list[focus_index].title,1) + 10
+					draw.gradline(252,370,252+wtext,370,theme.style.GRADRECTCOLOR, theme.style.GRADSHADOWCOLOR)
+					draw.gradline(252,371,252+wtext,371,theme.style.GRADSHADOWCOLOR, theme.style.GRADRECTCOLOR)
+				end
 				draw.rect(95,fill, appman[cat].list[focus_index].img:getw()+10, 230,color.shine)
 				draw.gradrect(95,fill, appman[cat].list[focus_index].img:getw()+10, 230, theme.style.GRADRECTCOLOR, theme.style.GRADSHADOWCOLOR, __DIAGONAL)--__DOUBLEVER
 				screen.print(95 + (appman[cat].list[focus_index].img:getw()+10)/2,350,SYMBOL_CROSS.." "..strings.start,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ACENTER)
 
-				screen.print(255,350, appman[cat].list[focus_index].title,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-
-				local wtext = screen.textwidth(appman[cat].list[focus_index].title,1) + 10
-				draw.gradline(252,370,252+wtext,370,theme.style.GRADRECTCOLOR, theme.style.GRADSHADOWCOLOR)
-				draw.gradline(252,371,252+wtext,371,theme.style.GRADSHADOWCOLOR, theme.style.GRADRECTCOLOR)
 			end
 
 			appman[cat].list[focus_index].img:blit(100+movx,y_init + (elev/2))

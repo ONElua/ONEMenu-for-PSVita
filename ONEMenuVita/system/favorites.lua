@@ -12,7 +12,7 @@
 function favorites_manager()
 
 	local srcn = newScroll(apps,15)
-	buttons.interval(10,10)
+	buttons.interval(16,5)
 
 	if __FAV == 1 then fav = strings.yes else fav = strings.no end
 	while true do

@@ -56,8 +56,10 @@ imgerror =		"Errore!! Immagine non supportata",
 background =	"Background: Premere Triangolo",
 
 -- ## Visor TXT ##
-editline =		"Modifica la stringa",
-savechanges =	"Vuoi salvare le modifiche?",
+editline =		"Edit line",
+savechanges =	"Would you like to save changes?",
+insertline =	"+ -> Insert Line",
+deleteline =	"+ <- Delete Line",
 
 -- ## Music Player ##
 playing =		"Riproduzione",
@@ -65,6 +67,7 @@ paused =		"Pausa",
 time =			"Tempo: ",
 tags =			"xx:xx:xx",
 sounderror =	"Errore!! Suono non valido",
+display =		"Lock Display",
 
 --ONEMenu
 switch =		"Sei sicuro di voler spostare ",
@@ -83,6 +86,7 @@ toexplorer =	"File explorer",
 partitions =	"Partizioni",
 version =		"Versione",
 size_ind =		"Dimensione",
+size_patch =	"patch",
 clon =			"Clona",
 plugins =		"Plugins",
 getsize =		"Calcolo in corso...",

@@ -27,12 +27,13 @@ SYMBOL_TRIANGLE	= string.char(0xe2)..string.char(0x96)..string.char(0xb3)
 SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
 
 --Primero checamos traducciones
-__STRINGS		= 149								--135v1,137v1.01,145vbeta,146v2.01,147v2.05
+__STRINGS		= 153--135v1,137v1.01,145vbeta,146v2.01,150v2.02
 if not files.exists("ux0:data/ONEMENU/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/ONEMENU/lang/")
 else
 	dofile("ux0:data/ONEMENU/lang/english_us.txt")
 	local cont_strings = 0
 	for key,value in pairs(strings) do cont_strings += 1 end
+--os.message(cont_strings)
 	if cont_strings < __STRINGS then files.copy("system/lang/english_us.txt","ux0:data/ONEMENU/lang/") end
 end
 
@@ -143,7 +144,6 @@ function newScroll(a,b,c)
 
 	function obj:set(tab,mxn,modemintomin) -- Set a obj scroll
 		obj.ini,obj.sel,obj.lim,obj.maxim,obj.minim = 1,1,1,1,1
-		--os.message(tostring(type(tab)))
 		if(type(tab)=="number")then
 			if tab > mxn then obj.lim=mxn else obj.lim=tab end
 			obj.maxim = tab
@@ -224,7 +224,7 @@ function message_wait()
 
 	draw.fillrect(x,y,w,h,theme.style.BARCOLOR)
 	draw.rect(x,y,w,h,color.white)
-		screen.print(480,y+13, strings.wait,1,color.white,color.black,__ACENTER)
+		screen.print(480,y+13, titlew,1,color.white,color.black,__ACENTER)
 	screen.flip()
 end
 
@@ -239,4 +239,38 @@ function splash_efect(pics,delay,vel)
 		pics:blit(__DISPLAYW/2,__DISPLAYH/2,i)
 		screen.flip()
 	end
+end
+
+function blit_icons_specials()
+
+	if batt.lifepercent()<30 then cbat = color.red else cbat = theme.style.PERCENTCOLOR end
+
+	screen.print(925,15,batt.lifepercent().."%",1,cbat,color.gray,__ARIGHT)
+	if not batt.charging() then
+		if batt.lifepercent()<30 then cbat = theme.style.LOWBATTERYCOLOR else cbat = theme.style.BATTERYCOLOR end
+		draw.fillrect(938,5+25,13,math.map(batt.lifepercent(), 0, 100, 0, -20 ), cbat)
+		theme.data["buttons1"]:blitsprite(935,10,6)
+	else
+		theme.data["buttons1"]:blitsprite(935,10,7)
+	end
+
+	if os.getreg("/CONFIG/SYSTEM/", "flight_mode", 1) == 1 then
+		theme.data["wifi"]:blitsprite(850,10,5)
+	else
+		local frame = wlan.strength()
+		if frame then
+			theme.data["wifi"]:blitsprite(850,10,math.ceil(frame/25))
+		else
+			theme.data["wifi"]:blitsprite(850,10,0)
+		end
+	end
+
+	if avatar then avatar:blit(800,5) end
+end
+
+function isTouched(x,y,sx,sy)
+	if math.minmax(touch.front[1].x,x,x+sx)==touch.front[1].x and math.minmax(touch.front[1].y,y,y+sy)==touch.front[1].y then
+		return true
+	end
+	return false
 end
