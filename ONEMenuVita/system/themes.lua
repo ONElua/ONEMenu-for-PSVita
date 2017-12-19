@@ -28,7 +28,7 @@ function theme.load()
 	__THEME = ini.read(__PATHINI,"theme","id","default")
 	__BACKG = ini.read(__PATHINI,"backg","img","")
 	__SLIDES = tonumber(ini.read(__PATHINI,"slides","pos",100))
-	__PIC1 = tonumber(ini.read(__PATHINI,"pics","show","0"))
+	__PIC1 = tonumber(ini.read(__PATHINI,"pics","show","1"))
 	__FNT = tonumber(ini.read(__PATHINI,"font","type","2"))
 	__FAV = tonumber(ini.read(__PATHINI,"favs","scan","0"))
 
