@@ -178,7 +178,7 @@ restartupdb =	"Deine PSVita wird neugestartet...\nund die app database wird aktu
 restartredb =	"Deine PSVita wird neugestartet...\nund die app database wird neu aufgebaut",
 restart =		"Deine PSVita wird neugestartet...",
 shutdown =		"Deine PSVita wird heruntergefahren...",
-gf =			"PGF Font",
+pgf =			"PGF Font",
 pvf =			"PVF Font",
 favorites =		"Favorites Section",
 
