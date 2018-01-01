@@ -187,7 +187,7 @@ nofavorites =	"Diese funktion konnte nicht aktiviert werden...\n\nDu brauchst mi
 delfavorites =	"Favorit Entfernen ?",
 activate =		"Nur Favoriten Scannen: ",
 removefav =		"Favoriten Liste aufräumen",
-emptyfav =		"Sicher das du die Favoriten\nthe Liste löschen willst ?",
+emptyfav =		"Sicher das du die Favoriten\nListe löschen willst ?",
 togglescan =	"Nur Favoriten: ",
 
 result =		"\nErgebnis: ",
