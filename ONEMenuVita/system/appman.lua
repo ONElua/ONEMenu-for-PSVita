@@ -9,21 +9,6 @@
    Collaborators: BaltazaR4 & Wzjk.
 ]]
 
-
-function isTouched(x,y,sx,sy)
---[[
-    for i=1,touch.front.count do
-		if math.minmax(touch.front[i].x,x,x+sx)==touch.front[i].x and math.minmax(touch.front[i].y,y,y+sy)==touch.front[i].y then
-			return true
-		end
-	end
-	]]
-	if math.minmax(touch.front[1].x,x,x+sx)==touch.front[1].x and math.minmax(touch.front[1].y,y,y+sy)==touch.front[1].y then
-		return true
-	end
-	return false
-end
-
 categories = {
 	{ img = theme.data["psvita"] },	--cat 1
 	{ img = theme.data["hbvita"] },	--cat 2
@@ -32,6 +17,12 @@ categories = {
 	{ img = theme.data["adrbb"]},	--cat 5
 	--{ img = theme.data["fav"] },	--cat 6
 }
+
+reboot = true
+local crono, clicked = timer.new(), false -- Timer and Oldstate to click actions.
+cronopic, show_pic = timer.new(), false
+flag_begin = false
+pic_alpha = 0
 
 cat,limit,movx=0,7,0
 elev = 0
@@ -64,9 +55,10 @@ function fillappman(obj)
 			else
 				index = 2
 			end
+
 		end
 
-		obj.path_img = "ur0:appmeta/"..obj.id.."/icon0.png"
+	obj.path_img = "ur0:appmeta/"..obj.id.."/icon0.png"
 
 	end
 
@@ -145,70 +137,74 @@ function appman.refresh()
 end
 
 function launch_game()
-	local gameboot = image.load(string.format("%s/pic0.png","ur0:appmeta/"..appman[cat].list[focus_index].id))
-
-	if not gameboot then gameboot = game.bg0(appman[cat].list[focus_index].id) end
-
-	if gameboot then
-		screen.flip()
-		splash_efect(gameboot,10,3)
-	end
-
 	if appman[cat].list[focus_index].type == "ME" then game.open(appman[cat].list[focus_index].id)
 	else game.launch(appman[cat].list[focus_index].id) end
 end
 
-reboot = true
-local crono, clicked = timer.new(), false -- Timer and Oldstate to click actions.
+function restart_cronopic()
+	cronopic:reset()
+		cronopic:start()
+			show_pic,pic1_crono = false,nil
+		pic_alpha = 0
+	flag_begin = true
+end
+
 function appman.ctrls()
 
 	if submenu_ctx.open then return end
 	if not submenu_ctx.close then return end
 
-	if (buttons.right or buttons.held.r or buttons.analoglx > 60) and submenu_ctx.x == -submenu_ctx.w then
-		if appman[cat].scroll:down_menu() then
-			if (buttons.right and theme.data["slide"]) then theme.data["slide"]:play() end
-			elev=0
+	if submenu_ctx.x == -submenu_ctx.w then--no mover hasta que todo este dibujado
+
+		if (buttons.right or buttons.held.r or buttons.analoglx > 60) then
+			if appman[cat].scroll:down_menu() then
+				if (buttons.right and theme.data["slide"]) then theme.data["slide"]:play() end
+				elev=0
+				restart_cronopic()
+			end
 		end
-	end
 
-	if (buttons.left or buttons.held.l or buttons.analoglx < -60) and submenu_ctx.x == -submenu_ctx.w then
-		if appman[cat].scroll:up_menu() then
-			if (buttons.left and theme.data["slide"]) then theme.data["slide"]:play() end
-			elev=0
+		if (buttons.left or buttons.held.l or buttons.analoglx < -60) then
+			if appman[cat].scroll:up_menu() then
+				if (buttons.left and theme.data["slide"]) then theme.data["slide"]:play() end
+				elev=0
+				restart_cronopic()
+			end
 		end
-	end
+	
+		if ((buttons.up or swipe.up) or (swipe.down or buttons.down)) then
 
-	if (buttons.up or buttons.down) and submenu_ctx.x == -submenu_ctx.w then
-
-		local tmp_cat = cat
-		if buttons.up then
-			cat-=1
-			if cat < 1 then cat = #appman end
-			while #appman[cat].list < 1 do
+			local tmp_cat = cat
+			if buttons.up or swipe.up then
 				cat-=1
 				if cat < 1 then cat = #appman end
+				while #appman[cat].list < 1 do
+					cat-=1
+					if cat < 1 then cat = #appman end
+				end
 			end
-		end
 
-		if buttons.down then
-			cat+=1
-			if cat > #appman then cat = 1 end
-			while #appman[cat].list < 1 do
+			if buttons.down or swipe.down then
 				cat+=1
 				if cat > #appman then cat = 1 end
+				while #appman[cat].list < 1 do
+					cat+=1
+					if cat > #appman then cat = 1 end
+				end
+			end
+
+			if tmp_cat != cat then
+				if theme.data["jump"] then theme.data["jump"]:play() end
+				elev=0
+				restart_cronopic()
 			end
 		end
 
-		if tmp_cat != cat then
-			if ((buttons.up or buttons.down) and theme.data["jump"]) then theme.data["jump"]:play() end
-			elev=0
-		end
 	end
 
 	--tmp0.CATEGORY: ISO/CSO UG, PSN EG, HBs MG, PS1 ME
 	if buttons[accept] then launch_game() end
-	if isTouched(100,180,200,120) and touch.front[1].pressed then
+	if isTouched(100,180,200,120) and touch.front[1].released then--pressed then
 		if clicked then
 			clicked = false
 			if crono:time() <= 300 then -- Double click and in time to Go.
@@ -227,6 +223,10 @@ function appman.ctrls()
 		clicked = false
 	end
 
+	if cronopic:time() > 950 and flag_begin then
+		show_pic = true
+	end
+
 end
 
 IMAGE_PORT_I = channel.new("IMAGE_PORT_I")
@@ -240,38 +240,39 @@ function appman.launch()
 	buttons.interval(10,10)
 	while true do
 
+		buttons.read()
+			touch.read()
+		swipe.read()
+
 		--Este for es una belleza!!!!
-	if not search_icon then
-		os.cpu(444)
-		for i=1, #appman do
-			for j=1, #appman[i].list do
+		if not search_icon then
+			os.cpu(444)
+			for i=1, #appman do
+				for j=1, #appman[i].list do
 
-				if not appman[i].list[j].ready then
-					appman[i].list[j].ready = true
-					IMAGE_PORT_O:push( { i=i, j=j, fav = __FAV, path = appman[i].list[j].path_img, resize = appman[i].list[j].resize } ) -- Enviamos peticion
-				end
-
-				if IMAGE_PORT_I:available() > 0 then -- De tal manera que si se quedo un previo, lo pueda setear..
-					local entry = IMAGE_PORT_I:pop() -- Recibimos peticiones..
-
-					if appman[entry.i].list[entry.j].path_img == entry.path then -- Por si lo borran o cambio etc..
-						if entry.img then
-							appman[entry.i].list[entry.j].img = entry.img
-						end
-						cont_icons += 1
+					if not appman[i].list[j].ready then
+						appman[i].list[j].ready = true
+						IMAGE_PORT_O:push( { i=i, j=j, fav = __FAV, path = appman[i].list[j].path_img, resize = appman[i].list[j].resize } ) -- Enviamos peticion
 					end
-				end
 
+					if IMAGE_PORT_I:available() > 0 then -- De tal manera que si se quedo un previo, lo pueda setear..
+						local entry = IMAGE_PORT_I:pop() -- Recibimos peticiones..
+
+						if appman[entry.i].list[entry.j].path_img == entry.path then -- Por si lo borran o cambio etc..
+							if entry.img then
+								appman[entry.i].list[entry.j].img = entry.img
+							end
+							cont_icons += 1
+						end
+					end
+
+				end
+			end
+			if cont_icons == appman.len then
+				os.cpu(333)
+				search_icon,flag_begin = true,true
 			end
 		end
-		if cont_icons == appman.len then
-			os.cpu(333)
-			search_icon = true
-		end
-	end
-
-		buttons.read()
-		touch.read()
 
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 		if math.minmax(tonumber(os.date("%d%m")),2312,2512)== tonumber(os.date("%d%m")) then stars.render() end
@@ -289,13 +290,9 @@ function appman.launch()
 			appman.ctrls()
 		end
 
-		if buttons.select and not submenu_ctx.open then
-			show_explorer_list()
-		end
+		if buttons.select and not submenu_ctx.open then	show_explorer_list() end--to Explorer
 
-		if buttons.start and not submenu_ctx.open then
-			system.run()
-		end
+		if buttons.start and not submenu_ctx.open then system.run()	end--To System Apps
 
 		shortcuts()
 
@@ -392,15 +389,12 @@ local switch_callback = function ()
 			{ text = loc2 },
 			{ text = strings.cancel }
 		}
-	local scroll_op = newScroll(options, #options)
+	local scroll_op,cccolor = newScroll(options, #options),""
 	while true do
 		buttons.read()
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 		screen.print(350,60,strings.partitions,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-
-		local titlew = string.format(strings.switchapp)
-		local w = screen.textwidth(titlew,1) + 10
 		draw.line(220,50,220,submenu_ctx.y + 98, color.green)
 
 		local y = 80
@@ -499,6 +493,8 @@ end
 
 local fav_callback = function ()
 
+	local pos_menu = submenu_ctx.scroll.sel
+
 	appman[cat].list[focus_index].fav = not appman[cat].list[focus_index].fav
 	submenu_ctx.wakefunct()
 
@@ -515,7 +511,8 @@ local fav_callback = function ()
 	end
 
 	write_favs(__PATH_FAVS)
-	submenu_ctx.close = true
+	submenu_ctx.wakefunct()
+	submenu_ctx.scroll.sel = pos_menu
 end
 
 local togglefavs_callback = function ()
@@ -556,13 +553,13 @@ function submenu_ctx.wakefunct()
 	if __PIC1 == 1 then showpic = strings.yes else showpic = strings.no end
 
 	submenu_ctx.options = { -- Handle Option Text and Option Function
-		{ text = strings.pressremove,	state = true, funct = uninstall_callback },
-		{ text = strings.removemanual,	state = true, funct = manual_callback },
-		{ text = strings.switchapp, 	state = true, funct = switch_callback },
-		{ text = strings.slides..var,	state = true, funct = slides_callback },
-		{ text = strings.pic1..showpic,	state = true, funct = pic1_callback },
-		{ text = strings.fav..favs,		state = true, funct = fav_callback },
-		{ text = strings.togglescan..enable_favs, state = true, funct = togglefavs_callback },
+		{ text = strings.pressremove,	funct = uninstall_callback },
+		{ text = strings.removemanual,	funct = manual_callback },
+		{ text = strings.switchapp, 	funct = switch_callback },
+		{ text = strings.slides..var,	funct = slides_callback },
+		{ text = strings.pic1..showpic,	funct = pic1_callback },
+		{ text = strings.fav..favs,		funct = fav_callback },
+		{ text = strings.togglescan..enable_favs, funct = togglefavs_callback },
 	}
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
 end
@@ -583,6 +580,10 @@ THID_SIZE = thread.new("system/thread_size.lua")
 local xprint = 12
 function submenu_ctx.draw()
 
+	if not submenu_ctx.close then
+		restart_cronopic()
+	end
+
 	if appman[cat].list[focus_index].fav then favs = strings.yes else favs = strings.no end
 
 	--gd,gp PSVITA:1	hbsvita2	mb PSM:3	EG PSP & ME PSX: 4		AdrenalineBubbles:5
@@ -600,6 +601,10 @@ function submenu_ctx.draw()
 					pic1 = game.bg0(appman[cat].list[focus_index].id)--id al recompilar
 				end
 			end
+			if pic1 then
+				pic1:resize(960,460)
+				pic1:center()
+			end
 		end
 
 	end
@@ -610,42 +615,47 @@ function submenu_ctx.draw()
 		submenu_ctx.x -= submenu_ctx.speed
 	end
 
+	--Peticion en hilo para obtener el Size
 	if submenu_ctx.x > -submenu_ctx.w then
 		if not appman[cat].list[focus_index].pullsize then
 			appman[cat].list[focus_index].pullsize = true
-			SIZES_PORT_O:push({cat = cat, focus = focus_index, path = appman[cat].list[focus_index].path}) -- Enviamos peticion
+			SIZES_PORT_O:push({cat = cat, focus = focus_index, path = appman[cat].list[focus_index].path, id = appman[cat].list[focus_index].id }) -- Enviamos peticion
 		end
 		if SIZES_PORT_I:available() > 0 then -- De tal manera que si se quedo un previo, lo pueda setear..
 			local entry = SIZES_PORT_I:pop() -- Recibimos peticiones..
 			if appman[entry.cat].list[entry.focus] and appman[entry.cat].list[entry.focus].path == entry.path then -- Por si lo borran o cambio etc..
 				appman[entry.cat].list[entry.focus].size = entry.size
 				appman[entry.cat].list[entry.focus].sizef = entry.sizef
+				appman[entry.cat].list[entry.focus].sizef_patch = entry.sizef_patch
 			end
 		end
 		draw.fillrect(submenu_ctx.x, submenu_ctx.y, submenu_ctx.w, submenu_ctx.h, theme.style.BARCOLOR)
 	end
+	--Peticion en hilo para obtener el Size
 
 	if submenu_ctx.x >= 0 then
 		submenu_ctx.open = true
 		local h = submenu_ctx.y + 30 -- Punto de origen de las opciones
+
 		for i=submenu_ctx.scroll.ini,submenu_ctx.scroll.lim do
-			if i==submenu_ctx.scroll.sel then 
+
+			if i==submenu_ctx.scroll.sel then
+
 				if (i!=3) then draw.fillrect(5,h-2,335,23,theme.style.SELCOLOR)
 				else draw.fillrect(5,h-2,215,23,theme.style.SELCOLOR) end
-				cc=color.green
-			else
-				cc=color.white
-			end
 
-			if submenu_ctx.options[i].state then
 				if screen.textwidth(submenu_ctx.options[i].text) > 320 then
-					xprint = screen.print(xprint, h, submenu_ctx.options[i].text, 1, cc,theme.style.TXTBKGCOLOR, __SLEFT,320)
+					xprint = screen.print(xprint, h, submenu_ctx.options[i].text, 1, color.green,theme.style.TXTBKGCOLOR, __SLEFT,320)
 				else
-					screen.print(xprint, h, submenu_ctx.options[i].text, 1, cc,theme.style.TXTBKGCOLOR, __ALEFT)
+					screen.print(12, h, submenu_ctx.options[i].text, 1, color.green,theme.style.TXTBKGCOLOR, __ALEFT)
+					xprint = 12
 				end
-				
-				h += 25
+
+			else
+				screen.print(12, h, submenu_ctx.options[i].text, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
 			end
+			h += 25
+
 		end
 
 		--Textos informativos en el submenu
@@ -653,7 +663,8 @@ function submenu_ctx.draw()
 		screen.print(10,h, strings.version..": "..appman[cat].list[focus_index].version or "", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		h += 20
 		screen.print(10,h, strings.size_ind..": "..(appman[cat].list[focus_index].sizef or strings.getsize), 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
-		--h += 20
+		h += 20
+		screen.print(10,h, strings.size_patch..": "..(appman[cat].list[focus_index].sizef_patch or strings.getsize), 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
 
 		h = 480
 		draw.fillrect(10,h, 330, 15, color.gray)
@@ -678,7 +689,6 @@ function submenu_ctx.draw()
 			h-=20
 			screen.print(10,h,"(uma0) "..infouma0.maxf.."/"..infouma0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		end
-
 		--Textos informativos en el submenu
 
 	else

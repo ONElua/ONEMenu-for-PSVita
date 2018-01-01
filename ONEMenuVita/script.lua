@@ -28,6 +28,9 @@ if theme.data["splash"] then--"splash"
 	screen.flip()
 end
 
+dofile("system/swipeLib.lua")
+	swipe.set(255,70,695,430,30) --20 de threshold
+
 dofile("system/stars.lua")									-- stars...stars...
 dofile("system/explorer/commons.lua")						-- Load Functions Commons
 dofile("system/explorer/explorer.lua")						-- Load Explorer File

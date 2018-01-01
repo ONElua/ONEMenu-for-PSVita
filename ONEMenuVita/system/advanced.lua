@@ -102,7 +102,7 @@ end
 menuadv.wakefunct()
 
 function advanced_options()
-	buttons.interval(10,10)
+	buttons.interval(16,5)
 	while true do
 		buttons.read()
 

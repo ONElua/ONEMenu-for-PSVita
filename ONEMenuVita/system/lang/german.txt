@@ -58,6 +58,8 @@ background =	"Hintergrund: Drücke Dreieck",
 -- ## Visor TXT ##
 editline =		"Edit line",
 savechanges =	"Would you like to save changes? ",
+insertline =	"+ -> Insert Line",
+deleteline =	"+ <- Delete Line",
 
 -- ## Music Player ##
 playing =		"Wird abgespielt",
@@ -65,6 +67,7 @@ paused =		"Pausiert",
 time =			"Zeit: ",
 tags =			"xx:xx:xx",
 sounderror =	"Ton nicht unterstützt",
+display =		"Lock Display",
 
 --ONEMenu
 switch =		"Wirklich verschieben ",
@@ -83,6 +86,7 @@ toexplorer =	"Explorer",
 partitions =	"Partitionen",
 version =		"Version",
 size_ind =		"Größe",
+size_patch =	"patch",
 clon =			"Clon",
 plugins =		"Plugins",
 getsize =		"Berechne...",

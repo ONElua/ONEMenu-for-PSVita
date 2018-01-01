@@ -58,6 +58,8 @@ background =	"Нажмите треугольник для перехода в �
 -- ## Visor TXT ##
 editline =		"Edit line",
 savechanges =	"Would you like to save changes?",
+insertline =	"+ -> Insert Line",
+deleteline =	"+ <- Delete Line",
 
 -- ## Music Player ##
 playing =		"Воспроизводится",
@@ -65,6 +67,7 @@ paused =		"Пауза",
 time =			"Время: ",
 tags =			"xx:xx:xx",
 sounderror =	"Не удалось воспроизвести",
+display =		"Lock Display",
 
 --ONEMenu
 switch =		"Подтвердите перемещение ",
@@ -83,6 +86,7 @@ toexplorer =	"Проводник",
 partitions =	"Раздел:",
 version =		"Версия",
 size_ind =		"Размер",
+size_patch =	"patch",
 clon =			"Клон",
 plugins =		"Плагины",
 getsize =		"Вычисление...",

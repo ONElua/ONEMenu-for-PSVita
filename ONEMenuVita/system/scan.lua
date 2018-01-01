@@ -131,7 +131,7 @@ function scan(full)
 	table.sort(list_vpks.data,function(a,b) return string.lower(a.name)<string.lower(b.name) end)
 
 	local srcn = newScroll(list_vpks.data,15)
-	buttons.interval(10,10)
+	buttons.interval(16,5)
 	while true do
 		buttons.read()
 
@@ -214,7 +214,7 @@ function scan(full)
 		end
 
 		if buttons[cancel] then
-			buttons.interval(10,10)
+			buttons.interval(16,5)
 			os.delay(55) break
 		end
 

@@ -50,20 +50,23 @@ function explorer.listshow(posy)
 	if not menu_ctx.close and slidex < 130 then slidex += 10 end
 
 	for i=scroll.list.ini, scroll.list.lim do
+
 		if i==scroll.list.sel then
+			
 			draw.fillrect(5+movx, posy-3, len_selector, 22, theme.style.SELCOLOR)
-			if screen.textwidth(explorer.list[i].name or "",1) > 480 then 
-				xtitle = screen.print(xtitle+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __SLEFT, 480)
+			if screen.textwidth(explorer.list[i].name or "",1) > 490 then 
+				xtitle = screen.print(xtitle+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __SLEFT, 490)
 				xtitle -= movx
 			else
-				screen.clip(35+movx,0,480+movx,544)
+				screen.clip(35+movx,0,490+movx,544)
 				screen.print(35+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
+				xtitle=35
 			end
 		else
-			screen.clip(35+movx,0,480+movx,544)
+			screen.clip(35+movx,0,490+movx,544)
 			screen.print(35+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
 		end
-		screen.clip() -- disable clip
+		screen.clip()
 
 		if explorer.list[i].size then
 			if icons_mimes[explorer.list[i].ext] then theme.data["icons"]:blitsprite(10+movx, posy, icons_mimes[explorer.list[i].ext]) -- mime type
@@ -86,7 +89,7 @@ end
 function show_explorer_list()
 
 	explorer.refresh(true)
-	buttons.interval(10,10)
+	buttons.interval(16,5)
 	while true do
 
 		buttons.read()
@@ -94,11 +97,12 @@ function show_explorer_list()
 
 		movx = menu_ctx.x+menu_ctx.w
 
-		if screen.textwidth(Root[Dev] or "",1) > 800 then 
-			title_scr_x = screen.print(title_scr_x+movx,5,Root[Dev],1,theme.style.PATHCOLOR,color.black,__SLEFT,950)
+		if screen.textwidth(Root[Dev] or "",1) > 860 then 
+			title_scr_x = screen.print(title_scr_x+movx,5,Root[Dev],1,theme.style.PATHCOLOR,color.black,__SLEFT,860)
 			title_scr_x -= movx
 		else
 			screen.print(5+movx,5,Root[Dev],1,theme.style.PATHCOLOR,color.black,__ALEFT)
+			title_scr_x = 5
 		end
 
 		screen.print(5+movx,26,files.sizeformat(infosize.max or 0).."/"..files.sizeformat(infosize.free or 0),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
@@ -146,8 +150,7 @@ function ctrls_explorer_list()
 	if menu_ctx.open then return end
 
 	if buttons[cancel] then -- return directory
-		if (Root[Dev]=="ux0:" or Root[Dev]=="ux0:/") or (Root[Dev]=="ur0:" or Root[Dev]=="ur0:/") or (Root[Dev]=="gro0:" or Root[Dev]=="gro0:/") or
-			(Root[Dev]=="grw0:" or Root[Dev]=="grw0:/") or (Root[Dev]=="imc0:" or Root[Dev]=="imc0:/") or (Root[Dev]=="uma0:" or Root[Dev]=="uma0:/") then return end
+		if check_root() then return end
 
 		Root[Dev]=files.nofile(Root[Dev])
 		explorer.refresh(false)
@@ -200,6 +203,7 @@ function ctrls_explorer_list()
 
 	if buttons.select and menu_ctx.open==false then
 		if __FAV == 1 then enable_favs = strings.yes else enable_favs = strings.no end
+		restart_cronopic()
 		appman.launch()
 	end
 
@@ -219,12 +223,16 @@ function handle_files(cnt)
 		buttons.homepopup(1)
 	elseif extension == "zip" or extension == "rar" or extension == "7z" or extension == "gz" then
 		show_scan(cnt)
-	elseif extension == "pbp" or extension == "iso" or extension == "cso" then 
+	elseif extension == "pbp" or extension == "iso" or extension == "cso" then
 		show_msg_pbp(cnt)
 	elseif extension == "mp3" or extension == "wav" or extension == "ogg" then
 		MusicPlayer(cnt)
-	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "trp" or extension == "inf" then 
-		visortxt(cnt)
+	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "trp" or extension == "inf" then
+		if extension == "txt" or extension == "lua" or extension == "ini" or extension == "xml" or extension == "inf" then
+			visortxt(cnt,true)
+		else
+			visortxt(cnt,false)
+		end
 	end
 
 end
@@ -425,11 +433,11 @@ local installgame_callback = function ()
                 end
                 screen.print(960/2,y+55,tostring(info.TITLE_ID),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
             end
-            if tmp_vpk.img then
-                tmp_vpk.img:setfilter(__ALINEAR, __ALINEAR)
-                tmp_vpk.img:scale(150)
-                tmp_vpk.img:center()
-                tmp_vpk.img:blit(960/2,544/2)
+			if tmp_vpk.img then
+				tmp_vpk.img:scale(150)
+				tmp_vpk.img:setfilter(__ALINEAR, __ALINEAR)
+				tmp_vpk.img:center()
+				tmp_vpk.img:blit(960/2,544/2)
             end
  
             screen.print(960/2,y+325,strings.installvpk +" ?",1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
@@ -670,12 +678,12 @@ local restart_callback = function ()
 end
  
 local reboot_callback = function ()
-    os.delay(1500)
+    os.delay(1000)
     power.restart()
 end
  
 local shutdown_callback = function ()
-    os.delay(1500)
+    os.delay(1000)
     power.shutdown()
 end
  
@@ -707,35 +715,35 @@ menu_ctx = { -- Creamos un objeto menu contextual
 
 function menu_ctx.wakefunct()
     menu_ctx.options = { -- Handle Option Text and Option Function
-		{ text = strings.delete,        state = true, funct = delete_callback },
-        { text = strings.makedir,       state = true, funct = makedir_callback },
-        { text = strings.rename,        state = true, funct = rename_callback },
-        { text = strings.size,          state = true, funct = sizedir_callback },
-        { text = strings.export,        state = true, funct = filesexport_callback },
-        { text = strings.insvpkfromdir, state = true, funct = installgame_callback },
-		{ text = strings.instheme,      state = true, funct = installtheme_callback },
-		{ text = strings.cancel,        state = true, funct = cancel_callback },
+		{ text = strings.delete,        funct = delete_callback },
+        { text = strings.makedir,       funct = makedir_callback },
+        { text = strings.rename,        funct = rename_callback },
+        { text = strings.size,          funct = sizedir_callback },
+        { text = strings.export,        funct = filesexport_callback },
+        { text = strings.insvpkfromdir, funct = installgame_callback },
+		{ text = strings.instheme,      funct = installtheme_callback },
+		{ text = strings.cancel,        funct = cancel_callback },
     }
     if menu_ctx.wait_action==__ACTION_WAIT_PASTE then
-        table.insert(menu_ctx.options, 1, { text = strings.paste,       state = true, funct = paste_callback })
+        table.insert(menu_ctx.options, 1, { text = strings.paste,       funct = paste_callback })
     elseif menu_ctx.wait_action==__ACTION_WAIT_EXTRACT then
-        table.insert(menu_ctx.options, 1, { text = strings.extractto,   state = true, funct = paste_callback })
+        table.insert(menu_ctx.options, 1, { text = strings.extractto,   funct = paste_callback })
     else
-        table.insert(menu_ctx.options, 1, { text = strings.copy,        state = true, funct =  src_path_callback })
-        table.insert(menu_ctx.options, 2, { text = strings.move,        state = true, funct = src_path_callback })
-        table.insert(menu_ctx.options, 3, { text = strings.extract,     state = true, funct = src_path_callback })
+        table.insert(menu_ctx.options, 1, { text = strings.copy,        funct =  src_path_callback })
+        table.insert(menu_ctx.options, 2, { text = strings.move,        funct = src_path_callback })
+        table.insert(menu_ctx.options, 3, { text = strings.extract,     funct = src_path_callback })
     end
     menu_ctx.scroll = newScroll(menu_ctx.options, #menu_ctx.options)
 end
  
 function menu_ctx.wakefunct2()
     menu_ctx.options = { -- Handle Option Text and Option Function
-        { text = strings.ftp,           state = true, funct = ftp_callback },
-        { text = strings.usb,           state = true, funct = usb_callback },
-        { text = strings.restarthb,     state = true, funct = restart_callback },
-        { text = strings.reset,         state = true, funct = reboot_callback },
-        { text = strings.off,           state = true, funct = shutdown_callback },
-        { text = strings.advanced,      state = true, funct = advanced_callback },
+        { text = strings.ftp,           funct = ftp_callback },
+        { text = strings.usb,           funct = usb_callback },
+        { text = strings.restarthb,     funct = restart_callback },
+        { text = strings.reset,         funct = reboot_callback },
+        { text = strings.off,           funct = shutdown_callback },
+        { text = strings.advanced,      funct = advanced_callback },
     }
     menu_ctx.scroll = newScroll(menu_ctx.options, #menu_ctx.options)
 end
@@ -773,18 +781,24 @@ function menu_ctx.draw()
 	end
 
     if menu_ctx.x >= 0 then
+
         menu_ctx.open = true
         local h = menu_ctx.y + 30 -- Punto de origen de las opciones
         for i=menu_ctx.scroll.ini,menu_ctx.scroll.lim do
-			if i==menu_ctx.scroll.sel then cc=color.green else cc=theme.style.TXTCOLOR end
 
-			if menu_ctx.options[i].state then
+			screen.clip(0,0,155, menu_ctx.h)
+			if i==menu_ctx.scroll.sel then
 				if screen.textwidth(menu_ctx.options[i].text) > 155 then
-					x_print = screen.print(x_print, h, menu_ctx.options[i].text, 1, cc, color.blue, __SLEFT,155)
+					x_print = screen.print(x_print, h, menu_ctx.options[i].text, 1, color.green, color.blue, __SLEFT,155)
 				else
-					screen.print(x_print, h, menu_ctx.options[i].text, 1, cc, color.blue, __ALEFT)
+					screen.print(5, h, menu_ctx.options[i].text, 1, color.green, color.blue, __ALEFT)
+					x_print = 5
 				end
+			else
+				screen.print(5, h, menu_ctx.options[i].text, 1, theme.style.TXTCOLOR, color.blue, __ALEFT)
 			end
+			screen.clip()
+
 			h += 25
         end
     else

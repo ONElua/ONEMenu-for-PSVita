@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="02.03">
+    <![CDATA[
+- [NEW] Enabled swipe up/down for category change.<br>
+- [NEW] Small internal changes on Text Editor, to add or delete lines:<br>
+- [NEW] Keep pressed triangle<br>
+-	right to add a line.<br>
+-	left to delete a line.<br>
+- [NEW] Fixed error on text files with text adjustment scroll.<br>
+- [NEW] Now the PIC1 of the selected game/app is shown if no buttons are pressed.<br>
+- [NEW] Please update your translations...New lines were added.<br>
+    ]]>
+  </changes>
   <changes app_ver="02.02">
     <![CDATA[
 - [NEW] Now you can edit .txt files in a simple way.<br>

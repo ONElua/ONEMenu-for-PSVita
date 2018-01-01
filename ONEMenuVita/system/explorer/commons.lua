@@ -35,6 +35,12 @@ while files.exists(partitions[i]) do
 end
 infosize = os.devinfo(Root[Dev])
 
+function check_root()
+	if (Root[Dev]=="ux0:" or Root[Dev]=="ux0:/") or (Root[Dev]=="ur0:" or Root[Dev]=="ur0:/") or (Root[Dev]=="gro0:" or Root[Dev]=="gro0:/") or
+		(Root[Dev]=="grw0:" or Root[Dev]=="grw0:/") or (Root[Dev]=="imc0:" or Root[Dev]=="imc0:/") or (Root[Dev]=="uma0:" or Root[Dev]=="uma0:/") then return true end
+return false
+end
+
 function files.listsort(path)
 	local tmp1 = files.listdirs(path)
 
@@ -180,8 +186,8 @@ function show_msg_vpk(obj_vpk)
 		screen.print(960/2,y+85,strings.total_sizevpk..tostring(realsize),1,color.black,color.blue,__ACENTER)
 
 		if tmp_vpk.img then
-			tmp_vpk.img:setfilter(__ALINEAR, __ALINEAR)
 			tmp_vpk.img:scale(150)
+			tmp_vpk.img:setfilter(__ALINEAR, __ALINEAR)
 			tmp_vpk.img:center()
 			tmp_vpk.img:blit(960/2,544/2)
 		end
@@ -350,8 +356,8 @@ function show_msg_pbp(handle)
 		end
 
 		if icon0 then
-			icon0:setfilter(__ALINEAR, __ALINEAR)
 			icon0:scale(150)
+			icon0:setfilter(__ALINEAR, __ALINEAR)
 			icon0:center()
 			icon0:blit(960/2,544/2)
 		end
@@ -390,13 +396,16 @@ function MusicPlayer(handle)
 	if isMp3 then id3 = sound.getid3(handle.path) end 
 
 	local snd = sound.load(handle.path)
+	local xscr2,xscr = 10,425
 	if snd then
 		snd:play(1)
 		while true do
-			if musicimg then musicimg:blit(0,0) end
 			buttons.read()
+			if musicimg then musicimg:blit(0,0) end
 
-			screen.print(10,10,tostring(handle.name),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+			if screen.textwidth(handle.path) > 860 then	xscr2 = screen.print(xscr2,10,handle.path,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__SLEFT,860) else
+				screen.print(10,10,handle.path,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+			end
 
 			if id3 then
 				if id3.cover then
@@ -437,14 +446,28 @@ function MusicPlayer(handle)
 
 				if id3 then
 					screen.clip(425, 170, 945-425,500-170)
-						screen.print(425,175, id3.title or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-						screen.print(425,200, id3.album or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+						
+						if screen.textwidth(id3.title or "") > 960-425 then
+							xscr = screen.print(xscr,175,id3.title or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__SLEFT,960-425)
+						else
+							screen.print(425,175, id3.title or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+						end
+
+						if screen.textwidth(id3.album or "") > 960-425 then
+							xscr = screen.print(xscr,200,id3.album or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__SLEFT,960-425)
+						else
+							screen.print(425,200, id3.album or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+						end
 						screen.print(425,225, id3.artist or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 						screen.print(425,250, id3.genre or "",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+
 					screen.clip()
 				end
 			end
-			
+
+			if theme.data["buttons1"] then theme.data["buttons1"]:blitsprite(5,518,1) end--triangle
+			screen.print(30,520,strings.display,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+
 			screen.flip()
 
 			power.tick(__SUSPEND) -- reset a power timers only for block suspend..
@@ -570,20 +593,75 @@ function files.readlines(path,index) -- Lee una table o string si se especifica 
 	end
 end
 
-function visortxt(handle)
+function visortxt(handle, flag_edit)
 	local cont_file = nil
 	if handle.ext == "sfo" then cont_file = files.readlinesSFO(handle.path)
 	else cont_file = files.readlines(handle.path) end
 
 	if cont_file == nil then return end
 
-	local change,limit = false,16
+	local hold,change,limit = false,false,16
 	local srcn = newScroll(cont_file,limit)
-	local xscr = 80
-	buttons.interval(8,8)
+	local xscr,xscr2 = 80,10
+	buttons.interval(20,4)
 	while true do
 		buttons.read()
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
+
+		if screen.textwidth(handle.path) > 860 then	xscr2 = screen.print(xscr2,10,handle.path,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__SLEFT,860) else
+			screen.print(10,10,handle.path,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+		end
+
+		local y = 70
+		for i=srcn.ini,srcn.lim do
+
+			if i == srcn.sel then
+				if hold then draw.fillrect(5,y,__DISPLAYW-18,20,color.green:a(80))
+				else draw.fillrect(5,y,__DISPLAYW-18,20,color.gray:a(175)) end
+			end
+
+			screen.print(5,y,string.format("%04d",i)+') ',1,color.white)
+
+			screen.clip(80,0,860,544)
+			if i == srcn.sel then
+				if screen.textwidth(cont_file[i]) > 860 then
+					xscr = screen.print(xscr, y, cont_file[i],1,color.white,color.gray,__SLEFT,860)
+				else
+					screen.print(80,y,cont_file[i],1,color.white,color.gray,__ALEFT) 
+					xscr=80
+				end
+			else
+				screen.print(80,y,cont_file[i],1,color.white,color.gray,__ALEFT)
+			end
+			screen.clip()
+
+			y+=26
+		end
+		
+		local ybar,hbar= 70, (limit*26)-2
+		if srcn.maxim > limit then -- Draw Scroll Bar
+			local pos_height = math.max(hbar/srcn.maxim, limit)
+			--Bar Scroll
+			draw.fillrect(950, ybar-2, 8, hbar, color.shine)--color.new(255,255,255,100))
+			draw.fillrect(950, ybar-2 + ((hbar-pos_height)/(srcn.maxim-1))*(srcn.sel-1), 8, pos_height, color.new(0,255,0))
+		end
+
+		if flag_edit then
+			local text_line = string.format(strings.insertline)
+			local tempx = screen.textwidth(text_line,1) + 60
+
+			if theme.data["buttons1"] then theme.data["buttons1"]:blitsprite(5,518,1) end--triangle
+			screen.print(25,520,text_line,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+
+			if theme.data["buttons1"] then theme.data["buttons1"]:blitsprite(tempx,518,1) end
+			screen.print(tempx+20,520,strings.deleteline,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+		end
+		
+		screen.flip()
+
+		if not hold then
+			if buttons.up then srcn:up() elseif buttons.down then srcn:down() end
+		end
 
 		if buttons[cancel] then
 			if change then
@@ -600,29 +678,7 @@ function visortxt(handle)
 			break
 		end
 
-		if buttons.up or buttons.analogly < -60 then srcn:up() elseif buttons.down or buttons.analogly > 60 then srcn:down() end
-
-		screen.print(10,15,(handle.name or handle.path))
-		local y = 70
-		for i=srcn.ini,srcn.lim do
-
-			if i == srcn.sel then draw.fillrect(5,y,__DISPLAYW-15,20,theme.style.SELCOLOR) end
-			         screen.print(5,y,string.format("%04d",i)+') ',1,color.white) 
-			if i == srcn.sel then
-				if screen.textwidth(cont_file[i]) > 860 then
-					xscr = screen.print(xscr, y, cont_file[i],1,color.white,color.gray,__SLEFT,860)
-				else
-					screen.print(xscr,y,cont_file[i],1,color.white,color.gray,__ALEFT) 
-					xscr=80
-				end
-			else
-				screen.print(xscr,y,cont_file[i],1,color.white,color.gray,__ALEFT) 
-			end
-			y+=26
-		end
-		screen.flip()
-
-		if buttons[accept] and (handle.ext == "txt" or handle.ext == "lua" or handle.ext == "ini") then
+		if buttons[accept] and flag_edit then
 			local ln_tmp = cont_file[srcn.sel]
 			local ln = osk.init(strings.editline, cont_file[srcn.sel], 512, __DEFAULT, __TEXT)
 			if ln then
@@ -631,38 +687,44 @@ function visortxt(handle)
 			end
 		end
 
-		if buttons.right and (handle.ext == "txt" or handle.ext == "lua" or handle.ext == "ini") then--add line
-			if srcn.sel < srcn.lim then
-				table.insert(cont_file,srcn.sel+1,"")
-			else
-				table.insert(cont_file,"")
-			end
+		if buttons.released.triangle then hold = false end
 
-			local ln = srcn.sel
-			srcn:set(cont_file,16)
-			for i=1, math.max(ln,0) do
-				srcn:down()
-			end
-			change = true
-		end
+		if buttons.held.triangle then
+			hold = true
 
-		if buttons.left and (handle.ext == "txt" or handle.ext == "lua" or handle.ext == "ini") then--remove line
-			if srcn.maxim-1 >= 1 then
-				table.remove(cont_file,srcn.sel)
+			if buttons.right and flag_edit then--add line
+				if srcn.sel < srcn.lim then
+					table.insert(cont_file,srcn.sel+1,"")
+				else
+					table.insert(cont_file,"")
+				end
+
 				local ln = srcn.sel
 				srcn:set(cont_file,16)
-				for i=1, math.max(ln-1,0) do
+				for i=1, math.max(ln,0) do
 					srcn:down()
 				end
-			else
-				cont_file[srcn.sel] =""
+				change = true
 			end
-			change = true
+			
+			if buttons.left and flag_edit then--remove line
+				if srcn.maxim-1 >= 1 then
+					table.remove(cont_file,srcn.sel)
+					local ln = srcn.sel
+					srcn:set(cont_file,16)
+					for i=1, math.max(ln-1,0) do
+						srcn:down()
+					end
+				else
+					cont_file[srcn.sel] =""
+				end
+				change = true
+			end
 		end
 
 	end
-	buttons.interval(10,10)
 	buttons.read()
+	buttons.interval(16,5)
 end
 
 function startftp()
@@ -720,7 +782,7 @@ function usbMassStorage()
 
 		draw.fillrect(x, y, w, h, theme.style.BARCOLOR)
 		draw.rect(x, y, w, h,color.white)
-			screen.print(480,y+13, strings.connectusb,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			screen.print(480,y+13, titlew,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 			screen.print(480,y+40, textXO..strings.cancelusb,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		screen.flip()
 

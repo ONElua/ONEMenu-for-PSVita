@@ -58,6 +58,8 @@ background =	"Background: Press Triangle",
 -- ## Visor TXT ##
 editline =		"Edit line",
 savechanges =	"Would you like to save changes?",
+insertline =	"+ -> Insert Line",
+deleteline =	"+ <- Delete Line",
 
 -- ## Music Player ##
 playing =		"Playing",
@@ -65,6 +67,7 @@ paused =		"Paused",
 time =			"Time: ",
 tags =			"xx:xx:xx",
 sounderror =	"Error Sonido Invalido",
+display =		"Lock Display",
 
 --ONEMenu
 switch =		"Really wish to move ",
@@ -83,6 +86,7 @@ toexplorer =	"Explorer",
 partitions =	"Partitions",
 version =		"Version",
 size_ind =		"Size",
+size_patch =	"patch",
 clon =			"Clon",
 plugins =		"Plugins",
 getsize =		"Calculating...",

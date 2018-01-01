@@ -30,6 +30,14 @@ uri["NPXS10091"] = "scecalendar:"
 --uri["NPXS10094"] = ""					--Parental Controls
 
 system = { data = {}, len = 0 }
+local crono_sys, show_sys = timer.new(), false
+local crono2, clic = timer.new(), false -- Timer and Oldstate to click actions.
+
+function restart_crono_sys()
+	crono_sys:reset()
+	crono_sys:start()
+	show_sys,pic1_sys = false,nil
+end
 
 function system.refresh()
 
@@ -59,11 +67,18 @@ function system.run()
 	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
 	themesimg = image.load(manager_path)
 
-	buttons.interval(10,10)
+	buttons.interval(16,5)
+	local preview = nil
 	while true do
 		buttons.read()
+		touch.read()
 
 		if themesimg then themesimg:blit(0,0) end
+		
+		if pic1_sys then
+			pic1_sys:blit(0,55,125)
+		end
+
 		if math.minmax(tonumber(os.date("%d%m")),2312,2512)== tonumber(os.date("%d%m")) then stars.render() end
 		screen.print(480,15,strings.liveareapps,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
 
@@ -76,6 +91,13 @@ function system.run()
 					if not preview then
 						preview = image.load(system.data[i].path.."/sce_sys/icon0.png")
 						if preview then preview:setfilter(__LINEAR, __LINEAR) end
+					end
+					if not pic1_sys and show_sys then
+						pic1_sys = image.load(system.data[i].path.."/sce_sys/livearea/contents/bg0.png")
+						if pic1_sys then
+							pic1_sys:resize(692,446)
+							pic1_sys:setfilter(__LINEAR, __LINEAR)
+						end
 					end
 				end
 				screen.print(15,y, system.data[i].title,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
@@ -94,23 +116,52 @@ function system.run()
 		--Controls
 		if system.len > 0 then
 
-			if buttons.up or buttons.analogly<-60 then 
-				if scroll:up() then	preview = nil end
+			if buttons.up or buttons.analogly<-60 then
+				if scroll:up() then
+					preview = nil
+					restart_crono_sys()
+				end
 			end
 
 			if buttons.down or buttons.analogly>60 then
-				if scroll:down() then preview = nil	end
+				if scroll:down() then
+					preview = nil
+					restart_crono_sys()
+				end
 			end
 
 			if buttons[accept] then
 				if not system.data[scroll.sel].uri then game.open(system.data[scroll.sel].id) else os.uri(system.data[scroll.sel].uri) end
 			end
+			if isTouched(770,90,128,128) and touch.front[1].released then
+				if clic then
+					clic = false
+					if crono2:time() <= 300 then -- Double click and in time to Go.
+						-- Your action here.
+						if not system.data[scroll.sel].uri then game.open(system.data[scroll.sel].id) else os.uri(system.data[scroll.sel].uri) end
+					end
+				else
+					-- Your action here.
+					clic = true
+					crono2:reset()
+					crono2:start()
+				end
+			end
 
+			if crono2:time() > 300 then -- First click, but long time to double click...
+				clic = false
+			end
+
+			if crono_sys:time() > 550 then
+				show_sys = true
+			end
 		end
 
 		if buttons.start then
-			themesimg = nil
+			restart_cronopic()
+			pic1_sys,themesimg = nil,nil
 			os.delay(80)
+			buttons.interval(10,10)
 			break
 		end
 

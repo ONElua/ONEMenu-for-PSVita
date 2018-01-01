@@ -111,8 +111,8 @@ function onScanningFiles(file,unsize,position,unsafe)
 	if not angle then angle = 0 end
 	angle += 24
 	if angle > 360 then angle = 0 end
-	draw.framearc(__DISPLAYW/2, __DISPLAYH/2, 40, color.new(255,255,255), 0, 360, 20, 30);
-	draw.framearc(__DISPLAYW/2, __DISPLAYH/2, 40, color.new(0,255,0), angle, 90, 20, 30);
+	draw.framearc(__DISPLAYW/2, __DISPLAYH/2, 40, color.new(255,255,255), 0, 360, 20, 30)
+	draw.framearc(__DISPLAYW/2, __DISPLAYH/2, 40, color.new(0,255,0), angle, 90, 20, 30)
 
 	screen.print(__DISPLAYW/2,(__DISPLAYH/2)+45,strings.scanning,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 

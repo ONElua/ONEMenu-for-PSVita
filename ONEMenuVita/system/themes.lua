@@ -28,7 +28,7 @@ function theme.load()
 	__THEME = ini.read(__PATHINI,"theme","id","default")
 	__BACKG = ini.read(__PATHINI,"backg","img","")
 	__SLIDES = tonumber(ini.read(__PATHINI,"slides","pos",100))
-	__PIC1 = tonumber(ini.read(__PATHINI,"pics","show","0"))
+	__PIC1 = tonumber(ini.read(__PATHINI,"pics","show","1"))
 	__FNT = tonumber(ini.read(__PATHINI,"font","type","2"))
 	__FAV = tonumber(ini.read(__PATHINI,"favs","scan","0"))
 
@@ -161,7 +161,7 @@ function reload_theme()
 	if vbuff then vbuff:blit(0,0) end
 	draw.fillrect(x,y,w,h,theme.style.BARCOLOR)
 	draw.rect(x,y,w,h,color.white)
-		screen.print(480,y+13, strings.wait,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		screen.print(480,y+13,titlew,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 	screen.flip()
 
 	theme.load()
@@ -170,7 +170,6 @@ function reload_theme()
 	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
 
 	themesimg = image.load(manager_path)
-
 
 end
 
