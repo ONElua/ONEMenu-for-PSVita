@@ -53,13 +53,13 @@ gamecard =		"Spielkarte",
 
 imgerror =		"Fehler Bild nicht unterstützt",
 
-background =	"Hintergrund: Drücke Dreieck",
+background =	"für Hintergrund: Drücke Dreieck",
 
 -- ## Visor TXT ##
-editline =		"Edit line",
-savechanges =	"Would you like to save changes? ",
-insertline =	"+ -> Insert Line",
-deleteline =	"+ <- Delete Line",
+editline =		"Zeile Bearbeiten",
+savechanges =	"Möchtest du die Änderungen speichern? ",
+insertline =	"+ -> Źeile Einfügen",
+deleteline =	"+ <- Zeile Entfernen",
 
 -- ## Music Player ##
 playing =		"Wird abgespielt",
@@ -67,7 +67,7 @@ paused =		"Pausiert",
 time =			"Zeit: ",
 tags =			"xx:xx:xx",
 sounderror =	"Ton nicht unterstützt",
-display =		"Lock Display",
+display =		"Display Sperren",
 
 --ONEMenu
 switch =		"Wirklich verschieben ",
@@ -171,24 +171,24 @@ deltheme =		"CustomTheme von app.db entfernen",
 delfilestheme =	"Dateien vom CustomTheme löschen ?",
 
 ------------	Advanced	---------------------------------------------------------------------------------
-advanced =		"Advanced",
-refreshdb =		"Update app.db",
-rebuilddb =		"Rebuild app.db",
+advanced =		"Erweitert",
+refreshdb =		"app.db Updaten",
+rebuilddb =		"app.db neu Aufbauen",
 restartupdb =	"Deine PSVita wird neugestartet...\nund die app database wird aktualisiert",
 restartredb =	"Deine PSVita wird neugestartet...\nund die app database wird neu aufgebaut",
 restart =		"Deine PSVita wird neugestartet...",
 shutdown =		"Deine PSVita wird heruntergefahren...",
-pgf =			"PGF Font",
-pvf =			"PVF Font",
-favorites =		"Favorites Section",
+pgf =			"PGF Schrift",
+pvf =			"PVF Schrift",
+favorites =		"Favoriten",
 
 ------------	Favorites	---------------------------------------------------------------------------------
-nofavorites =	"This function can't be activated...\n\nNeed at least 1 favorite",
-delfavorites =	"Remove from favorites ?",
-activate =		"Scanning Only for favorites: ",
-removefav =		"Clean up Favorites list",
-emptyfav =		"You really want to empty\nthe Favorites list ?",
-togglescan =	"Scan Favorites: ",
+nofavorites =	"Diese funktion konnte nicht aktiviert werden...\n\nDu brauchst mindestens einen Favoriten",
+delfavorites =	"Favorit Entfernen ?",
+activate =		"Nur Favoriten Scannen: ",
+removefav =		"Favoriten Liste aufräumen",
+emptyfav =		"Sicher das du die Favoriten\nListe löschen willst ?",
+togglescan =	"Nur Favoriten: ",
 
 result =		"\nErgebnis: ",
 count =			"Anzahl: ",
