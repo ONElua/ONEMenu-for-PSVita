@@ -2,13 +2,13 @@
 strings = {
 
 -------------	Explorer	---------------------------------------------------------------------------------
-back =			"Return ",
+back =			"Return",
 copyfile =		"Copying: ",
 delfile =		"Deleting: ",
 dir =			"<DIR>",
 creatfolder =	"Create Folder",
 newfolder =		"New Folder",
-pass =			"Use Pass ?",
+pass =			"Use Pass?",
 ospass =		"PASS",
 
 --SubMenu
@@ -29,16 +29,16 @@ export =		"Export",
 themes =		"Themes ONEMenu",
 cthemesman =	"LiveArea CustomThemes",
 ftp =			"FTP",
-restarthb =		"Restart 1Menu",
+restarthb =		"Restart ONEMenu",
 reset =			"Power Reset",
 off =			"Shutdown",
 
 items =			"Sel Items: ",
 
 ------------	Ftp 		---------------------------------------------------------------------------------
-textftp =		"Enter this FTP addres to your device or PC",
-closeftp =		"Press START to close FTP conection",
-loseftp =		"FTP Conection Closed",
+textftp =		"Enter this FTP address to your device or PC",
+closeftp =		"Press START to close FTP connection",
+loseftp =		"FTP Connection Closed",
 
 ------------	USB 		---------------------------------------------------------------------------------
 usb =			"USB",
@@ -46,14 +46,14 @@ connectusb =	"Connect a USB cable",
 usbconnection = "USB Connection Enabled",
 cancelusb =		"Disconnect",
 usbmode =		"USB Connection Mode",
-usbfail =		"Error... Conexion Failed",
-sd2vita =		"Sd2Vita",
+usbfail =		"Error... Connection Failed",
+sd2vita =		"SD2VITA",
 memcard =		"Memory Card",
 gamecard =		"Game Card",
 
 imgerror =		"Error Image not supported",
 
-background =	"Background: Press Triangle",
+background =	"Background: Press △",
 
 -- ## Visor TXT ##
 editline =		"Edit line",
@@ -66,15 +66,15 @@ playing =		"Playing",
 paused =		"Paused",
 time =			"Time: ",
 tags =			"xx:xx:xx",
-sounderror =	"Error Sonido Invalido",
+sounderror =	"Error Sound Invalid",
 display =		"Lock Display",
 
 --ONEMenu
-switch =		"Really wish to move ",
+switch =		"Really wish to move: ",
 nomemory =		"Not enough memory...",
-appremove =		"Really wish to Uninstall ",
-delclon	=		"Delete this CLON: ",
-manual =		"Do you really want to remove this manual ?",
+appremove =		"Really wish to Uninstall: ",
+delclon	=		"Delete this clone: ",
+manual =		"Do you really want to remove this manual?: ",
 notmanual =		"Manual has been removed!",
 notfindmanual =	"Manual not exist",
 removemanual =	"Remove manual",
@@ -87,12 +87,12 @@ partitions =	"Partitions",
 version =		"Version",
 size_ind =		"Size",
 size_patch =	"patch",
-clon =			"Clon",
+clon =			"clone",
 plugins =		"Plugins",
 getsize =		"Calculating...",
-slides =		"Style ", 
+slides =		"Style: ",
 pic1 =			"Show PIC1s: ",
-fav =			"Mark Favourite: ",
+fav =			"Mark Favorite: ",
 up =			"Up",
 down =			"Down",
 original=		"Original",
@@ -106,7 +106,7 @@ liveareapps =	"LiveArea Apps",
 noliveareapps =	"LiveArea Apps Unavailable",
 
 --SearchingVpks
-vpktittle =		"Vpks Searchs",
+vpktittle =		"VPKs Searches",
 wait =			"Please wait...",
 nofinds =		"No files were found",
 reloadfull =	"Full Scan of ux0/ur0/uma0",
@@ -124,10 +124,10 @@ movefiles =		"File",
 updatedb =		"Update db...",
 
 --onAppInstall
-searchunsafe =	"Search in vpk, Unsafe or Dangerous files!",
+searchunsafe =	"Search VPK, Unsafe or Dangerous files!",
 unsafevpk =		"Extended permissions and personal info access required! \n\nUse caution with non trusted source packages! \n\nDo you want to install at your own risk?",
 dangerousvpk =	"Warning!!! High risk of bricking your device if this VPK is installed! \n\nUse caution with non trusted source packages! \n\nDo you want to install at your own risk?",
-vpkunpack =		"Unpack vpk...",
+vpkunpack =		"Unpacking VPK...",
 install =		"Installing...",
 
 --onExtractFiles
@@ -135,14 +135,14 @@ extraction =	"Extraction...",
 
 --onScanningFiles
 scanning =		"Scanning...",
-size_unpk =		"Size Unpack: ",
+size_unpk =		"Unpacked size: ",
 -------------------------------------------------------------------------------------------------------------
 
 --Launch PBP or VPK
-launchpbp =		"Launch game/app ",
+launchpbp =		"Launch game/app: ",
 confirm =		"Accept",
-warningvpk =	"\nWARNING TOTAL ACCESS\nUNSAFE VPK",
-warningvpk2 =	"WARNING TOTAL ACCESS",
+warningvpk =	"\nWARNING FULL ACCESS\nUNSAFE VPK",
+warningvpk2 =	"WARNING FULL ACCESS",
 safevpk =		"VPK SAFE",
 total_sizevpk = "Total Size VPK: ",
 installvpk =	"INSTALL VPK",
@@ -150,25 +150,25 @@ installgame =	"INSTALL APP",
 alertunsafe =	"VPK UNSAFE!!!!",
 alertdang =		"VPK DANGEOROUS!!!!",
 installvpkdir =	"INSTALL VPK FROM DIR",
-launchbin =		"Launch app ",
-errorinstall =	"An error ocurred when installing",
+launchbin =		"Launch app: ",
+errorinstall =	"An error occurred while installing",
 
 ------------	ThemesONEMenu	----------------------------------------------------------------------------
 themesappman =	"Themes for ONEMenu",
 themesdone =	"Installation Completed!",
-notthemesmenu =	"There's no themes for Onemenu yet",
+notthemesmenu =	"There's no themes for ONEMenu yet",
 reload =		"Reload Original Theme",
-settinsthemes =	"Go to Settings Theme ?",
+settinsthemes =	"Go to Theme Settings?",
 themeactual =	"Now: ",
 
-reloadconfig =	"TaiHen Config",
-configtxt =		"Reload taiHEN ConfigTxt",
+reloadconfig =	"taiHen Config",
+configtxt =		"Reload taiHEN config.txt",
 
 ------------	ThemesLivearea		-------------------------------------------------------------------------
 customthemes =	"CustomThemes LiveArea",
 notthemes =		"Empty/Error in theme list!",
 deltheme =		"Uninstall CustomTheme from app.db",
-delfilestheme =	"Delete files from CustomTheme ?",
+delfilestheme =	"Delete files from CustomTheme?",
 
 ------------	Advanced	---------------------------------------------------------------------------------
 advanced =		"Advanced",
@@ -183,17 +183,17 @@ pvf =			"PVF Font",
 favorites =		"Favorites Section",
 
 ------------	Favorites	---------------------------------------------------------------------------------
-nofavorites =	"This function can't be activated...\n\nNeed at least 1 favorite",
-delfavorites =	"Remove from favorites ?",
+nofavorites =	"This function can't be activated...\n\nNeed at least one favorite",
+delfavorites =	"Remove from favorites?",
 activate =		"Scanning Only for favorites: ",
 removefav =		"Clean up Favorites list",
-emptyfav =		"You really want to empty\nthe Favorites list ?",
+emptyfav =		"You really want to empty\nthe Favorites list?",
 togglescan =	"Scan Favorites: ",
 
 result =		"\nResult: ",
 count =			"Count: ",
 sizeis =		"Size is: ",
-opensettings =	"Open Mp3 Player/Gallery/Video ?",
+opensettings =	"Open app for MP3/Gallery/Video?",
 filesfolders =	"Files/Folders",
 
 }
