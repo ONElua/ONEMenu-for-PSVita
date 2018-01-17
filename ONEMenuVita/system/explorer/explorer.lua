@@ -53,7 +53,7 @@ function explorer.listshow(posy)
 
 		if i==scroll.list.sel then
 			
-			draw.fillrect(5+movx, posy-3, len_selector, 22, theme.style.SELCOLOR)
+			draw.fillrect(5+movx, posy-3, len_selector, 23, theme.style.SELCOLOR)
 			if screen.textwidth(explorer.list[i].name or "",1) > 490 then 
 				xtitle = screen.print(xtitle+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __SLEFT, 490)
 				xtitle -= movx
@@ -435,7 +435,7 @@ local installgame_callback = function ()
             end
 			if tmp_vpk.img then
 				tmp_vpk.img:scale(150)
-				tmp_vpk.img:setfilter(__ALINEAR, __ALINEAR)
+				tmp_vpk.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 				tmp_vpk.img:center()
 				tmp_vpk.img:blit(960/2,544/2)
             end
@@ -481,7 +481,7 @@ local installgame_callback = function ()
 			if tmp_vpk.img then
 				tmp_vpk.img:reset()
 				tmp_vpk.img:resize(120,120)
-				tmp_vpk.img:setfilter(__LINEAR, __LINEAR)
+				tmp_vpk.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 			end
 
 			--id, type, version, dev, path, title
@@ -503,10 +503,13 @@ local installgame_callback = function ()
 			end
 
 			if search == 0 then
-				table.insert(appman[index].list, tmp_vpk)
-				table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-				appman[index].scroll:set(appman[index].list,limit)
-				--plugman.load()
+				if __FAV == 0 then
+					tmp_vpk.fav = false
+					table.insert(appman[index].list, tmp_vpk)
+					table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+					appman[index].scroll:set(appman[index].list,limit)
+					--plugman.load()
+				end
 			else
 				--update
 				appman[index].list[search].dev = "ux0"
@@ -699,22 +702,22 @@ local cancel_callback = function ()
 end
  
 menu_ctx = { -- Creamos un objeto menu contextual
-    h = 450,--(maxim_files*26)-2, -- Height of menu
-    w = 170, -- Width of menu
-    x = -160, -- X origin of menu
-    y = 55, -- Y origin of menu
-    open = false, -- Is open the menu?
+    h = 450,				-- Height of menu
+    w = 170,				-- Width of menu
+    x = -160,				-- X origin of menu
+    y = 55,					-- Y origin of menu
+    open = false,			-- Is open the menu?
     close = true,
-    speed = 10, -- Speed of Effect Open/Close.
-    ctrl = "triangle", -- The button handle Open/Close menu.
+    speed = 10,				-- Speed of Effect Open/Close.
+    ctrl = "triangle",		-- The button handle Open/Close menu.
     ctrl2 = "start",
-    scroll = newScroll(), -- Scroll of menu options.
+    scroll = newScroll(),	-- Scroll of menu options.
 	type = 1,
 	wait_action = 0,
 }
 
 function menu_ctx.wakefunct()
-    menu_ctx.options = { -- Handle Option Text and Option Function
+    menu_ctx.options = { 	-- Handle Option Text and Option Function
 		{ text = strings.delete,        funct = delete_callback },
         { text = strings.makedir,       funct = makedir_callback },
         { text = strings.rename,        funct = rename_callback },
@@ -738,12 +741,12 @@ end
  
 function menu_ctx.wakefunct2()
     menu_ctx.options = { -- Handle Option Text and Option Function
-        { text = strings.ftp,           funct = ftp_callback },
-        { text = strings.usb,           funct = usb_callback },
-        { text = strings.restarthb,     funct = restart_callback },
-        { text = strings.reset,         funct = reboot_callback },
-        { text = strings.off,           funct = shutdown_callback },
-        { text = strings.advanced,      funct = advanced_callback },
+        { text = strings.ftp,       funct = ftp_callback },
+        { text = strings.usb,       funct = usb_callback },
+        { text = strings.restarthb,	funct = restart_callback },
+        { text = strings.reset,     funct = reboot_callback },
+        { text = strings.off,       funct = shutdown_callback },
+        { text = strings.advanced,  funct = advanced_callback },
     }
     menu_ctx.scroll = newScroll(menu_ctx.options, #menu_ctx.options)
 end

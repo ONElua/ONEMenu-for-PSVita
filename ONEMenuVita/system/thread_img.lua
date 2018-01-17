@@ -31,7 +31,7 @@ while true do
 					entry.img:resize(120,120)
 				end	
 			end
-			entry.img:setfilter(__LINEAR, __LINEAR)
+			entry.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 		end
 
 		IMAGE_PORT_O:push(entry)

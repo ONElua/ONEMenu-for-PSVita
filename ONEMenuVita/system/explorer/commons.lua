@@ -187,7 +187,7 @@ function show_msg_vpk(obj_vpk)
 
 		if tmp_vpk.img then
 			tmp_vpk.img:scale(150)
-			tmp_vpk.img:setfilter(__ALINEAR, __ALINEAR)
+			tmp_vpk.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 			tmp_vpk.img:center()
 			tmp_vpk.img:blit(960/2,544/2)
 		end
@@ -254,7 +254,7 @@ function show_msg_vpk(obj_vpk)
 		if tmp_vpk.img then
 			tmp_vpk.img:reset()
 			tmp_vpk.img:resize(120,120)
-			tmp_vpk.img:setfilter(__LINEAR, __LINEAR)
+			tmp_vpk.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 		end
 
 		--id, type, version, dev, path, title
@@ -276,10 +276,13 @@ function show_msg_vpk(obj_vpk)
 		end
 
 		if search == 0 then
-			table.insert(appman[index].list, tmp_vpk)
-			table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-			appman[index].scroll:set(appman[index].list,limit)
-			--plugman.load()
+			if __FAV == 0 then
+				tmp_vpk.fav = false
+				table.insert(appman[index].list, tmp_vpk)
+				table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+				appman[index].scroll:set(appman[index].list,limit)
+				--plugman.load()
+			end
 		else
 			--update
 			appman[index].list[search].dev = "ux0"
@@ -357,7 +360,7 @@ function show_msg_pbp(handle)
 
 		if icon0 then
 			icon0:scale(150)
-			icon0:setfilter(__ALINEAR, __ALINEAR)
+			icon0:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 			icon0:center()
 			icon0:blit(960/2,544/2)
 		end
@@ -438,7 +441,7 @@ function MusicPlayer(handle)
 				end
 				screen.print(425,120, str,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
-				local perc = snd:porcent() 
+				local perc = snd:percent() 
 				if perc then
 					draw.fillrect(425,145,((perc*350)/100),10,color.green)
 				end
@@ -470,7 +473,7 @@ function MusicPlayer(handle)
 
 			screen.flip()
 
-			power.tick(__SUSPEND) -- reset a power timers only for block suspend..
+			power.tick(__POWER_TICK_SUSPEND) -- reset a power timers only for block suspend..
 
 			if buttons[accept] then
 				--[[if snd:endstream() then
@@ -513,7 +516,7 @@ function visorimg(path)
 			--screen.flip()
 		end
 
-		local changeimg = false
+		local changeimg,angle = false,0
 		while true do
 			if theme.data["back"] then theme.data["back"]:blit(0,0)	end
 			buttons.read()
@@ -533,6 +536,13 @@ function visorimg(path)
 
 			screen.flip()
 
+			if buttons.r or buttons.l then
+				if buttons.r then angle+=90 elseif buttons.l then angle-=90 end
+				 if angle > 360 then angle = 90 end
+				 if angle < 0 then angle = 270 end
+				tmp:rotate(angle)
+			end
+			
 			if buttons.square then show_bar_upper = not show_bar_upper end
 			if buttons[cancel] or buttons[accept] then break end
 			if buttons.triangle then
@@ -603,7 +613,8 @@ function visortxt(handle, flag_edit)
 	local hold,change,limit = false,false,16
 	local srcn = newScroll(cont_file,limit)
 	local xscr,xscr2 = 80,10
-	buttons.interval(20,4)
+	buttons.analogtodpad(60)
+	buttons.interval(9,4)
 	while true do
 		buttons.read()
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
@@ -616,8 +627,8 @@ function visortxt(handle, flag_edit)
 		for i=srcn.ini,srcn.lim do
 
 			if i == srcn.sel then
-				if hold then draw.fillrect(5,y,__DISPLAYW-18,20,color.green:a(80))
-				else draw.fillrect(5,y,__DISPLAYW-18,20,color.gray:a(175)) end
+				if hold then ccc=color.green:a(80) else ccc=color.gray:a(175) end
+				draw.fillrect(0,y-3,__DISPLAYW-12,22,ccc)
 			end
 
 			screen.print(5,y,string.format("%04d",i)+') ',1,color.white)
@@ -656,7 +667,7 @@ function visortxt(handle, flag_edit)
 			if theme.data["buttons1"] then theme.data["buttons1"]:blitsprite(tempx,518,1) end
 			screen.print(tempx+20,520,strings.deleteline,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		end
-		
+
 		screen.flip()
 
 		if not hold then
@@ -680,7 +691,7 @@ function visortxt(handle, flag_edit)
 
 		if buttons[accept] and flag_edit then
 			local ln_tmp = cont_file[srcn.sel]
-			local ln = osk.init(strings.editline, cont_file[srcn.sel], 512, __DEFAULT, __TEXT)
+			local ln = osk.init(strings.editline, cont_file[srcn.sel], 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
 			if ln then
 				if ln != ln_tmp then change = true end
 				cont_file[srcn.sel] = ln
@@ -724,6 +735,7 @@ function visortxt(handle, flag_edit)
 
 	end
 	buttons.read()
+	buttons.analogtodpad()
 	buttons.interval(16,5)
 end
 
@@ -741,7 +753,7 @@ function startftp()
 
 	while ftp.state() do
 		reboot=false
-		power.tick(1)
+		power.tick()
 		buttons.read()
 		if ftpimg then ftpimg:blit(0,0) end
 		screen.print(960/2,300,strings.textftp,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
@@ -772,7 +784,7 @@ function usbMassStorage()
 
 	while usb.actived() != 1 do
 		buttons.read()
-		power.tick(1)
+		power.tick()
 
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end 
 
@@ -806,7 +818,7 @@ function usbMassStorage()
 	local x,y = 480 - (w/2), 272 - (h/2)
 	while true do
 		buttons.read()
-		power.tick(1)
+		power.tick()
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end 
 
 		draw.fillrect(x, y, w, h, color.new(0x2f,0x2f,0x2f,0xff))
@@ -834,7 +846,7 @@ function usbMassStorage()
 	local x,y = 480 - (w/2), 272 - (h/2)
 	while not buttons[cancel] do
 		buttons.read()
-		power.tick(1)
+		power.tick()
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end 
 
 		draw.fillrect(x,y,w,h,theme.style.BARCOLOR)

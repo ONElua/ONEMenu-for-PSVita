@@ -9,7 +9,6 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
---os.debug()
 game.close()
 color.loadpalette()
 
@@ -29,7 +28,10 @@ if theme.data["splash"] then--"splash"
 end
 
 dofile("system/swipeLib.lua")
-	swipe.set(255,70,695,430,30) --20 de threshold
+	swipe.set(30,255,70,695,430)
+--maps= { {"left","left"},{"right","right"} }
+swipe.enableDiagonal=false
+swipe.disableContV=true
 
 dofile("system/stars.lua")									-- stars...stars...
 dofile("system/explorer/commons.lua")						-- Load Functions Commons

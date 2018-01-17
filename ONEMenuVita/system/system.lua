@@ -67,7 +67,7 @@ function system.run()
 	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
 	themesimg = image.load(manager_path)
 
-	buttons.interval(16,5)
+	buttons.interval(15,4)
 	local preview = nil
 	while true do
 		buttons.read()
@@ -90,13 +90,13 @@ function system.run()
 					draw.fillrect(10,y-2,675,23,theme.style.SELCOLOR)
 					if not preview then
 						preview = image.load(system.data[i].path.."/sce_sys/icon0.png")
-						if preview then preview:setfilter(__LINEAR, __LINEAR) end
+						if preview then preview:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR) end
 					end
 					if not pic1_sys and show_sys then
 						pic1_sys = image.load(system.data[i].path.."/sce_sys/livearea/contents/bg0.png")
 						if pic1_sys then
 							pic1_sys:resize(692,446)
-							pic1_sys:setfilter(__LINEAR, __LINEAR)
+							pic1_sys:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 						end
 					end
 				end

@@ -255,17 +255,17 @@ function blit_icons_specials()
 	end
 
 	if os.getreg("/CONFIG/SYSTEM/", "flight_mode", 1) == 1 then
-		theme.data["wifi"]:blitsprite(850,10,5)
+		theme.data["wifi"]:blitsprite(840,10,5)
 	else
 		local frame = wlan.strength()
 		if frame then
-			theme.data["wifi"]:blitsprite(850,10,math.ceil(frame/25))
+			theme.data["wifi"]:blitsprite(840,10,math.ceil(frame/25))
 		else
-			theme.data["wifi"]:blitsprite(850,10,0)
+			theme.data["wifi"]:blitsprite(840,10,0)
 		end
 	end
 
-	if avatar then avatar:blit(800,5) end
+	if avatar then avatar:blit(790,5) end
 end
 
 function isTouched(x,y,sx,sy)

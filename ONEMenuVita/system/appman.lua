@@ -33,7 +33,9 @@ for i=1,#categories do table.insert(appman, { list={}, scroll, slide = { img = n
 appman.len = 0
 
 function fillappman(obj)
-	
+
+	if obj.id == os.titleid() then return end
+
 	local index=1
 
 	if obj.type == "mb" then
@@ -58,7 +60,7 @@ function fillappman(obj)
 
 		end
 
-	obj.path_img = "ur0:appmeta/"..obj.id.."/icon0.png"
+		obj.path_img = "ur0:appmeta/"..obj.id.."/icon0.png"
 
 	end
 
@@ -68,7 +70,7 @@ function fillappman(obj)
 	else
 		if obj.resize then obj.img:resize(120,100) else obj.img:resize(120,120) end
 	end
-	obj.img:setfilter(__LINEAR, __LINEAR)
+	obj.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 
 	appman.len += 1
 	table.insert(appman[index].list,obj)
@@ -87,9 +89,8 @@ function appman.refresh()
 
 		for i=1,#list do
 
-			if list[i].title then list[i].title = list[i].title:gsub("\n"," ") end
-
 			if files.exists(list[i].path) then
+				if list[i].title then list[i].title = list[i].title:gsub("\n"," ") end
 				list[i].fav = false
 				for j=1,#apps do
 					if list[i].id == apps[j] then list[i].fav = true end
@@ -156,22 +157,22 @@ function appman.ctrls()
 
 	if submenu_ctx.x == -submenu_ctx.w then--no mover hasta que todo este dibujado
 
-		if (buttons.right or buttons.held.r or buttons.analoglx > 60) then
+		if (buttons.right or swipe.right or buttons.held.r or buttons.analoglx > 60) then
 			if appman[cat].scroll:down_menu() then
-				if (buttons.right and theme.data["slide"]) then theme.data["slide"]:play() end
+				if ((buttons.right or swipe.right) and theme.data["slide"]) then theme.data["slide"]:play() end
 				elev=0
 				restart_cronopic()
 			end
 		end
 
-		if (buttons.left or buttons.held.l or buttons.analoglx < -60) then
+		if (buttons.left or swipe.left or buttons.held.l or buttons.analoglx < -60) then
 			if appman[cat].scroll:up_menu() then
-				if (buttons.left and theme.data["slide"]) then theme.data["slide"]:play() end
+				if ((buttons.left or swipe.left) and theme.data["slide"]) then theme.data["slide"]:play() end
 				elev=0
 				restart_cronopic()
 			end
 		end
-	
+
 		if ((buttons.up or swipe.up) or (swipe.down or buttons.down)) then
 
 			local tmp_cat = cat
@@ -198,6 +199,7 @@ function appman.ctrls()
 				elev=0
 				restart_cronopic()
 			end
+
 		end
 
 	end
@@ -340,25 +342,40 @@ local uninstall_callback = function ()
 			reboot=true
 			if result_rmv == 1 then
 
-			if theme.data["back"] then theme.data["back"]:blit(0,0) end
+				if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-			table.remove(appman[cat].list, appman[cat].scroll.sel)
-			appman[cat].scroll.maxim=#appman[cat].list
-			
-			if #appman[cat].list < 1 then
-				while #appman[cat].list < 1 do
-					cat += 1
-					if cat > #appman then cat = 1 end
-				end
-			else
+				if cat == 5 then--Only Adrenaline Bubbles
+					for i=1,#apps do
+						if apps[i] == appman[cat].list[focus_index].id then
+							table.remove(apps,z)
+							write_favs(__PATH_FAVS)
+							appman[cat].list[focus_index].fav = false
 
-				if appman[cat].scroll.sel==appman[cat].scroll.lim then
-					if appman[cat].scroll.ini != 1 then appman[cat].scroll.ini-=1 end
-						appman[cat].scroll.sel-=1
-						appman[cat].scroll.lim=appman[cat].scroll.sel
-					elseif appman[cat].scroll.lim>#appman[cat].list then
-						appman[cat].scroll.lim-=1
+							if #apps <=0 then
+								if __FAV == 1 then __FAV = 0 end
+							end
+							write_config()
+						end
 					end
+				end
+
+				table.remove(appman[cat].list, appman[cat].scroll.sel)
+				appman[cat].scroll.maxim=#appman[cat].list
+
+				if #appman[cat].list < 1 then
+					while #appman[cat].list < 1 do
+						cat += 1
+						if cat > #appman then cat = 1 end
+					end
+				else
+
+					if appman[cat].scroll.sel==appman[cat].scroll.lim then
+						if appman[cat].scroll.ini != 1 then appman[cat].scroll.ini-=1 end
+							appman[cat].scroll.sel-=1
+							appman[cat].scroll.lim=appman[cat].scroll.sel
+						elseif appman[cat].scroll.lim>#appman[cat].list then
+							appman[cat].scroll.lim-=1
+						end
 				end
 				appman.len -= 1
 				infodevices()
@@ -372,14 +389,21 @@ local switch_callback = function ()
 
 	if appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG" or appman[cat].list[focus_index].type == "ME" then return end
 
-	local mov = 1
-	local loc1,loc2,v1,v2 = "ur0","uma0",1,1
+	--__GAME_MOVE_UX02UR0=1
+	--__GAME_MOVE_UR02UX0=2
+	--__GAME_MOVE_UX02UMA0=3
+	--__GAME_MOVE_UMA02UX0=4
+	--__GAME_MOVE_UR02UMA0=5
+	--__GAME_MOVE_UMA02UR0=6
+	local mov = __GAME_MOVE_UX02UR0
+	local loc1,loc2,v1,v2 = "ur0","uma0",__GAME_MOVE_UX02UR0,__GAME_MOVE_UX02UR0
+
 	if appman[cat].list[focus_index].dev == "ur0" then
-		loc1,loc2,v1,v2 = "ux0","uma0",2,5
+		loc1,loc2,v1,v2 = "ux0","uma0",__GAME_MOVE_UR02UX0,__GAME_MOVE_UR02UMA0
 	elseif appman[cat].list[focus_index].flag == "ux0" then
-		loc1,loc2,v1,v2 = "ur0","uma0",1,3
+		loc1,loc2,v1,v2 = "ur0","uma0",__GAME_MOVE_UX02UR0,__GAME_MOVE_UX02UMA0
 	elseif appman[cat].list[focus_index].flag == "uma0" then
-		loc1,loc2,v1,v2 = "ux0","ur0",4,6
+		loc1,loc2,v1,v2 = "ux0","ur0",__GAME_MOVE_UMA02UX0,__GAME_MOVE_UMA02UR0
 	end
 
 	buttons.read()
@@ -422,13 +446,6 @@ local switch_callback = function ()
 	buttons.read()--fflush
 	buttons.homepopup(0)
 		reboot=false
-		 	--//1		ux0-ur0
-			--//2		ur0-ux0
-			--//3		ux0-uma0
-			--//4		uma0-ux0
-			--//5		ur0-uma0
-			--//6		uma0-ur0
-			--flag =0 ur0	flag =1 ux0		flag =2 uma0
 			game_move=true
 				total_size,folders,filess = files.size(appman[cat].list[focus_index].path)
 				files_move,cont = folders+filess,0
@@ -443,13 +460,13 @@ local switch_callback = function ()
 		os.delay(100)
 
 		if result ==1 then
-			if mov == 1 or mov == 6 then
+			if mov == __GAME_MOVE_UX02UR0 or mov == __GAME_MOVE_UMA02UR0 then
 				appman[cat].list[focus_index].path = "ur0:app/"..appman[cat].list[focus_index].id
 				appman[cat].list[focus_index].dev = "ur0"
-			elseif mov == 2 or mov == 4 then
+			elseif mov == __GAME_MOVE_UR02UX0 or mov == __GAME_MOVE_UMA02UX0 then
 				appman[cat].list[focus_index].path = "ux0:app/"..appman[cat].list[focus_index].id
 				appman[cat].list[focus_index].dev = "ux0"
-			elseif mov == 3 or mov == 5 then
+			elseif mov == __GAME_MOVE_UX02UMA0 or mov == __GAME_MOVE_UR02UMA0 then
 				appman[cat].list[focus_index].path = "uma0:app/"..appman[cat].list[focus_index].id
 				appman[cat].list[focus_index].dev = "uma0"
 			end

@@ -28,10 +28,9 @@ function theme.load()
 	__THEME = ini.read(__PATHINI,"theme","id","default")
 	__BACKG = ini.read(__PATHINI,"backg","img","")
 	__SLIDES = tonumber(ini.read(__PATHINI,"slides","pos",100))
-	__PIC1 = tonumber(ini.read(__PATHINI,"pics","show","1"))
+	__PIC1 = tonumber(ini.read(__PATHINI,"pics","show","0"))
 	__FNT = tonumber(ini.read(__PATHINI,"font","type","2"))
 	__FAV = tonumber(ini.read(__PATHINI,"favs","scan","0"))
-
 
 	if __FAV == 1 and #apps>0 then
 		enable_favs = strings.yes
@@ -63,8 +62,8 @@ function theme.load()
 	}
 	--table.insert(elements, {name = "algo"})
 
-	local path = __PATHTHEMES..__THEME.."/"
-	if not files.exists(path) then path = "system/theme/default/" end
+	local path_theme = __PATHTHEMES..__THEME.."/"
+	if not files.exists(path_theme) then path_theme = "system/theme/default/" end
 
 	--Primero checamos si tienen una img de fondo para el back
 	theme.data["back"] = image.load(__BACKG)
@@ -74,23 +73,22 @@ function theme.load()
 			theme.data["back"]:resize(__DISPLAYW, __DISPLAYH)
 		end
 	else
-		if files.exists(path.."back.png") then theme.data["back"] = image.load(path.."back.png")
+		if files.exists(path_theme.."back.png") then theme.data["back"] = image.load(path_theme.."back.png")
 		else theme.data["back"] = image.load("system/theme/default/back.png") end
 	end
 
 	-- Load Resources
-	local path_img = "system/theme/default/"
-	local path_snd = "system/theme/default/"
+	local path_resources = "system/theme/default/"
 	for i=1,#elements do
-		if files.exists(string.format("%s%s.png",path,elements[i].name)) or files.exists(string.format("%s%s.ogg",path,elements[i].name)) then
-			path_img = path else path_img = "system/theme/default/" end
+		if files.exists(string.format("%s%s.png",path_theme,elements[i].name)) or files.exists(string.format("%s%s.ogg",path_theme,elements[i].name)) then
+			path_resources = path_theme else path_resources = "system/theme/default/" end
 
 		if elements[i].sound then
-			theme.data[elements[i].name] = sound.load(string.format("%s%s.ogg",path_img,elements[i].name))--,1)
+			theme.data[elements[i].name] = sound.load(string.format("%s%s.ogg",path_resources,elements[i].name))--,1)
 		elseif elements[i].sprite then
-			theme.data[elements[i].name] = image.load(string.format("%s%s.png",path_img,elements[i].name),elements[i].w,elements[i].h)
+			theme.data[elements[i].name] = image.load(string.format("%s%s.png",path_resources,elements[i].name),elements[i].w,elements[i].h)
 		else
-			theme.data[elements[i].name] = image.load(string.format("%s%s.png",path_img,elements[i].name))
+			theme.data[elements[i].name] = image.load(string.format("%s%s.png",path_resources,elements[i].name))
 		end
 	end
 
@@ -132,15 +130,15 @@ function theme.load()
 		end
 	end
 
-	parseTheme(path.."theme.ini",theme.style)
+	parseTheme(path_theme.."theme.ini",theme.style)
 
 	fnt, __USERFNT = nil,false
-	if files.exists(string.format("%s%s",path,"font.ttf")) then
-		fnt = font.load(string.format("%s%s",path,"font.ttf"))
-	elseif files.exists(string.format("%s%s",path,"font.pgf")) then
-		fnt = font.load(string.format("%s%s",path,"font.pgf"))
-	elseif files.exists(string.format("%s%s",path,"font.pvf")) then
-		fnt = font.load(string.format("%s%s",path,"font.pvf"))
+	if files.exists(string.format("%s%s",path_theme,"font.ttf")) then
+		fnt = font.load(string.format("%s%s",path_theme,"font.ttf"))
+	elseif files.exists(string.format("%s%s",path_theme,"font.pgf")) then
+		fnt = font.load(string.format("%s%s",path_theme,"font.pgf"))
+	elseif files.exists(string.format("%s%s",path_theme,"font.pvf")) then
+		fnt = font.load(string.format("%s%s",path_theme,"font.pvf"))
 	end
 
 	if fnt then	font.setdefault(fnt)
