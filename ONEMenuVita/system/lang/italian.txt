@@ -56,10 +56,10 @@ imgerror =		"Errore!! Immagine non supportata",
 background =	"Background: Premere Triangolo",
 
 -- ## Visor TXT ##
-editline =		"Edit line",
-savechanges =	"Would you like to save changes?",
-insertline =	"+ -> Insert Line",
-deleteline =	"+ <- Delete Line",
+editline =		"Modifica linea",
+savechanges =	"Vuoi salvare le modifiche?",
+insertline =	"+ -> Inserisci linea",
+deleteline =	"+ <- Elimina linea",
 
 -- ## Music Player ##
 playing =		"Riproduzione",
@@ -67,7 +67,7 @@ paused =		"Pausa",
 time =			"Tempo: ",
 tags =			"xx:xx:xx",
 sounderror =	"Errore!! Suono non valido",
-display =		"Lock Display",
+display =		"Blocca schermata",
 
 --ONEMenu
 switch =		"Sei sicuro di voler spostare ",
