@@ -142,7 +142,7 @@ size_unpk =		"Unpacked size: ",
 --onNetGetFile
 download =		"Downloading...",
 success =		"Successful download in",
-failed =		"Failed download",
+failed =		"Download failed",
 
 -------------------------------------------------------------------------------------------------------------
 
