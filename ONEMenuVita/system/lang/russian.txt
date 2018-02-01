@@ -32,6 +32,8 @@ ftp =			"FTP сервер",
 restarthb =		"Перезапустить 1Menu",
 reset =			"Перезагрузить PSV",
 off =			"Выключить PSV",
+qr =			"QR-DLoader",
+qrscan =		"QR Scanning",
 
 items =			"Выбрано: ",
 
@@ -136,6 +138,12 @@ extraction =	"Извлечение...",
 --onScanningFiles
 scanning =		"Сканирование...",
 size_unpk =		"Полный размер: ",
+
+--onNetGetFile
+download =		"Downloading...",
+success =		"Successful download in",
+failed =		"Failed download",
+
 -------------------------------------------------------------------------------------------------------------
 
 --Launch PBP or VPK

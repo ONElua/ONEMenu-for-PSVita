@@ -32,6 +32,8 @@ ftp =			"FTP",
 restarthb =		"1Menu Neustarten",
 reset =			"Neustarten",
 off =			"Ausschalten",
+qr =			"QR-DLoader",
+qrscan =		"QR Scanning",
 
 items =			"Sel Items: ",
 
@@ -136,6 +138,12 @@ extraction =	"Extrahiere...",
 --onScanningFiles
 scanning =		"Scannvorgang...",
 size_unpk =		"Extrahierte Größe: ",
+
+--onNetGetFile
+download =		"Downloading...",
+success =		"Successful download in",
+failed =		"Failed download",
+
 -------------------------------------------------------------------------------------------------------------
 
 --Launch PBP or VPK

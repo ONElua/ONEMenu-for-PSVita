@@ -32,6 +32,8 @@ ftp =			"FTP",
 restarthb =		"Redémarrer 1Menu",
 reset =			"Redémarrer PSVita",
 off =			"Eteindre la PSVita",
+qr =			"QR-DLoader",
+qrscan =		"QR Scanning",
 
 items =			"Eléments Sel: ",
 
@@ -136,6 +138,12 @@ extraction =	"Extraction en cours...",
 --onScanningFiles
 scanning =		"\nVérification en cours...",
 size_unpk =		"Taille Décompressé : ",
+
+--onNetGetFile
+download =		"Downloading...",
+success =		"Successful download in",
+failed =		"Failed download",
+
 -------------------------------------------------------------------------------------------------------------
 
 --Launch PBP or VPK

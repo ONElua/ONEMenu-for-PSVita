@@ -27,7 +27,7 @@ SYMBOL_TRIANGLE	= string.char(0xe2)..string.char(0x96)..string.char(0xb3)
 SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
 
 --Primero checamos traducciones
-__STRINGS		= 153--135v1,137v1.01,145vbeta,146v2.01,150v2.02
+__STRINGS		= 158--135v1,137v1.01,145vbeta,146v2.01,150v2.02,155v2.04
 if not files.exists("ux0:data/ONEMENU/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/ONEMENU/lang/")
 else
 	dofile("ux0:data/ONEMENU/lang/english_us.txt")

@@ -32,6 +32,8 @@ ftp =			"FTP",
 restarthb =		"ONEMenuを再起動",
 reset =			"再起動",
 off =			"シャットダウン",
+qr =			"QR-DLoader",
+qrscan =		"QR Scanning",
 
 items =			"項目を選択: ",
 
@@ -136,6 +138,12 @@ extraction =	"抽出",
 --onScanningFiles
 scanning =		"スキャン中",
 size_unpk =		"解凍後のサイズ: ",
+
+--onNetGetFile
+download =		"Downloading...",
+success =		"Successful download in",
+failed =		"Failed download",
+
 -------------------------------------------------------------------------------------------------------------
 
 --Launch PBP or VPK

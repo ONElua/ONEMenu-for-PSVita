@@ -32,6 +32,8 @@ ftp =			"FTP",
 restarthb =		"Restart ONEMenu",
 reset =			"Power Reset",
 off =			"Shutdown",
+qr =			"QR-DLoader",
+qrscan =		"QR Scanning",
 
 items =			"Sel Items: ",
 
@@ -136,6 +138,12 @@ extraction =	"Extraction...",
 --onScanningFiles
 scanning =		"Scanning...",
 size_unpk =		"Unpacked size: ",
+
+--onNetGetFile
+download =		"Downloading...",
+success =		"Successful download in",
+failed =		"Failed download",
+
 -------------------------------------------------------------------------------------------------------------
 
 --Launch PBP or VPK

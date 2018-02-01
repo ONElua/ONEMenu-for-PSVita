@@ -661,7 +661,42 @@ local usb_callback = function ()
 	buttons.homepopup(1)
 	menu_ctx.scroll.sel = pos_menu
 end
- 
+
+local qr_callback = function ()
+	local pos_menu = menu_ctx.scroll.sel
+	menu_ctx.wakefunct2()
+
+	local url = nil
+
+	url=cam.scanqr(strings.qrscan,theme.style.TXTBKGCOLOR)
+
+	if url then
+		if not wlan.isconnected() then wlan.connect() end
+		if wlan.isconnected() then
+			buttons.homepopup(0)
+				local res,filename = http.getfile(url,"ux0:downloads/")
+			buttons.homepopup(1)
+			if res then
+				if filename then
+					if files.exists("ux0:downloads/"..filename) then
+						os.message(strings.success.." ux0:downloads\n\n"..filename)
+					end
+				end
+			else
+				os.message(strings.failed.." ux0:downloads\n\n"..filename)
+			end
+		end
+	end
+
+--clean
+	menu_ctx.close = true
+	action = false
+	explorer.refresh(true)
+	explorer.action = 0
+	multi={}
+	menu_ctx.scroll.sel = pos_menu
+end
+
 local advanced_callback = function ()
 	local pos_menu = menu_ctx.scroll.sel
 	menu_ctx.wakefunct2()
@@ -738,11 +773,12 @@ function menu_ctx.wakefunct()
     end
     menu_ctx.scroll = newScroll(menu_ctx.options, #menu_ctx.options)
 end
- 
+
 function menu_ctx.wakefunct2()
     menu_ctx.options = { -- Handle Option Text and Option Function
         { text = strings.ftp,       funct = ftp_callback },
         { text = strings.usb,       funct = usb_callback },
+		{ text = strings.qr,       	funct = qr_callback },
         { text = strings.restarthb,	funct = restart_callback },
         { text = strings.reset,     funct = reboot_callback },
         { text = strings.off,       funct = shutdown_callback },

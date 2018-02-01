@@ -32,6 +32,8 @@ ftp =			"FTP",
 restarthb =		"重启 OneMenu",
 reset =			"重启 PSVita",
 off =			"关机",
+qr =			"QR-DLoader",
+qrscan =		"QR Scanning",
 
 items =			"Sel Items：",
 
@@ -136,6 +138,12 @@ extraction =	"解压...",
 --onScanningFiles
 scanning =		"扫描...",
 size_unpk =		"解压后大小: ",
+
+--onNetGetFile
+download =		"Downloading...",
+success =		"Successful download in",
+failed =		"Failed download",
+
 -------------------------------------------------------------------------------------------------------------
 
 --Launch PBP or VPK

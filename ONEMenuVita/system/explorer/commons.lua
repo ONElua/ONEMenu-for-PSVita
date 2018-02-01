@@ -518,7 +518,8 @@ function visorimg(path)
 
 		local changeimg,angle = false,0
 		while true do
-			if theme.data["back"] then theme.data["back"]:blit(0,0)	end
+			screen.clear(color.shine)
+			--if theme.data["back"] then theme.data["back"]:blit(0,0) end
 			buttons.read()
 	
 			tmp:blit(__DISPLAYW/2,__DISPLAYH/2)
@@ -529,7 +530,7 @@ function visorimg(path)
 				screen.print(10,5,infoimg.name,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 				screen.print(940,3,"w: "..infoimg.w,0.8,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
 				screen.print(940,24,"h: "..infoimg.h,0.8,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
-				if (infoimg.w>500 and infoimg.h>300) then
+				if (infoimg.w>800 and infoimg.h>500) then
 					screen.print(10,30,strings.background,0.7,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 				end
 			end
@@ -546,7 +547,7 @@ function visorimg(path)
 			if buttons.square then show_bar_upper = not show_bar_upper end
 			if buttons[cancel] or buttons[accept] then break end
 			if buttons.triangle then
-				if (infoimg.w>500 and infoimg.h>300) then
+				if (infoimg.w>800 and infoimg.h>500) then
 					theme.data["back"] = nil
 					theme.data["back"] = tmp
 					if theme.data["back"] then
@@ -569,6 +570,7 @@ function visorimg(path)
 	else
 		os.message(strings.imgerror)
 	end
+	screen.clear(color.black)
 end
 
 -- ## File-Viewer ## --
@@ -584,6 +586,10 @@ end
 function files.readlinesSFO(path)
 	local sfo = game.info(path)
 	if not sfo then return nil end
+	
+	if sfo.TITLE then sfo.TITLE = sfo.TITLE:gsub("\n"," ") end
+	if sfo.STITLE then sfo.STITLE = sfo.STITLE:gsub("\n"," ") end
+
 	local data = {}
 	for k,v in pairs(sfo) do
 		table.insert(data,tostring(k).." = "..tostring(v))
@@ -825,8 +831,8 @@ function usbMassStorage()
 			screen.print(480, y+10, title,1,color.white,color.black, __ACENTER)
 			screen.print(480,y+40,SYMBOL_CROSS.." "..strings.sd2vita, 1,color.white,color.black, __ACENTER)
 			screen.print(480,y+65,SYMBOL_SQUARE.." "..strings.memcard, 1,color.white,color.black, __ACENTER)
-			screen.print(480,y+85,SYMBOL_TRIANGLE.." "..strings.gamecard, 1,color.white,color.black, __ACENTER)
-			screen.print(480,y+110,SYMBOL_CIRCLE.." "..strings.cancel, 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+90,SYMBOL_TRIANGLE.." "..strings.gamecard, 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+115,SYMBOL_CIRCLE.." "..strings.cancel, 1,color.white,color.black, __ACENTER)
 		screen.flip()
 
 		if buttons.cross or buttons.square or buttons.triangle or buttons.circle then

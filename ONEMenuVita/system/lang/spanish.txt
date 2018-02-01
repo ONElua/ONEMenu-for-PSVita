@@ -32,6 +32,8 @@ ftp =			"FTP",
 restarthb =		"Reiniciar ONEMenu",
 reset =			"Reiniciar Vita",
 off =			"Apagar",
+qr =			"QR-DLoader",
+qrscan =		"QR Scanning",
 
 items =			"Items Sel: ",
 
@@ -136,6 +138,12 @@ extraction =	"Extrayendo...",
 --onScanningFiles
 scanning =		"Revisando...",
 size_unpk =		"Tamaño desempacado: ",
+
+--onNetGetFile
+download =		"Descargando...",
+success =		"Descarga Exitosa en",
+failed =		"Error al descargar",
+
 -------------------------------------------------------------------------------------------------------------
 
 --Launch PBP or VPK
