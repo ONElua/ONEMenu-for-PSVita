@@ -79,7 +79,7 @@ function system.run()
 			pic1_sys:blit(0,55,125)
 		end
 
-		if math.minmax(tonumber(os.date("%d%m")),2312,2512)== tonumber(os.date("%d%m")) then stars.render() end
+		if math.minmax(tonumber(os.date("%d%m")),2512,2512)== tonumber(os.date("%d%m")) then stars.render() end
 		screen.print(480,15,strings.liveareapps,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
 
 		if system.len > 0 then

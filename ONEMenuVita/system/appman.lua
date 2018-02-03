@@ -277,7 +277,7 @@ function appman.launch()
 		end
 
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
-		if math.minmax(tonumber(os.date("%d%m")),2312,2512)== tonumber(os.date("%d%m")) then stars.render() end
+		if math.minmax(tonumber(os.date("%d%m")),2512,2512)== tonumber(os.date("%d%m")) then stars.render() end
 
 		if appman.len > 0 then
 			main_draw()
