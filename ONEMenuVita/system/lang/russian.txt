@@ -33,7 +33,7 @@ restarthb =		"Перезапустить 1Menu",
 reset =			"Перезагрузить PSV",
 off =			"Выключить PSV",
 qr =			"QR-DLoader",
-qrscan =		"QR Scanning",
+qrscan =		"Сканирование QR-кодов",
 
 items =			"Выбрано: ",
 
@@ -49,7 +49,7 @@ usbconnection = "USB подключение установлено.",
 cancelusb =		"Отключить",
 usbmode =		"Выберите режим USB подключения:",
 usbfail =		"Ошибка USB подключения...",
-sd2vita =		"Sd2Vita",
+sd2vita =		"SD2VITA",
 memcard =		"Карта памяти",
 gamecard =		"Игровой картридж",
 
@@ -58,10 +58,10 @@ imgerror =		"Ошибка. Формат изображения не поддер
 background =	"Нажмите треугольник для перехода в фоновый режим",
 
 -- ## Visor TXT ##
-editline =		"Edit line",
-savechanges =	"Would you like to save changes?",
-insertline =	"+ -> Insert Line",
-deleteline =	"+ <- Delete Line",
+editline =		"Изменить строку",
+savechanges =	"Вы хотите сохранить изменения?",
+insertline =	"+ -> Вставить строку",
+deleteline =	"+ <- Удалить строку",
 
 -- ## Music Player ##
 playing =		"Воспроизводится",
@@ -69,7 +69,7 @@ paused =		"Пауза",
 time =			"Время: ",
 tags =			"xx:xx:xx",
 sounderror =	"Не удалось воспроизвести",
-display =		"Lock Display",
+display =		"Заблокировать экран",
 
 --ONEMenu
 switch =		"Подтвердите перемещение ",
@@ -80,7 +80,7 @@ manual =		"Подтвердите удаление руководства",
 notmanual =		"Данные руководства удалены!",
 notfindmanual =	"Данные не найдены",
 removemanual =	"Удалить руководство",
-free =			"освобождено.",
+free =			"Свободно",
 pressremove =	"Удалить",
 switchapp =		"Переместить",
 empty =			"Нет данных/Ошибка доступа",
@@ -140,9 +140,9 @@ scanning =		"Сканирование...",
 size_unpk =		"Полный размер: ",
 
 --onNetGetFile
-download =		"Downloading...",
-success =		"Successful download in",
-failed =		"Download failed",
+download =		"Загрузка...",
+success =		"Успешно загружено в",
+failed =		"Ошибка загрузки",
 
 -------------------------------------------------------------------------------------------------------------
 
@@ -196,7 +196,7 @@ delfavorites =	"Идалить из избранного ?",
 activate =		"Поиск в избранном: ",
 removefav =		"Очистить список ибранного",
 emptyfav =		"Вы действительно хотите\nочистить список избранного?",
-togglescan =	"Scan Favorites: ",
+togglescan =	"Сканировать избранное: ",
 
 result =		"\nРезультат: ",
 count =			"Всего файлов: ",
