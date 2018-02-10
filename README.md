@@ -9,12 +9,17 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 
 ![header](screenshots/1MENUVITA5.png)
 
-# Controls:
+### Changelog 2.04 ###
+- [NEW] Added QR Downloader.<br>
+- [NEW] Horizontal and vertical touchscreen support<br>
+- [FIX] Stars rain only on 2512.<br>
 
 ### Changelog 2.03 ###
 - Enabled swipe up/down for category change.<br>
 - Small internal changes on Text Editor, to add or delete lines:<br>
-keep pressed triangle right to add a line or left to delete a line.<br>
+- keep pressed triangle<br>
+-	right to add a line.<br>
+-	left to delete a line.<br>
 - Fixed error on text files with text adjustment scroll.<br>
 - Now the PIC1 of the selected game/app is shown if no buttons are pressed.<br>
 - Please update your translations...New lines were added.<br>
