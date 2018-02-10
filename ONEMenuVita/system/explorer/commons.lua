@@ -518,8 +518,7 @@ function visorimg(path)
 
 		local changeimg,angle = false,0
 		while true do
-			screen.clear(color.shine)
-			--if theme.data["back"] then theme.data["back"]:blit(0,0) end
+			if theme.data["back"] then theme.data["back"]:blit(0,0) end
 			buttons.read()
 	
 			tmp:blit(__DISPLAYW/2,__DISPLAYH/2)

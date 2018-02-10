@@ -32,7 +32,7 @@ ftp =			"FTP",
 restarthb =		"Reiniciar ONEMenu",
 reset =			"Reiniciar Vita",
 off =			"Apagar",
-qr =			"QR-DLoader",
+qr =			"QR DownLoader",
 qrscan =		"QR Scanning",
 
 items =			"Items Sel: ",

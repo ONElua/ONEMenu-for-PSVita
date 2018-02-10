@@ -28,7 +28,7 @@ if theme.data["splash"] then--"splash"
 end
 
 dofile("system/swipeLib.lua")
-	swipe.set(30,255,70,695,430)
+	swipe.set(30,255,70,695,430)--,30) --20 de threshold
 --maps= { {"left","left"},{"right","right"} }
 swipe.enableDiagonal=false
 swipe.disableContV=true

@@ -32,7 +32,7 @@ ftp =			"FTP сервер",
 restarthb =		"Перезапустить 1Menu",
 reset =			"Перезагрузить PSV",
 off =			"Выключить PSV",
-qr =			"QR-DLoader",
+qr =			"QR DownLoader",
 qrscan =		"Сканирование QR-кодов",
 
 items =			"Выбрано: ",

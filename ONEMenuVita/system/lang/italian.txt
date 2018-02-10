@@ -32,7 +32,7 @@ ftp =			"FTP",
 restarthb =		"Riavvia 1Menu",
 reset =			"Resetta",
 off =			"Spegni",
-qr =			"QR-DLoader",
+qr =			"QR DownLoader",
 qrscan =		"QR Scanning",
 
 items =			"Seleziona Elementi: ",
@@ -142,7 +142,7 @@ size_unpk =		"Dimensione di spacchettamento : ",
 --onNetGetFile
 download =		"Downloading...",
 success =		"Successful download in",
-failed =		"Download failed",
+failed =		"Failed download",
 
 -------------------------------------------------------------------------------------------------------------
 

@@ -32,7 +32,7 @@ ftp =			"FTP",
 restarthb =		"1Menu Neustarten",
 reset =			"Neustarten",
 off =			"Ausschalten",
-qr =			"QR-DLoader",
+qr =			"QR DownLoader",
 qrscan =		"QR Scanning",
 
 items =			"Sel Items: ",
@@ -142,7 +142,7 @@ size_unpk =		"Extrahierte Größe: ",
 --onNetGetFile
 download =		"Downloading...",
 success =		"Successful download in",
-failed =		"Download failed",
+failed =		"Failed download",
 
 -------------------------------------------------------------------------------------------------------------
 

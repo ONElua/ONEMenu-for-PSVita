@@ -32,7 +32,7 @@ ftp =			"FTP",
 restarthb =		"Redémarrer 1Menu",
 reset =			"Redémarrer PSVita",
 off =			"Eteindre la PSVita",
-qr =			"QR-DLoader",
+qr =			"QR DownLoader",
 qrscan =		"QR Scanning",
 
 items =			"Eléments Sel: ",
@@ -142,7 +142,7 @@ size_unpk =		"Taille Décompressé : ",
 --onNetGetFile
 download =		"Downloading...",
 success =		"Successful download in",
-failed =		"Download failed",
+failed =		"Failed download",
 
 -------------------------------------------------------------------------------------------------------------
 

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="02.04">
+    <![CDATA[
+- [NEW] Added QR Downloader.<br>
+- [NEW] Horizontal and vertical touchscreen support<br>
+- [FIX] Stars rain only on 25/12.<br>
+    ]]>
+  </changes>
   <changes app_ver="02.03">
     <![CDATA[
 - [NEW] Enabled swipe up/down for category change.<br>

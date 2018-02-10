@@ -167,10 +167,6 @@ function onDeleteFiles(file)
 		screen.print(10,70,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
 		screen.flip()
-
-		buttons.read()
-		if buttons[cancel] then return 0 end
-		return 1
 	end
 end
 
