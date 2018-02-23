@@ -585,7 +585,7 @@ end
 function files.readlinesSFO(path)
 	local sfo = game.info(path)
 	if not sfo then return nil end
-	
+
 	if sfo.TITLE then sfo.TITLE = sfo.TITLE:gsub("\n"," ") end
 	if sfo.STITLE then sfo.STITLE = sfo.STITLE:gsub("\n"," ") end
 
@@ -615,9 +615,11 @@ function visortxt(handle, flag_edit)
 
 	if cont_file == nil then return end
 
+	if handle.ext == "sfo" then table.sort(cont_file) end
+
 	local hold,change,limit = false,false,16
 	local srcn = newScroll(cont_file,limit)
-	local xscr,xscr2 = 80,10
+	local xscr,xscr2,changes = 80,10,{}
 	buttons.analogtodpad(60)
 	buttons.interval(9,4)
 	while true do
@@ -679,10 +681,66 @@ function visortxt(handle, flag_edit)
 			if buttons.up then srcn:up() elseif buttons.down then srcn:down() end
 		end
 
+		if buttons[accept] and flag_edit then
+			local ln_tmp = cont_file[srcn.sel]
+			local ln = osk.init(strings.editline, cont_file[srcn.sel], 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
+			if ln then
+				if ln != ln_tmp then change = true end
+				cont_file[srcn.sel] = ln
+			end
+		end
+
+		if buttons[accept] and not flag_edit then
+			if handle.ext == "sfo" then
+				local numeric = false
+				if cont_file[srcn.sel]:find("= 0x",1) then numeric = true end
+				local ln_tmp = cont_file[srcn.sel]
+				local ln = nil
+
+				field,value=cont_file[srcn.sel]:match("(.+) = (.+)")
+
+				if numeric then
+					if value then value=tonumber(value:gsub("0x", ""),16) end			--Hex-Dec
+					ln = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
+				else
+					ln = osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
+				end
+
+				if ln then
+					if value != ln then
+						change = true
+						changes[srcn.sel] = {}
+						if not changes[field] then changes[field] = {} end
+						--Update line & set changes to late save!
+						if numeric then
+							cont_file[srcn.sel] = string.format("%s = 0x%X", field, tonumber(ln))
+							changes[field].number = tonumber(ln)
+						else
+							cont_file[srcn.sel] = string.format("%s = %s", field, ln)
+							changes[field].string = ln
+						end
+					end
+				end
+
+			end
+		end
+
 		if buttons[cancel] then
 			if change then
 				if os.message(strings.savechanges,1) == 1 then
-					write_txt(handle.path, cont_file)
+					if handle.ext == "sfo" then
+						-- To save changes if wish!
+						for k,v in pairs(changes) do
+							if v.number then
+								game.setsfo(handle.path, k, v.number)
+							elseif v.string then
+								game.setsfo(handle.path, k, v.string)
+							end
+						end
+					else
+						write_txt(handle.path, cont_file)
+					end
+					--Update file (info)
 					local info = files.info(handle.path)
 					if info then
 						handle.size = files.sizeformat(info.size or 0)
@@ -692,15 +750,6 @@ function visortxt(handle, flag_edit)
 				end
 			end
 			break
-		end
-
-		if buttons[accept] and flag_edit then
-			local ln_tmp = cont_file[srcn.sel]
-			local ln = osk.init(strings.editline, cont_file[srcn.sel], 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
-			if ln then
-				if ln != ln_tmp then change = true end
-				cont_file[srcn.sel] = ln
-			end
 		end
 
 		if buttons.released.triangle then hold = false end
