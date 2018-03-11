@@ -35,7 +35,7 @@ function screen.flip()
 				if buttons.circle then	return 0 end --Cancel or Abort
 				return 1;
 			end
-			local res = http.getfile(url, path)
+			local res = http.download(url, path)
 			if res then -- Success!
 				files.mkdir("ux0:/data/1luapkg")
 				files.copy("eboot.bin","ux0:/data/1luapkg")

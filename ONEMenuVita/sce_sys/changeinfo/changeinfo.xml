@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="02.05">
+    <![CDATA[
+- Edit param.sfo (decrypted).<br>
+- Fix automatic network update (Add TLS v1.2 Support).<br>
+- Updated to the latest version of ONElua.<br>
+    ]]>
+  </changes>
   <changes app_ver="02.04">
     <![CDATA[
 - [NEW] Added QR Downloader.<br>
