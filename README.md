@@ -9,6 +9,11 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 
 ![header](screenshots/1MENUVITA5.png)
 
+### Changelog 2.05 ###
+- Edit param.sfo (decrypted).<br>
+- Fix automatic network update (Add TLS v1.2 Support).<br>
+- Updated to the latest version of ONElua.<br>
+
 ### Changelog 2.04 ###
 - [NEW] Added QR Downloader.<br>
 - [NEW] Horizontal and vertical touchscreen support<br>
