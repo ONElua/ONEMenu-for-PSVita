@@ -101,7 +101,10 @@ original=		"原生",
 ps4 =			"PS4 XMB",
 yes =			"是",
 no =			"否",
-start =			"START", 
+start =			"START",
+sort =			"Sort: ",
+title =			"Title",
+id =			"Id",
 
 --LiveArea Apps
 liveareapps =	"LiveArea Apps",

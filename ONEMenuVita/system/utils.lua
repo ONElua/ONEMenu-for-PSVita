@@ -27,7 +27,7 @@ SYMBOL_TRIANGLE	= string.char(0xe2)..string.char(0x96)..string.char(0xb3)
 SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
 
 --Primero checamos traducciones
-__STRINGS = 158
+__STRINGS = 161
 if not files.exists("ux0:data/ONEMENU/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/ONEMENU/lang/")
 else
 	dofile("ux0:data/ONEMENU/lang/english_us.txt")
@@ -215,6 +215,7 @@ function write_config()
 	ini.write(__PATHINI,"pics","show",__PIC1)
 	ini.write(__PATHINI,"font","type",__FNT)
 	ini.write(__PATHINI,"favs","scan",__FAV)
+	ini.write(__PATHINI,"sort","sort",__SORT)
 end
 
 function message_wait()

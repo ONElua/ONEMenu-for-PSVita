@@ -31,7 +31,9 @@ function theme.load()
 	__PIC1 = tonumber(ini.read(__PATHINI,"pics","show","0"))
 	__FNT = tonumber(ini.read(__PATHINI,"font","type","2"))
 	__FAV = tonumber(ini.read(__PATHINI,"favs","scan","0"))
+	__SORT = tonumber(ini.read(__PATHINI,"sort","sort","1"))
 
+	sort = __SORT
 	if __FAV == 1 and #apps>0 then
 		enable_favs = strings.yes
 	else

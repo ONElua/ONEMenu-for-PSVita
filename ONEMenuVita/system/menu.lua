@@ -138,7 +138,7 @@ function focus_icon()
 	if __SLIDES == 100 or not submenu_ctx.close or pic1_crono then
 		screen.print(10,15, appman[cat].list[focus_index].title,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 	end
-	
+
 	--Blit icons specials...battery, wifi, avatar...
 	blit_icons_specials()
 

@@ -102,6 +102,9 @@ ps4 =			"PS4 XMB",
 yes =			"Да",
 no =			"Нет",
 start =			"START",
+sort =			"Sort: ",
+title =			"Title",
+id =			"Id",
 
 --LiveArea Apps
 liveareapps =	"Приложения LiveArea:",

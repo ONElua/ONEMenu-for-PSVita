@@ -10,7 +10,7 @@
 ]]
 
 categories = {
-	{ img = theme.data["psvita"] },	--cat 1
+    { img = theme.data["psvita"] },	--cat 1
 	{ img = theme.data["hbvita"] },	--cat 2
 	{ img = theme.data["psm"] },	--cat 3
 	{ img = theme.data["retro"]},	--cat 4
@@ -84,8 +84,11 @@ function appman.refresh()
 
 		--id, type, version, dev, path, title
 		local list = game.list(__GAME_LIST_ALL)
-		--type: EG, gd,mb,ME
-		table.sort(list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+		if __SORT == 1 then
+			table.sort(list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+		else
+			table.sort(list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+		end
 
 		for i=1,#list do
 
@@ -112,15 +115,6 @@ function appman.refresh()
 		end
 		if cat == 0 then appman.len = 0 end
 
-	end
-
-	--Sorteamos contenido
-	if #appman[3].list > 0 then--PSM
-		table.sort(appman[3].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-	end
-
-	if #appman[5].list > 0 then--PSP(X)
-		table.sort(appman[5].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
 	end
 
 	--Asignamos limites y las img para nuestras categorias
@@ -235,6 +229,15 @@ IMAGE_PORT_I = channel.new("IMAGE_PORT_I")
 IMAGE_PORT_O = channel.new("IMAGE_PORT_O")
 THID_IMAGE = thread.new("system/thread_img.lua")
 
+local static_void = {
+	{},	--cat 1
+	{},	--cat 2
+	{},	--cat 3
+	{},	--cat 4
+	{},	--cat 5
+	--{},	--cat 6
+}
+
 local search_icon,cont_icons = false,0
 function appman.launch()
 
@@ -252,17 +255,18 @@ function appman.launch()
 			for i=1, #appman do
 				for j=1, #appman[i].list do
 
-					if not appman[i].list[j].ready then
-						appman[i].list[j].ready = true
-						IMAGE_PORT_O:push( { i=i, j=j, fav = __FAV, path = appman[i].list[j].path_img, resize = appman[i].list[j].resize } ) -- Enviamos peticion
+					if not static_void[i][j] then
+						static_void[i][j] = appman[i].list[j]
+						static_void[i][j].ready = true
+						IMAGE_PORT_O:push( { i=i, j=j, fav = __FAV, path = static_void[i][j].path_img, resize = static_void[i][j].resize } ) -- Enviamos peticion
 					end
 
 					if IMAGE_PORT_I:available() > 0 then -- De tal manera que si se quedo un previo, lo pueda setear..
 						local entry = IMAGE_PORT_I:pop() -- Recibimos peticiones..
 
-						if appman[entry.i].list[entry.j].path_img == entry.path then -- Por si lo borran o cambio etc..
+						if static_void[entry.i][entry.j].path_img == entry.path then -- Por si lo borran o cambio etc..
 							if entry.img then
-								appman[entry.i].list[entry.j].img = entry.img
+								static_void[entry.i][entry.j].img = entry.img
 							end
 							cont_icons += 1
 						end
@@ -552,6 +556,32 @@ local togglefavs_callback = function ()
 	submenu_ctx.scroll.sel = pos_menu
 end
 
+local sort_callback = function ()
+
+	submenu_ctx.wakefunct()
+
+	if sort==0 then
+		for i=1,#categories do 
+			if #appman[i].list > 0 then
+				table.sort(appman[i].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+			end
+		end
+		sort = 1
+		__SORT,sorting = 1,strings.title
+		write_config()
+	elseif sort==1 then
+		for i=1,#categories do 
+			if #appman[i].list > 0 then
+				table.sort(appman[i].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+			end
+		end
+		sort = 0
+		__SORT,sorting = 0,strings.id
+		write_config()
+	end
+	submenu_ctx.close = true
+end
+			
 submenu_ctx = {
 	h = 450,				-- Height of menu
 	w = 355,				-- Width of menu
@@ -568,15 +598,17 @@ function submenu_ctx.wakefunct()
 
 	if __SLIDES == 100 then var = strings.original else var = strings.ps4 end
 	if __PIC1 == 1 then showpic = strings.yes else showpic = strings.no end
+	if __SORT == 1 then sorting = strings.title else sorting = strings.id end
 
 	submenu_ctx.options = { -- Handle Option Text and Option Function
-		{ text = strings.pressremove,	funct = uninstall_callback },
-		{ text = strings.removemanual,	funct = manual_callback },
-		{ text = strings.switchapp, 	funct = switch_callback },
-		{ text = strings.slides..var,	funct = slides_callback },
-		{ text = strings.pic1..showpic,	funct = pic1_callback },
-		{ text = strings.fav..favs,		funct = fav_callback },
+		{ text = strings.pressremove,			funct = uninstall_callback },
+		{ text = strings.removemanual,			funct = manual_callback },
+		{ text = strings.switchapp, 			funct = switch_callback },
+		{ text = strings.slides..var,			funct = slides_callback },
+		{ text = strings.pic1..showpic,			funct = pic1_callback },
+		{ text = strings.fav..favs,				funct = fav_callback },
 		{ text = strings.togglescan..enable_favs, funct = togglefavs_callback },
+		{ text = strings.sort..sorting, 		funct = sort_callback },
 	}
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
 end
