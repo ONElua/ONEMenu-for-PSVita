@@ -320,7 +320,7 @@ function show_msg_pbp(handle)
 	local sfo = game.info(handle.path)
 
 	local launch=false
-	if (sfo.CATEGORY == "EG" or sfo.CATEGORY == "ME") then
+	if sfo and (sfo.CATEGORY == "EG" or sfo.CATEGORY == "ME") then
 		if sfo.DISC_ID and game.exists(sfo.DISC_ID) then
 			launch=true
 		end
@@ -678,7 +678,11 @@ function visortxt(handle, flag_edit)
 		screen.flip()
 
 		if not hold then
+			buttons.analogtodpad(60)
+			buttons.interval(9,4)
 			if buttons.up then srcn:up() elseif buttons.down then srcn:down() end
+		else
+			buttons.analogtodpad()
 		end
 
 		if buttons[accept] and flag_edit then
