@@ -140,7 +140,29 @@ function focus_icon()
 	end
 
 	--Blit icons specials...battery, wifi, avatar...
-	blit_icons_specials()
+	if batt.lifepercent()<30 then cbat = color.red else cbat = theme.style.PERCENTCOLOR end
+
+	screen.print(925,15,batt.lifepercent().."%",1,cbat,color.gray,__ARIGHT)
+	if not batt.charging() then
+		if batt.lifepercent()<30 then cbat = theme.style.LOWBATTERYCOLOR else cbat = theme.style.BATTERYCOLOR end
+		draw.fillrect(938,5+25,13,math.map(batt.lifepercent(), 0, 100, 0, -20 ), cbat)
+		theme.data["buttons1"]:blitsprite(935,10,6)
+	else
+		theme.data["buttons1"]:blitsprite(935,10,7)
+	end
+
+	if os.getreg("/CONFIG/SYSTEM/", "flight_mode", 1) == 1 then
+		theme.data["wifi"]:blitsprite(840,10,5)
+	else
+		local frame = wlan.strength()
+		if frame then
+			theme.data["wifi"]:blitsprite(840,10,math.ceil(frame/25))
+		else
+			theme.data["wifi"]:blitsprite(840,10,0)
+		end
+	end
+
+	if avatar then avatar:blit(790,5) end
 
 	if submenu_ctx.close and not pic1_crono then
 		if show_pic and __PIC1==1 then

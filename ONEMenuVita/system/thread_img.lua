@@ -38,5 +38,5 @@ while true do
 		if entry.img then entry.img:lost() end
 	end
 
-	os.delay(40) -- ONE frame
+	os.delay(45) -- ONE frame
 end

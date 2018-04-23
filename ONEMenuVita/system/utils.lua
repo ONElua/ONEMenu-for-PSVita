@@ -1,7 +1,7 @@
 --[[ 
 	ONEMenu
 	Application, themes and files manager.
-	
+
 	Licensed by Creative Commons Attribution-ShareAlike 4.0
 	http://creativecommons.org/licenses/by-sa/4.0/
 	
@@ -9,45 +9,61 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
--- Create a folder work
-files.mkdir("ux0:data/ONEMENU/themes/")
-files.mkdir("ux0:data/ONEMENU/lang/")
-
---Constants
-__PATHINI		= "ux0:data/ONEMENU/config.ini"
-__PATH_FAVS		= "ux0:data/ONEMENU/favs.txt"
-__PATHTHEMES	= "ux0:data/ONEMENU/themes/"
-__PROFILE		= "ur0:user/00/np/myprofile.dat"
-__LANG			= os.language()
-__ID			= os.titleid()
+color.loadpalette()
 
 SYMBOL_CROSS	= string.char(0xe2)..string.char(0x95)..string.char(0xb3)
 SYMBOL_SQUARE	= string.char(0xe2)..string.char(0x96)..string.char(0xa1)
 SYMBOL_TRIANGLE	= string.char(0xe2)..string.char(0x96)..string.char(0xb3)
 SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
 
+--Constants
+__PATHINI		= "ux0:data/ONEMENU/config.ini"
+__PATH_FAVS		= "ux0:data/ONEMENU/favs.txt"
+__PATH_THEMES	= "ux0:data/ONEMENU/themes/"
+__PATH_LANG		= "ux0:data/ONEMENU/lang/"
+__PROFILE		= "ur0:user/00/np/myprofile.dat"
+
+__LANG			= os.language()
+__ID			= os.titleid()
+
+accept,cancel = "cross","circle"
+textXO = "O: "
+accept_x = 1
+if buttons.assign()==0 then
+	accept,cancel = "circle","cross"
+	textXO = "X: "
+	accept_x = 0
+end
+
+if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
+
+-- Create a folder work
+files.mkdir(__PATH_THEMES)
+files.mkdir(__PATH_LANG)
+
 --Primero checamos traducciones
-__STRINGS = 161
-if not files.exists("ux0:data/ONEMENU/lang/english_us.txt") then files.copy("system/lang/english_us.txt","ux0:data/ONEMENU/lang/")
+__STRINGS = 163
+
+dofile("system/lang/english_us.txt")
+if not files.exists(__PATH_LANG.."english_us.txt") then files.copy("system/lang/english_us.txt",__PATH_LANG)
 else
-	dofile("ux0:data/ONEMENU/lang/english_us.txt")
+	dofile(__PATH_LANG.."english_us.txt")
 	local cont_strings = 0
 	for key,value in pairs(strings) do cont_strings += 1 end
 --os.message(cont_strings)
-	if cont_strings < __STRINGS then files.copy("system/lang/english_us.txt","ux0:data/ONEMENU/lang/") end
+	if cont_strings < __STRINGS then files.copy("system/lang/english_us.txt",__PATH_LANG) end
 end
 
-if files.exists("ux0:data/ONEMENU/lang/"..__LANG..".txt") then
-	dofile("ux0:data/ONEMENU/lang/"..__LANG..".txt")
+if files.exists(__PATH_LANG..__LANG..".txt") then
+	dofile(__PATH_LANG..__LANG..".txt")
 	local cont_strings = 0
 	for key,value in pairs(strings) do cont_strings += 1 end
 	if cont_strings < __STRINGS then dofile("system/lang/english_us.txt") end
 else
-	if files.exists("system/lang/"..__LANG..".txt") then dofile("system/lang/"..__LANG..".txt")
-	else dofile("system/lang/english_us.txt") end
+	if files.exists("system/lang/"..__LANG..".txt") then dofile("system/lang/"..__LANG..".txt") end
 end
 
---Conseguir avatar (Requerido Wifi solo la 1era vez)
+--Get avatar
 function getavatar(path)
 
 	f = io.open(path)
@@ -78,6 +94,8 @@ function getavatar(path)
 		databin = nil
 	end
 end
+
+--Load avatar
 if files.exists("ux0:data/ONEMENU/avatar.png") then
 	avatar = image.load("ux0:data/ONEMENU/avatar.png")
 	if avatar then avatar:resize(35,35) end
@@ -88,30 +106,52 @@ else
 	end
 end
 
+Dev = 1
+partitions = {"ux0:", "ur0:", "uma0:", "imc0:", "ud0:", "gro0:", "grw0:" }
+Root,Root2 ={},{}
+
+for i=1,#partitions do
+	if files.exists(partitions[i]) then
+		local device_info = os.devinfo(partitions[i])
+		if device_info then
+			table.insert(Root,partitions[i])
+			table.insert(Root2,partitions[i])
+		end
+	end
+end
+
 --Globals
-infoux0, infour0, infouma0 = {},{},{}
 function infodevices()
-	infoux0 = os.devinfo("ux0:")
+
+	if files.exists("ux0:") then
+		infoux0 = os.devinfo("ux0:")
+		if infoux0 then
+			infoux0.maxf = files.sizeformat(infoux0.max or 0)
+			infoux0.freef = files.sizeformat(infoux0.free or 0)
+			infoux0.usedf = files.sizeformat(infoux0.used or 0)
+		end
+	end
+
 	if files.exists("ur0:") then
 		infour0 = os.devinfo("ur0:")
+		if infour0 then
+			infour0.maxf = files.sizeformat(infour0.max or 0)
+			infour0.freef = files.sizeformat(infour0.free or 0)
+			infour0.usedf = files.sizeformat(infour0.used or 0)
+		end
 	end
+
 	if files.exists("uma0:") then
 		infouma0 = os.devinfo("uma0:")
+		if infouma0 then
+			infouma0.maxf = files.sizeformat(infouma0.max or 0)
+			infouma0.freef = files.sizeformat(infouma0.free or 0)
+			infouma0.usedf = files.sizeformat(infouma0.used or 0)
+		end
 	end
 
-	infoux0.maxf = files.sizeformat(infoux0.max or 0)
-	infour0.maxf = files.sizeformat(infour0.max or 0)
-	infouma0.maxf = files.sizeformat(infouma0.max or 0)
-
-	infoux0.freef = files.sizeformat(infoux0.free or 0)
-	infour0.freef = files.sizeformat(infour0.free or 0)
-	infouma0.freef = files.sizeformat(infouma0.free or 0)
-
-	infoux0.usedf = files.sizeformat(infoux0.used or 0)
-	infour0.usedf = files.sizeformat(infour0.used or 0)
-	infouma0.usedf = files.sizeformat(infouma0.used or 0)
-
 end
+infodevices()
 
 apps = {}
 function write_favs(pathini)
@@ -125,7 +165,7 @@ function write_favs(pathini)
 			file:write(string.format('"%s",\n', tostring(apps[i])))
 		end
 	end
-	file:write("}")
+	file:write("}\n")
 	file:close()
 end
 
@@ -218,8 +258,9 @@ function write_config()
 	ini.write(__PATHINI,"sort","sort",__SORT)
 end
 
-function message_wait()
-	local titlew = string.format(strings.wait)
+function message_wait(message)
+	local mge = (message or strings.wait)
+	local titlew = string.format(mge)
 	local w,h = screen.textwidth(titlew,1) + 30,70
 	local x,y = 480 - (w/2), 272 - (h/2)
 
@@ -227,46 +268,6 @@ function message_wait()
 	draw.rect(x,y,w,h,color.white)
 		screen.print(480,y+13, titlew,1,color.white,color.black,__ACENTER)
 	screen.flip()
-end
-
-function splash_efect(pics,delay,vel)
-	pics:center()
-	for i = 0, 255, vel do
-		pics:blit(__DISPLAYW/2,__DISPLAYH/2,i)
-		screen.flip()
-	end
-	os.delay(delay)
-	for i = 255, 0, -vel do
-		pics:blit(__DISPLAYW/2,__DISPLAYH/2,i)
-		screen.flip()
-	end
-end
-
-function blit_icons_specials()
-
-	if batt.lifepercent()<30 then cbat = color.red else cbat = theme.style.PERCENTCOLOR end
-
-	screen.print(925,15,batt.lifepercent().."%",1,cbat,color.gray,__ARIGHT)
-	if not batt.charging() then
-		if batt.lifepercent()<30 then cbat = theme.style.LOWBATTERYCOLOR else cbat = theme.style.BATTERYCOLOR end
-		draw.fillrect(938,5+25,13,math.map(batt.lifepercent(), 0, 100, 0, -20 ), cbat)
-		theme.data["buttons1"]:blitsprite(935,10,6)
-	else
-		theme.data["buttons1"]:blitsprite(935,10,7)
-	end
-
-	if os.getreg("/CONFIG/SYSTEM/", "flight_mode", 1) == 1 then
-		theme.data["wifi"]:blitsprite(840,10,5)
-	else
-		local frame = wlan.strength()
-		if frame then
-			theme.data["wifi"]:blitsprite(840,10,math.ceil(frame/25))
-		else
-			theme.data["wifi"]:blitsprite(840,10,0)
-		end
-	end
-
-	if avatar then avatar:blit(790,5) end
 end
 
 function isTouched(x,y,sx,sy)

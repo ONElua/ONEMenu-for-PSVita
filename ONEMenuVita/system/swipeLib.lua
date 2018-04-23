@@ -156,3 +156,7 @@ swipe={
 	end
 
 }
+
+swipe.set(30,255,70,695,430)
+	swipe.enableDiagonal=false
+		swipe.disableContV=true

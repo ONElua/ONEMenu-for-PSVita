@@ -15,8 +15,11 @@ function screen.flip()
 		local major = (version >> 0x18) & 0xFF;
 		local minor = (version >> 0x10) & 0xFF;
 
-		if os.message(string.format("%s%s ", APP_PROJECT, string.format("%X.%02X",major, minor).." is now available.\n".."Do you want to update the application?"), 1) == 1 then
+		if os.message(string.format("%s v%s ", APP_PROJECT, string.format("%X.%02X",major, minor).." is now available.\n".."Do you want to update the application?"), 1) == 1 then
 			buttons.homepopup(0)
+
+			if theme.data["splash"] then theme.data["splash"]:blit(0,0)
+			elseif back then back:blit(0,0) end
 
 			local url = string.format("https://github.com/%s/%s/releases/download/%s/%s", APP_REPO, APP_PROJECT, string.format("%X.%02X",major, minor), APP_VPK..".vpk")
 			local path = "ux0:data/"..APP_VPK..".vpk"
@@ -26,13 +29,17 @@ function screen.flip()
 			end
 			local onNetGetFileOld = onNetGetFile
 			function onNetGetFile(size,written,speed)
+
+				if theme.data["splash"] then theme.data["splash"]:blit(0,0)
+				elseif back then back:blit(0,0) end
+
 				screen.print(10,10,"Downloading Update...")
 				screen.print(10,30,"Size: "..tostring(size).." Written: "..tostring(written).." Speed: "..tostring(speed).."Kb/s")
 				screen.print(10,50,"Percent: "..math.floor((written*100)/size).."%")
 				draw.fillrect(0,520,((written*960)/size),24,color.new(0,255,0))
 				screen.flip()
 				buttons.read()
-				if buttons.circle then	return 0 end --Cancel or Abort
+				if buttons.circle then return 0 end --Cancel or Abort
 				return 1;
 			end
 			local res = http.download(url, path)
@@ -47,7 +54,6 @@ function screen.flip()
 			end
 			onAppInstall = onAppInstallOld
 			onNetGetFile = onNetGetFileOld
-
 			buttons.homepopup(1)
 		end
 	end

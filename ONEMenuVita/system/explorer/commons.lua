@@ -10,35 +10,14 @@
 ]]
 
 --Functions Commons
-if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
 
 vpkdel,_print,game_move = false,true,false			--for callbacks
 
-accept,cancel = "cross","circle"
-textXO = "O: "
-accept_x = 1
-if buttons.assign()==0 then
-	accept,cancel = "circle","cross"
-	textXO = "X: "
-	accept_x = 0
-end
-
-Dev = 1
-partitions = {"ux0:","ur0:","uma0:","gro0:","grw0:", "imc0:", }
-Root,Root2 ={},{}
-
-local i=1
-while files.exists(partitions[i]) do
-	table.insert(Root,partitions[i])
-	table.insert(Root2,partitions[i])
-	i+=1
-end
-infosize = os.devinfo(Root[Dev])
-
 function check_root()
-	if (Root[Dev]=="ux0:" or Root[Dev]=="ux0:/") or (Root[Dev]=="ur0:" or Root[Dev]=="ur0:/") or (Root[Dev]=="gro0:" or Root[Dev]=="gro0:/") or
-		(Root[Dev]=="grw0:" or Root[Dev]=="grw0:/") or (Root[Dev]=="imc0:" or Root[Dev]=="imc0:/") or (Root[Dev]=="uma0:" or Root[Dev]=="uma0:/") then return true end
-return false
+	for i=1,#Root do
+		if (Root[Dev]==partitions[i] or Root[Dev]==partitions[i].."/") then return true end
+	end
+	return false
 end
 
 function files.listsort(path)
@@ -161,6 +140,7 @@ function show_msg_vpk(obj_vpk)
 	local res,xscr = false,290
 	local version = ""
 	if scan_vpk.sfo.APP_VER then version = "v"..scan_vpk.sfo.APP_VER end
+	if scan_vpk.sfo.TITLE then scan_vpk.sfo.TITLE = scan_vpk.sfo.TITLE:gsub("\n"," ") end
 	local realsize = files.sizeformat(scan_vpk.realsize or 0)
 
 	while true do
@@ -385,11 +365,11 @@ end
 -- ## Music Player ##
 function MusicPlayer(handle)
 
-	local coverpath = __PATHTHEMES..__THEME.."/cover.png"
+	local coverpath = __PATH_THEMES..__THEME.."/cover.png"
 	if not files.exists(coverpath) then coverpath = "system/theme/default/cover.png" end
 	local coverimg = image.load(coverpath)
 
-	local musicpath = __PATHTHEMES..__THEME.."/music.png"
+	local musicpath = __PATH_THEMES..__THEME.."/music.png"
 	if not files.exists(musicpath) then musicpath = "system/theme/default/music.png" end
 	local musicimg = image.load(musicpath)
 
@@ -573,7 +553,6 @@ function visorimg(path)
 end
 
 -- ## File-Viewer ## --
-
 function write_txt(pathini, tb)
     local file = io.open(pathini, "w+")
 	for s,t in pairs(tb) do
@@ -599,8 +578,9 @@ end
 function files.readlines(path,index) -- Lee una table o string si se especifica linea
 	if files.exists(path) then
 		local contenido = {}
-		for linea in io.lines(path) do
-			table.insert(contenido,linea)
+		for line in io.lines(path) do
+			if line:byte(#line) == 13 then line = line:sub(1,#line-1) end --Remove CR == 13
+			table.insert(contenido,line)
 		end
 
 		if index == nil then return contenido
@@ -609,19 +589,37 @@ function files.readlines(path,index) -- Lee una table o string si se especifica 
 end
 
 function visortxt(handle, flag_edit)
-	local cont_file = nil
-	if handle.ext == "sfo" then cont_file = files.readlinesSFO(handle.path)
-	else cont_file = files.readlines(handle.path) end
 
-	if cont_file == nil then return end
+	local texteditorInfo = {
+		list = {},
+		focus = 1,
+		top = 1,
+	}
 
-	if handle.ext == "sfo" then table.sort(cont_file) end
+	texteditorInfo.list = {}
+	if handle.ext == "sfo" then texteditorInfo.list = files.readlinesSFO(handle.path)
+	else texteditorInfo.list = files.readlines(handle.path) end
 
-	local hold,change,limit = false,false,16
-	local srcn = newScroll(cont_file,limit)
-	local xscr,xscr2,changes = 80,10,{}
+	local sfo_empty = false
+	if #texteditorInfo.list == 0 then
+		table.insert(texteditorInfo.list, "")
+		if handle.ext == "sfo" then sfo_empty=true end
+	end
+
+	if handle.ext == "sfo" then table.sort(texteditorInfo.list) end
+
+	if #texteditorInfo.list > 9999 then os.message("File too large") return end
+
+	local texteditorOrdinal_x = 5
+	local texteditorOrdinalWidth = texteditorOrdinal_x + screen.textwidth("0000") + texteditorOrdinal_x
+	local texteditorDefaultText_x = texteditorOrdinalWidth
+	local texteditorText_x = texteditorDefaultText_x
+	local texteditorTextDefaultWidth = 960 - texteditorOrdinalWidth - 15
+	local texteditorTextWidth = texteditorTextDefaultWidth
+	local textHadChange, hold, changes, limit = false,false,{},16
+
 	buttons.analogtodpad(60)
-	buttons.interval(9,4)
+	buttons.interval(16,5)
 	while true do
 		buttons.read()
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
@@ -630,41 +628,54 @@ function visortxt(handle, flag_edit)
 			screen.print(10,10,handle.path,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 		end
 
-		local y = 70
-		for i=srcn.ini,srcn.lim do
+		local list_y = 70
+		if texteditorInfo.list and #texteditorInfo.list > 0 then
+			local listShowCount = limit
 
-			if i == srcn.sel then
-				if hold then ccc=color.green:a(80) else ccc=color.gray:a(175) end
-				draw.fillrect(0,y-3,__DISPLAYW-12,22,ccc)
+			if texteditorInfo.top > texteditorInfo.focus then
+				texteditorInfo.top = texteditorInfo.focus
+			elseif texteditorInfo.top < texteditorInfo.focus - (listShowCount - 1) then
+				texteditorInfo.top = texteditorInfo.focus - (listShowCount - 1)
 			end
 
-			screen.print(5,y,string.format("%04d",i)+') ',1,color.white)
+			local bottom = #texteditorInfo.list
+			if bottom > texteditorInfo.top + (listShowCount - 1) then
+				bottom = texteditorInfo.top + (listShowCount - 1)
+			end
 
-			screen.clip(80,0,860,544)
-			if i == srcn.sel then
-				if screen.textwidth(cont_file[i]) > 860 then
-					xscr = screen.print(xscr, y, cont_file[i],1,color.white,color.gray,__SLEFT,860)
-				else
-					screen.print(80,y,cont_file[i],1,color.white,color.gray,__ALEFT) 
-					xscr=80
+			for i = texteditorInfo.top, bottom do
+
+				local tmpTextWidth = screen.textwidth(texteditorInfo.list[i])
+				if tmpTextWidth > texteditorTextWidth then
+					texteditorTextWidth = tmpTextWidth
 				end
-			else
-				screen.print(80,y,cont_file[i],1,color.white,color.gray,__ALEFT)
+
+				if i == texteditorInfo.focus then
+					if hold then ccc=color.green:a(80) else ccc=color.gray:a(175) end
+					draw.fillrect(0,list_y-3,__DISPLAYW-12,22,ccc)
+				end
+
+				screen.print(texteditorOrdinal_x, list_y, string.format("%04d", i), 1, 0xFF666666, color.black, __ALEFT)
+
+				screen.clip(texteditorOrdinalWidth,0,texteditorTextDefaultWidth,544)
+				screen.print(texteditorText_x, list_y, texteditorInfo.list[i], 1, color.white, color.black, __ALEFT)
+				screen.clip()
+
+				list_y += 26
 			end
-			screen.clip()
 
-			y+=26
-		end
-		
-		local ybar,hbar= 70, (limit*26)-2
-		if srcn.maxim > limit then -- Draw Scroll Bar
-			local pos_height = math.max(hbar/srcn.maxim, limit)
-			--Bar Scroll
-			draw.fillrect(950, ybar-2, 8, hbar, color.shine)--color.new(255,255,255,100))
-			draw.fillrect(950, ybar-2 + ((hbar-pos_height)/(srcn.maxim-1))*(srcn.sel-1), 8, pos_height, color.new(0,255,0))
-		end
+			---- Draw Scroll Bar
+			local ybar,hbar = 70, (limit*26)-2
+			if #texteditorInfo.list > limit then -- Draw Scroll Bar
+				local pos_height = math.max(hbar/#texteditorInfo.list, limit)
+				--Bar Scroll
+				draw.fillrect(950, ybar-2, 8, hbar, color.shine)--color.new(255,255,255,100))
+				draw.fillrect(950, ybar-2 + ((hbar-pos_height)/(#texteditorInfo.list-1))*(texteditorInfo.focus-1), 8, pos_height, color.new(0,255,0))
+			end
 
-		if flag_edit then
+		end--if list > 0 the
+
+		if flag_edit and handle.ext != "sfo" then
 			local text_line = string.format(strings.insertline)
 			local tempx = screen.textwidth(text_line,1) + 60
 
@@ -679,58 +690,95 @@ function visortxt(handle, flag_edit)
 
 		if not hold then
 			buttons.analogtodpad(60)
-			buttons.interval(9,4)
-			if buttons.up then srcn:up() elseif buttons.down then srcn:down() end
+			buttons.interval(16,5)
+
+			if buttons.up or buttons.analogly < -60 then
+				if texteditorInfo.list and #texteditorInfo.list > 0 then
+					if texteditorInfo.focus > 1 then texteditorInfo.focus -= 1 end
+				end
+			end
+
+			if buttons.down or buttons.analogly > 60 then
+				if texteditorInfo.list and #texteditorInfo.list > 0 then
+					if texteditorInfo.focus < #texteditorInfo.list then texteditorInfo.focus += 1 end
+				end
+			end
+
+			if buttons.left or buttons.analoglx < -60 then
+				if texteditorText_x < texteditorDefaultText_x then texteditorText_x += 10 end  
+			end
+
+			if buttons.right or buttons.analoglx > 60 then
+				if texteditorDefaultText_x	- texteditorText_x + texteditorTextDefaultWidth < texteditorTextWidth then texteditorText_x -= 10 end
+			end
+
+			if buttons.l then
+				local tmpTop = texteditorInfo.top - limit
+				if tmpTop < 1 then tmpTop = 1 end
+				if texteditorInfo.top ~= tmpTop then
+					texteditorInfo.focus = tmpTop + (texteditorInfo.focus - texteditorInfo.top)
+					texteditorInfo.top = tmpTop
+				end
+			end
+
+			if buttons.r then
+				local tmpTop = texteditorInfo.top + limit
+				if tmpTop <= #texteditorInfo.list then
+					if tmpTop > #texteditorInfo.list - (limit - 1) then tmpTop = #texteditorInfo.list - (limit - 1) end
+					texteditorInfo.focus = tmpTop + (texteditorInfo.focus - texteditorInfo.top)
+					if texteditorInfo.focus > #texteditorInfo.list then texteditorInfo.focus = #texteditorInfo.list end
+					texteditorInfo.top = tmpTop
+				end
+			end
+
 		else
 			buttons.analogtodpad()
 		end
 
 		if buttons[accept] and flag_edit then
-			local ln_tmp = cont_file[srcn.sel]
-			local ln = osk.init(strings.editline, cont_file[srcn.sel], 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
-			if ln then
-				if ln != ln_tmp then change = true end
-				cont_file[srcn.sel] = ln
-			end
-		end
-
-		if buttons[accept] and not flag_edit then
-			if handle.ext == "sfo" then
+			if handle.ext == "sfo" and not sfo_empty then
 				local numeric = false
-				if cont_file[srcn.sel]:find("= 0x",1) then numeric = true end
-				local ln_tmp = cont_file[srcn.sel]
-				local ln = nil
+				if texteditorInfo.list[texteditorInfo.focus]:find("= 0x",1) then numeric = true end
 
-				field,value=cont_file[srcn.sel]:match("(.+) = (.+)")
+				field,value=texteditorInfo.list[texteditorInfo.focus]:match("(.+) = (.+)")
 
+				local newStr = nil
 				if numeric then
 					if value then value=tonumber(value:gsub("0x", ""),16) end			--Hex-Dec
-					ln = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
+					newStr = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
 				else
-					ln = osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
+					newStr = osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
 				end
 
-				if ln then
-					if value != ln then
-						change = true
-						changes[srcn.sel] = {}
+				if newStr then
+					if value != newStr then
+						textHadChange = true
+						changes[texteditorInfo.focus] = {}
 						if not changes[field] then changes[field] = {} end
 						--Update line & set changes to late save!
 						if numeric then
-							cont_file[srcn.sel] = string.format("%s = 0x%X", field, tonumber(ln))
-							changes[field].number = tonumber(ln)
+							texteditorInfo.list[texteditorInfo.focus] = string.format("%s = 0x%X", field, tonumber(newStr))
+							changes[field].number = tonumber(newStr)
 						else
-							cont_file[srcn.sel] = string.format("%s = %s", field, ln)
-							changes[field].string = ln
+							changes[field].string = ""
+							texteditorInfo.list[texteditorInfo.focus] = string.format("%s = %s", field, newStr)
+							changes[field].string = newStr
 						end
 					end
 				end
 
+			else
+				local editStr = texteditorInfo.list[texteditorInfo.focus]
+				local newStr = osk.init(strings.editline, editStr, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
+				if newStr and newStr ~= editStr then
+					texteditorInfo.list[texteditorInfo.focus] = newStr
+					textHadChange = true
+				end
 			end
 		end
 
 		if buttons[cancel] then
-			if change then
+			if textHadChange then
 				if os.message(strings.savechanges,1) == 1 then
 					if handle.ext == "sfo" then
 						-- To save changes if wish!
@@ -738,11 +786,11 @@ function visortxt(handle, flag_edit)
 							if v.number then
 								game.setsfo(handle.path, k, v.number)
 							elseif v.string then
-								game.setsfo(handle.path, k, v.string)
+								game.setsfo(handle.path, k, tostring(v.string))
 							end
 						end
 					else
-						write_txt(handle.path, cont_file)
+						write_txt(handle.path, texteditorInfo.list)
 					end
 					--Update file (info)
 					local info = files.info(handle.path)
@@ -758,37 +806,24 @@ function visortxt(handle, flag_edit)
 
 		if buttons.released.triangle then hold = false end
 
-		if buttons.held.triangle then
+		if buttons.held.triangle and handle.ext != "sfo" then
 			hold = true
 
 			if buttons.right and flag_edit then--add line
-				if srcn.sel < srcn.lim then
-					table.insert(cont_file,srcn.sel+1,"")
-				else
-					table.insert(cont_file,"")
-				end
-
-				local ln = srcn.sel
-				srcn:set(cont_file,16)
-				for i=1, math.max(ln,0) do
-					srcn:down()
-				end
-				change = true
+				table.insert(texteditorInfo.list, texteditorInfo.focus + 1, "")
+				textHadChange = true
 			end
 			
 			if buttons.left and flag_edit then--remove line
-				if srcn.maxim-1 >= 1 then
-					table.remove(cont_file,srcn.sel)
-					local ln = srcn.sel
-					srcn:set(cont_file,16)
-					for i=1, math.max(ln-1,0) do
-						srcn:down()
-					end
-				else
-					cont_file[srcn.sel] =""
+				table.remove(texteditorInfo.list, texteditorInfo.focus)  
+				if #texteditorInfo.list < 1 then
+					table.insert(texteditorInfo.list, "")
+				elseif texteditorInfo.focus > #texteditorInfo.list then
+					texteditorInfo.focus = #texteditorInfo.list
 				end
-				change = true
+				textHadChange = true
 			end
+
 		end
 
 	end
@@ -805,7 +840,7 @@ function startftp()
 
 	if not init then return false end
 
-	local ftppath = __PATHTHEMES..__THEME.."/ftp.png"
+	local ftppath = __PATH_THEMES..__THEME.."/ftp.png"
 	if not files.exists(ftppath) then ftppath = "system/theme/default/ftp.png" end
 	local ftpimg = image.load(ftppath)
 

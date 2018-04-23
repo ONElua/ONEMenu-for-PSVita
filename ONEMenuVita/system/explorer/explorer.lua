@@ -37,6 +37,12 @@ maxim_files=16
 backl, explorer, multi = {},{},{} -- All explorer functions
 slidex=0
 
+infosize = os.devinfo(Root[Dev])
+if not infosize then
+	infosize = {}
+	infosize.max, infosize.free, infosize.used = 0,0,0
+end
+
 -- ## Explorer Drawer List ## --
 function explorer.listshow(posy)
 
@@ -52,7 +58,7 @@ function explorer.listshow(posy)
 	for i=scroll.list.ini, scroll.list.lim do
 
 		if i==scroll.list.sel then
-			
+			ccc = color.green:a(130)
 			draw.fillrect(5+movx, posy-3, len_selector, 23, theme.style.SELCOLOR)
 			if screen.textwidth(explorer.list[i].name or "",1) > 490 then 
 				xtitle = screen.print(xtitle+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __SLEFT, 490)
@@ -63,6 +69,7 @@ function explorer.listshow(posy)
 				xtitle=35
 			end
 		else
+			ccc = theme.style.TXTBKGCOLOR
 			screen.clip(35+movx,0,490+movx,544)
 			screen.print(35+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
 		end
@@ -77,8 +84,8 @@ function explorer.listshow(posy)
 
 		if explorer.list[i].multi then draw.fillrect(5+movx, posy-3, len_selector, 22, theme.style.MARKEDCOLOR) end
 
-		screen.print(((905-250)+movx)+slidex, posy, explorer.list[i].size or strings.dir, 1, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-		screen.print((910+movx)+slidex, posy, explorer.list[i].mtime, 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+		screen.print(((905-250)+movx)+slidex, posy, explorer.list[i].size or strings.dir, 1, theme.style.TXTCOLOR,ccc, __ARIGHT)
+		screen.print((910+movx)+slidex, posy, explorer.list[i].mtime, 1.0, theme.style.TXTCOLOR,ccc, __ARIGHT)
 		posy += 26
 
 	end--for
@@ -86,6 +93,7 @@ function explorer.listshow(posy)
 end
 
 --Cycle Main for Explorer Files: show_explorer_list()
+local xtmp = 0
 function show_explorer_list()
 
 	explorer.refresh(true)
@@ -105,9 +113,25 @@ function show_explorer_list()
 			title_scr_x = 5
 		end
 
-		screen.print(5+movx,26,files.sizeformat(infosize.max or 0).."/"..files.sizeformat(infosize.free or 0),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+		if infosize.max > 0 then
+			xtmp = screen.print(5+movx,33,files.sizeformat(infosize.max or 0).."/"..files.sizeformat(infosize.free or 0),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+		else
+			xtmp = screen.print(5+movx,33,"--/--",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+		end
 
-		screen.print(940+movx,5,scroll.list.maxim,1,theme.style.COUNTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)--color.new(255,69,0),color.black
+		if menu_ctx.close then
+			local xRoot = xtmp + 15
+			local w = (960-xRoot)/#Root2
+			for i=1, #Root2 do
+				if Dev == i then
+					draw.fillrect(xRoot,28,w,28, color.shine)
+				end
+				screen.print(xRoot+(w/2), 33, Root2[i], 1, color.white, 0x0, __ACENTER)
+				xRoot += w
+			end
+		end
+
+		screen.print(940+movx,5,scroll.list.maxim,1,theme.style.COUNTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
 
 		if (multi and #multi > 0) and action then
 			if movx==0 then
@@ -122,7 +146,7 @@ function show_explorer_list()
 			if scroll.list.maxim >= maxim_files then -- Draw Scroll Bar
 				local pos_height = math.max(h/scroll.list.maxim, maxim_files)
 				--Bar Scroll
-				draw.fillrect(930+movx, y-2, 8, h, color.shine)--color.new(255,255,255,100))
+				draw.fillrect(930+movx, y-2, 8, h, color.shine)
 				draw.fillrect(930+movx, y-2 + ((h-pos_height)/(scroll.list.maxim-1))*(scroll.list.sel-1), 8, pos_height, color.new(0,255,0))
 			end
 			explorer.listshow(y)
@@ -133,6 +157,7 @@ function show_explorer_list()
 		screen.print(10+movx,515,os.date(_time.."  %m/%d/%y"),1,theme.style.DATETIMECOLOR,color.gray,__ALEFT)
 
 		menu_ctx.run()
+
 		screen.flip()
 
 		ctrls_explorer_list()
@@ -142,12 +167,18 @@ end
 
 function explorer.refresh(onflag)
 	if onflag then infosize = os.devinfo(Root2[Dev]) end
+	if not infosize then
+		infosize = {}
+		infosize.max, infosize.free, infosize.used = 0,0,0
+	end
 	explorer.list = files.listsort(Root[Dev])
 	scroll.list:set(explorer.list,maxim_files)
 end
 
 function ctrls_explorer_list()
+
 	if menu_ctx.open then return end
+	if not menu_ctx.close then return end
 
 	if buttons[cancel] then -- return directory
 		if check_root() then return end
@@ -190,7 +221,6 @@ function ctrls_explorer_list()
 		explorer.refresh(true)
 	end
 
-
 	if buttons.square then
 		explorer.list[scroll.list.sel].multi = not explorer.list[scroll.list.sel].multi
 		if explorer.list[scroll.list.sel].multi then
@@ -202,7 +232,6 @@ function ctrls_explorer_list()
 	end
 
 	if buttons.select and menu_ctx.open==false then
-		if __FAV == 1 then enable_favs = strings.yes else enable_favs = strings.no end
 		restart_cronopic()
 		appman.launch()
 	end
@@ -227,12 +256,8 @@ function handle_files(cnt)
 		show_msg_pbp(cnt)
 	elseif extension == "mp3" or extension == "wav" or extension == "ogg" then
 		MusicPlayer(cnt)
-	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "trp" or extension == "inf" then
-		if extension == "txt" or extension == "lua" or extension == "ini" or extension == "xml" or extension == "inf" then
-			visortxt(cnt,true)
-		else
-			visortxt(cnt,false)
-		end
+	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "inf" then
+		visortxt(cnt,true)
 	end
 
 end
@@ -580,20 +605,19 @@ end
  
 local sizedir_callback = function ()
 	if #explorer.list > 0 then
-		local sizedir=0
 		if explorer.list[scroll.list.sel].multi then
 			if #multi>0 then
+				local sizedir=0
 				message_wait()
 				for i=1,#multi do
 					sizedir += files.size(multi[i])
 				end--for
-				os.message(strings.total_size+"\n\n"+strings.sizeis+files.sizeformat(sizedir or "-1",3))
+				os.message(strings.total_size+"\n\n"+strings.sizeis+files.sizeformat(sizedir or 0))
 			end
 		else
 			if not explorer.list[scroll.list.sel].size then                -- Its Dir
 				message_wait()
-				sizedir = files.size(explorer.list[scroll.list.sel].path)
-				os.message(explorer.list[scroll.list.sel].name+"\n\n"+strings.sizeis+files.sizeformat(sizedir or "-1"))
+				os.message(explorer.list[scroll.list.sel].name+"\n\n"+strings.sizeis+files.sizeformat(files.size(explorer.list[scroll.list.sel].path) or 0))
 			else
 				os.message(explorer.list[scroll.list.sel].name+"\n\n"+strings.sizeis+explorer.list[scroll.list.sel].size)
 			end
@@ -803,7 +827,7 @@ function menu_ctx.run()
 	end
 
     menu_ctx.draw()
-    menu_ctx.buttons()
+	menu_ctx.buttons()
 end
 
 local x_print = 5
@@ -847,6 +871,7 @@ end
 
 function menu_ctx.buttons()
 	if not menu_ctx.open then return end
+
 	if buttons.up or buttons.analogly < -60 then menu_ctx.scroll:up() end
 	if buttons.down or buttons.analogly > 60 then menu_ctx.scroll:down() end
 

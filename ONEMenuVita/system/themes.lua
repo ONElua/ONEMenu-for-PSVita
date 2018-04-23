@@ -14,8 +14,8 @@ theme = {
 	style = {},	-- Handle of colors
 }
 
-enable_favs=""
 local themesimg = nil
+
 function theme.load()
 
 	if theme.data["back"] then
@@ -35,10 +35,10 @@ function theme.load()
 
 	sort = __SORT
 	if __FAV == 1 and #apps>0 then
-		enable_favs = strings.yes
+		__FAV_STRING = strings.yes
 	else
 		__FAV=0
-		enable_favs = strings.no
+		__FAV_STRING = strings.no
 	end
 
 	local elements = {
@@ -62,9 +62,8 @@ function theme.load()
 		{name="jump", sound=true},
 		{name="slide", sound=true},
 	}
-	--table.insert(elements, {name = "algo"})
 
-	local path_theme = __PATHTHEMES..__THEME.."/"
+	local path_theme = __PATH_THEMES..__THEME.."/"
 	if not files.exists(path_theme) then path_theme = "system/theme/default/" end
 
 	--Primero checamos si tienen una img de fondo para el back
@@ -148,7 +147,7 @@ function theme.load()
 	else font.setdefault(__FNT) end
 
 end
-	
+
 function reload_theme()
 
 	write_config()
@@ -166,7 +165,7 @@ function reload_theme()
 
 	theme.load()
 
-	local manager_path = __PATHTHEMES..__THEME.."/themesmanager.png"
+	local manager_path = __PATH_THEMES..__THEME.."/themesmanager.png"
 	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
 
 	themesimg = image.load(manager_path)
@@ -175,8 +174,8 @@ end
 
 function theme.manager()
 
-	local thlist = files.listdirs(__PATHTHEMES)
-	if not thlist then os.message(strings.notthemesmenu.."\n\n"..__PATHTHEMES) return end
+	local thlist = files.listdirs(__PATH_THEMES)
+	if not thlist then os.message(strings.notthemesmenu.."\n\n"..__PATH_THEMES) return end
 
 	local list = {}
 	for i=1,#thlist do
@@ -186,13 +185,13 @@ function theme.manager()
 		local preview = image.load(thlist[i].path.."/preview.png")
 		if preview then preview:resize(252,151) end
 
-		table.insert(list,{id=thlist[i].name,title = title, author = author, preview = preview})
+		table.insert(list, {id=thlist[i].name, title = title, author = author, preview = preview})
 	end
 
 	local theme_list = newScroll(list,15)
-	if theme_list.maxim <= 0 then os.message(strings.notthemesmenu.."\n\n"..__PATHTHEMES) return end
+	if theme_list.maxim <= 0 then os.message(strings.notthemesmenu.."\n\n"..__PATH_THEMES) return end
 	
-	local manager_path = __PATHTHEMES..__THEME.."/themesmanager.png"
+	local manager_path = __PATH_THEMES..__THEME.."/themesmanager.png"
 	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
 	themesimg = image.load(manager_path)
 
@@ -244,3 +243,6 @@ function theme.manager()
 		if buttons[cancel] then break end
 	end
 end
+
+--Load our theme
+theme.load()

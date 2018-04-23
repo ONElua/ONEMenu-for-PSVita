@@ -63,7 +63,7 @@ function system.run()
 	local themesimg = nil
 	local scroll = newScroll(system.data,15)
 
-	local manager_path = __PATHTHEMES..__THEME.."/themesmanager.png"
+	local manager_path = __PATH_THEMES..__THEME.."/themesmanager.png"
 	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
 	themesimg = image.load(manager_path)
 

@@ -77,7 +77,7 @@ function fillappman(obj)
 
 end
 
-function appman.refresh()
+function appman.scan()
 
 	--Solo se escanea en cada inicio de 1menu
 	if appman.len == 0 then
@@ -126,9 +126,8 @@ function appman.refresh()
 		end
 	end
 
-	if theme.data["splash"] then theme.data["splash"] = nil end
-
 	infodevices()
+
 end
 
 function launch_game()
@@ -198,7 +197,6 @@ function appman.ctrls()
 
 	end
 
-	--tmp0.CATEGORY: ISO/CSO UG, PSN EG, HBs MG, PS1 ME
 	if buttons[accept] then launch_game() end
 	if isTouched(100,180,200,120) and touch.front[1].released then--pressed then
 		if clicked then
@@ -239,10 +237,11 @@ local static_void = {
 }
 
 local search_icon,cont_icons = false,0
+
 function appman.launch()
 
-	appman.refresh()
 	buttons.interval(10,10)
+	if theme.data["splash"] then theme.data["splash"] = nil end
 	while true do
 
 		buttons.read()
@@ -251,7 +250,10 @@ function appman.launch()
 
 		--Este for es una belleza!!!!
 		if not search_icon then
+			local cpu = os.cpu()
 			os.cpu(444)
+			local gpu = os.gpuclock()
+			os.gpuclock(166)
 			for i=1, #appman do
 				for j=1, #appman[i].list do
 
@@ -275,7 +277,8 @@ function appman.launch()
 				end
 			end
 			if cont_icons == appman.len then
-				os.cpu(333)
+				os.cpu(cpu)
+				os.gpuclock(gpu)
 				search_icon,flag_begin = true,true
 			end
 		end
@@ -296,7 +299,16 @@ function appman.launch()
 			appman.ctrls()
 		end
 
-		if buttons.select and not submenu_ctx.open then	show_explorer_list() end--to Explorer
+		if buttons.select and not submenu_ctx.open then
+			for i=1,#categories do 
+				if #appman[i].list > 0 then
+					for j=1,#appman[i].list do
+						appman[i].list[j].pullsize = false
+					end
+				end
+			end
+			show_explorer_list()
+		end--to Explorer
 
 		if buttons.start and not submenu_ctx.open then system.run()	end--To System Apps
 
@@ -305,32 +317,145 @@ function appman.launch()
 	end
 end
 
------------------------------------------Submenu-----------------------------------------------------------------------
+-----------------------------------------Submenu Contextual-----------------------------------------------------------------------
 
-local manual_callback = function ()
+local rip_callback = function ()
 
-	local pathmanual = ""
-	pathmanual = appman[cat].list[focus_index].path.."/sce_sys/manual/"
+	if cat == 1 then--Only Vita Games in ux0:app
 
-	if files.exists(pathmanual) then
-		if os.message(strings.manual,1) == 1 then
-			local size_manual = files.size(pathmanual)
-			reboot=false
-				files.delete(pathmanual)
-			reboot=true
+		local vbuff = screen.toimage()
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-			--update size
-			appman[cat].list[focus_index].size = files.size(appman[cat].list[focus_index].path)
-			appman[cat].list[focus_index].sizef = files.sizeformat(appman[cat].list[focus_index].size or 0)
+		local list_patch, list_app = {},{}
 
-			infodevices()
-
-			os.message(files.sizeformat(size_manual).." "..strings.free)
+		function getlist(_path, _list, substring)
+			local tmp = files.list(_path)	
+			if tmp and #tmp > 0 then
+				for i=1, #tmp do
+					if tmp[i].directory then
+						if not tmp[i].name:find("sce_",1) then getlist(tmp[i].path, _list, substring) end
+					else
+						if tmp[i].name != "eboot.bin" then
+							local _size = (tmp[i].size or files.size(tmp[i].path))
+							table.insert(_list, {path = tmp[i].path:gsub(substring,'ux0:app'):lower(), size = _size})
+						end
+					end
+				end
+			end
 		end
-	else
-		os.message(strings.notfindmanual)
-	end
+		message_wait("ux0:Patch")
 
+		getlist("ux0:patch/"..appman[cat].list[focus_index].id, list_patch, "ux0:patch")
+		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, "ux0:patch")
+
+		local size_del,list_del = 0,{}
+		if #list_patch > 0 and #list_app > 0 then
+			for i=1,#list_patch do
+				for j=1,#list_app do
+					if list_patch[i].path == list_app[j].path then
+						size_del += list_app[j].size
+						table.insert(list_del,list_app[j].path)
+					end
+				end
+			end
+		end
+
+		if #list_del > 0 then
+			if os.message(strings.rip.."\n\n                        ux0:patch:\n\n"..strings.count..#list_del.." "..strings.movefiles.." "..files.sizeformat(size_del or 0).." "..strings.free,1) == 1 then
+				for i=1,#list_del do
+					files.delete(list_del[i])
+				end
+				--update size
+				appman[cat].list[focus_index].size = files.size(appman[cat].list[focus_index].path)
+				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
+			end
+		else
+			os.message(strings.norip)
+		end
+		os.delay(15)
+
+----------------repatch
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait("ux0:rePatch")
+
+		list_patch, list_app = {},{}
+		getlist("ux0:repatch/"..appman[cat].list[focus_index].id, list_patch, "ux0:repatch")
+		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, "ux0:repatch")
+
+		local size_del,list_del = 0,{}
+		if #list_patch > 0 and #list_app > 0 then
+			for i=1,#list_patch do
+				for j=1,#list_app do
+					if list_patch[i].path == list_app[j].path then
+						size_del += list_app[j].size
+						table.insert(list_del,list_app[j].path)
+					end
+				end
+			end
+		end
+
+		if #list_del > 0 then
+			if os.message(strings.rip.."\n\n                        ux0:rePatch:\n\n"..strings.count..#list_del.." "..strings.movefiles.." "..files.sizeformat(size_del or 0).." "..strings.free,1) == 1 then
+				for i=1,#list_del do
+					files.delete(list_del[i])
+				end
+				--update size
+				appman[cat].list[focus_index].size = files.size(appman[cat].list[focus_index].path)
+				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
+			end
+		else
+			os.message(strings.norip)
+		end
+		os.delay(15)
+
+----------------sce_sys/manual/
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait("sce_sys/manual/")
+
+		local pathmanual,pathpatch  = appman[cat].list[focus_index].path.."/sce_sys/manual/","ux0:patch/"..appman[cat].list[focus_index].id.."/sce_sys/manual/"
+		local scesys_manual, patch_manual, size_manual, dirs_manual, files_manual = false,false,0,0,0
+
+		if files.exists(pathmanual) then
+			size_manual, dirs_manual, files_manual = files.size(pathmanual)
+			scesys_manual = true
+		end
+		if files.exists(pathpatch) then
+			local tam,fold,arch = 0,0,0
+			tam,fold,arch = files.size(pathpatch)
+			patch_manual = true
+			size_manual += tam
+			files_manual += arch
+		end
+
+		if scesys_manual or patch_manual then
+			if os.message(strings.manual.."\n\n"..strings.count..files_manual.." "..strings.movefiles.." "..files.sizeformat(size_manual or 0).." "..strings.free,1) == 1 then
+				if scesys_manual then
+					reboot=false
+						files.delete(pathmanual)
+					reboot=true
+				end
+
+				if patch_manual then
+					reboot=false
+						files.delete(pathpatch)
+					reboot=true
+				end
+				--update size
+				appman[cat].list[focus_index].size = files.size(appman[cat].list[focus_index].path)
+				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
+
+				--update sizef in patch
+				appman[cat].list[focus_index].sizef_patch = files.sizeformat(files.size("ux0:patch/"..appman[cat].list[focus_index].id or 0))
+			end
+		else
+			os.message(strings.notfindmanual)
+		end
+		os.delay(15)
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+		infodevices()
+
+	end
 end
 
 local uninstall_callback = function ()
@@ -443,8 +568,6 @@ local switch_callback = function ()
 			break
 		end
 
-		if buttons[cancel] then return end
-
 	end--while
 
 	buttons.read()--fflush
@@ -541,11 +664,11 @@ local togglefavs_callback = function ()
 	local pos_menu = submenu_ctx.scroll.sel
 
 	if __FAV == 1 then
-		__FAV,enable_favs = 0,strings.no
+		__FAV,__FAV_STRING = 0,strings.no
 		write_config()
 	else
 		if #apps > 0 then
-			__FAV,enable_favs = 1,strings.yes
+			__FAV,__FAV_STRING = 1,strings.yes
 			write_config()
 		else
 			os.message(strings.nofavorites)
@@ -599,15 +722,16 @@ function submenu_ctx.wakefunct()
 	if __SLIDES == 100 then var = strings.original else var = strings.ps4 end
 	if __PIC1 == 1 then showpic = strings.yes else showpic = strings.no end
 	if __SORT == 1 then sorting = strings.title else sorting = strings.id end
+	if __FAV == 1 then __FAV_STRING = strings.yes else __FAV_STRING = strings.no end
 
 	submenu_ctx.options = { -- Handle Option Text and Option Function
 		{ text = strings.pressremove,			funct = uninstall_callback },
-		{ text = strings.removemanual,			funct = manual_callback },
+		{ text = strings.ripgame,				funct = rip_callback },
 		{ text = strings.switchapp, 			funct = switch_callback },
 		{ text = strings.slides..var,			funct = slides_callback },
 		{ text = strings.pic1..showpic,			funct = pic1_callback },
 		{ text = strings.fav..favs,				funct = fav_callback },
-		{ text = strings.togglescan..enable_favs, funct = togglefavs_callback },
+		{ text = strings.togglescan..__FAV_STRING, funct = togglefavs_callback },
 		{ text = strings.sort..sorting, 		funct = sort_callback },
 	}
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
@@ -676,6 +800,7 @@ function submenu_ctx.draw()
 				appman[entry.cat].list[entry.focus].size = entry.size
 				appman[entry.cat].list[entry.focus].sizef = entry.sizef
 				appman[entry.cat].list[entry.focus].sizef_patch = entry.sizef_patch
+				appman[entry.cat].list[entry.focus].sizef_repatch = entry.sizef_repatch
 			end
 		end
 		draw.fillrect(submenu_ctx.x, submenu_ctx.y, submenu_ctx.w, submenu_ctx.h, theme.style.BARCOLOR)
@@ -684,7 +809,7 @@ function submenu_ctx.draw()
 
 	if submenu_ctx.x >= 0 then
 		submenu_ctx.open = true
-		local h = submenu_ctx.y + 30 -- Punto de origen de las opciones
+		local h = submenu_ctx.y + 10 -- Punto de origen de las opciones
 
 		for i=submenu_ctx.scroll.ini,submenu_ctx.scroll.lim do
 
@@ -708,12 +833,14 @@ function submenu_ctx.draw()
 		end
 
 		--Textos informativos en el submenu
-		h += 25
+		h += 15
 		screen.print(10,h, strings.version..": "..appman[cat].list[focus_index].version or "", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-		h += 20
+		h += 23
 		screen.print(10,h, strings.size_ind..": "..(appman[cat].list[focus_index].sizef or strings.getsize), 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
-		h += 20
-		screen.print(10,h, strings.size_patch..": "..(appman[cat].list[focus_index].sizef_patch or strings.getsize), 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
+		h += 23
+		screen.print(10,h, "ux0:Patch: "..(appman[cat].list[focus_index].sizef_patch or strings.getsize), 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
+		h += 23
+		screen.print(10,h, "ux0:RePatch: "..(appman[cat].list[focus_index].sizef_repatch or strings.getsize), 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
 
 		h = 480
 		draw.fillrect(10,h, 330, 15, color.gray)
@@ -723,7 +850,7 @@ function submenu_ctx.draw()
 		screen.print(10,h,"(ux0) "..infoux0.maxf.."/"..infoux0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		h-=20
 
-		if files.exists("ur0:") then
+		if infour0 then
 			draw.fillrect(10,h, 330, 15, color.gray)
 			draw.fillrect(10,h, math.map(infour0.used, 0,infour0.max, 0, 330 ), 15, color.shine:a(80))
 			draw.rect(10,h,330,15,color.white:a(200))
@@ -731,7 +858,7 @@ function submenu_ctx.draw()
 			screen.print(10,h,"(ur0) "..infour0.maxf.."/"..infour0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 			h-=20
 		end
-		if files.exists("uma0:") then
+		if infouma0 then
 			draw.fillrect(10,h, 330, 15, color.gray)
 			draw.fillrect(10,h, math.map(infouma0.used, 0,infouma0.max, 0, 330 ), 15, color.shine:a(80))
 			draw.rect(10,h,330,15,color.white:a(200))

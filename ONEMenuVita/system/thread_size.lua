@@ -19,6 +19,7 @@ while true do
 		entry.size, entry.folders, entry.filess = files.size(entry.path)
 		entry.sizef = files.sizeformat(entry.size or 0)
 		entry.sizef_patch = files.sizeformat(files.size("ux0:patch/"..entry.id or 0))
+		entry.sizef_repatch = files.sizeformat(files.size("ux0:repatch/"..entry.id or 0))
 		SIZES_PORT_O:push(entry)
 	end
 	os.delay(16) -- ONE frame
