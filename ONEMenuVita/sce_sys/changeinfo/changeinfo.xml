@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<changeinfo>
+  <changes app_ver="02.05">
+    <![CDATA[
+- Edit param.sfo (decrypted).<br>
+- Fix automatic network update (Add TLS v1.2 Support).<br>
+- Updated to the latest version of ONElua.<br>
+    ]]>
+  </changes>
+  <changes app_ver="02.04">
+    <![CDATA[
+- [NEW] Added QR Downloader.<br>
+- [NEW] Horizontal and vertical touchscreen support<br>
+- [FIX] Stars rain only on 25/12.<br>
+    ]]>
+  </changes>
+  <changes app_ver="02.03">
+    <![CDATA[
+- [NEW] Enabled swipe up/down for category change.<br>
+- [NEW] Small internal changes on Text Editor, to add or delete lines:<br>
+- [NEW] Keep pressed triangle<br>
+-	right to add a line.<br>
+-	left to delete a line.<br>
+- [NEW] Fixed error on text files with text adjustment scroll.<br>
+- [NEW] Now the PIC1 of the selected game/app is shown if no buttons are pressed.<br>
+- [NEW] Please update your translations...New lines were added.<br>
+    ]]>
+  </changes>
+  <changes app_ver="02.02">
+    <![CDATA[
+- [NEW] Now you can edit .txt files in a simple way.<br>
+- [NEW] Text editor controls: Left : Remove line, Right : Add line.<br>
+- [NEW] Added sound effects for ui transitions.<br>
+- [NEW] System apps are alphabetically shown.<br>
+- [NEW] Scan favorites option added to apps menu (direct access to same option at advanced settings).<br>
+- [NEW] You can run the selected game with double touch.<br>
+- [NEW] Please update your translations...New lines were added.<br>
+    ]]>
+  </changes>
+  <changes app_ver="02.01">
+    <![CDATA[
+- Fix some bugs.<br>
+    ]]>
+  </changes>
+  <changes app_ver="02.00">
+    <![CDATA[
+- [NEW] Icons and games list loading time reduced everytime Onemenu is started.<br>
+- [NEW] New categorie "Favorites".<br>
+- [NEW] "Favorites" section at advanced submenu.<br>
+- [NEW] Categorie PS Vita games/homebrews got separated into "PSVita" and "Homebrews Vita".<br>
+- [NEW] PSP and PSX content unified into one categorie : "Retro Games".<br>
+- [NEW] Lines added to english_ux.txt ...Dont forget to update your translations.<br>
+- [NEW] Now your avatar icon gets downloaded to ux0:data/onemenu so it can get loaded offline.<br>
+    ]]>
+  </changes>
+  <changes app_ver="01.01">
+    <![CDATA[
+- [FIX] Incorrect display of LiveArea app names.<br>
+- [FIX] PS Button lock when using FTP and USB mode.<br>
+- [FIX] Some errors in the internal code.<br>
+- [FIX] Standard format month/day/year.<br>
+- [NEW] Support to change the type of font (PGF<->PVF) in advanced options.<br>
+- 3 added shortcuts:<br>
+- L + R + Up: Restart ONEMenu.<br>
+- L + R + Down: Restart PSvita.<br>
+- L + R + Square: Shutdown PSvita.<br>
+    ]]>
+  </changes>
+  <changes app_ver="01.00">
+    <![CDATA[
+- Initial release 'POC'.<br>
+    ]]>
+  </changes>
+</changeinfo>
