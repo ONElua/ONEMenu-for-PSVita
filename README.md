@@ -1,10 +1,8 @@
 # ONEMenu for PSVita
 
-App Manager Plus has evolved to Onemenu for psvita! so, App manager Plus will no longer be updated.
-
 ![header](screenshots/1MENUVITA.png)
 
-**OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories...<br>
+**OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories.<br>
 Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db...
 
 ![header](screenshots/1MENUVITA5.png)
@@ -13,64 +11,6 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 - Edit param.sfo (decrypted).<br>
 - Fix automatic network update (Add TLS v1.2 Support).<br>
 - Updated to the latest version of ONElua.<br>
-
-### Changelog 2.04 ###
-- [NEW] Added QR Downloader.<br>
-- [NEW] Horizontal and vertical touchscreen support<br>
-- [FIX] Stars rain only on 2512.<br>
-
-### Changelog 2.03 ###
-- Enabled swipe up/down for category change.<br>
-- Small internal changes on Text Editor, to add or delete lines:<br>
-- keep pressed triangle<br>
--	right to add a line.<br>
--	left to delete a line.<br>
-- Fixed error on text files with text adjustment scroll.<br>
-- Now the PIC1 of the selected game/app is shown if no buttons are pressed.<br>
-- Please update your translations...New lines were added.<br>
-
-### Changelog 2.02 ###
-- Now you can edit .txt files in a simple way.<br>
-- Text editor controls: Left : Remove line, Right : Add line.<br>
-- Added sound effects for ui transitions.<br>
-- System apps are alphabetically shown.<br>
-- Scan favorites option added to apps menu (direct access to same option at advanced settings).<br>
-- You can launch the selected game with double touch.<br>
-- Please update your translations...New lines were added.<br>
-
-### Changelog 2.01 ###
-- Fix some bugs.<br>
-
-### Changelog 2.00 ###
-- Icons and games list loading time reduced everytime Onemenu is started.<br>
-- New categorie "Favorites".<br>
-- "Favorites" section at advanced submenu.<br>
-- Categorie PS Vita games/homebrews got separated into "PSVita" and "Homebrews Vita".<br>
-- PSP and PSX content unified into one categorie : "Retro Games".<br>
-- Lines added to english_ux.txt ...Dont forget to update your translations.<br>
-- Now your avatar icon gets downloaded to ux0:data/onemenu so it can get loaded offline.<br>
-
-- Images PSP.PNG y PS1.PNG got eliminated and instead the image RETRO.PNG has been added for the categorie PS Retro games (for PSP and PS1 games).<br>
-- Added the image HBVITA.PNG for Homebrews PSVita categorie.<br>
-
-- Added two lines on the theme ini file :<br>
-	COUNTCOLOR to print the folder/file count in the file explorer.<br>
-	CBACKSBARCOLOR to draw the bars in the callbacks section.<br>
-
-### Changelog 1.01 ###
-Please update your translations...Two new lines were added:<br>
-*PGF Font*<br>
-*PVF Font*<br>
-
-- [FIX] Incorrect display of LiveArea app names.<br>
-- [FIX] PS Button lock when using FTP and USB mode.<br>
-- [FIX] Some errors in the internal code.<br>
-- [FIX] Standard format month/day/year.<br>
-- [NEW] Support to change the type of font (PGF<->PVF) in advanced options.<br>
-- 3 added shortcuts:<br>
-- L + R + Up: Restart ONEMenu.<br>
-- L + R + Down: Restart PSvita.<br>
-- L + R + Square: Shutdown PSvita.<br>
 
 ![header](screenshots/1MENUVITA2.png)
 
@@ -82,21 +22,47 @@ Category change (5 categories available: Vita/Hb games, PSM Games, PSP/Hbs Games
 Fast scrolling.<br>
 **Start:**<br>
 Opens a submenu with a list of system apps.<br>
+
 **Triangle:**<br>
-Open Submenu:<br>
 
-	Uninstall		Allows to uninstall selected app/game.
-	Remove manual		Allows to eliminate the game/app manual.
-	Switch app		Allows to move the selected app/game between the 3 available partitions (ux0-ur0-uma0).
+Press L/R to alternate between submenus (options).
 
-**Slides**					2 options:.<br>
+Submenu1:<br>
 
+
+**LiveArea Apps** Allows to install games in ux0:app (Thanks the plugin Nonpdrm from TheFloW).
+
+**Uninstall**     Allows to uninstall selected app/game.
+
+**Rip Game**      Allows to free up some space by eliminating some game folders/files such as: Game Manual, and some folders/files from ux0:app/(GAMEID) since those folders/files are also at ux0:patch/(GAMEID) (ux0:Repatch/(GAMEID)).
+              This option is based in TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDRM-modding/wiki#saving-memory-space-while-using-mods
+* NOTE: Be very carefull after using this option, because, if the folders/files get deleted from ux0:patch/(GAMEID) o ux0:rePatch/(GAMEID) the game will stop booting cause there won't be any folders/files left at ux0:app/(GAMEID)
+
+**Switch app**    Allows to move the selected app/game between the 3 available partitions (ux0-ur0-uma0).
+
+**Show PICS**     Allows to show the selected game PIC in the submenu.<br>
+
+**Mark Favorite** Allows to mark a game/app as favorite.<br>
+
+
+Submenu2:<br>
+
+
+**Themes ONEMenu** This option now allows to download and change themes for ONEMenu (moved to this submenu for best accessibility).
+
+**Style**       Allows to interchange ONEMenu category slides position and icon list style.
 	Up: Clasic Menu style with mirrored icons and the category slides above the icons list.
 	Down: Simple menu similar to PS4 with the category slide below, this option does not have the icons reflections.
 
-**Show PICS**				Allows to show the selected game PIC in the submenu.<br>
+**Scan Favorites** If this option gets enabled, when ONEMenu is restarted the icon list will only show the games/apps marked as "Favorite", is necesary to have marked one game/app at least to enable the option. 
+If you want to have all the games/apps listed again then this option must be disabled.
 
-![header](screenshots/1MENUVITA3.png)
+**Sort Category by** Allows to sort the icon list by Title (alphabetically) or Gameid.
+
+**Enable AutoUpdate** Enable/Disable the AutoUpdate feature to allow or block future ONEMenu updates.
+
+
+![header](screenshots/1MENUVITA3.png) 
 
 **Explorer Files**
 
@@ -104,20 +70,66 @@ Open Submenu:<br>
 
 **Triangle:**
 
-	Opens SubMenu1 with basic functions as Copy, Move, Install games as vpk or folder, Install CustomThemes, etc...
+Press L/R to alternate between submenus (options).
 
-**Start:**
+SubMenu1 with basic functions as:
 
-	Opens SubMenu2 with advanced functions as FTP and USB connection, Restart or Shutdown the PSVita, Update and/or Rebuild Database (app.db), Option for vpks/isos/cso Search, Change Available Themes for ONEMenu and Uninstall CustomThemes.
+Copy
+Move
+Extract (zips and rars).
+Delete
+Rename
+MakeDir
+Size    (folder/file size)
 
-### NOTE:<br>
-When a CustomTheme is installed the corresponding folder and files are moved to ux0:data/customtheme and for uninstalling any of these CustomThemes you'll be given the option to eliminate the folder and files of the CustomTheme, if you choose not to eliminate them, then the resources of said CustomTheme will be moved to the path ux0:data/uninstall_customtheme for reinstalling in the futured.<br>
+Install games as vpk or folder
+Export multimedia files (mp4, mp3, png, jpg).
 
-The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes following mostly the same instructions as for AppManager Themes.<br>
 
-# Theme Personalization
+SubMenu2 with advanced functions as:
+
+FTP
+USB connection
+Livearea Apps (install games in ux0:app)
+Update Database (app.db)
+Rebuild Database (app.db)
+Reload config.txt
+Favorites section to manage the games/apps marked as faverites and/or enable the option to scan only the favorites the next time you open ONEMenu.
+
+### Language and Personalization ###
+
+**Language**
+
+You can translate the file ux0:data/ONEMENU/english_us.txt and rename it to corresponding language:.<br>
+
+JAPANESE.txt<br>
+ENGLISH_US.txt<br>
+FRENCH.txt<br>
+SPANISH.txt<br>
+GERMAN.txt<br>
+ITALIAN.txt<br>
+DUTCH.txt<br>
+PORTUGUESE.txt<br>
+RUSSIAN.txt<br>
+KOREAN.txt<br>
+CHINESE_T.txt<br>
+CHINESE_S.txt<br>
+FINNISH.txt<br>
+SWEDISH.txt<br>
+DANISH.txt<br>
+NORWEGIAN.txt<br>
+POLISH.txt<br>
+PORTUGUESE_BR.txt<br>
+ENGLISH_GB.txt<br>
+TURKISH.txt<br>
+
+*Remember to translate only the quoted words from english_us.txt.
 
 **Themes for ONEMenu**
+
+Note: Remember an option its been added to download themes directly to the path mentioned below :)
+
+The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes.<br>
 
 ![header](screenshots/themes1.png)
 
@@ -159,13 +171,13 @@ The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes fol
 
 **music.png**       Image for Music section (960*544)
 
+**editor.png**     Image for the Text Editor (960*544)
+
 **ftp.png**         Background Image for FTP port message (960*544)
 
 **list.png**        Image for ExplorerFiles and vpk/iso/cso search results found on memory card (960*544)
 
-**menu.png**        Image for blitting the options submenu (167*443)
-
-**themesmanager.png**		Background Image for ONEMenu theme selection section (960*544)
+**themesmanager.png** Background Image for ONEMenu theme selection section (960*544)
 
 **preview.png**     Your image preview for your theme for ONEMenu (391*219)
 
@@ -188,17 +200,16 @@ The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes fol
 
 *Label Categories*
 
-**PSVITA.png**		PSVita Games (250*66).<br>
+**PSVITA.png**   PSVita Games (250*66).<br>
 
-**HBVITA.png**		Homebrews Vita (250*66).<br>
+**HBVITA.png**   Homebrews Vita (250*66).<br>
 
-**PSM.png**		PSM Games (250*66).<br>
+**PSM.png**      PSM Games (250*66).<br>
 
-**RETRO.png**		PSP & PS1 Games (250*66).<br>
+**RETRO.png**    PSP & PS1 Games (250*66).<br>
 
-**ADRBB.png**		Adrenaline Bubbles Games (250*66).<br>
+**ADRBB.png**    Adrenaline Bubbles Games (250*66).<br>
 
-**FAV.png**		Favorite Games (250*66).<br>
 
 # Create a ini file
 
@@ -214,11 +225,11 @@ AUTHOR = "Name of Author".<br>
 TXTCOLOR		= 0xFFFFFFFF<br>
 TXTBKGCOLOR		= 0x64000000
 
-*#Header color.*<br>
-TITLECOLOR      = 0xFF9999FF
-
 *#Submenu color bar on selected icon.*<br>
 BARCOLOR        = 0x64330066
+
+*#Header color.*<br>
+TITLECOLOR      = 0xFF9999FF
 
 *#Path text color (File Explorer).*<br>
 PATHCOLOR       = 0xA09999FF
@@ -256,39 +267,8 @@ GRADSHADOWCOLOR = 0xC8FFFFFF<br>
 *Change only the Hex-Dec part for the desired color. (ABGR format)<br>
 Recommended website: ([Colors Hex](https://www.w3schools.com/colors/colors_hexadecimal.asp)).<br>
 
-ONEMenu Themes must be placed in the next path:.<br>
-ux0:data/ONEMENU/themes/yournameTheme
-
 ![header](screenshots/themes2.png)
 
-# Language
-
-You can translate the file ux0:data/ONEMENU/english_us.txt and rename it to corresponding language:.<br>
-JAPANESE.txt<br>
-ENGLISH_US.txt<br>
-FRENCH.txt<br>
-SPANISH.txt<br>
-GERMAN.txt<br>
-ITALIAN.txt<br>
-DUTCH.txt<br>
-PORTUGUESE.txt<br>
-RUSSIAN.txt<br>
-KOREAN.txt<br>
-CHINESE_T.txt<br>
-CHINESE_S.txt<br>
-FINNISH.txt<br>
-SWEDISH.txt<br>
-DANISH.txt<br>
-NORWEGIAN.txt<br>
-POLISH.txt<br>
-PORTUGUESE_BR.txt<br>
-ENGLISH_GB.txt<br>
-TURKISH.txt<br>
-
-Then you have to place at the following path:
-ux0:data/ONEMenu/lang/
-
-*Remember to translate only the quoted words from english_us.txt.
 
 # Credits
 *Xerpi* for vita2d.<br>
