@@ -49,14 +49,13 @@ function theme.load()
 
 	--Primero checamos si tienen una img de fondo para el back
 	theme.data["back"] = image.load(__BACKG)
+	if not theme.data["back"] then theme.data["back"] = image.load(path_theme.."back.png") or image.load("system/theme/default/back.png") end
+
 	if theme.data["back"] then 
 		if (image.getrealw(theme.data["back"]) < __DISPLAYW or image.getrealh(theme.data["back"]) < __DISPLAYH) or
 			(image.getrealw(theme.data["back"]) > __DISPLAYW or image.getrealh(theme.data["back"]) > __DISPLAYH) then
 			theme.data["back"]:resize(__DISPLAYW, __DISPLAYH)
 		end
-	else
-		if files.exists(path_theme.."back.png") then theme.data["back"] = image.load(path_theme.."back.png")
-		else theme.data["back"] = image.load("system/theme/default/back.png") end
 	end
 
 	-- Load Resources

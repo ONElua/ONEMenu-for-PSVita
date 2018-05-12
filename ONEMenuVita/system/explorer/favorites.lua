@@ -11,7 +11,7 @@
 
 function favorites_manager()
 
-	local srcn = newScroll(list_favs,15)
+	local srcn = newScroll(apps,15)
 	buttons.interval(16,5)
 
 	if __FAV == 1 then fav = strings.yes else fav = strings.no end
@@ -32,7 +32,7 @@ function favorites_manager()
 			for i=srcn.ini,srcn.lim do
 				if i == srcn.sel then draw.fillrect(10,y-2,930,23,theme.style.SELCOLOR) end
 
-				screen.print(20,y,string.format("%02d",i)+' ) '+ list_favs[i],1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+				screen.print(20,y,string.format("%02d",i)+' ) '+ apps[i],1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 
 				y+=26
 			end
@@ -57,8 +57,8 @@ function favorites_manager()
 
 		if buttons.select and srcn.maxim > 0 then
 			if os.message(strings.emptyfav,1) == 1 then
-				list_favs={}
-				srcn:set(list_favs,15)
+				apps={}
+				srcn:set(apps,15)
 				if __FAV == 1 then __FAV,fav = 0,strings.no end
 				write_favs(__PATH_FAVS)
 				write_config()
@@ -75,11 +75,11 @@ function favorites_manager()
 			if os.message(strings.delfavorites,1) == 1 then
 				for i=1, #appman do
 					for j=1, #appman[i].list do
-						if appman[i].list[j].id == list_favs[srcn.sel] then appman[i].list[j].fav = false end
+						if appman[i].list[j].id == apps[srcn.sel] then appman[i].list[j].fav = false end
 					end
 				end
-				table.remove(list_favs,srcn.sel)
-				srcn:set(list_favs,15)
+				table.remove(apps,srcn.sel)
+				srcn:set(apps,15)
 
 				write_favs(__PATH_FAVS)
 

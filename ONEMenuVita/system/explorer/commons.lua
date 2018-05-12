@@ -378,18 +378,13 @@ end
 -- ## Music Player ##
 function MusicPlayer(handle)
 
-	local coverpath = __PATH_THEMES..__THEME.."/cover.png"
-	if not files.exists(coverpath) then coverpath = "system/theme/default/cover.png" end
-	local coverimg = image.load(coverpath)
-
-	local musicpath = __PATH_THEMES..__THEME.."/music.png"
-	if not files.exists(musicpath) then musicpath = "system/theme/default/music.png" end
-	local musicimg = image.load(musicpath)
+	local coverimg = image.load(__PATH_THEMES..__THEME.."/cover.png") or image.load("system/theme/default/cover.png")
+	local musicimg = image.load(__PATH_THEMES..__THEME.."/music.png") or image.load("system/theme/default/music.png")
 
 	local isMp3 = ((handle.ext or "") == "mp3")
 	local id3 = nil
 
-	if isMp3 then id3 = sound.getid3(handle.path) end 
+	if isMp3 then id3 = sound.getid3(handle.path) end
 
 	local snd = sound.load(handle.path)
 	local xscr2,xscr = 10,425
@@ -403,16 +398,13 @@ function MusicPlayer(handle)
 				screen.print(10,10,handle.name,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 			end
 
-			if id3 then
-				if id3.cover then
-					if id3.cover:getw() > 350 or id3.cover:geth() > 350 then
-						id3.cover:scale( math.floor( (350*100)/math.max(id3.cover:getw(), id3.cover:geth()) ) )
-					end
-					id3.cover:center()
-					id3.cover:blit(175+35,175+100)
+			if id3 and id3.cover then
+				if id3.cover:getw() > 350 or id3.cover:geth() > 350 then
+					id3.cover:scale( math.floor( (350*100)/math.max(id3.cover:getw(), id3.cover:geth()) ) )
 				end
-			else
-				if coverimg then
+				id3.cover:center()
+				id3.cover:blit(175+35,175+100)
+			else if coverimg then
 					coverimg:center()
 					coverimg:blit(175+35,175+100)
 				end
@@ -629,9 +621,7 @@ function visortxt(handle, flag_edit)
 	local texteditorTextWidth = texteditorTextDefaultWidth
 	local textHadChange, hold, changes, limit = false,false,{},16
 
-	local editor = __PATH_THEMES..__THEME.."/editor.png"
-	if not files.exists(editor) then editor = "system/theme/default/editor.png" end
-	local editorimg = image.load(editor)
+	local editorimg = image.load(__PATH_THEMES..__THEME.."/editor.png") or image.load("system/theme/default/editor.png")
 
 	buttons.analogtodpad(60)
 	buttons.interval(16,5)
@@ -855,9 +845,7 @@ function startftp()
 
 	if not init then return false end
 
-	local ftppath = __PATH_THEMES..__THEME.."/ftp.png"
-	if not files.exists(ftppath) then ftppath = "system/theme/default/ftp.png" end
-	local ftpimg = image.load(ftppath)
+	local ftpimg = image.load(__PATH_THEMES..__THEME.."/ftp.png") or image.load("system/theme/default/ftp.png")
 
 	while ftp.state() do
 		reboot=false

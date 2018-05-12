@@ -210,13 +210,13 @@ local uninstall_callback = function ()
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 				if cat == 5 then--Only Adrenaline Bubbles
-					for i=1,#list_favs do
-						if list_favs[i] == appman[cat].list[focus_index].id then
-							table.remove(list_favs,z)
+					for i=1,#apps do
+						if apps[i] == appman[cat].list[focus_index].id then
+							table.remove(apps,z)
 							write_favs(__PATH_FAVS)
 							appman[cat].list[focus_index].fav = false
 
-							if #list_favs <=0 then
+							if #apps <=0 then
 								if __FAV == 1 then __FAV = 0 end
 							end
 							write_config()
@@ -515,12 +515,12 @@ local fav_callback = function ()
 
 	if appman[cat].list[focus_index].fav then
 		favs = strings.yes
-		table.insert(list_favs, appman[cat].list[focus_index].id)
+		table.insert(apps, appman[cat].list[focus_index].id)
 	else
 		favs = strings.no
-		for j=1,#list_favs do
-			if appman[cat].list[focus_index].id == list_favs[j] then
-				table.remove(list_favs, j)
+		for j=1,#apps do
+			if appman[cat].list[focus_index].id == apps[j] then
+				table.remove(apps, j)
 			end
 		end
 	end
@@ -556,7 +556,7 @@ local togglefavs_callback = function ()
 		__FAV,_favs = 0,strings.no
 		write_config()
 	else
-		if #list_favs > 0 then
+		if #apps > 0 then
 			__FAV,_favs = 1,strings.yes
 			write_config()
 		else

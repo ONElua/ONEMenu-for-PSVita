@@ -55,7 +55,7 @@ if buttons.assign()==0 then
 end
 if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
 
-if __FAV == 1 and #list_favs>0 then
+if __FAV == 1 and #apps>0 then
 	_favs = strings.yes
 else
 	__FAV=0
@@ -231,7 +231,7 @@ function write_config()
 	ini.write(__PATH_INI,"sort","sort3",appman[3].sort)
 	ini.write(__PATH_INI,"sort","sort4",appman[4].sort)
 	ini.write(__PATH_INI,"sort","sort5",appman[5].sort)
---sort for sys list_favs
+--sort for sys apps
 	ini.write(__PATH_INI,"sys","sort",system.sort)
 end
 

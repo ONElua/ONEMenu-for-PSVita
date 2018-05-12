@@ -12,32 +12,25 @@ files.mkdir(__PATH_THEMES)
 __ID        = os.titleid()
 
 ---------------------Buscamos icono por defecto y splash----------------------
-local path_theme = __PATH_THEMES..__THEME.."/"
-if not files.exists(path_theme) then path_theme = "system/theme/default/" end
-
 local splash,iconDef = nil,nil
-
-if files.exists(path_theme.."splash.png") then splash = image.load(path_theme.."splash.png")
-else splash = image.load("system/theme/default/splash.png") end
+splash = image.load(__PATH_THEMES..__THEME.."/splash.png") or image.load("system/theme/default/splash.png")
 
 --Show Splash
 if splash then splash:blit(0,0) end
 screen.flip()
 
-if files.exists(path_theme.."icodef.png") then iconDef = image.load(path_theme.."icodef.png")
-else iconDef = image.load("system/theme/default/icodef.png") end
-
+iconDef = image.load(__PATH_THEMES..__THEME.."/icodef.png") or image.load("system/theme/default/icodef.png")
 ------------------------Checamos la lista de Favoritos------------------------
-list_favs = {}
+apps = {}
 function write_favs(pathini)
     local file = io.open(pathini, "w+")
     file:write("apps = {\n")
 
-	for i=1,#list_favs do
-		if i==#list_favs then
-			file:write(string.format('"%s"\n', tostring(list_favs[i])))
+	for i=1,#apps do
+		if i==#apps then
+			file:write(string.format('"%s"\n', tostring(apps[i])))
 		else
-			file:write(string.format('"%s",\n', tostring(list_favs[i])))
+			file:write(string.format('"%s",\n', tostring(apps[i])))
 		end
 	end
 	file:write("}\n")
@@ -52,7 +45,7 @@ write_favs(__PATH_FAVS) end
 __CATEGORIES = 5
 appman = {}
 for i=1,__CATEGORIES do table.insert(appman, { list={}, scroll, sort = 0, slide = { img = nil, x=0 , acel=7, w= 0 } } ) end
-cat, appman.len = 0,-1
+cat, appman.len = 0,0
 
 IMAGE_PORT_I = channel.new("IMAGE_PORT_I")
 IMAGE_PORT_O = channel.new("IMAGE_PORT_O")
@@ -129,8 +122,8 @@ function Scanning()
 		if files.exists(list[i].path) then
 			if list[i].title then list[i].title = list[i].title:gsub("\n"," ") end
 			list[i].fav = false
-			for j=1,#list_favs do
-				if list[i].id == list_favs[j] then list[i].fav = true end
+			for j=1,#apps do
+				if list[i].id == apps[j] then list[i].fav = true end
 			end
 
 			if __FAV == 1 then
@@ -142,20 +135,21 @@ function Scanning()
 
 	end
 	
-	local y,x = 1,1;
+	local y,x = 1,1
 	while y <= __CATEGORIES do
-		if cat == 0 and appman[y].list[x] then cat = y; end
+		if cat == 0 and appman[y].list[x] then cat = y end
 		while appman[y].list[x] do
 			-- Push request of icon! :D
-			local obj = appman[y].list[x];
+			local obj = appman[y].list[x]
 			static_void[y][x] = obj
 			IMAGE_PORT_O:push( { x = x, y = y, fav = __FAV, path = obj.path_img, resize = obj.resize } )
-			x += 1;
+			x += 1
 		end
-		y += 1; x = 1;
+		y += 1
+		x = 1
 	end
-	
-	if cat < 0 then appman.len = 0 end
+
+	if cat <= 0 then appman.len = 0 end
 
 end
 ------------------Busqueda y peticion de Iconos en modo hilo------------------

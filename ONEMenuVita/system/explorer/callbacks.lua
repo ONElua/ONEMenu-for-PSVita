@@ -72,7 +72,7 @@ end
 -- CallBack Extraction
 function onExtractFiles(size,written,file,totalsize,totalwritten)
 
-	if theme.data["back"] then theme.data["back"]:blit(0,0)	end
+	if theme.data["list"] then theme.data["list"]:blit(0,0)	end
 	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 	if explorer.dst then
@@ -94,7 +94,7 @@ end
 
 function onScanningFiles(file,unsize,position,unsafe)
 	if not bufftmp then
-		if theme.data["back"] then theme.data["back"]:blit(0,0)	end
+		if theme.data["list"] then theme.data["list"]:blit(0,0)	end
 	else bufftmp:blit(0,0) end
 
 	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
@@ -128,7 +128,7 @@ total_size,files_move, cont = 0,0,0
 function onCopyFiles(size,written,file)
 	if _print then
 
-		if theme.data["back"] then theme.data["back"]:blit(0,0)	end
+		if theme.data["list"] then theme.data["list"]:blit(0,0)	end
 		draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 		if explorer.dst then
@@ -162,7 +162,7 @@ end
 -- CallBack DeleteFiles
 function onDeleteFiles(file)
 	if not game_move then
-		if theme.data["back"] then theme.data["back"]:blit(0,0) end
+		if theme.data["list"] then theme.data["list"]:blit(0,0) end
 		draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 		screen.print(10,10,strings.delfile,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
@@ -173,7 +173,7 @@ function onDeleteFiles(file)
 end
 
 function onNetGetFile(size,written,speed)
-	if theme.data["back"] then theme.data["back"]:blit(0,0) end
+	if theme.data["list"] then theme.data["list"]:blit(0,0) end
 	screen.print(10,10,strings.download)
 	screen.print(10,30,strings.total_size..tostring(files.sizeformat(size) or 0))
 	screen.print(10,50,strings.percent_total..math.floor((written*100)/size).."%")
@@ -183,3 +183,4 @@ function onNetGetFile(size,written,speed)
 	if buttons[cancel] then return 0 end --Cancel or Abort
 	return 1
 end
+

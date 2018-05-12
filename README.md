@@ -12,7 +12,7 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 
 ## ONEMenu icons ##
 
-![header](screenshots/1MENUVITA2.png)
+![header](screenshots/1MENUVITA.png)
 
 **UP/Down:** Category change (5 categories available: Vita/Hb games, PSM Games, PSP/Hbs Games, PS1 Games, Adrenaline Bubbles).<br>
 **L/R:** Fast scrolling.<br>
@@ -23,6 +23,8 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 * NOTE: Press L/R to alternate between submenus (options).
 
 #### Submenu 1: <br>
+
+![header](screenshots/1MENUVITA2.png)
 
 **LiveArea Apps** Allows to install games in ux0:app (Thanks the plugin Nonpdrm from TheFloW).
 
@@ -42,6 +44,8 @@ This option is based in TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDR
 
 #### Submenu 2: <br>
 
+![header](screenshots/1MENUVITA3.png)
+
 **Themes ONEMenu** This option now allows to download and change themes for ONEMenu (moved to this submenu for best accessibility).
 
 **Style**       Allows to interchange ONEMenu category slides position and icon list style.
@@ -55,17 +59,16 @@ If you want to have all the games/apps listed again then this option must be dis
 
 **Enable AutoUpdate** Enable/Disable the AutoUpdate feature to allow or block future ONEMenu updates.
 
-![header](screenshots/1MENUVITA3.png) 
 
 ## ONEMenu Explorer Files ##
-
-![header](screenshots/1MENUVITA4.png)
 
 **Triangle:** Open Submenus<br>
 
 * NOTE: Press L/R to alternate between submenus (options).
 
 #### Submenu 1 with basic functions as:
+
+![header](screenshots/1MENUVITA4.png)
 
 Copy<br>
 Move<br>
@@ -80,6 +83,8 @@ Export multimedia files (mp4, mp3, png, jpg).<br>
 
 
 #### Submenu 2 with advanced functions as:
+
+![header](screenshots/1MENUVITA5.png)
 
 FTP<br>
 USB connection<br>
@@ -124,7 +129,9 @@ Note: Remember an option its been added to download themes directly to the path 
 
 The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes.<br>
 
-![header](screenshots/themes1.png)
+![header](screenshots/1MENUVITA6.png)
+
+![header](screenshots/themes2.png)
 
 ++ Create a new folder with the theme name and place the next resources inside:.<br>
 
@@ -260,7 +267,7 @@ GRADSHADOWCOLOR = 0xC8FFFFFF<br>
 *Change only the Hex-Dec part for the desired color. (ABGR format)<br>
 Recommended website: ([Colors Hex](https://www.w3schools.com/colors/colors_hexadecimal.asp)).<br>
 
-![header](screenshots/themes2.png)
+![header](screenshots/themes1.png)
 
 
 # Credits

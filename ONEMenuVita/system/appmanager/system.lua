@@ -67,12 +67,15 @@ function system.run()
 
 	system.refresh()
 
-	local themesimg = nil
+	--local themesimg = nil
 	local scroll = newScroll(system.data,15)
 
+	--[[
 	local manager_path = __PATH_THEMES..__THEME.."/themesmanager.png"
 	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
 	themesimg = image.load(manager_path)
+	]]
+	local themesimg = image.load(__PATH_THEMES..__THEME.."/themesmanager.png") or image.load("system/theme/default/themesmanager.png")
 
 	buttons.interval(15,4)
 	local preview = nil
