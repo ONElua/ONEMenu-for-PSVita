@@ -3,39 +3,34 @@
 ![header](screenshots/1MENUVITA.png)
 
 **OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories.<br>
-Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db...
-
-![header](screenshots/1MENUVITA5.png)
+Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db.
 
 ### Changelog 2.05 ###
 - Edit param.sfo (decrypted).<br>
 - Fix automatic network update (Add TLS v1.2 Support).<br>
 - Updated to the latest version of ONElua.<br>
 
+## ONEMenu icons ##
+
 ![header](screenshots/1MENUVITA2.png)
 
-**ONEMenu icons list:**
+**UP/Down:** Category change (5 categories available: Vita/Hb games, PSM Games, PSP/Hbs Games, PS1 Games, Adrenaline Bubbles).<br>
+**L/R:** Fast scrolling.<br>
+**Start:** Opens a submenu with a list of system apps.<br>
 
-**UP/Down:**<br>
-Category change (5 categories available: Vita/Hb games, PSM Games, PSP/Hbs Games, PS1 Games, Adrenaline Bubbles).<br>
-**L/R:**<br>
-Fast scrolling.<br>
-**Start:**<br>
-Opens a submenu with a list of system apps.<br>
+**Triangle:** Open Submenus<br>
 
-**Triangle:**<br>
+* NOTE: Press L/R to alternate between submenus (options).
 
-Press L/R to alternate between submenus (options).
-
-Submenu1:<br>
-
+#### Submenu 1: <br>
 
 **LiveArea Apps** Allows to install games in ux0:app (Thanks the plugin Nonpdrm from TheFloW).
 
 **Uninstall**     Allows to uninstall selected app/game.
 
 **Rip Game**      Allows to free up some space by eliminating some game folders/files such as: Game Manual, and some folders/files from ux0:app/(GAMEID) since those folders/files are also at ux0:patch/(GAMEID) (ux0:Repatch/(GAMEID)).
-              This option is based in TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDRM-modding/wiki#saving-memory-space-while-using-mods
+
+This option is based in TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDRM-modding/wiki#saving-memory-space-while-using-mods
 * NOTE: Be very carefull after using this option, because, if the folders/files get deleted from ux0:patch/(GAMEID) o ux0:rePatch/(GAMEID) the game will stop booting cause there won't be any folders/files left at ux0:app/(GAMEID)
 
 **Switch app**    Allows to move the selected app/game between the 3 available partitions (ux0-ur0-uma0).
@@ -45,8 +40,7 @@ Submenu1:<br>
 **Mark Favorite** Allows to mark a game/app as favorite.<br>
 
 
-Submenu2:<br>
-
+#### Submenu 2: <br>
 
 **Themes ONEMenu** This option now allows to download and change themes for ONEMenu (moved to this submenu for best accessibility).
 
@@ -61,40 +55,39 @@ If you want to have all the games/apps listed again then this option must be dis
 
 **Enable AutoUpdate** Enable/Disable the AutoUpdate feature to allow or block future ONEMenu updates.
 
-
 ![header](screenshots/1MENUVITA3.png) 
 
-**Explorer Files**
+## ONEMenu Explorer Files ##
 
 ![header](screenshots/1MENUVITA4.png)
 
-**Triangle:**
+**Triangle:** Open Submenus<br>
 
-Press L/R to alternate between submenus (options).
+* NOTE: Press L/R to alternate between submenus (options).
 
-SubMenu1 with basic functions as:
+#### Submenu 1 with basic functions as:
 
-Copy
-Move
-Extract (zips and rars).
-Delete
-Rename
-MakeDir
-Size    (folder/file size)
+Copy<br>
+Move<br>
+Extract (zips and rars).<br>
+Delete<br>
+Rename<br>
+MakeDir<br>
+Size    (folder/file size)<br>
 
-Install games as vpk or folder
-Export multimedia files (mp4, mp3, png, jpg).
+Install games as vpk or folder<br>
+Export multimedia files (mp4, mp3, png, jpg).<br>
 
 
-SubMenu2 with advanced functions as:
+#### Submenu 2 with advanced functions as:
 
-FTP
-USB connection
-Livearea Apps (install games in ux0:app)
-Update Database (app.db)
-Rebuild Database (app.db)
-Reload config.txt
-Favorites section to manage the games/apps marked as faverites and/or enable the option to scan only the favorites the next time you open ONEMenu.
+FTP<br>
+USB connection<br>
+Livearea Apps (install games in ux0:app)<br>
+Update Database (app.db)<br>
+Rebuild Database (app.db)<br>
+Reload config.txt<br>
+Favorites section to manage the games/apps marked as faverites and/or enable the option to scan only the favorites the next time you open ONEMenu.<br>
 
 ### Language and Personalization ###
 
