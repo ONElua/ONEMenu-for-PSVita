@@ -9,22 +9,6 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
--- ## Explorer ## --
-icons_mimes={1,pbp=2,prx=2,bin=2,suprx=2,skprx=2,dat=2,db=2,a=2,prs=2,pmf=2,at9=2,dds=2,tmp=2,html=2,gft=2,sfm=2,icv=2,cer=2,dic=2,pgf=2,
-rsc=2,rco=2,res=2,dreg=2,ireg=2,pdb=2,mai=2,bin_bak=2,psp2dmp=2,rif=2,trp=2,self=2,mp4=2,edat=2,log=2,ptf=2,ctf=2,inf=2,
-png=3,gif=3,jpg=3,bmp=3,
-mp3=4,s3m=4,wav=4,at3=4,ogg=4,
-rar=5,zip=5,vpk=5,gz=5,
-cso=6,iso=6,dax=6
-}
-
-isopened = { png = theme.style.IMAGECOLOR, jpg = theme.style.IMAGECOLOR, gif = theme.style.IMAGECOLOR, bmp = theme.style.IMAGECOLOR,
-	mp3 = theme.style.MUSICCOLOR, ogg = theme.style.MUSICCOLOR, wav = theme.style.MUSICCOLOR,
-	iso = theme.style.BINCOLOR, pbp = theme.style.BINCOLOR, cso = theme.style.BINCOLOR, dax = theme.style.BINCOLOR, bin = theme.style.BINCOLOR, suprx = theme.style.BINCOLOR, skprx = theme.style.BINCOLOR,
-	zip = theme.style.ARCHIVECOLOR, rar = theme.style.ARCHIVECOLOR, vpk = theme.style.ARCHIVECOLOR, gz = theme.style.ARCHIVECOLOR,
-	sfo = theme.style.SFOCOLOR,
-}
-
 -- Create two scrolls :P
 scroll = {
    list = newScroll(),
@@ -40,31 +24,29 @@ slidex=0
 -- ## Explorer Drawer List ## --
 function explorer.listshow(posy)
 
-	if movx==0 then
-		if scroll.list.maxim >= maxim_files then len_selector = __DISPLAYW-40 else len_selector = __DISPLAYW-10 end
-	else
-		len_selector = __DISPLAYW-173
-	end
+	if movx==0 then	len_selector,len_clip = __DISPLAYW-25,500 else len_selector,len_clip = __DISPLAYW-173,600 end
 
 	if menu_ctx.close and slidex > 0 then slidex -= 10 end
-	if not menu_ctx.close and slidex < 130 then slidex += 10 end
+	if not menu_ctx.close and slidex < 86 then slidex += 10 end
 
 	for i=scroll.list.ini, scroll.list.lim do
 
 		if i==scroll.list.sel then
-			ccc = color.green:a(130)
+			ccc = theme.style.TXTBKGCOLOR--color.green:a(130)
 			draw.fillrect(5+movx, posy-3, len_selector, 23, theme.style.SELCOLOR)
-			if screen.textwidth(explorer.list[i].name or "",1) > 490 then 
-				xtitle = screen.print(xtitle+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __SLEFT, 490)
+
+			if screen.textwidth(explorer.list[i].name or "",1) > len_clip then 
+				xtitle = screen.print( xtitle+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or
+									   theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __SLEFT, len_clip)
 				xtitle -= movx
 			else
-				screen.clip(35+movx,0,490+movx,544)
+				screen.clip(35+movx,0,len_clip+movx,544)
 				screen.print(35+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
 				xtitle=35
 			end
 		else
 			ccc = theme.style.TXTBKGCOLOR
-			screen.clip(35+movx,0,490+movx,544)
+			screen.clip(35+movx,0,len_clip+movx,544)
 			screen.print(35+movx, posy, explorer.list[i].name,1, isopened[explorer.list[i].ext] or theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
 		end
 		screen.clip()
@@ -78,8 +60,8 @@ function explorer.listshow(posy)
 
 		if explorer.list[i].multi then draw.fillrect(5+movx, posy-3, len_selector, 22, theme.style.MARKEDCOLOR) end
 
-		screen.print(((905-250)+movx)+slidex, posy, explorer.list[i].size or strings.dir, 1, theme.style.TXTCOLOR,ccc, __ARIGHT)
-		screen.print((910+movx)+slidex, posy, explorer.list[i].mtime, 1.0, theme.style.TXTCOLOR,ccc, __ARIGHT)
+		screen.print((680+movx)+slidex, posy, explorer.list[i].size or "<DIR>", 1, theme.style.TXTCOLOR,ccc, __ARIGHT)
+		screen.print((930+movx)+slidex, posy, explorer.list[i].mtime, 1.0, theme.style.TXTCOLOR,ccc, __ARIGHT)
 		posy += 26
 
 	end--for
@@ -111,12 +93,13 @@ function show_explorer_list()
 			xtmp = screen.print(5+movx,33,files.sizeformat(infosize.max or 0).."/"..files.sizeformat(infosize.free or 0),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		end
 
+		--Partitions
 		if menu_ctx.close then
 			local xRoot = xtmp + 15
-			local w = (960-xRoot)/#Root2
+			local w = (955-xRoot)/#Root2
 			for i=1, #Root2 do
 				if Dev == i then
-					draw.fillrect(xRoot,28,w,28, color.shine)
+					draw.fillrect(xRoot,28,w,28, theme.style.SELCOLOR)
 				end
 				screen.print(xRoot+(w/2), 33, Root2[i], 1, color.white, 0x0, __ACENTER)
 				xRoot += w
@@ -133,13 +116,13 @@ function show_explorer_list()
 			end
 		end
 
+		--Bar Scroll
 		local y,h=70, (maxim_files*26)-2
 		if scroll.list.maxim > 0 then
+			draw.fillrect(945+movx, y-2, 8, h, color.shine)
 			if scroll.list.maxim >= maxim_files then -- Draw Scroll Bar
 				local pos_height = math.max(h/scroll.list.maxim, maxim_files)
-				--Bar Scroll
-				draw.fillrect(930+movx, y-2, 8, h, color.shine)
-				draw.fillrect(930+movx, y-2 + ((h-pos_height)/(scroll.list.maxim-1))*(scroll.list.sel-1), 8, pos_height, color.new(0,255,0))
+				draw.fillrect(945+movx, y-2 + ((h-pos_height)/(scroll.list.maxim-1))*(scroll.list.sel-1), 8, pos_height, color.new(0,255,0))
 			end
 			explorer.listshow(y)
 		else
@@ -199,8 +182,9 @@ function ctrls_explorer_list()
 		end
 	end
 
+	-- Switch device
 	if buttons.released.r or buttons.released.l then
-		if menu_ctx.open then return end                 -- Switch device
+		if menu_ctx.open then return end
 		if buttons.released.l then Dev -= 1 else Dev += 1 end
 
 		if Dev > #Root then Dev = 1 end
@@ -209,6 +193,7 @@ function ctrls_explorer_list()
 		explorer.refresh(true)
 	end
 
+	-- Multi-Selection
 	if buttons.square then
 		explorer.list[scroll.list.sel].multi = not explorer.list[scroll.list.sel].multi
 		if explorer.list[scroll.list.sel].multi then
@@ -219,6 +204,7 @@ function ctrls_explorer_list()
 		end
 	end
 
+	--Return AppManager
 	if buttons.select and menu_ctx.open==false then
 		restart_cronopic()
 		appman.launch()
@@ -336,10 +322,16 @@ local paste_callback = function ()
 end
  
 local delete_callback = function () -- TODO: add move to -1 pos of the deleted element in list
+	local vbuff = screen.toimage()
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+	local pos_menu = menu_ctx.scroll.sel
+
     if #explorer.list > 0 then
+		local del=false
         if explorer.list[scroll.list.sel].multi then
             if #multi>0 then
                 if os.message(strings.delete.." "..#multi.."\n\n"..strings.filesfolders.."(s) ?",1) == 1 then
+					del=true
                     reboot=false
                         for i=1,#multi do files.delete(multi[i]) end
                     reboot=true
@@ -347,20 +339,26 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
             end
         else
             if os.message(strings.delete.." "..explorer.list[scroll.list.sel].name.." ?",1) == 1 then
+				del=true
                 reboot=false
                     files.delete(explorer.list[scroll.list.sel].path)
                 reboot=true
             end
         end
+		if del then
 --clean
-        menu_ctx.wakefunct()
-        menu_ctx.close = true
-        action = false
-        explorer.refresh(true)
-        explorer.action = 0
-        multi={}
-        os.delay(150)
-    end
+			menu_ctx.wakefunct()
+			menu_ctx.close = true
+			action = false
+			explorer.refresh(true)
+			explorer.action = 0
+			multi={}
+		end
+	end
+
+	menu_ctx.scroll.sel = pos_menu
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
 
 local rename_callback = function ()
@@ -560,15 +558,9 @@ local installgame_callback = function ()
 				--update
 				appman[index].list[search].dev = "ux0"
 				appman[index].list[search].img = tmp_vpk.img
-
-				--size
-				--appman[index].list[search].size = tmp_vpk.size
-				--appman[index].list[search].sizef = tmp_vpk.sizef
-
 				appman[index].list[search].type = tmp_vpk.type
 				appman[index].list[search].version = tmp_vpk.version
 				appman[index].list[search].title = tmp_vpk.title
-
 			end
 
 			appman.len +=1
@@ -589,31 +581,88 @@ local installgame_callback = function ()
 end
  
 local filesexport_callback = function ()
-    if #explorer.list > 0 then
-        local ext = explorer.list[scroll.list.sel].ext or ""
-        if ext:lower() == "png" or ext:lower() == "jpg" or ext:lower() == "bmp" or ext:lower() == "gif" or ext:lower() == "mp3" or ext:lower() == "mp4" then
-            reboot=false
-                message_wait()
-                local result = files.export(explorer.list[scroll.list.sel].path)
-            reboot=true
- 
-            if result == 1 then
-                if os.message(strings.opensettings,1)==1 then
-                    os.delay(150)
-                    if ext:lower() == "mp3" then os.uri("music:browse?category=ALL")
-                    elseif ext:lower() == "mp4" then os.uri("video:browse?category=ALL")
-                    else os.uri("photo:browse?category=ALL") end
-                end
-            end
+
+	local vbuff = screen.toimage()
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+	local pos_menu = menu_ctx.scroll.sel
+
+    local result = 0
+	if #explorer.list > 0 then
+		if not explorer.list[scroll.list.sel].size then                -- Its Dir
+
+			local cont_multimedia,cont_img,cont_mp3,cont_mp4 = 0,0,0,0
+
+			if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+			message_wait()
+
+			local tmp = files.listfiles(explorer.list[scroll.list.sel].path)
+			if tmp and #tmp > 0 then
+
+				for i=1,#tmp do
+					local ext = tmp[i].ext:lower() or ""
+					if ext == "png" or ext == "jpg" or ext == "bmp" or ext == "gif" or ext == "mp3" or ext == "mp4" then
+						cont_multimedia+=1
+						reboot=false
+							if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+							message_wait(tmp[i].name)
+							local res = files.export(tmp[i].path)
+						reboot=true
+
+						if res == 1 then
+							result = 1
+							if ext == "png" or ext == "jpg" or ext == "bmp" or ext == "gif" then cont_img+=1
+								elseif ext == "mp3" then cont_mp3+=1
+									else cont_mp4+=1 end
+						else
+							os.message(strings.fail.."\n\n"..tmp[i].name,0)
+						end
+					end
+				end--for
+
+			end
+
+			if cont_multimedia > 0 then
+				os.message("\n"..strings.mp3s..cont_mp3.."\n"..strings.mp4s..cont_mp4.."\n"..strings.imgs..cont_img.."\n"..strings.openexport)
+			else
+				os.message(strings.nofile)
+			end
+
+		else
+			local ext = explorer.list[scroll.list.sel].ext:lower() or ""
+			if ext == "png" or ext == "jpg" or ext == "bmp" or ext == "gif" or ext == "mp3" or ext == "mp4" then
+				reboot=false
+					if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+					message_wait()
+					result = files.export(explorer.list[scroll.list.sel].path)
+				reboot=true
+
+				if result == 1 then
+					if os.message(strings.opensettings,1)==1 then
+						os.delay(150)
+						if ext == "mp3" then os.uri("music:browse?category=ALL")
+						elseif ext == "mp4" then os.uri("video:browse?category=ALL")
+						else os.uri("photo:browse?category=ALL") end
+					end
+				else
+					os.message(strings.fail.."\n\n"..explorer.list[scroll.list.sel].name,0)
+				end
+			end
+		end
+	end
+
+	if result == 1 then
 --clean
-            menu_ctx.wakefunct()
-            menu_ctx.close = true
-            action = false
-            explorer.refresh(true)
-            multi={}
-            explorer.action = 0
-        end
+		menu_ctx.wakefunct()
+		menu_ctx.close = true
+		action = false
+		explorer.refresh(true)
+		multi={}
+		explorer.action = 0
     end
+
+	menu_ctx.scroll.sel = pos_menu
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
 
 local qr_callback = function ()
@@ -670,16 +719,11 @@ local usb_callback = function ()
 	local vbuff = screen.toimage()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	local pos_menu = menu_ctx.scroll.sel
-	if usbMassStorage() then
---clean
-		menu_ctx.close = true
-		action = false
-	else
-		menu_ctx.wakefunct2()
-		menu_ctx.scroll.sel = pos_menu
-	end
-
+	usbMassStorage()
 	buttons.homepopup(1)
+	menu_ctx.wakefunct2()
+	menu_ctx.scroll.sel = pos_menu
+
 	os.delay(15)
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
@@ -755,10 +799,10 @@ local font_callback = function ()
 end
 
 menu_ctx = { -- Creamos un objeto menu contextual
-    h = 450,				-- Height of menu
-    w = 170,				-- Width of menu--170
-    x = -160,				-- X origin of menu--160
-    y = 55,					-- Y origin of menu
+    h = 544,				-- Height of menu
+    w = 190,				-- Width of menu--170
+    x = -190,				-- X origin of menu--160
+    y = 0,					-- Y origin of menu
     open = false,			-- Is open the menu?
     close = true,
     speed = 10,				-- Speed of Effect Open/Close.
@@ -806,9 +850,9 @@ function menu_ctx.wakefunct2()
 		{ text = strings.favorites,		funct = scanfavs_callback },
     }
 	if __FNT == 3 then 
-		table.insert(menu_ctx.options, { text = strings.pvf,	funct = font_callback })
+		table.insert(menu_ctx.options, { text = "< "..strings.pvf.." >", funct = font_callback, pad = true })
 	else
-		table.insert(menu_ctx.options, { text = strings.pgf,	funct = font_callback })
+		table.insert(menu_ctx.options, { text = "< "..strings.pgf.." >", funct = font_callback, pad = true })
 	end
 
     menu_ctx.scroll = newScroll(menu_ctx.options, #menu_ctx.options)
@@ -845,16 +889,16 @@ function menu_ctx.draw()
     if menu_ctx.x >= 0 then
 
         menu_ctx.open = true
-        local h = menu_ctx.y + 25 -- Punto de origen de las opciones
+        local h = menu_ctx.y + 75 -- Punto de origen de las opciones
         for i=menu_ctx.scroll.ini,menu_ctx.scroll.lim do
 
-			screen.clip(0,0,165, menu_ctx.h)
+			screen.clip(0,0,menu_ctx.w-5, menu_ctx.h)
 			if i==menu_ctx.scroll.sel then
 
 				draw.fillrect(0,h-4,menu_ctx.w,25,theme.style.SELCOLOR)
 
-				if screen.textwidth(menu_ctx.options[i].text) > 160 then
-					x_print = screen.print(x_print, h, menu_ctx.options[i].text, 1, color.green, color.blue, __SLEFT,155)
+				if screen.textwidth(menu_ctx.options[i].text) > menu_ctx.w-10 then
+					x_print = screen.print(x_print, h, menu_ctx.options[i].text, 1, color.green, color.blue, __SLEFT,menu_ctx.w-10)
 				else
 					screen.print(5, h, menu_ctx.options[i].text, 1, color.green, color.blue, __ALEFT)
 					x_print = 5
@@ -865,7 +909,9 @@ function menu_ctx.draw()
 			end
 			screen.clip()
 
-			if menu_ctx.type == 1 and (i == 7 or i == 10) then
+			if menu_ctx.type == 1 and (i == 3 or i == 7 or i == 10) then
+				h += 35
+			elseif menu_ctx.type == 2 and (i == 3 or i == 6) then
 				h += 35
 			else
 				h += 26
@@ -882,9 +928,16 @@ function menu_ctx.buttons()
 	if buttons.up or buttons.analogly < -60 then menu_ctx.scroll:up() end
 	if buttons.down or buttons.analogly > 60 then menu_ctx.scroll:down() end
 
+	if buttons[cancel] then -- Run function of cancel option.
+		menu_ctx.close = not menu_ctx.close
+	end
+
 	if buttons[accept] then
 		menu_ctx.options[menu_ctx.scroll.sel].funct()
     end
+	if (buttons.left or buttons.right) and menu_ctx.options[menu_ctx.scroll.sel].pad then
+		menu_ctx.options[menu_ctx.scroll.sel].funct()
+	end
 
 	if buttons.released.l or buttons.released.r then
 		if menu_ctx.type == 1 then
@@ -896,7 +949,4 @@ function menu_ctx.buttons()
 		end
 	end
 
-	if buttons[cancel] then -- Run function of cancel option.
-		menu_ctx.close = not menu_ctx.close
-	end
 end

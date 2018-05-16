@@ -67,23 +67,16 @@ function system.run()
 
 	system.refresh()
 
-	--local themesimg = nil
 	local scroll = newScroll(system.data,15)
-
-	--[[
-	local manager_path = __PATH_THEMES..__THEME.."/themesmanager.png"
-	if not files.exists(manager_path) then manager_path = "system/theme/default/themesmanager.png" end
-	themesimg = image.load(manager_path)
-	]]
-	local themesimg = image.load(__PATH_THEMES..__THEME.."/themesmanager.png") or image.load("system/theme/default/themesmanager.png")
 
 	buttons.interval(15,4)
 	local preview = nil
+	local themesimg = image.load(__PATH_THEMES..__THEME.."/themesmanager.png") or image.load("system/theme/default/themesmanager.png")
 	while true do
 		buttons.read()
 		touch.read()
 
-		if themesimg then themesimg:blit(0,0) end
+		if themesimg then themesimg:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 		
 		if pic1_sys then
 			pic1_sys:blit(0,55,125)
@@ -185,9 +178,9 @@ function system.run()
 			restart_cronopic()
 		end
 
-		if buttons.start then
+		if buttons.start or buttons[cancel] then
 			restart_cronopic()
-			pic1_sys,themesimg,preview = nil,nil,nil
+			pic1_sys,preview = nil,nil
 			os.delay(80)
 			buttons.interval(10,10)
 			break

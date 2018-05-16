@@ -16,7 +16,7 @@ __LANG      = os.language()
 files.mkdir(__PATH_LANG)
 
 --Aqui checamos las traducciones
-__STRINGS   = 160
+__STRINGS   = 165
 
 if not files.exists(__PATH_LANG.."english_us.txt") then files.copy("system/lang/english_us.txt",__PATH_LANG)
 else
@@ -52,6 +52,9 @@ if buttons.assign()==0 then
 	accept,cancel = "circle","cross"
 	textXO = "X: "
 	accept_x = 0
+	SYMBOL_CROSS	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
+	SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x95)..string.char(0xb3)
+	
 end
 if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
 

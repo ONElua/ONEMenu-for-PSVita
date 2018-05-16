@@ -74,8 +74,6 @@ function refresh_init(img)
 			if result == 1 then
 
 				count += 1
-				appman.len +=1
-
 				list[i].dev = "ux0:"
 
 				--Size
@@ -128,6 +126,7 @@ function refresh_init(img)
 
 				end
 
+				appman.len +=1
 				infodevices()
 
 			else

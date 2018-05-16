@@ -5,7 +5,6 @@ strings = {
 back =			"Return",
 copyfile =		"Copying: ",
 delfile =		"Deleting: ",
-dir =			"<DIR>",
 creatfolder =	"Create Folder",
 newfolder =		"New Folder",
 pass =			"Use Pass?",
@@ -196,8 +195,16 @@ togglescan =	"Scan Favorites: ",
 result =		"\nResult: ",
 count =			"Count: ",
 sizeis =		"Size is: ",
-opensettings =	"Open app for MP3/Gallery/Video?",
 filesfolders =	"Files/Folders",
+
+------------	Export Mulimedia	-------------------------------------------------------------------------
+opensettings =	"Open app for MP3/Gallery/Video?",
+nofile =		"No multimedia files",
+mp3s =			"MP3 file(s) : ",
+mp4s =			"MP4 file(s) : ",
+imgs =			"IMG file(s) : ",
+openexport =	"\nExport completed, please launch Music/Photos/Videos\n\napplication to read your files !",
+fail =			"Error",
 
 ------------	Refresh LiveArea	-------------------------------------------------------------------------
 notinstalled =	"\nGame not installed: ",

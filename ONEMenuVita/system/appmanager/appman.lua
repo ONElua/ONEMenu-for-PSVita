@@ -206,7 +206,6 @@ local uninstall_callback = function ()
 			buttons.homepopup(1)
 			reboot=true
 			if result_rmv == 1 then
-
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 				if cat == 5 then--Only Adrenaline Bubbles
@@ -412,14 +411,14 @@ local switch_callback = function ()
 		loc1,loc2,v1,v2 = "ux0","ur0",__GAME_MOVE_UMA02UX0,__GAME_MOVE_UMA02UR0
 	end
 
-	buttons.read()
-	local vbuff = screen.toimage()
 	local options = {
 			{ text = loc1 },
 			{ text = loc2 },
 			{ text = strings.cancel }
 		}
 	local scroll_op,cccolor = newScroll(options, #options),""
+
+	local vbuff = screen.toimage()
 	while true do
 		buttons.read()
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
@@ -438,6 +437,12 @@ local switch_callback = function ()
 
 		if buttons.up then scroll_op:up() elseif buttons.down then scroll_op:down() end
 
+		if buttons[cancel] then
+			os.delay(15)
+			if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+			return
+		end
+
 		if buttons[accept] then
 			if scroll_op.sel == 1 then mov = v1
 			elseif scroll_op.sel == 2 then mov = v2
@@ -451,43 +456,40 @@ local switch_callback = function ()
 
 	end--while
 
-	buttons.read()--fflush
 	buttons.homepopup(0)
-		reboot=false
-			game_move=true
-				total_size,folders,filess = files.size(appman[cat].list[focus_index].path)
-				files_move,cont = folders+filess,0
-				local result = game.move(appman[cat].list[focus_index].id, mov, total_size)
-				total_size,files_move, cont = 0,0,0
-				fileant = ""
-			game_move=false
+	reboot=false
+		game_move=true
+			total_size,folders,filess = files.size(appman[cat].list[focus_index].path)
+			files_move,cont = folders+filess,0
+			local result = game.move(appman[cat].list[focus_index].id, mov, total_size)
+			total_size,files_move, cont = 0,0,0
+			fileant = ""
+		game_move=false
+	buttons.homepopup(1)
+	reboot=true
 
-		buttons.homepopup(1)
-		reboot=true
-		buttons.read()--fflush
-		os.delay(100)
+	os.delay(100)
 
-		if result ==1 then
-			if mov == __GAME_MOVE_UX02UR0 or mov == __GAME_MOVE_UMA02UR0 then
-				appman[cat].list[focus_index].path = "ur0:app/"..appman[cat].list[focus_index].id
-				appman[cat].list[focus_index].dev = "ur0"
-			elseif mov == __GAME_MOVE_UR02UX0 or mov == __GAME_MOVE_UMA02UX0 then
-				appman[cat].list[focus_index].path = "ux0:app/"..appman[cat].list[focus_index].id
-				appman[cat].list[focus_index].dev = "ux0"
-			elseif mov == __GAME_MOVE_UX02UMA0 or mov == __GAME_MOVE_UR02UMA0 then
-				appman[cat].list[focus_index].path = "uma0:app/"..appman[cat].list[focus_index].id
-				appman[cat].list[focus_index].dev = "uma0"
-			end
-			if appman[cat].list[focus_index].id == __ID then
-				os.message(strings.restart)
-				power.restart()
-			end
+	if result ==1 then
+		if mov == __GAME_MOVE_UX02UR0 or mov == __GAME_MOVE_UMA02UR0 then
+			appman[cat].list[focus_index].path = "ur0:app/"..appman[cat].list[focus_index].id
+			appman[cat].list[focus_index].dev = "ur0"
+		elseif mov == __GAME_MOVE_UR02UX0 or mov == __GAME_MOVE_UMA02UX0 then
+			appman[cat].list[focus_index].path = "ux0:app/"..appman[cat].list[focus_index].id
+			appman[cat].list[focus_index].dev = "ux0"
+		elseif mov == __GAME_MOVE_UX02UMA0 or mov == __GAME_MOVE_UR02UMA0 then
+			appman[cat].list[focus_index].path = "uma0:app/"..appman[cat].list[focus_index].id
+			appman[cat].list[focus_index].dev = "uma0"
+		end
+		if appman[cat].list[focus_index].id == __ID then
+			os.message(strings.restart)
+			power.restart()
+		end
+	elseif result ==-4 then os.message(strings.nomemory) end
 
-		elseif result ==-4 then os.message(strings.nomemory) end
-
+	infodevices()
 	os.delay(15)
 	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-	infodevices()
 end
 
 local pic1_callback = function ()
@@ -532,24 +534,23 @@ end
 
 ---------------------------------- SubMenu Contextual 2 ---------------------------------------------------
 local themesONEMenu_callback = function ()
+	local pos_menu = submenu_ctx.scroll.sel
 	theme.manager()
 	submenu_ctx.wakefunct2()
-	submenu_ctx.close = true
+	submenu_ctx.scroll.sel = pos_menu
 end
 
 local slides_callback = function ()
-
+	local pos_menu = submenu_ctx.scroll.sel
 	if __SLIDES == 100 then __SLIDES = 415 else __SLIDES = 100 end
 
 	submenu_ctx.wakefunct2()
 	write_config()
 
-	submenu_ctx.close = true
-
+	submenu_ctx.scroll.sel = pos_menu
 end
 
 local togglefavs_callback = function ()
-
 	local pos_menu = submenu_ctx.scroll.sel
 
 	if __FAV == 1 then
@@ -563,7 +564,8 @@ local togglefavs_callback = function ()
 			os.message(strings.nofavorites)
 		end
 	end
-
+	os.delay(15)
+	if theme.data["back"] then theme.data["back"]:blit(0,0) end
 	submenu_ctx.wakefunct2()
 	submenu_ctx.scroll.sel = pos_menu
 end
@@ -641,8 +643,8 @@ function submenu_ctx.wakefunct()
 		{ text = strings.pressremove,       funct = uninstall_callback },
 		{ text = strings.ripgame,           funct = rip_callback },
 		{ text = strings.switchapp,         funct = switch_callback },
-		{ text = strings.pic1..showpic,     funct = pic1_callback },
-		{ text = strings.fav..favs,         funct = fav_callback },
+		{ text = strings.pic1..showpic,     funct = pic1_callback, pad = true },
+		{ text = strings.fav..favs,         funct = fav_callback,  pad = true },
 	}
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
 end
@@ -654,10 +656,10 @@ function submenu_ctx.wakefunct2()
 
     submenu_ctx.options = { -- Handle Option Text and Option Function
         { text = strings.themes,            funct = themesONEMenu_callback },
-        { text = strings.slides..var,       funct = slides_callback },
-		{ text = strings.togglescan.._favs, funct = togglefavs_callback },
-		{ text = strings.sort..sorting,     funct = sort_callback },
-		{ text = strings.update.._update,   funct = update_callback },
+        { text = strings.slides..var,       funct = slides_callback,     pad = true },
+		{ text = strings.togglescan.._favs, funct = togglefavs_callback, pad = true },
+		{ text = strings.sort..sorting,     funct = sort_callback,       pad = true },
+		{ text = strings.update.._update,   funct = update_callback,     pad = true },
 
 		{ text = strings.restarthb,         funct = restart_callback },
         { text = strings.reset,             funct = reboot_callback },
@@ -707,7 +709,7 @@ function submenu_ctx.draw()
 			else
 				pic1 = image.load(string.format("%s/pic0.png","ur0:appmeta/"..appman[cat].list[focus_index].id))
 				if not pic1 then
-					pic1 = game.bg0(appman[cat].list[focus_index].id)--id al recompilar
+					pic1 = game.bg0(appman[cat].list[focus_index].id)
 				end
 			end
 			if pic1 then
@@ -855,7 +857,14 @@ function submenu_ctx.buttons()
 	if buttons.up or buttons.analogly < -60 then submenu_ctx.scroll:up() end
 	if buttons.down or buttons.analogly > 60 then submenu_ctx.scroll:down() end
 
+	if buttons[cancel] then -- Run function of cancel option.
+		submenu_ctx.close = not submenu_ctx.close
+	end
+
 	if buttons[accept] then
+		submenu_ctx.options[submenu_ctx.scroll.sel].funct()
+	end
+	if (buttons.left or buttons.right) and submenu_ctx.options[submenu_ctx.scroll.sel].pad then
 		submenu_ctx.options[submenu_ctx.scroll.sel].funct()
 	end
 
@@ -867,9 +876,5 @@ function submenu_ctx.buttons()
 			submenu_ctx.type = 1
 			submenu_ctx.wakefunct()
 		end
-	end
-
-	if buttons[cancel] then -- Run function of cancel option.
-		submenu_ctx.close = not submenu_ctx.close
 	end
 end

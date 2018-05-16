@@ -126,6 +126,20 @@ function theme.load()
 		__USERFNT = true
 	else font.setdefault(__FNT) end
 
+	icons_mimes={ 1,pbp=2,prx=2,bin=2,suprx=2,skprx=2,dat=2,db=2,a=2,prs=2,pmf=2,at9=2,dds=2,tmp=2,html=2,gft=2,sfm=2,icv=2,cer=2,dic=2,pgf=2,
+					rsc=2,rco=2,res=2,dreg=2,ireg=2,pdb=2,mai=2,bin_bak=2,psp2dmp=2,rif=2,trp=2,self=2,mp4=2,edat=2,log=2,ptf=2,ctf=2,inf=2,
+					png=3,gif=3,jpg=3,bmp=3,
+					mp3=4,s3m=4,wav=4,at3=4,ogg=4,
+					rar=5,zip=5,vpk=5,gz=5,
+					cso=6,iso=6,dax=6
+				}
+
+	isopened = { png = theme.style.IMAGECOLOR, jpg = theme.style.IMAGECOLOR, gif = theme.style.IMAGECOLOR, bmp = theme.style.IMAGECOLOR,
+				 mp3 = theme.style.MUSICCOLOR, ogg = theme.style.MUSICCOLOR, wav = theme.style.MUSICCOLOR,
+				 iso = theme.style.BINCOLOR, pbp = theme.style.BINCOLOR, cso = theme.style.BINCOLOR, dax = theme.style.BINCOLOR, bin = theme.style.BINCOLOR, suprx = theme.style.BINCOLOR, skprx = theme.style.BINCOLOR,
+				 zip = theme.style.ARCHIVECOLOR, rar = theme.style.ARCHIVECOLOR, vpk = theme.style.ARCHIVECOLOR, gz = theme.style.ARCHIVECOLOR,
+				 sfo = theme.style.SFOCOLOR,
+			}
 end
 
 function reload_theme()
@@ -150,7 +164,7 @@ function reload_theme()
 
 	theme.load()
 
-	--Load Slides
+	--RE-Load Slides
 	categories = {
 		{ img = theme.data["psvita"] },	--cat 1
 		{ img = theme.data["hbvita"] },	--cat 2
@@ -198,7 +212,7 @@ function theme.manager()
 
 	while true do
 		buttons.read()
-		if themesimg then themesimg:blit(0,0) end
+		if themesimg then themesimg:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 		
 		screen.print(480,15,({strings.themes, strings.themesonline })[sect],1,theme.style.TITLECOLOR,color.gray,__ACENTER)
 		local y = 70

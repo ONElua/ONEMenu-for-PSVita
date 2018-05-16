@@ -300,7 +300,6 @@ function show_msg_vpk(obj_vpk)
 	end
 
 	bufftmp:blit(0,0)
-	buttons.read()--flush 
 	--return res
 end
 
@@ -370,7 +369,6 @@ function show_msg_pbp(handle)
 	end
 
 	bufftmp:blit(0,0)
-	buttons.read()--flush 
 	return res
 	
 end
@@ -656,8 +654,8 @@ function visortxt(handle, flag_edit)
 				end
 
 				if i == texteditorInfo.focus then
-					if hold then ccc=color.green:a(80) else ccc=color.gray:a(175) end
-					draw.fillrect(0,list_y-3,__DISPLAYW-12,22,ccc)
+					if hold then ccc=color.green:a(80) else ccc=theme.style.SELCOLOR end
+					draw.fillrect(3,list_y-3,__DISPLAYW-16,22,ccc)
 				end
 
 				screen.print(texteditorOrdinal_x, list_y, string.format("%04d", i), 1, color.white, color.black, __ALEFT)--0xFF666666
@@ -671,10 +669,10 @@ function visortxt(handle, flag_edit)
 
 			---- Draw Scroll Bar
 			local ybar,hbar = 70, (limit*26)-2
+			draw.fillrect(950,ybar-2,8,hbar,color.shine)
 			if #texteditorInfo.list > limit then -- Draw Scroll Bar
 				local pos_height = math.max(hbar/#texteditorInfo.list, limit)
 				--Bar Scroll
-				draw.fillrect(950, ybar-2, 8, hbar, color.shine)--color.new(255,255,255,100))
 				draw.fillrect(950, ybar-2 + ((hbar-pos_height)/(#texteditorInfo.list-1))*(texteditorInfo.focus-1), 8, pos_height, color.new(0,255,0))
 			end
 
@@ -895,10 +893,8 @@ function usbMassStorage()
 			screen.print(480,y+40, textXO..strings.cancelusb,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		screen.flip()
 
-		if buttons.released[cancel] then return false end
+		if buttons[cancel] then return false end
 	end
-
-	buttons.read()--fflush
 
 	if not _return then
 		--[[
@@ -927,8 +923,8 @@ function usbMassStorage()
 				screen.print(480,y+115,SYMBOL_CIRCLE.." "..strings.cancel, 1,color.white,color.black, __ACENTER)
 			screen.flip()
 
-			if buttons.cross or buttons.square or buttons.triangle or buttons.released.circle then
-				if buttons.cross then mode_usb = 2
+			if buttons[accept] or buttons.square or buttons.triangle or buttons[cancel] then
+				if buttons[accept] then mode_usb = 2
 				elseif buttons.square then mode_usb = 0
 				elseif buttons.triangle then mode_usb = 1
 				else return false end
@@ -945,7 +941,7 @@ function usbMassStorage()
 				local titlew = string.format(strings.usbconnection)
 				local w,h = screen.textwidth(titlew,1) + 30,70
 				local x,y = 480 - (w/2), 272 - (h/2)
-				while not buttons.released[cancel] do
+				while not buttons[cancel] do
 					buttons.read()
 					power.tick()
 					if theme.data["list"] then theme.data["list"]:blit(0,0) end 
@@ -957,7 +953,6 @@ function usbMassStorage()
 					screen.flip()
 				end
 
-				buttons.read()--fflush
 				usb.stop()
 				buttons.homepopup(1)
 
