@@ -224,7 +224,7 @@ function handle_files(cnt)
 			show_msg_vpk(cnt)
 			if vpkdel then explorer.refresh(true) end
 		buttons.homepopup(1)
-	elseif extension == "zip" or extension == "rar" or extension == "7z" or extension == "gz" then
+	elseif extension == "zip" or extension == "rar" then
 		show_scan(cnt)
 	elseif extension == "pbp" or extension == "iso" or extension == "cso" then
 		show_msg_pbp(cnt)
@@ -245,7 +245,7 @@ __ACTION_WAIT_EXTRACT = 2
 local src_path_callback = function ()
    if #explorer.list > 0 then
       local ext = explorer.list[scroll.list.sel].ext or ""
-      if menu_ctx.scroll.sel != 3 or (menu_ctx.scroll.sel == 6 and (ext:lower()=="zip" or ext:lower()=="rar" or ext:lower()=="vpk")) then
+      if menu_ctx.scroll.sel != 3 or (menu_ctx.scroll.sel == 3 and (ext:lower()=="zip" or ext:lower()=="rar" or ext:lower()=="vpk")) then
          if not multi or #multi < 1 then
             table.insert(multi, explorer.list[scroll.list.sel].path)
          end
@@ -433,6 +433,8 @@ local sizedir_callback = function ()
 end
 
 local installgame_callback = function ()
+	local vbuff = screen.toimage()
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
     if #explorer.list > 0 then
         if explorer.list[scroll.list.sel].ext == "vpk" then
             buttons.homepopup(0)
@@ -443,9 +445,8 @@ local installgame_callback = function ()
  
         if not files.exists(string.format("%s/eboot.bin",explorer.list[scroll.list.sel].path)) and
             not files.exists(string.format("%s/sce_sys/param.sfo",explorer.list[scroll.list.sel].path)) then return end
- 
-        local bufftmp = screen.buffertoimage()
-        local x,y = (960-420)/2,(544-420)/2
+
+		local x,y = (960-420)/2,(544-420)/2
         local resp=0
 
 		local tmp_vpk  = {}
@@ -459,10 +460,10 @@ local installgame_callback = function ()
         if accept_x == 1 then Xa,Oa = "X: ","O: " end
         while true do
             buttons.read()
-            bufftmp:blit(0,0)
+			if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
  
-            draw.fillrect(x,y,420,420, theme.style.SELCOLOR)
-            draw.framerect(x,y,420,420,color.black, color.shine,6)
+            draw.fillrect(x,y,420,420, color.new(0x2f,0x2f,0x2f,0xff))
+            draw.framerect(x,y,420,420, color.black, color.shine,6)
    
             if info then
                 if screen.textwidth(tostring(info.TITLE) or "UNK") > 380 then
@@ -484,7 +485,7 @@ local installgame_callback = function ()
 				tmp_vpk.img:blit(960/2,544/2)
             end
  
-            screen.print(960/2,y+325,strings.installvpk +" ?",1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+            screen.print(960/2,y+325,strings.insvpkfromdir +" ?",1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
             screen.print(960/2,y+395,Xa..strings.confirm.." | "..Oa..strings.cancel,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
             screen.flip()
  
@@ -494,7 +495,11 @@ local installgame_callback = function ()
             end
         end
  
-        if res == false then return end
+        if res == false then
+			os.delay(15)
+			if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+			return
+		end
  
         buttons.homepopup(0)
         reboot=false
@@ -533,8 +538,9 @@ local installgame_callback = function ()
 
 			--Update appman[x].list
 			local index = 1
-			if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5 else
-				if info.CONTENT_ID:len() > 9 then index = 1	else index = 2 end
+			if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5
+			else
+				if info.CONTENT_ID and info.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
 			end
 
 			--Search game in appman[index].list
@@ -578,6 +584,8 @@ local installgame_callback = function ()
         explorer.action = 0
         multi={}
     end
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
  
 local filesexport_callback = function ()
@@ -720,7 +728,7 @@ local usb_callback = function ()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	local pos_menu = menu_ctx.scroll.sel
 	usbMassStorage()
-	buttons.homepopup(1)
+	buttons.read()
 	menu_ctx.wakefunct2()
 	menu_ctx.scroll.sel = pos_menu
 

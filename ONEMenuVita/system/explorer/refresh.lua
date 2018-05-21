@@ -13,7 +13,7 @@ function fillapps(list, obj)
 
 	local info = game.info(obj.path.."/sce_sys/param.sfo")
 	if info then
-		if info.TITLE_ID then
+		if info.TITLE_ID and info.CATEGORY != "gda" then
 
 			if info.TITLE then info.TITLE = info.TITLE:gsub("\n"," ") else info.TITLE = "UNK" end
 
@@ -23,8 +23,9 @@ function fillapps(list, obj)
 			end
 
 			local index = 1
-			if files.exists(obj.path.."/data/boot.inf") or obj.id == "PSPEMUCFW" then index = 5 else
-				if info.CONTENT_ID:len() > 9 then index = 1	else index = 2 end
+			if files.exists(obj.path.."/data/boot.inf") or obj.id == "PSPEMUCFW" then index = 5
+			else
+				if info.CONTENT_ID and info.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
 			end
 
 			table.insert(list, { id=info.TITLE_ID, type=info.CATEGORY, version=info.APP_VER or "00.00", title=info.TITLE or info.TITLE_ID,
@@ -33,7 +34,7 @@ function fillapps(list, obj)
 	end
 
 end
-	
+
 function refresh_init(img)
 
 	if img then img:blit(0,0) end

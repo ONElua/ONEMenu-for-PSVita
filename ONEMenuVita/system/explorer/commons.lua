@@ -66,7 +66,7 @@ end
 
 --===============================   vpk      ==========================================================================
 function show_scan(infovpk)
-	bufftmp = screen.buffertoimage()
+	bufftmp = screen.toimage()
 	local x,y = (960-420)/2,(544-420)/2
 
 	newpath,vpk=nil,nil
@@ -84,7 +84,7 @@ function show_scan(infovpk)
 	local realsize = files.sizeformat(vpk.scan.realsize or 0)
 	while true do
 		buttons.read()
-		bufftmp:blit(0,0)
+		if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 
 		draw.fillrect(x,y,420,420,color.new(0x2f,0x2f,0x2f,0xff))
 		draw.framerect(x,y,420,420,color.black, color.shine,6)
@@ -99,10 +99,12 @@ function show_scan(infovpk)
 		end
 
 	end
+	os.delay(15)
+	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
 
 function show_msg_vpk(obj_vpk)
-	bufftmp = screen.buffertoimage()
+	bufftmp = screen.toimage()
 	local x,y = (960-420)/2,(544-420)/2
 
 	reboot=false
@@ -159,7 +161,7 @@ function show_msg_vpk(obj_vpk)
 
 	while true do
 		buttons.read()
-		bufftmp:blit(0,0)
+		if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 
 		draw.fillrect(x,y,420,420,ccc)
 		draw.framerect(x,y,420,420,color.black, ccc,6)
@@ -207,8 +209,9 @@ function show_msg_vpk(obj_vpk)
 		end
 
 	end
-
-	if res == false then return end
+	os.delay(15)
+	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+	if res == false then return	end
 
 	--Install
 	reboot=false
@@ -256,8 +259,9 @@ function show_msg_vpk(obj_vpk)
 
 		--Update appman[x].list
 		local index = 1
-		if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5 else
-			if scan_vpk.sfo.CONTENT_ID:len() > 9 then index = 1	else index = 2 end
+		if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5
+		else
+			if info.CONTENT_ID and info.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
 		end
 
 		--Search game in appman[index].list
@@ -299,13 +303,14 @@ function show_msg_vpk(obj_vpk)
 		os.message(strings.errorinstall)
 	end
 
-	bufftmp:blit(0,0)
+	os.delay(15)
+	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	--return res
 end
 
 --tmp0.CATEGORY: ISO/CSO UG, PSN EG, HBs MG, PS1 ME
 function show_msg_pbp(handle)
-	local bufftmp = screen.buffertoimage()
+	local bufftmp = -screen.toimage()-screen.buffertoimage()
 	local x,y = (960-420)/2,(544-420)/2
 
 	local icon0 = game.geticon0(handle.path)
@@ -323,7 +328,7 @@ function show_msg_pbp(handle)
 	local res,xscr = false,290
 	while true do
 		buttons.read()
-		bufftmp:blit(0,0)
+		if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 
 		draw.fillrect(x,y,420,420,color.new(0x2f,0x2f,0x2f,0xff))
 		draw.rect(x,y,420,420,color.white)
@@ -368,7 +373,8 @@ function show_msg_pbp(handle)
 
 	end
 
-	bufftmp:blit(0,0)
+	os.delay(15)
+	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	return res
 	
 end
@@ -876,7 +882,6 @@ function usbMassStorage()
 
 	if not usb then os.requireusb() end
 
-	local _return = false
 	while usb.actived() != 1 do
 		buttons.read()
 		power.tick()
@@ -896,71 +901,71 @@ function usbMassStorage()
 		if buttons[cancel] then return false end
 	end
 
-	if not _return then
-		--[[
-			// 0:	USBDEVICE_MODE_MEMORY_CARD
-			// 1:	USBDEVICE_MODE_GAME_CARD
-			// 2:	USBDEVICE_MODE_SD2VITA
-			// 3:	USBDEVICE_MODE_PSVSD
-			"ux0:","ur0:","uma0:","gro0:","grw0:"
-		]]
-		local mode_usb = -1
-		local title = string.format(strings.usbmode)
-		local w,h = screen.textwidth(title,1) + 120,145
-		local x,y = 480 - (w/2), 272 - (h/2)
+	--[[
+		// 0:	USBDEVICE_MODE_MEMORY_CARD
+		// 1:	USBDEVICE_MODE_GAME_CARD
+		// 2:	USBDEVICE_MODE_SD2VITA
+		// 3:	USBDEVICE_MODE_PSVSD
+		"ux0:","ur0:","uma0:","gro0:","grw0:"
+	]]
+	local mode_usb = -1
+	local title = string.format(strings.usbmode)
+	local w,h = screen.textwidth(title,1) + 120,145
+	local x,y = 480 - (w/2), 272 - (h/2)
 
-		while true do
-			buttons.read()
-			power.tick()
-			if theme.data["list"] then theme.data["list"]:blit(0,0) end 
+	while true do
+		buttons.read()
+		power.tick()
+		if theme.data["list"] then theme.data["list"]:blit(0,0) end 
 
-			draw.fillrect(x, y, w, h, theme.style.BARCOLOR)
-			draw.rect(x,y,w,h,color.white)
-				screen.print(480, y+10, title,1,color.white,color.black, __ACENTER)
-				screen.print(480,y+40,SYMBOL_CROSS.." "..strings.sd2vita, 1,color.white,color.black, __ACENTER)
-				screen.print(480,y+65,SYMBOL_SQUARE.." "..strings.memcard, 1,color.white,color.black, __ACENTER)
-				screen.print(480,y+90,SYMBOL_TRIANGLE.." "..strings.gamecard, 1,color.white,color.black, __ACENTER)
-				screen.print(480,y+115,SYMBOL_CIRCLE.." "..strings.cancel, 1,color.white,color.black, __ACENTER)
-			screen.flip()
+		draw.fillrect(x, y, w, h, theme.style.BARCOLOR)
+		draw.rect(x,y,w,h,color.white)
+			screen.print(480, y+10, title,1,color.white,color.black, __ACENTER)
+			screen.print(480,y+40,SYMBOL_CROSS.." "..strings.sd2vita, 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+65,SYMBOL_SQUARE.." "..strings.memcard, 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+90,SYMBOL_TRIANGLE.." "..strings.gamecard, 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+115,SYMBOL_CIRCLE.." "..strings.cancel, 1,color.white,color.black, __ACENTER)
+		screen.flip()
 
-			if buttons[accept] or buttons.square or buttons.triangle or buttons[cancel] then
-				if buttons[accept] then mode_usb = 2
-				elseif buttons.square then mode_usb = 0
-				elseif buttons.triangle then mode_usb = 1
-				else return false end
-				break
-			end
-		end--while
-
-		if not _return then
-			buttons.homepopup(0)
-			local conexion = usb.start(mode_usb)
-			if conexion == -1 then os.message(strings.usbfail,0) _return=true end
-
-			if not _return then
-				local titlew = string.format(strings.usbconnection)
-				local w,h = screen.textwidth(titlew,1) + 30,70
-				local x,y = 480 - (w/2), 272 - (h/2)
-				while not buttons[cancel] do
-					buttons.read()
-					power.tick()
-					if theme.data["list"] then theme.data["list"]:blit(0,0) end 
-
-					draw.fillrect(x,y,w,h,theme.style.BARCOLOR)
-					draw.rect(x,y,w,h,color.white)
-						screen.print(480,y+13, strings.usbconnection,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-						screen.print(480,y+40, textXO..strings.cancelusb,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-					screen.flip()
-				end
-
-				usb.stop()
-				buttons.homepopup(1)
-
-				explorer.refresh(true)
-				explorer.action = 0
-				multi={}
-				return true
-			end
+		if buttons[accept] or buttons.square or buttons.triangle or buttons[cancel] then
+			if buttons[accept] then mode_usb = 2
+			elseif buttons.square then mode_usb = 0
+			elseif buttons.triangle then mode_usb = 1
+			else return false end
+			break
 		end
+	end--while
+	buttons.read()
+
+	buttons.homepopup(0)
+	local conexion = usb.start(mode_usb)
+	if conexion == -1 then
+		buttons.homepopup(1)
+		os.message(strings.usbfail,0)
+		return false
 	end
+
+	local titlew = string.format(strings.usbconnection)
+	local w,h = screen.textwidth(titlew,1) + 30,70
+	local x,y = 480 - (w/2), 272 - (h/2)
+	while not buttons[cancel] do
+		buttons.read()
+		power.tick()
+		if theme.data["list"] then theme.data["list"]:blit(0,0) end 
+
+		draw.fillrect(x,y,w,h,theme.style.BARCOLOR)
+		draw.rect(x,y,w,h,color.white)
+			screen.print(480,y+13, strings.usbconnection,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			screen.print(480,y+40, textXO..strings.cancelusb,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		screen.flip()
+	end
+
+	usb.stop()
+	buttons.read()
+	buttons.homepopup(1)
+
+	explorer.refresh(true)
+	explorer.action = 0
+	multi={}
+	return true
 end

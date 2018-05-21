@@ -199,14 +199,23 @@ local uninstall_callback = function ()
 		if os.message(strings.appremove + appman[cat].list[focus_index].id + "?",1) == 1 then
 			if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 			message_wait()
-			buttons.homepopup(0)
-			reboot=false
 
-			local result_rmv = game.delete(appman[cat].list[focus_index].id)
+			buttons.homepopup(0)
+				reboot=false
+					local result_rmv = game.delete(appman[cat].list[focus_index].id)
+				reboot=true
 			buttons.homepopup(1)
-			reboot=true
+
 			if result_rmv == 1 then
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+				if files.exists("ux0:repatch/"..appman[cat].list[focus_index].id) then
+					if os.message(strings.delete.."\n\n".."ux0:rePatch/"..appman[cat].list[focus_index].id.."?",1) == 1 then
+						reboot=false
+							files.delete("ux0:rePatch/"..appman[cat].list[focus_index].id)
+						reboot=true
+					end
+				end
 
 				if cat == 5 then--Only Adrenaline Bubbles
 					for i=1,#apps do

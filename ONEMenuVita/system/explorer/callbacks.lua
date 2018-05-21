@@ -31,6 +31,7 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 			end
 
 			if theme.data["back"] then theme.data["back"]:blit(0,0)	end
+			draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
 
 			if size_argv == 1 then
 				screen.print(10,10,strings.unsafevpk)
@@ -47,7 +48,6 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 		end
 	elseif step == 3 then -- Unpack :P
 		if theme.data["back"] then theme.data["back"]:blit(0,0)	end
-
 		draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
 
 		screen.print(10,10,strings.vpkunpack)
@@ -60,8 +60,8 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 		screen.flip()
 	elseif step == 4 then -- Promote o install :P
 		if theme.data["back"] then theme.data["back"]:blit(0,0)	end
-
 		draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
+
 		screen.print(10,10,strings.install)
 		screen.print(10,55,__TITTLEAPP, 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
 		screen.print(10,80,__IDAPP, 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
@@ -93,10 +93,7 @@ function onExtractFiles(size,written,file,totalsize,totalwritten)
 end
 
 function onScanningFiles(file,unsize,position,unsafe)
-	if not bufftmp then
-		if theme.data["list"] then theme.data["list"]:blit(0,0)	end
-	else bufftmp:blit(0,0) end
-
+	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 	local ccc=color.white
@@ -174,11 +171,14 @@ end
 
 function onNetGetFile(size,written,speed)
 	if theme.data["list"] then theme.data["list"]:blit(0,0) end
+	draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
+
 	screen.print(10,10,strings.download)
 	screen.print(10,30,strings.total_size..tostring(files.sizeformat(size) or 0))
 	screen.print(10,50,strings.percent_total..math.floor((written*100)/size).."%")
 	draw.fillrect(0,520,((written*960)/size),24,color.new(0,255,0))
 	screen.flip()
+
 	buttons.read()
 	if buttons[cancel] then return 0 end --Cancel or Abort
 	return 1
