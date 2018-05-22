@@ -1,0 +1,214 @@
+--Texts
+strings = {
+
+-------------	Explorer	---------------------------------------------------------------------------------
+back =			"Regresar ",
+copyfile =		"Copiando: ",
+delfile =		"Eliminando: ",
+creatfolder =	"Crear carpeta",
+newfolder =		"Nueva carpeta",
+pass =			"Usar Pass ?",
+ospass =		"PASS",
+
+--SubMenu
+copy =			"Copiar",
+delete =		"Eliminar",
+makedir =		"Crear carpeta",
+rename =		"Renombrar",
+extract =		"Extraer",
+cancel =		"Cancelar",
+insvpkfromdir = "Instalar Juego",
+extractto =		"Extraer a",
+paste =			"Pegar",
+move =			"Mover",
+size =			"Tamaño Total",
+export =		"Exportar Multimedia",
+themes =		"Temas Onemenu",
+ftp =			"FTP",
+restarthb =		"Reiniciar ONEMenu",
+reset =			"Reiniciar Vita",
+off =			"Apagar",
+qr =			"QR DownLoader",
+qrscan =		"QR Scanning",
+
+items =			"Items Sel: ",
+
+------------	Ftp 		---------------------------------------------------------------------------------
+textftp =		"Entra esta dirección IP en tu Dispositivo o PC",
+closeftp =		"Presiona START para cerrar la conexión FTP",
+loseftp =		"Conexion FTP Cerrada",
+
+------------	USB 		---------------------------------------------------------------------------------
+usb =			"USB",
+connectusb =	"Conecta un cable USB",
+usbconnection = "Conexión USB habilitada",
+cancelusb =		"Desactivar",
+usbmode =		"Modo Conexión USB",
+usbfail =		"Error... Falló la Conexión",
+sd2vita =		"Sd2Vita",
+memcard =		"Memory Card",
+gamecard =		"Game Card",
+
+imgerror =		"Error Imagen no soportada",
+
+background =	"Background: Presiona Triangulo",
+
+-- ## Visor TXT ##
+editline =		"Edit line",
+savechanges =	"Deseas guardar el archivo con los nuevos cambios ?",
+insertline =	"+ -> Insertar Linea",
+deleteline =	"+ <- Eliminar Linea",
+
+-- ## Music Player ##
+playing =		"Reproduciendo",
+paused =		"Pausado",
+time =			"Tiempo: ",
+tags =			"xx:xx:xx",
+sounderror =	"Error Sound Invalid",
+display =		"Apagar Display",
+
+--ONEMenu
+wait =			"Por Favor Espere...",
+
+switch =		"Realmente quieres mover ",
+nomemory =		"No hay memoria suficiente...",
+appremove =		"Realmente quieres Desinstalar ",
+manual =		"Realmente deseas Eliminar el Manual ?",
+notmanual =		"Manual Eliminado",
+notfindmanual =	"Manual no encontrado",
+removemanual =	"Eliminar Manual",
+rip =			"Realmente deseas Ripear el juego ?",
+ripgame =		"Ripear Juego",
+norip =			"Ningún archivo duplicado",
+free =			"Liberados",
+pressremove =	"Desinstalar",
+switchapp =		"Mover App",
+empty =			"Vacio/Error",
+toexplorer =	"Explorador de Archivos",
+partitions =	"Particiones",
+version =		"Version",
+size_ind =		"Size",
+size_patch =	"patch",
+getsize = 		"Calculando...",
+slides =		"Tema: ",
+pic1 =			"Mostrar PIC1s: ",
+fav =			"Marcar Favorito: ",
+up =			"Arriba",
+down =			"Abajo",
+original=		"Original",
+ps4 =			"PS4 XMB",
+yes =			"Si",
+no =			"No",
+start =			"START",
+sort =			"Sortear Categoría: ",
+title =			"Título",
+id =			"Id",
+
+--LiveArea Apps
+liveareapps =	"Apps de LiveArea",
+noliveareapps =	"Apps de LiveArea No Disponibles",
+
+-------------		Callbacks		-------------------------------------------------------------------------
+unsafe =		"Inseguro: ",
+file =			"Archivo: ",
+percent =		"Porcentaje: ",
+percent_total = "Porcentaje Total: ",
+total_size =	"Tamaño Total: ",
+movefiles =		"Archivos",
+updatedb =		"Actualizando DB...",
+
+--onAppInstall
+searchunsafe =	"Buscar en el vpk archivos inseguros o peligrosos!",
+unsafevpk =		"Permisos extendidos y acceso a información personal  y requeridos! \n\nTen cuidado con VPKs de fuentes no confiables! \n\nQuieres instalar bajo tu propio riesgo?",
+dangerousvpk =	"Peligro!!! Alto riesgo de dañar tu consola si se instala este VPK! \n\nTen cuidado con VPKs de fuentes no confiables! \n\nQuieres instalar bajo tu propio riesgo?",
+vpkunpack =		"Desempacando vpk...",
+install =		"Instalando...",
+
+--onExtractFiles
+extraction =	"Extrayendo...",
+
+--onScanningFiles
+scanning =		"Revisando...",
+size_unpk =		"Tamaño desempacado: ",
+
+--onNetGetFile
+download =		"Descargando...",
+success =		"Descarga Exitosa en",
+failed =		"Error al descargar",
+
+-------------------------------------------------------------------------------------------------------------
+
+--Launch PBP or VPK
+launchpbp =		"Iniciar juego/app ",
+confirm =		"Aceptar",
+warningvpk =	"\nPELIGRO ACCESO TOTAL\nVPK INSEGURO",
+warningvpk2 =	"PELIGRO ACCESO TOTAL",
+safevpk =		"VPK SEGURO",
+total_sizevpk = "Tamaño Total VPK: ",
+installvpk =	"INSTALAR VPK",
+installgame =	"INSTALAR APP",
+alertunsafe =	"VPK INSEGURO!!!!",
+alertdang =		"VPK PELIGROSO!!!!",
+installvpkdir =	"INSTALAR VPK DESDE CARPETA",
+launchbin =		"Ejecutar App ",
+errorinstall =	"Hubo un error al instalar",
+
+------------	ThemesONEMenu	----------------------------------------------------------------------------
+themesdone =	"Instalación Realizada!",
+notthemesmenu =	"No hay Temas disponibles para Onemenu",
+themeisready =	"El tema ya existe, Descargar nuevamente ?",
+reload =		"Recargar Tema Original",
+settinsthemes =	"Ir a Ajustes de Temas ?",
+themeactual =	"Actual: ",
+search =		"Búsqueda En Línea",
+themesonline =	"Temas en línea",
+errordecode =	"Error al descodificar la base de datos de temas!",
+errorgetbase =	"Error al obtener la base de datos de temas!",
+themeinstall =	"Tema Instalado!",
+errorunpack =	"Error al extraer el tema!",
+notdown =		"Error al descargar el tema!",
+
+------------	Advanced	---------------------------------------------------------------------------------
+advanced =		"Avanzado",
+refresh =		"RELOAD Apps",
+refreshdb =		"Actualizar DB",
+rebuilddb =		"Reconstruir DB",
+reloadconfig =	"TaiHen Config",
+configtxt =		"TaiHen Config Recargado",
+favorites =		"Sección Favoritos",
+restartupdb =	"Tú PSVita se reiniciará...\ny tu base de datos será Actualizada",
+restartredb =	"Tú PSVita se reiniciará...\nY tu base de datos será Reconstruida",
+restart =		"Tú PSVita se reiniciará...",
+shutdown =		"Tu PSVita se Apagara...",
+update =		"Activar AutoUpdate: ",
+pgf =			"PGF Font",
+pvf =			"PVF Font",
+
+------------	Favorites	---------------------------------------------------------------------------------
+nofavorites =	"Está función no puede activarse...\n\nMinimo Marcar 1 Favorito",
+delfavorites =	"Quitar de Favoritos ?",
+activate =		"Escanear solo Favoritos: ",
+removefav =		"Limpiar lista de Favoritos",
+emptyfav =		"Realmente deseas limpiar la lista de Favoritos ?",
+togglescan =	"Scan Favoritos: ",
+
+result =		"\nResultado: ",
+count =			"Total: ",
+sizeis =		"Tamaño es: ",
+filesfolders =	"Carpetas/Archivos",
+
+------------	Export Mulimedia	-------------------------------------------------------------------------
+opensettings =	"Abrir App Mp3/Galería/Videos ?",
+nofile =		"No hay Archivos Multimedia",
+mp3s =			"Archivo(s)  MP3 : ",
+mp4s =			"Archivo(s)  MP4 : ",
+imgs =			"Archivos(s) IMG : ",
+openexport =	"\nPor Favor, Ejecuta Music/Photos/Videos \n\n                Aplicación para leer tus archivos!",
+fail =			"Error",
+
+------------	Refresh LiveArea	-------------------------------------------------------------------------
+notinstalled =	"\Juego no instalado: ",
+gamesinst =		"\nTotal de juegos instalados: ",
+nogames =		"\nNingún Juego detectado",
+
+}
