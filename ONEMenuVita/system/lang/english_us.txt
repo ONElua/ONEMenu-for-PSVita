@@ -79,7 +79,7 @@ notfindmanual =	"Manual not exist",
 removemanual =	"Remove manual",
 rip =			"Do you really want to rip this game ?",
 ripgame =		"Rip Game",
-norip =			"No duplicated files found",
+norip =			"Ningún archivo duplicado",
 free =			"Free",
 pressremove =	"Uninstall",
 switchapp =		"Move App",
@@ -105,7 +105,7 @@ title =			"Title",
 id =			"Id",
 
 --LiveArea Apps
-liveareapps =	"LiveArea Apps",
+liveareapps =	"Livearea Apps",
 noliveareapps =	"LiveArea Apps Unavailable",
 
 -------------		Callbacks		-------------------------------------------------------------------------
@@ -149,7 +149,7 @@ installvpk =	"INSTALL VPK",
 installgame =	"INSTALL APP",
 alertunsafe =	"VPK UNSAFE!!!!",
 alertdang =		"VPK DANGEOROUS!!!!",
-installvpkdir =	"INSTALL VPK FROM DIR",
+installvpkdir =	"INSTALL APP FROM DIR",
 launchbin =		"Launch app: ",
 errorinstall =	"An error occurred while installing",
 
@@ -170,7 +170,7 @@ notdown =		"Error Downloading Theme!",
 
 ------------	Advanced	---------------------------------------------------------------------------------
 advanced =		"Advanced",
-refresh =		"LiveArea Apps",
+refresh =		"RELOAD Content",
 refreshdb =		"Update DB",
 rebuilddb =		"Rebuild DB",
 reloadconfig =	"Reload Config",

@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="03.00">
+      <![CDATA[
+- Now the submenu in main screen have 2 pages (press triangle to open, and alternate pages with L and R), Same for submenu in Explorer.<br>
+- Added the option to download and install ONEMenu themes to the main screen submenu.<br>
+- Added the option "RELOAD Content" Allows to install games (NONPDRM) in ux0:app (Thanks the plugin Nonpdrm from TheFloW).<br>
+- Added the option "Rip Game" to the main screen submenu, allows to free up some space by eliminating some game folders/files.<br>
+- Optimized the code a litle.<br>
+    ]]>
   <changes app_ver="02.05">
     <![CDATA[
 - Edit param.sfo (decrypted).<br>
