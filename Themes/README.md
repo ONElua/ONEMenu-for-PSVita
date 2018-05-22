@@ -17,9 +17,9 @@ Note: Remember an option its been added to download themes directly to the path 
 
 The Themes for ONEMenu have to be placed in the path ux0:data/ONEMENU/themes.<br>
 
-![header](screenshots/1MENUVITA6.png)
+![header](../screenshots/1MENUVITA6.png)
 
-![header](screenshots/themes2.png)
+![header](../screenshots/themes2.png)
 
 ++ Create a new folder with the theme name and place the next resources inside:.<br>
 
@@ -155,4 +155,4 @@ GRADSHADOWCOLOR = 0xC8FFFFFF<br>
 *Change only the Hex-Dec part for the desired color. (ABGR format)<br>
 Recommended website: ([Colors Hex](https://www.w3schools.com/colors/colors_hexadecimal.asp)).<br>
 
-![header](screenshots/themes1.png)
+![header](../screenshots/themes1.png)
