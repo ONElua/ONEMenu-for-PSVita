@@ -310,7 +310,7 @@ end
 
 --tmp0.CATEGORY: ISO/CSO UG, PSN EG, HBs MG, PS1 ME
 function show_msg_pbp(handle)
-	local bufftmp = -screen.toimage()-screen.buffertoimage()
+	bufftmp = screen.toimage()
 	local x,y = (960-420)/2,(544-420)/2
 
 	local icon0 = game.geticon0(handle.path)
