@@ -9,7 +9,7 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 - Now the submenu in main screen have 2 pages (press triangle to open, and alternate pages with L and R), Same for submenu in Explorer.<br>
 - Added the option to download and install ONEMenu themes to the main screen submenu.<br>
 - Added the option "RELOAD Content" Allows to install games (NONPDRM) in ux0:app (Thanks the plugin Nonpdrm from TheFloW).<br>
-- Added the option "Reduce Game Size" to the main screen submenu, allows to free up some space by eliminating some game folders/files.<br>
+- Added the option "Shrink Game" to the main screen submenu, allows to free up some space by eliminating some game folders/files.<br>
 - Optimized the code a litle.<br>
 
 ### Changelog 2.05 ###
