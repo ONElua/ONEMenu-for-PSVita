@@ -260,7 +260,7 @@ local uninstall_callback = function ()
 	end
 end
 
-local rip_callback = function ()
+local shrink_callback = function ()
 
 	if cat == 1 then--Only Vita Games in ux0:app
 
@@ -311,7 +311,7 @@ local rip_callback = function ()
 				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
 			end
 		else
-			os.message(strings.norip)
+			os.message(strings.nofiles)
 		end
 		os.delay(15)
 
@@ -336,7 +336,7 @@ local rip_callback = function ()
 		end
 
 		if #list_del > 0 then
-			if os.message(strings.rip.."\n\n                        ux0:rePatch:\n\n"..strings.count..#list_del.." "..strings.movefiles.." "..files.sizeformat(size_del or 0).." "..strings.free,1) == 1 then
+			if os.message(strings.shrink.."\n\n                        ux0:rePatch:\n\n"..strings.count..#list_del.." "..strings.movefiles.." "..files.sizeformat(size_del or 0).." "..strings.free,1) == 1 then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -345,7 +345,7 @@ local rip_callback = function ()
 				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
 			end
 		else
-			os.message(strings.norip)
+			os.message(strings.nofiles)
 		end
 		os.delay(15)
 
@@ -410,13 +410,13 @@ local switch_callback = function ()
 	--__GAME_MOVE_UR02UMA0=5
 	--__GAME_MOVE_UMA02UR0=6
 	local mov = __GAME_MOVE_UX02UR0
-	local loc1,loc2,v1,v2 = "ur0","uma0",__GAME_MOVE_UX02UR0,__GAME_MOVE_UX02UR0
+	local loc1,loc2,v1,v2 = "ur0","uma0",__GAME_MOVE_UX02UR0,__GAME_MOVE_UX02UMA0
 
 	if appman[cat].list[focus_index].dev == "ur0" then
 		loc1,loc2,v1,v2 = "ux0","uma0",__GAME_MOVE_UR02UX0,__GAME_MOVE_UR02UMA0
-	elseif appman[cat].list[focus_index].flag == "ux0" then
+	elseif appman[cat].list[focus_index].dev == "ux0" then
 		loc1,loc2,v1,v2 = "ur0","uma0",__GAME_MOVE_UX02UR0,__GAME_MOVE_UX02UMA0
-	elseif appman[cat].list[focus_index].flag == "uma0" then
+	elseif appman[cat].list[focus_index].dev == "uma0" then
 		loc1,loc2,v1,v2 = "ux0","ur0",__GAME_MOVE_UMA02UX0,__GAME_MOVE_UMA02UR0
 	end
 
@@ -650,7 +650,7 @@ function submenu_ctx.wakefunct()
 	submenu_ctx.options = { -- Handle Option Text and Option Function
 		{ text = strings.refresh,           funct = refresh_callback },
 		{ text = strings.pressremove,       funct = uninstall_callback },
-		{ text = strings.ripgame,           funct = rip_callback },
+		{ text = strings.shrinkgame,        funct = shrink_callback },
 		{ text = strings.switchapp,         funct = switch_callback },
 		{ text = strings.pic1..showpic,     funct = pic1_callback, pad = true },
 		{ text = strings.fav..favs,         funct = fav_callback,  pad = true },
