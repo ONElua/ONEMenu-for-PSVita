@@ -37,12 +37,13 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 
 **Uninstall**     Allows to uninstall selected app/game.
 
-**Reduce Game Size**      Allows to free up some space by eliminating some game folders/files such as: Game Manual, and some folders/files from ux0:app/(GAMEID) since those folders/files are also at ux0:patch/(GAMEID) (ux0:Repatch/(GAMEID)).
+**Shrink Game**  Allows to free up some space by eliminating some game folders/files such as: Game Manual, and some folders/files from ux0:app/(GAMEID) since those folders/files are also at ux0:patch/(GAMEID) (ux0:Repatch/(GAMEID)).
 
 This option is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDRM-modding/wiki#saving-memory-space-while-using-mods
 * NOTE: Be very careful after using this option, because if the folders/files get deleted from ux0:patch/(GAMEID) or ux0:rePatch/(GAMEID) the game will stop booting cause there won't be any folders/files left at ux0:app/(GAMEID)
 
 **Switch app**    Allows to move the selected app/game between the 3 available partitions (ux0-ur0-uma0).
+* NOTE: When moving apps/games to ur0 or uma0 some will not start or will give a savedata error.
 
 **Show PICS**     Allows to show the selected game PIC in the submenu.<br>
 
