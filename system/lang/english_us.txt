@@ -1,0 +1,220 @@
+--Texts
+strings = {
+
+-------------	Explorer	---------------------------------------------------------------------------------
+back =			"Return",
+copyfile =		"Copying: ",
+delfile =		"Deleting: ",
+creatfolder =	"Create Folder",
+newfolder =		"New Folder",
+pass =			"Use Pass?",
+ospass =		"PASS",
+
+--SubMenu
+copy =			"Copy",
+delete =		"Delete",
+makedir =		"MakeDir",
+rename =		"Rename",
+extract =		"Extract",
+cancel =		"Cancel",
+insvpkfromdir = "Install Game",
+extractto =		"Extract To",
+paste =			"Paste",
+move =			"Move",
+size =			"Size",
+export =		"Export Multimedia",
+themes =		"Themes ONEMenu",
+ftp =			"FTP",
+restarthb =		"Restart ONEMenu",
+reset =			"Power Reset",
+off =			"Shutdown",
+qr =			"QR DownLoader",
+qrscan =		"QR Scanning",
+
+items =			"Sel Items: ",
+
+------------	Ftp 		---------------------------------------------------------------------------------
+textftp =		"Enter this FTP address to your device or PC",
+closeftp =		"Press START to close FTP connection",
+loseftp =		"FTP Connection Closed",
+
+------------	USB 		---------------------------------------------------------------------------------
+usb =			"USB",
+connectusb =	"Connect a USB cable",
+usbconnection = "USB Connection Enabled",
+cancelusb =		"Disconnect",
+usbmode =		"USB Connection Mode",
+usbfail =		"Error... Connection Failed",
+sd2vita =		"SD2VITA",
+memcard =		"Memory Card",
+gamecard =		"Game Card",
+
+imgerror =		"Error Image not supported",
+
+background =	"Background: Press △",
+
+-- ## Visor TXT ##
+editline =		"Edit line",
+savechanges =	"Would you like to save changes?",
+insertline =	"+ -> Insert Line",
+deleteline =	"+ <- Delete Line",
+toolarge =		"File too large",
+nimplemented =	"Not implemented",
+Titleupdatedb = "To apply the TITLE it is necessary to do UPDATE DB\n\nOr use QCMA to make backup/restore of the game\n\nDo you want to update now ?",
+Stitlerestart = "To apply the STITLE it is necessary to restart the PSVita\n\nDo you want to restart now ?",
+
+-- ## Music Player ##
+playing =		"Playing",
+paused =		"Paused",
+time =			"Time: ",
+tags =			"xx:xx:xx",
+sounderror =	"Error Sound Invalid",
+display =		"Lock Display",
+
+--ONEMenu
+wait =			"Please wait...",
+
+switch =		"Really wish to move: ",
+nomemory =		"Not enough memory...",
+appremove =		"Really wish to Uninstall: ",
+manual =		"Do you really want to remove this manual? ",
+notmanual =		"Manual has been removed!",
+notfindmanual =	"Manual not exist",
+removemanual =	"Remove manual",
+shrink =		"Do you really want to shrink this game ?",
+shrinkgame =	"Shrink Game",
+nofiles =		"No duplicate files detected",
+free =			"Free",
+pressremove =	"Uninstall",
+switchapp =		"Move App",
+empty =			"Empty/Error",
+toexplorer =	"Explorer",
+partitions =	"Partitions",
+version =		"Version",
+size_ind =		"Size",
+size_patch =	"patch",
+getsize =		"Calculating...",
+slides =		"Style: ",
+pic1 =			"Show PIC1s: ",
+fav =			"Mark Favorite: ",
+up =			"Up",
+down =			"Down",
+original=		"Original",
+ps4 =			"PS4 XMB",
+yes =			"Yes",
+no =			"No",
+start =			"START",
+sort =			"Sort Category by: ",
+title =			"Title",
+id =			"Id",
+editbubble =	"Edit bubble",
+confirmdb =		"\nDo you want to update your database now ?\n\nThis is necessary for vita in order to recognize new bubble changes.",
+
+--LiveArea Apps
+liveareapps =	"Livearea Apps",
+noliveareapps =	"LiveArea Apps Unavailable",
+
+-------------		Callbacks		-------------------------------------------------------------------------
+unsafe =		"Unsafe: ",
+file =			"File: ",
+percent =		"Percent: ",
+percent_total = "Percent Total: ",
+total_size =	"Total Size: ",
+movefiles =		"File",
+updatedb =		"Update db...",
+
+--onAppInstall
+searchunsafe =	"Search VPK, Unsafe or Dangerous files!",
+unsafevpk =		"Extended permissions and personal info access required! \n\nUse caution with non trusted source packages! \n\nDo you want to install at your own risk?",
+dangerousvpk =	"Warning!!! High risk of bricking your device if this VPK is installed! \n\nUse caution with non trusted source packages! \n\nDo you want to install at your own risk?",
+vpkunpack =		"Unpacking VPK...",
+install =		"Installing...",
+
+--onExtractFiles
+extraction =	"Extraction...",
+
+--onScanningFiles
+scanning =		"Scanning...",
+size_unpk =		"Unpacked size: ",
+
+--onNetGetFile
+download =		"Downloading...",
+success =		"Successful download in",
+failed =		"Failed download",
+
+-------------------------------------------------------------------------------------------------------------
+
+--Launch PBP or VPK
+launchpbp =		"Launch game/app: ",
+confirm =		"Accept",
+warningvpk =	"\nWARNING FULL ACCESS\nUNSAFE VPK",
+warningvpk2 =	"WARNING FULL ACCESS",
+safevpk =		"VPK SAFE",
+total_sizevpk = "Total Size VPK: ",
+installvpk =	"INSTALL VPK",
+installgame =	"INSTALL APP",
+alertunsafe =	"VPK UNSAFE!!!!",
+alertdang =		"VPK DANGEOROUS!!!!",
+installvpkdir =	"INSTALL APP FROM DIR",
+launchbin =		"Launch app: ",
+errorinstall =	"An error occurred while installing",
+
+------------	ThemesONEMenu	----------------------------------------------------------------------------
+themesdone =	"Installation Completed!",
+notthemesmenu =	"There's no themes for ONEMenu yet",
+themeisready =	"Theme already exists, download again ?",
+reload =		"Reload Original Theme",
+settinsthemes =	"Go to Theme Settings?",
+themeactual =	"Now: ",
+search =		"Search Online",
+themesonline =	"Themes Online",
+errordecode =	"Error Decode Database of Themes!",
+errorgetbase =	"Error Get Database of Themes!",
+themeinstall =	"Theme Installed!",
+errorunpack =	"Error Unpack theme!",
+notdown =		"Error Downloading Theme!",
+
+------------	Advanced	---------------------------------------------------------------------------------
+advanced =		"Advanced",
+refresh =		"RELOAD Content",
+refreshdb =		"Update DB",
+rebuilddb =		"Rebuild DB",
+reloadconfig =	"Reload Config",
+configtxt =		"Reload taiHEN config.txt",
+favorites =		"Favorites Section",
+restartupdb =	"Your PSVita will Restart...\nand your database will be update",
+restartredb =	"Your PSVita will Restart...\nand your database will be rebuilt",
+restart =		"Your PSVita will Restart...",
+shutdown =		"Your PSVita will Shutdown...",
+update =		"Enable AutoUpdate: ",
+pgf =			"PGF Font",
+pvf =			"PVF Font",
+
+------------	Favorites	---------------------------------------------------------------------------------
+nofavorites =	"This function can't be activated...\n\nNeed at least one favorite",
+delfavorites =	"Remove from favorites?",
+activate =		"Scanning Only for favorites: ",
+removefav =		"Clean up Favorites list",
+emptyfav =		"You really want to empty\nthe Favorites list?",
+togglescan =	"Scan Favorites: ",
+
+result =		"\nResult: ",
+count =			"Count: ",
+sizeis =		"Size is: ",
+filesfolders =	"Files/Folders",
+
+------------	Export Mulimedia	-------------------------------------------------------------------------
+opensettings =	"Open app for MP3/Gallery/Video?",
+nofile =		"No multimedia files",
+mp3s =			"MP3 file(s) : ",
+mp4s =			"MP4 file(s) : ",
+imgs =			"IMG file(s) : ",
+openexport =	"\nExport completed, please launch Music/Photos/Videos\n\napplication to read your files !",
+fail =			"Error",
+
+------------	Refresh LiveArea	-------------------------------------------------------------------------
+notinstalled =	"\nGame not installed: ",
+gamesinst =		"\nTotal Installed Games: ",
+nogames =		"\nNo Games found",
+
+}
