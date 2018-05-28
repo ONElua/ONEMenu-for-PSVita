@@ -9,6 +9,8 @@
    Collaborators: BaltazaR4 & Wzjk.
 ]]
 
+__TITLE, __STITLE, __EDITB = "","",false
+
 categories = {
     { img = theme.data["psvita"] },  --cat 1
     { img = theme.data["hbvita"] },  --cat 2
@@ -302,7 +304,7 @@ local shrink_callback = function ()
 		end
 
 		if #list_del > 0 then
-			if os.message(strings.rip.."\n\n                        ux0:patch:\n\n"..strings.count..#list_del.." "..strings.movefiles.." "..files.sizeformat(size_del or 0).." "..strings.free,1) == 1 then
+			if os.message(strings.shrink.."\n\n                        ux0:patch:\n\n"..strings.count..#list_del.." "..strings.movefiles.." "..files.sizeformat(size_del or 0).." "..strings.free,1) == 1 then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -501,6 +503,62 @@ local switch_callback = function ()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 end
 
+local editsfo_callback = function ()
+	local pos_menu = submenu_ctx.scroll.sel
+	local vbuff = screen.toimage()
+
+	game.umount()
+	buttons.homepopup(0)
+		local res = game.mount("ux0:appmeta/"..appman[cat].list[focus_index].id)
+
+		--Edit SFO
+		local obj = {}
+		obj.path = "ux0:appmeta/"..appman[cat].list[focus_index].id.."/param.sfo"
+		obj.ext = "sfo"
+		--Clean
+		__TITLE, __STITLE, __EDITB = "","",true
+		local edit_sfo = visortxt(obj,true)
+
+	game.umount()
+	buttons.homepopup(1)
+
+	if edit_sfo then
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+		local reboot_updatedb, restart_only = false,false
+		--STitle,Title,ID
+		if __TITLE != "" then
+			os.titledb(__TITLE, appman[cat].list[focus_index].id)
+			if os.message(strings.Titleupdatedb,1) == 1 then reboot_updatedb = true end
+		end
+		if __STITLE != "" then
+			os.stitledb(__STITLE, appman[cat].list[focus_index].id)
+			if os.message(strings.Stitlerestart,1) == 1 then restart_only = true end
+		end
+
+		if reboot_updatedb then
+			os.delay(150)
+			_print=false
+			os.updatedb()
+			os.message(strings.restartupdb)
+			os.delay(1500)
+			power.restart()
+		end
+		if restart_only then
+			os.delay(1500)
+			power.restart()
+		end
+
+	end
+	__TITLE, __STITLE, __EDITB = "","",false
+
+	submenu_ctx.wakefunct()
+	submenu_ctx.scroll.sel = pos_menu
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+end
+
 local pic1_callback = function ()
 
 	local pos_menu = submenu_ctx.scroll.sel
@@ -592,6 +650,7 @@ local sort_callback = function ()
 		sorting = strings.id
 		table.sort(appman[cat].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
 	end
+
 	write_config()
 
 	submenu_ctx.close = true
@@ -652,6 +711,7 @@ function submenu_ctx.wakefunct()
 		{ text = strings.pressremove,       funct = uninstall_callback },
 		{ text = strings.shrinkgame,        funct = shrink_callback },
 		{ text = strings.switchapp,         funct = switch_callback },
+		{ text = strings.editbubble,        funct = editsfo_callback },
 		{ text = strings.pic1..showpic,     funct = pic1_callback, pad = true },
 		{ text = strings.fav..favs,         funct = fav_callback,  pad = true },
 	}
@@ -704,7 +764,11 @@ function submenu_ctx.draw()
 	end
 
 	if appman[cat].list[focus_index].fav then favs = strings.yes else favs = strings.no end
-	if appman[cat].sort == 1 then sorting = strings.title else sorting = strings.id end
+	--if appman[cat].sort == 1 then sorting = strings.title else sorting = strings.id end
+	if appman[cat].sort == 0 then sorting = strings.id
+		elseif appman[cat].sort == 1 then sorting = strings.title
+			elseif appman[cat].sort == 2 then sorting = "Region"
+	end
 
 	--gd,gp PSVITA:1	hbsvita2	mb PSM:3	EG PSP & ME PSX: 4		AdrenalineBubbles:5
 	if not submenu_ctx.close and not pic1 then

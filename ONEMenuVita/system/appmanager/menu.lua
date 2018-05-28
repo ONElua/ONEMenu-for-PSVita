@@ -22,11 +22,13 @@ for i=1,#appman do
 		else
 			appman[i].sort = tonumber(ini.read(__PATH_INI,"sort","sort"..i,"0"))
 		end
+
 		if appman[i].sort == 1 then
 			table.sort(appman[i].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
 		else
 			table.sort(appman[i].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
 		end
+	
 	end
 end
 

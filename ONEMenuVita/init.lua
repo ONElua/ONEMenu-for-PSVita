@@ -1,3 +1,18 @@
+--Init load prkxs
+__kernel, __user = false,false
+
+if files.exists("modules/kernel.skprx") then
+	if os.requirek("modules/kernel.skprx")==1 then __kernel = true end
+else
+	if os.requirek("ux0:VitaShell/module/kernel.skprx")==1 then	__kernel = true end
+end
+
+if files.exists("modules/user.suprx") then
+	if os.requireu("modules/user.suprx")==1 then __user = true end
+else
+	if os.requireu("ux0:VitaShell/module/user.suprx")==1 then __user = true end
+end
+
 --Creamos nuestra carpeta principal de Trabajo
 files.mkdir("ux0:data/ONEMENU/")
 
@@ -73,9 +88,11 @@ function fillappman(obj)
 		if files.exists(obj.path.."/data/boot.inf") or obj.id == "PSPEMUCFW" then
 			index = 5
 		else
+			local region = "N"
 			local sfo = game.info(obj.path.."/sce_sys/param.sfo")
 			if sfo and sfo.CONTENT_ID then
 				if sfo.CONTENT_ID:len() > 9 then index = 1 else	index = 2 end
+				region = sfo.CONTENT_ID[1]
 			else
 				index = 2
 			end
@@ -85,6 +102,7 @@ function fillappman(obj)
 		obj.path_img = "ur0:appmeta/"..obj.id.."/icon0.png"
 
 	end
+	obj.region = region or "N"
 
 	obj.img = iconDef
 	if __FAV == 1 then
@@ -134,7 +152,7 @@ function Scanning()
 		end
 
 	end
-	
+
 	local y,x = 1,1
 	while y <= __CATEGORIES do
 		if cat == 0 and appman[y].list[x] then cat = y end

@@ -553,11 +553,13 @@ local installgame_callback = function ()
 				if __FAV == 0 then
 					tmp_vpk.fav = false
 					table.insert(appman[index].list, tmp_vpk)
+
 					if appman[index].sort == 1 then
 						table.sort(appman[index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
 					else
 						table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
 					end
+
 					appman[index].scroll:set(appman[index].list,limit)
 				end
 			else

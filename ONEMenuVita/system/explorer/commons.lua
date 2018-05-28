@@ -261,7 +261,7 @@ function show_msg_vpk(obj_vpk)
 		local index = 1
 		if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5
 		else
-			if info.CONTENT_ID and info.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
+			if scan_vpk.sfo.CONTENT_ID and scan_vpk.sfo.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
 		end
 
 		--Search game in appman[index].list
@@ -274,11 +274,13 @@ function show_msg_vpk(obj_vpk)
 			if __FAV == 0 then
 				tmp_vpk.fav = false
 				table.insert(appman[index].list, tmp_vpk)
+
 				if appman[index].sort == 1 then
 					table.sort(appman[index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
 				else
 					table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
 				end
+
 				appman[index].scroll:set(appman[index].list,limit)
 			end
 		else
@@ -584,10 +586,15 @@ end
 
 function files.readlines(path,index) -- Lee una table o string si se especifica linea
 	if files.exists(path) then
-		local contenido = {}
+		local contenido,cont_lines = {},0
 		for line in io.lines(path) do
+
+			cont_lines += 1
+			if cont_lines > 9999 then os.message(strings.toolarge) return nil end
+
 			if line:byte(#line) == 13 then line = line:sub(1,#line-1) end --Remove CR == 13
 			table.insert(contenido,line)
+			
 		end
 
 		if index == nil then return contenido
@@ -608,6 +615,9 @@ function visortxt(handle, flag_edit)
 	else texteditorInfo.list = files.readlines(handle.path) end
 
 	local sfo_empty = false
+
+	if texteditorInfo.list == nil then return false end
+
 	if #texteditorInfo.list == 0 then
 		table.insert(texteditorInfo.list, "")
 		if handle.ext == "sfo" then sfo_empty=true end
@@ -615,7 +625,7 @@ function visortxt(handle, flag_edit)
 
 	if handle.ext == "sfo" then table.sort(texteditorInfo.list) end
 
-	if #texteditorInfo.list > 9999 then os.message("File too large") return end
+	if #texteditorInfo.list > 9999 then os.message(strings.toolarge) return false end
 
 	local texteditorOrdinal_x = 10
 	local texteditorOrdinalWidth = texteditorOrdinal_x + screen.textwidth("0000") + texteditorOrdinal_x
@@ -744,6 +754,38 @@ function visortxt(handle, flag_edit)
 			buttons.analogtodpad()
 		end
 
+		if buttons[cancel] then
+			local _flag = false
+			if textHadChange then
+				if os.message(strings.savechanges,1) == 1 then
+					if handle.ext == "sfo" then
+						-- To save changes if wish!
+						for k,v in pairs(changes) do
+							--if v.field != "VERSION" then
+								if v.number then
+									game.setsfo(handle.path, k, v.number)
+								elseif v.string then
+									game.setsfo(handle.path, k, tostring(v.string))
+								end
+							--end
+						end
+						_flag = true
+					else
+						write_txt(handle.path, texteditorInfo.list)
+					end
+					--Update file (info)
+					local info = files.info(handle.path)
+					if info then
+						if handle.size then	handle.size = files.sizeformat(info.size or 0) end
+						if handle.mtime then handle.mtime = info.mtime end
+					end
+					infodevices()
+				end
+			end
+			if _flag then return true else return false end
+			break
+		end
+
 		if buttons[accept] and flag_edit then
 			if handle.ext == "sfo" and not sfo_empty then
 				local numeric = false
@@ -751,31 +793,72 @@ function visortxt(handle, flag_edit)
 
 				field,value=texteditorInfo.list[texteditorInfo.focus]:match("(.+) = (.+)")
 
-				local newStr = nil
-				if numeric then
-					if value then value=tonumber(value:gsub("0x", ""),16) end			--Hex-Dec
-					newStr = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
-				else
-					newStr = osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
-				end
+				if field then
+					if __EDITB then
+						if field:upper() == "STITLE" or field:upper() == "TITLE" then
+							local newStr = nil
+							if numeric then
+								if value then value=tonumber(value:gsub("0x", ""),16) end			--Hex-Dec
+								newStr = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
+							else
+								newStr = tostring(osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT))
+							end
 
-				if newStr then
-					if value != newStr then
-						textHadChange = true
-						changes[texteditorInfo.focus] = {}
-						if not changes[field] then changes[field] = {} end
-						--Update line & set changes to late save!
-						if numeric then
-							texteditorInfo.list[texteditorInfo.focus] = string.format("%s = 0x%X", field, tonumber(newStr))
-							changes[field].number = tonumber(newStr)
-						else
-							changes[field].string = ""
-							texteditorInfo.list[texteditorInfo.focus] = string.format("%s = %s", field, newStr)
-							changes[field].string = newStr
+							if newStr then
+								if value != newStr then
+
+									textHadChange = true
+									if field:upper() == "STITLE" then __STITLE = newStr end
+									if field:upper() == "TITLE" then __TITLE = newStr end
+
+									changes[texteditorInfo.focus] = {}
+									if not changes[field] then changes[field] = {} end
+									--Update line & set changes to late save!
+									--changes[field].field = tostring(field:upper())
+									if numeric then
+										texteditorInfo.list[texteditorInfo.focus] = string.format("%s = 0x%X", field, tonumber(newStr))
+										changes[field].number = tonumber(newStr)
+										
+									else
+										changes[field].string = ""
+										texteditorInfo.list[texteditorInfo.focus] = string.format("%s = %s", field, newStr)
+										changes[field].string = newStr
+									end
+								end
+							end--newStr
 						end
-					end
-				end
+					else
+						if field:upper() == "APP_VER" or field:upper() == "VERSION" or
+							field:upper() == "PSP2_DISP_VER" or field:upper() == "TITLE_ID" then os.message(strings.notimplemented)--Nothing.. ITs bug :(
+						else
+							local newStr = nil
+							if numeric then
+								if value then value=tonumber(value:gsub("0x", ""),16) end			--Hex-Dec
+								newStr = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
+							else
+								newStr = osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
+							end
 
+							if newStr then
+								if value != newStr then
+									textHadChange = true
+									changes[texteditorInfo.focus] = {}
+									if not changes[field] then changes[field] = {} end
+
+									--Update line & set changes to late save!
+									if numeric then
+										texteditorInfo.list[texteditorInfo.focus] = string.format("%s = 0x%X", field, tonumber(newStr))
+										changes[field].number = tonumber(newStr)
+									else
+										changes[field].string = ""
+										texteditorInfo.list[texteditorInfo.focus] = string.format("%s = %s", field, newStr)
+										changes[field].string = newStr
+									end
+								end
+							end
+						end
+					end--__EDITB
+				end
 			else
 				local editStr = texteditorInfo.list[texteditorInfo.focus]
 				local newStr = osk.init(strings.editline, editStr, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
@@ -784,33 +867,6 @@ function visortxt(handle, flag_edit)
 					textHadChange = true
 				end
 			end
-		end
-
-		if buttons[cancel] then
-			if textHadChange then
-				if os.message(strings.savechanges,1) == 1 then
-					if handle.ext == "sfo" then
-						-- To save changes if wish!
-						for k,v in pairs(changes) do
-							if v.number then
-								game.setsfo(handle.path, k, v.number)
-							elseif v.string then
-								game.setsfo(handle.path, k, tostring(v.string))
-							end
-						end
-					else
-						write_txt(handle.path, texteditorInfo.list)
-					end
-					--Update file (info)
-					local info = files.info(handle.path)
-					if info then
-						handle.size = files.sizeformat(info.size or 0)
-						handle.mtime = info.mtime
-					end
-					infodevices()
-				end
-			end
-			break
 		end
 
 		if buttons.released.triangle then hold = false end

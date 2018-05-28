@@ -16,7 +16,7 @@ __LANG      = os.language()
 files.mkdir(__PATH_LANG)
 
 --Aqui checamos las traducciones
-__STRINGS   = 165
+__STRINGS   = 170
 
 if not files.exists(__PATH_LANG.."english_us.txt") then files.copy("system/lang/english_us.txt",__PATH_LANG)
 else
