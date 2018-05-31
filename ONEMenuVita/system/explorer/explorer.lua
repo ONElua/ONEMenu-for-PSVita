@@ -541,7 +541,9 @@ local installgame_callback = function ()
 			if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5
 			else
 				if info.CONTENT_ID and info.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
+				tmp_vpk.region = regions[info.CONTENT_ID[1]] or 5
 			end
+			tmp_vpk.Nregion = name_region[tmp_vpk.region] or ""
 
 			--Search game in appman[index].list
 			local search = 0

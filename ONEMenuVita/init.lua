@@ -66,18 +66,18 @@ IMAGE_PORT_I = channel.new("IMAGE_PORT_I")
 IMAGE_PORT_O = channel.new("IMAGE_PORT_O")
 THID_IMAGE = thread.new("system/appmanager/thread_img.lua")
 
+regions = { A=1,E=2,J=3,U=4 }
+name_region = { "(A)","(E)","(J)","(U)", "" }
+--Region:
+--Asia,Eur,Jpn,Usa,Unk	<-- Asc: 1,2,3,4,5
+--Unk,Usa,Jpn,Eur,Asia	<-- Des: 5,4,3,2,1
+	
 static_void = {}
 for i=1,__CATEGORIES do static_void[i] = {x=1} end
 
 function fillappman(obj)
 
 	if obj.id == __ID then return end
-
-	local regions = { A=1,E=2,J=3,U=4 }
-	local name_region = { "(A)","(E)","(J)","(U)", "" }
---Region:
---Asia,Eur,Jpn,Usa,Unk	<-- Asc: 1,2,3,4,5
---Unk,Usa,Jpn,Eur,Asia	<-- Des: 5,4,3,2,1
 
 	local index = 1
 

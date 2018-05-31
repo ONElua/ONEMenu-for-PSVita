@@ -99,6 +99,10 @@ function refresh_init(img)
 					list[i].img = theme.data["icodef"]
 				end
 
+				local sfo = game.info(list[i].path.."/sce_sys/param.sfo")
+				if sfo and sfo.CONTENT_ID then list[i].region = regions[sfo.CONTENT_ID[1]] or 5	end
+				list[i].Nregion = name_region[list[i].region] or ""
+
 				--Search game in appman[index].list
 				local search = 0
 				for j=1,appman[list[i].index].scroll.maxim do
