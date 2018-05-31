@@ -109,11 +109,25 @@ function refresh_init(img)
 					if __FAV == 0 then
 						list[i].fav = false
 						table.insert(appman[list[i].index].list, list[i])
-						if appman[list[i].index].sort == 1 then
-							table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+
+						if list[i].index == 1 and appman[list[i].index].sort == 3 then
+							table.sort(appman[list[i].index].list, tableSortReg)
 						else
-							table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+							if appman[list[i].index].sort == 0 then
+								if appman[list[i].index].asc == 1 then
+									table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+								else
+									table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.id)>string.lower(b.id) end)
+								end
+							else
+								if appman[list[i].index].asc == 1 then
+									table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+								else
+									table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.title)>string.lower(b.title) end)
+								end
+							end
 						end
+
 						appman[list[i].index].scroll:set(appman[list[i].index].list,limit)
 					end
 				else

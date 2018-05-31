@@ -11,24 +11,40 @@
 
 --Asignamos limites y las img para nuestras categorias
 for i=1,#appman do
+
 	appman[i].scroll = newScroll(appman[i].list,limit)
 	appman[i].slide.img = categories[i].img
 	if appman[i].slide.img then
 		appman[i].slide.w = appman[i].slide.img:getw()
 	end
-	if #appman[i].list > 0 then
-		if i==1 then
-			appman[i].sort = tonumber(ini.read(__PATH_INI,"sort","sort","0"))
-		else
-			appman[i].sort = tonumber(ini.read(__PATH_INI,"sort","sort"..i,"0"))
-		end
 
-		if appman[i].sort == 1 then
-			table.sort(appman[i].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+	if i==1 then
+		appman[i].sort = tonumber(ini.read(__PATH_INI,"sort","sort","0"))
+		appman[i].asc = tonumber(ini.read(__PATH_INI,"sort","asc","1"))
+	else
+		appman[i].sort = tonumber(ini.read(__PATH_INI,"sort","sort"..i,"0"))
+		appman[i].asc = tonumber(ini.read(__PATH_INI,"sort","asc"..i,"1"))
+	end
+
+	if #appman[i].list > 0 then
+
+		if i == 1 and appman[i].sort == 2 then
+			table.sort(appman[i].list, tableSortReg)
 		else
-			table.sort(appman[i].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+			if appman[i].sort == 0 then
+				if appman[i].asc == 1 then
+					table.sort(appman[i].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+				else
+					table.sort(appman[i].list, function (a,b) return string.lower(a.id)>string.lower(b.id) end)
+				end
+			elseif appman[i].sort == 1 then
+				if appman[i].asc == 1 then
+					table.sort(appman[i].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+				else
+					table.sort(appman[i].list, function (a,b) return string.lower(a.title)>string.lower(b.title) end)
+				end
+			end
 		end
-	
 	end
 end
 
@@ -256,7 +272,7 @@ function focus_icon()
 
 	end
 
-	screen.print(10,520,appman[cat].list[focus_index].dev..": "..appman[cat].list[focus_index].id,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+	screen.print(10,520,appman[cat].list[focus_index].dev..": "..appman[cat].list[focus_index].id.." "..appman[cat].list[focus_index].Nregion,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 	screen.print(955,520,os.date(_time.."  %m/%d/%y").." ("..#appman[cat].list..")",1,theme.style.DATETIMECOLOR,color.gray,__ARIGHT)
 
 end

@@ -275,10 +275,22 @@ function show_msg_vpk(obj_vpk)
 				tmp_vpk.fav = false
 				table.insert(appman[index].list, tmp_vpk)
 
-				if appman[index].sort == 1 then
-					table.sort(appman[index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+				if index == 1 and appman[index].sort == 3 then
+					table.sort(appman[index].list, tableSortReg)
 				else
-					table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+					if appman[index].sort == 0 then
+						if appman[index].asc == 1 then
+							table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+						else
+							table.sort(appman[index].list ,function (a,b) return string.lower(a.id)>string.lower(b.id) end)
+						end
+					else
+						if appman[index].asc == 1 then
+							table.sort(appman[index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+						else
+							table.sort(appman[index].list ,function (a,b) return string.lower(a.title)>string.lower(b.title) end)
+						end
+					end
 				end
 
 				appman[index].scroll:set(appman[index].list,limit)
@@ -801,7 +813,7 @@ function visortxt(handle, flag_edit)
 								if value then value=tonumber(value:gsub("0x", ""),16) end			--Hex-Dec
 								newStr = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
 							else
-								newStr = tostring(osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT))
+								newStr = osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
 							end
 
 							if newStr then
@@ -829,7 +841,7 @@ function visortxt(handle, flag_edit)
 						end
 					else
 						if field:upper() == "APP_VER" or field:upper() == "VERSION" or
-							field:upper() == "PSP2_DISP_VER" or field:upper() == "TITLE_ID" then os.message(strings.notimplemented)--Nothing.. ITs bug :(
+							field:upper() == "PSP2_DISP_VER" or field:upper() == "TITLE_ID" then os.message(strings.nimplemented)--Nothing.. ITs bug :(
 						else
 							local newStr = nil
 							if numeric then

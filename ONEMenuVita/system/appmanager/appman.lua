@@ -393,17 +393,17 @@ local shrink_callback = function ()
 		else
 			os.message(strings.notfindmanual)
 		end
-		os.delay(15)
-		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 		infodevices()
+		os.delay(15)
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 	end
 end
 
 local switch_callback = function ()
 
-	if appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG" or appman[cat].list[focus_index].type == "ME" then return end
+	if cat == 1 or appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG" or appman[cat].list[focus_index].type == "ME" then return end
 
 	--__GAME_MOVE_UX02UR0=1
 	--__GAME_MOVE_UR02UX0=2
@@ -639,20 +639,120 @@ end
 
 local sort_callback = function ()
 
-	submenu_ctx.wakefunct2()
+	local options = {
+		{ text = strings.id },
+		{ text = strings.title },
+	}
+	if cat == 1 then
+		table.insert(options, { text = strings.region })
+	end
 
-	if appman[cat].sort == 0 then
-		appman[cat].sort = 1
-		sorting = strings.title
-		table.sort(appman[cat].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-	elseif appman[cat].sort == 1 then
-		appman[cat].sort = 0
-		sorting = strings.id
-		table.sort(appman[cat].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+	local scroll_op,cccolor,mov = newScroll(options, #options),"",1
+
+	local vbuff = screen.toimage()
+	while true do
+		buttons.read()
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+		screen.print(350,80,strings.list_sort,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+
+		local y = 100
+		for i=scroll_op.ini,scroll_op.lim do
+			if i == scroll_op.sel then cccolor = color.green else cccolor = color.white end
+			screen.print(350,y, options[i].text,1.0,cccolor,theme.style.TXTBKGCOLOR,__ARIGHT)
+			y+=22
+		end
+
+		screen.flip()
+
+		if buttons.up then scroll_op:up() elseif buttons.down then scroll_op:down() end
+
+		if buttons[cancel] then
+			os.delay(15)
+			if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+			return
+		end
+
+		if buttons[accept] then
+			if scroll_op.sel == 1 then mov = 1
+				elseif scroll_op.sel == 2 then mov = 2
+					elseif scroll_op.sel == 3 then mov = 3
+			end
+			break
+		end
+
+	end--while
+
+	options = {
+		{ text = strings.up_sort },
+		{ text = strings.down_sort },
+	}
+	scroll_op:set(options, #options)
+	cccolor = ""
+
+	local sort_asc = 1
+	while true do
+		buttons.read()
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+		local y = 100
+		for i=scroll_op.ini,scroll_op.lim do
+			if i == scroll_op.sel then cccolor = color.green else cccolor = color.white end
+			screen.print(350,y, options[i].text,1.0,cccolor,theme.style.TXTBKGCOLOR,__ARIGHT)
+			y+=22
+		end
+
+		screen.flip()
+
+		if buttons.up then scroll_op:up() elseif buttons.down then scroll_op:down() end
+
+		if buttons[cancel] then
+			os.delay(15)
+			if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+			return
+		end
+
+		if buttons[accept] then
+			if scroll_op.sel == 1 then sort_asc = 1
+				elseif scroll_op.sel == 2 then sort_asc = 0
+			end
+			break
+		end
+	end--while
+
+	os.delay(250)
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait(strings.list_refresh)
+	os.delay(250)
+
+	
+	if cat == 1 and mov == 3 then
+		appman[cat].sort,appman[cat].asc = 2,sort_asc
+		sorting = strings.region
+		table.sort(appman[cat].list, tableSortReg)
+	else
+		if mov == 1 then
+			appman[cat].sort,appman[cat].asc = 0,sort_asc
+			sorting = strings.id
+			if appman[cat].asc == 1 then
+				table.sort(appman[cat].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+			else
+				table.sort(appman[cat].list, function (a,b) return string.lower(a.id)>string.lower(b.id) end)
+			end
+		elseif mov == 2 then
+			appman[cat].sort,appman[cat].asc = 1,sort_asc
+			sorting = strings.title
+			if appman[cat].asc == 1 then
+				table.sort(appman[cat].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+			else
+				table.sort(appman[cat].list, function (a,b) return string.lower(a.title)>string.lower(b.title) end)
+			end
+		end
 	end
 
 	write_config()
-
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 	submenu_ctx.close = true
 end
 
@@ -764,10 +864,10 @@ function submenu_ctx.draw()
 	end
 
 	if appman[cat].list[focus_index].fav then favs = strings.yes else favs = strings.no end
-	--if appman[cat].sort == 1 then sorting = strings.title else sorting = strings.id end
+
 	if appman[cat].sort == 0 then sorting = strings.id
 		elseif appman[cat].sort == 1 then sorting = strings.title
-			elseif appman[cat].sort == 2 then sorting = "Region"
+			elseif appman[cat].sort == 2 then sorting = strings.region
 	end
 
 	--gd,gp PSVITA:1	hbsvita2	mb PSM:3	EG PSP & ME PSX: 4		AdrenalineBubbles:5
@@ -872,7 +972,24 @@ function submenu_ctx.draw()
 				screen.print(12, h, submenu_ctx.options[i].text, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
 			end
 
-			if submenu_ctx.type == 2 and i == 4 then
+			if submenu_ctx.type == 2 and i == 3 then
+				h += 70
+
+				if screen.textwidth(strings.sortnow) > 320 then
+					if appman[cat].asc == 1 then
+						xprint = screen.print(xprint, 165, strings.sortnow.." "..sorting.."/"..strings.up_sort, 1, color.white,theme.style.TXTBKGCOLOR, __SLEFT,320)
+					else
+						xprint = screen.print(xprint, 165, strings.sortnow.." "..sorting.."/"..strings.down_sort, 1, color.white,theme.style.TXTBKGCOLOR, __SLEFT,320)
+					end
+				else
+					if appman[cat].asc == 1 then
+						screen.print(12, 165, strings.sortnow.." "..sorting.."/"..strings.up_sort, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
+					else
+						screen.print(12, 165, strings.sortnow.." "..sorting.."/"..strings.down_sort, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
+					end
+					xprint = 12
+				end
+			elseif submenu_ctx.type == 2 and i == 4 then
 				h += 45
 			else
 				h += 26

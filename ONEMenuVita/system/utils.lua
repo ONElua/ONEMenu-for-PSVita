@@ -16,7 +16,7 @@ __LANG      = os.language()
 files.mkdir(__PATH_LANG)
 
 --Aqui checamos las traducciones
-__STRINGS   = 170
+__STRINGS   = 177
 
 if not files.exists(__PATH_LANG.."english_us.txt") then files.copy("system/lang/english_us.txt",__PATH_LANG)
 else
@@ -229,11 +229,15 @@ function write_config()
 	ini.write(__PATH_INI,"favs","scan",__FAV)
 	ini.write(__PATH_INI,"update","update",__UPDATE)
 --sort for categories
-	ini.write(__PATH_INI,"sort","sort",appman[1].sort)
-	ini.write(__PATH_INI,"sort","sort2",appman[2].sort)
-	ini.write(__PATH_INI,"sort","sort3",appman[3].sort)
-	ini.write(__PATH_INI,"sort","sort4",appman[4].sort)
-	ini.write(__PATH_INI,"sort","sort5",appman[5].sort)
+	for i=1,#appman do
+		if i==1 then
+			ini.write(__PATH_INI,"sort","sort",appman[i].sort)
+			ini.write(__PATH_INI,"sort","asc",appman[i].asc)
+		else
+			ini.write(__PATH_INI,"sort","sort"..i,appman[i].sort)
+			ini.write(__PATH_INI,"sort","asc"..i,appman[i].asc)
+		end
+	end
 --sort for sys apps
 	ini.write(__PATH_INI,"sys","sort",system.sort)
 end
@@ -255,4 +259,11 @@ function isTouched(x,y,sx,sy)
 		return true
 	end
 	return false
+end
+
+function tableSortReg(a,b)
+	if (string.lower(a.region) < string.lower(b.region)) then if appman[1].asc == 1 then return true else return false end
+		elseif (string.lower(a.region) > string.lower(b.region)) then if appman[1].asc == 1 then return false else return true end
+			else return string.lower(a.id) < string.lower(b.id)
+	end
 end

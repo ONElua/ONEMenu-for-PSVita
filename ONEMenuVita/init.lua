@@ -73,7 +73,13 @@ function fillappman(obj)
 
 	if obj.id == __ID then return end
 
-	local index=1
+	local regions = { A=1,E=2,J=3,U=4 }
+	local name_region = { "(A)","(E)","(J)","(U)", "" }
+--Region:
+--Asia,Eur,Jpn,Usa,Unk	<-- Asc: 1,2,3,4,5
+--Unk,Usa,Jpn,Eur,Asia	<-- Des: 5,4,3,2,1
+
+	local index = 1
 
 	if obj.type == "mb" then
 		index = 3
@@ -88,11 +94,10 @@ function fillappman(obj)
 		if files.exists(obj.path.."/data/boot.inf") or obj.id == "PSPEMUCFW" then
 			index = 5
 		else
-			local region = "N"
 			local sfo = game.info(obj.path.."/sce_sys/param.sfo")
 			if sfo and sfo.CONTENT_ID then
 				if sfo.CONTENT_ID:len() > 9 then index = 1 else	index = 2 end
-				region = sfo.CONTENT_ID[1]
+				obj.region = regions[sfo.CONTENT_ID[1]] or 5
 			else
 				index = 2
 			end
@@ -102,7 +107,7 @@ function fillappman(obj)
 		obj.path_img = "ur0:appmeta/"..obj.id.."/icon0.png"
 
 	end
-	obj.region = region or "N"
+	obj.Nregion = name_region[obj.region] or ""
 
 	obj.img = iconDef
 	if __FAV == 1 then
