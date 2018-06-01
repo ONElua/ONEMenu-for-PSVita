@@ -642,6 +642,8 @@ function visortxt(handle, flag_edit)
 	if #texteditorInfo.list > 9999 then os.message(strings.toolarge) return false end
 
 	local texteditorOrdinal_x = 10
+	if __FNT == 3 then texteditorOrdinal_x = 15 end
+
 	local texteditorOrdinalWidth = texteditorOrdinal_x + screen.textwidth("0000") + texteditorOrdinal_x
 	local texteditorDefaultText_x = texteditorOrdinalWidth
 	local texteditorText_x = texteditorDefaultText_x
