@@ -20,6 +20,10 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 - Added the option "Shrink Game" to the main screen submenu, allows to free up some space by eliminating some game folders/files.<br>
 - Optimized the code a litle.<br>
 
+![header](screenshots/1MENUVITA7.png)
+
+![header](screenshots/1MENUVITA8.png)
+
 ### Changelog 2.05 ###
 - Edit param.sfo (decrypted).<br>
 - Fix automatic network update (Add TLS v1.2 Support).<br>
