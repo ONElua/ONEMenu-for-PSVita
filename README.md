@@ -5,6 +5,14 @@
 **OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories.<br>
 Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db.
 
+### Changelog 3.01 ###
+- Added option Edit Bubble (by TheRadziu) allowing to edit the game STITLE and TITLE from the SFO at appmeta (Thanks to TheFloW for User/Kernel Modules).<br>
+- Added sort list by Region.<br>
+- Now you can set the sorting categories to Ascendant/Descendant.<br>
+- Now the option Move App will only be enabled for homebrews.<br>
+- Now the pvf font is shown in Bold style (improving presentation).<br>
+- Took care of some bugs.<br>
+
 ### Changelog 3.00 ###
 - Now the submenu in main screen have 2 pages (press triangle to open, and alternate pages with L and R), Same for submenu in Explorer.<br>
 - Added the option to download and install ONEMenu themes to the main screen submenu.<br>
@@ -104,13 +112,15 @@ Favorites section to manage the games/apps marked as faverites and/or enable the
 
 # Credits
 *Xerpi* for vita2d.<br>
-*TheFloW* Pkg installer & USB Modules.<br>
+*TheFloW* Pkg installer & USB Modules & User/Kernel Modules.<br>
 *Yifan-lu, XYZ and Davee* and every coder and dev contributing to Vitasdk.<br>
 *Team Molecule* for Henkaku.<br>
 *WZ-JK* For Graphics.<br>
+*Yizhi gai* For the text editor.<br>
 Testers:<br>
 *([BaltazaR4](https://twitter.com/baltazarregala4)).*<br>
 *([thehero_](https://twitter.com/TheheroGAC)).*<br>
 *([Applelo1](https://twitter.com/Applelo1)).*<br>
 *([Tuto Pro Play](https://twitter.com/Tuto_Pro_Play)).*<br>
+*([TheRadziu](https://twitter.com/AluProductions)).*<br>
 

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="03.01">
+      <![CDATA[
+- Added option Edit Bubble (by TheRadziu) allowing to edit the game STITLE and TITLE from the SFO at appmeta.<br>
+- Added sort list by Region.<br>
+- Now you can set the sorting categories to Ascendant/Descendant.<br>
+- Now the option Move App will only be enabled for homebrews.<br>
+- Now the pvf font is shown in Bold style (improving presentation).<br>
+- Took care of some bugs.<br>
+    ]]>
   <changes app_ver="03.00">
       <![CDATA[
 - Now the submenu in main screen have 2 pages (press triangle to open, and alternate pages with L and R), Same for submenu in Explorer.<br>
