@@ -1,0 +1,226 @@
+--Texts
+strings = {
+
+-------------	Explorer	---------------------------------------------------------------------------------
+back =			"Indietro",
+copyfile =		"Copia in corso: ",
+delfile =		"Cancellazione in corso: ",
+creatfolder =	"Crea Cartella",
+newfolder =		"Nuova Cartella",
+pass =			"Usare Pass?",
+ospass =		"PASS",
+
+--SubMenu
+copy =			"Copia",
+delete =		"Cancella",
+makedir =		"MakeDir",
+rename =		"Rinomina",
+extract =		"Estrai",
+cancel =		"Cancella",
+insvpkfromdir = "Installa Gioco",
+extractto =		"Estrai su",
+paste =			"Incolla",
+move =			"Sposta",
+size =			"Dimensione",
+export =		"Esporta file Multimediale",
+themes =		"Temi ONEMenu",
+ftp =			"FTP",
+restarthb =		"Riavvia ONEMenu",
+reset =			"Power Reset",
+off =			"Spegni",
+qr =			"QR DownLoader",
+qrscan =		"QR Scanning",
+
+items =			"Elementi selezionati: ",
+
+------------	Ftp 		---------------------------------------------------------------------------------
+textftp =		"Inserisci questo indirizzo FTP sul tuo dispositivo o PC",
+closeftp =		"Premere START per chiudere la connessione FTP",
+loseftp =		"Connessione FTP chiusa",
+
+------------	USB 		---------------------------------------------------------------------------------
+usb =			"USB",
+connectusb =	"Collegare un cavo USB",
+usbconnection = "Connessione USB abilitata",
+cancelusb =		"Disconnetti",
+usbmode =		"Modalità di connessione USB",
+usbfail =		"Errore... Connessione Fallita",
+sd2vita =		"SD2VITA",
+memcard =		"Memory Card",
+gamecard =		"Game Card",
+
+imgerror =		"Errore Immagine non supportata",
+
+background =	"Sfondo: Premere △",
+
+-- ## Visor TXT ##
+editline =		"Modifica linea",
+savechanges =	"Vuoi salvare le modifiche?",
+insertline =	"+ -> Inserisci Linea",
+deleteline =	"+ <- Cancella Linea",
+toolarge =		"File troppo grande",
+nimplemented =	"Non implementato",
+Titleupdatedb = "Per applicare la modifica al TITLE è necessario eseguire l'aggiornamento del DB\n\nOppure puoi usare QCMA per fare il backup / ripristinare il gioco\n\nVuoi aggiornareil DB ora?",
+Stitlerestart = "Per applicare la modifica al STITLE è necessario riavviare la PSVita\n\nVuoi riavviare ora?",
+
+-- ## Music Player ##
+playing =		"In riproduzione",
+paused =		"In pausa",
+time =			"Tempo: ",
+tags =			"xx:xx:xx",
+sounderror =	"Errore audio non valido",
+display =		"Blocca Display",
+
+--ONEMenu
+wait =			"Attendere prego...",
+
+switch =		"Sicuro di voler spostare: ",
+nomemory =		"Memoria insufficiente...",
+appremove =		"Sicuro di voler disinstallare: ",
+manual =		"Si desidera rimuovere questo manuale? ",
+notmanual =		"Manuale è stato rimosso!",
+notfindmanual =	"Manuale non esiste",
+removemanual =	"Rimosso manuale",
+shrink =		"Vuoi davvero rimpicciolire questo gioco ?",
+shrinkgame =	"Gioco rimpicciolito",
+nofiles =		"Nessun file duplicato rilevato",
+free =			"Libero",
+pressremove =	"Disinstalla",
+switchapp =		"Sposta App",
+empty =			"Vuoto/Errore",
+toexplorer =	"Explorer",
+partitions =	"Partizioni",
+version =		"Versione",
+size_ind =		"Dimensione",
+size_patch =	"patch",
+getsize =		"Calcolo in corso...",
+slides =		"Stile: ",
+pic1 =			"Visualizza PIC1s: ",
+fav =			"Seleziona Preferiti: ",
+up =			"Su",
+down =			"Giu",
+original=		"Originale",
+ps4 =			"PS4 XMB",
+yes =			"Si",
+no =			"No",
+start =			"START",
+list_sort =		"Ordina",
+sortnow =		"Adesso: ",
+sort =			"Ordina categoria per: ",
+title =			"Titolo",
+id =			"Id",
+region =		"Regione",
+up_sort =		"Asc",
+down_sort =		"Disc",
+list_refresh =	"Aggiorna...",
+editbubble =	"Modifica bolla",
+confirmdb =		"\n\nVuoi aggiornare il tuo database adesso?\n\nQuesto è necessario per la PSvita per riconoscere i nuovi cambiamenti delle bolle.",
+
+--LiveArea Apps
+liveareapps =	"Livearea Apps",
+noliveareapps =	"LiveArea Apps non disponibili",
+
+-------------		Callbacks		-------------------------------------------------------------------------
+unsafe =		"Non Sicuro: ",
+file =			"File: ",
+percent =		"Percentuale: ",
+percent_total = "Percentuale Totale: ",
+total_size =	"Dimensione Totale: ",
+movefiles =		"File",
+updatedb =		"Aggiornamento db in corso...",
+
+--onAppInstall
+searchunsafe =	"Cerca file VPK, non sicuri o pericolosi!",
+unsafevpk =		"Sono richieste autorizzazioni estese e accesso alle informazioni personali! \n\nUsa con cautela i packages non affidabili! \n\nVuoi installare a tuo rischio?",
+dangerousvpk =	"Attenzione!!! Alto rischio di brick del dispositivo se questo VPK è installato! \n\nUsa con cautela i packages non affidabili! \n\nVuoi installare a tuo rischio?",
+vpkunpack =		"Unpacking VPK...",
+install =		"Installazione in corso...",
+
+--onExtractFiles
+extraction =	"Estrazione in corso...",
+
+--onScanningFiles
+scanning =		"Scansione in corso...",
+size_unpk =		"Dimensione di spacchettamento: ",
+
+--onNetGetFile
+download =		"Scaricamento in corso...",
+success =		"Scaricamento riuscito in",
+failed =		"Scaricamento fallito",
+
+-------------------------------------------------------------------------------------------------------------
+
+--Launch PBP or VPK
+launchpbp =		"Avvia il gioco/app: ",
+confirm =		"Accetta",
+warningvpk =	"\n\nATTENZIONE ACCESSO COMPLETO\n\nVPK NON SICURO",
+warningvpk2 =	"ATTENZIONE ACCESSO COMPLETO",
+safevpk =		"VPK SICURO",
+total_sizevpk = "Totale Dimensione VPK: ",
+installvpk =	"INSTALLA VPK",
+installgame =	"INSTALLA APP",
+alertunsafe =	"VPK NON SICURO!!!!",
+alertdang =		"VPK PERICOLOSO!!!!",
+installvpkdir =	"INSTALLA APP DALLA CARTELLA",
+launchbin =		"Avvia app: ",
+errorinstall =	"Si è verificato un errore durante l'installazione",
+
+------------	ThemesONEMenu	----------------------------------------------------------------------------
+themesdone =	"Installazione Completata!",
+notthemesmenu =	"Non ci sono ancora temi per ONEMenu",
+themeisready =	"Il tema esiste già, scaricarlo di nuovo ?",
+reload =		"Ricarica il tema originale",
+settinsthemes =	"Vai a Impostazioni del tema?",
+themeactual =	"Adesso: ",
+search =		"Cerca Online",
+themesonline =	"Temi Online",
+errordecode =	"Errore di decodifica del database dei temi!",
+errorgetbase =	"Errore nell'ottenere un database di temi!",
+themeinstall =	"Tema Installato!",
+errorunpack =	"Errore Unpack theme!",
+notdown =		"Errore nello scaricamento del Tema!",
+
+------------	Advanced	---------------------------------------------------------------------------------
+advanced =		"Avanzato",
+refresh =		"RICARICA Contenuto",
+refreshdb =		"Aggiorna DB",
+rebuilddb =		"Ricostruisci DB",
+reloadconfig =	"Ricarica file Config",
+configtxt =		"Ricarica taiHEN config.txt",
+favorites =		"Sezione Preferiti",
+restartupdb =	"La tua PSVita si riavvierà...\n\ne il tuo database sarà aggiornato",
+restartredb =	"La tua PSVita si riavvierà...\n\ne il tuo database sarà ricostruito",
+restart =		"La tua PSVita sta effettuando il Riavvio...",
+shutdown =		"La tua PSVita sta effettuando lo Spegnimento...",
+update =		"Abilita Auto-Aggiornamento: ",
+pgf =			"PGF Font",
+pvf =			"PVF Font",
+
+------------	Favorites	---------------------------------------------------------------------------------
+nofavorites =	"Questa funzione non può essere attivata...\n\nHai bisogno di almeno un preferito",
+delfavorites =	"Rimuovere dai preferiti?",
+activate =		"Scansione Solo per i preferiti: ",
+removefav =		"Pulisci la lista dei preferiti",
+emptyfav =		"Vuoi davvero svuotare\n\nla lista dei Preferiti?",
+togglescan =	"Scansiona Preferiti: ",
+
+result =		"\n\nRisultato: ",
+count =			"Count: ",
+sizeis =		"La dimensione è: ",
+filesfolders =	"File/Cartelle",
+
+------------	Export Mulimedia	-------------------------------------------------------------------------
+opensettings =	"Aprire l'app per MP3/Galleria/Video?",
+nofile =		"Nessun file multimediale",
+mp3s =			"File MP3  : ",
+mp4s =			"File MP4  : ",
+imgs =			"File IMG  : ",
+openexport =	"\n\nEsportazione completata, avvia l'applicazione Musica/Foto/Video\n\nper leggere i tuoi file !",
+fail =			"Errore",
+
+------------	Refresh LiveArea	-------------------------------------------------------------------------
+notinstalled =	"\n\nGioco non installato: ",
+gamesinst =		"\n\nTotale Giochi Installati: ",
+nogames =		"\n\nNessun Gioco trovato",
+
+}
