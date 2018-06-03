@@ -17,6 +17,8 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 
 ![header](screenshots/1MENUVITA8.png)
 
+* NOTE: Translations support removed from the folder System, now the translation txt file must be uploaded to the repo Translations folder and copied manually to ux0:data/ONEMenu/lang
+
 ### Changelog 3.00 ###
 - Now the submenu in main screen have 2 pages (press triangle to open, and alternate pages with L and R), Same for submenu in Explorer.<br>
 - Added the option to download and install ONEMenu themes to the main screen submenu.<br>
