@@ -135,18 +135,22 @@ function refresh_init(img)
 						appman[list[i].index].scroll:set(appman[list[i].index].list,limit)
 					end
 				else
-					--update
+					--Update
 					appman[list[i].index].list[search].dev = "ux0:"
-					appman[list[i].index].list[search].img = list[i].img
-
+					appman[list[i].index].list[search].img = list[i].img	--Icon New ??...Maybe
 					appman[list[i].index].list[search].type = list[i].type
 					appman[list[i].index].list[search].version = list[i].version
 					appman[list[i].index].list[search].title = list[i].title
-
 				end
 
+				--Restore Save from "ux0:data/ONEMenu/Saves
+				if files.exists("ux0:data/ONEMenu/SAVES/"..list[i].id) then
+					local info = files.info("ux0:data/ONEMenu/SAVES/"..list[i].id)
+					if os.message(strings.restoresave.."\n\n"..info.mtime or "", 1) == 1 then
+						files.copy("ux0:data/ONEMenu/SAVES/"..list[i].id, "ux0:user/00/savedata/")
+					end
+				end
 				appman.len +=1
-				infodevices()
 
 			else
 				os.message(strings.notinstalled..list[i].id)
@@ -158,6 +162,7 @@ function refresh_init(img)
 		os.message(strings.nogames)
 	end
 
+	infodevices()
 	os.delay(15)
 	if vbuff then vbuff:blit(0,0) elseif img then img:blit(0,0) end
 	__TITTLEAPP, __IDAPP = "",""

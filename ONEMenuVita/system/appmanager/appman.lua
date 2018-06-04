@@ -202,6 +202,13 @@ local uninstall_callback = function ()
 			if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 			message_wait()
 
+			--Backup Save from ux0:user/00/savedata
+			if files.exists("ux0:user/00/savedata/"..appman[cat].list[focus_index].id) then
+				if os.message(strings.backupsave, 1) == 1 then
+					files.copy("ux0:user/00/savedata/"..appman[cat].list[focus_index].id, "ux0:data/ONEMenu/Saves/")
+				end
+			end
+
 			buttons.homepopup(0)
 				reboot=false
 					local result_rmv = game.delete(appman[cat].list[focus_index].id)

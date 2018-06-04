@@ -103,6 +103,81 @@ function show_scan(infovpk)
 	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
 
+function fillappmanlist(objin, info_sfo)
+
+	if not objin.img then objin.img = theme.data["icodef"] end
+	if objin.img then
+		objin.img:reset()
+		objin.img:resize(120,120)
+		objin.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
+	end
+
+	--id, type, version, dev, path, title
+	objin.id = info_sfo.TITLE_ID
+	objin.type = info_sfo.CATEGORY
+	objin.version = info_sfo.APP_VER or "00.00"
+	objin.dev = "ux0"
+	objin.path = string.format("ux0:app/%s",info_sfo.TITLE_ID)
+	objin.title = info_sfo.TITLE or info_sfo.TITLE_ID
+
+	local index = 1
+	if files.exists(objin.path.."/data/boot.inf") or objin.id == "PSPEMUCFW" then index = 5
+	else
+		if info_sfo.CONTENT_ID and info_sfo.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
+		objin.region = regions[info_sfo.CONTENT_ID[1]] or 5
+	end
+	objin.Nregion = name_region[objin.region] or ""
+
+	--Search game in appman[index].list
+	local search = 0
+	for i=1,appman[index].scroll.maxim do
+		if objin.id == appman[index].list[i].id then search = i break end
+	end
+
+	--No Exist!!!
+	if search == 0 then
+		if __FAV == 0 then
+			objin.fav = false
+			table.insert(appman[index].list, objin)
+
+			if index == 1 and appman[index].sort == 3 then
+				table.sort(appman[index].list, tableSortReg)
+			else
+				if appman[index].sort == 0 then
+					if appman[index].asc == 1 then
+						table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+					else
+						table.sort(appman[index].list ,function (a,b) return string.lower(a.id)>string.lower(b.id) end)
+					end
+				else
+					if appman[index].asc == 1 then
+						table.sort(appman[index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+					else
+						table.sort(appman[index].list ,function (a,b) return string.lower(a.title)>string.lower(b.title) end)
+					end
+				end
+			end
+
+			appman[index].scroll:set(appman[index].list,limit)
+		end
+	else
+		--Update
+		appman[index].list[search].img = objin.img	--Icon New ??...Maybe
+		appman[index].list[search].type = objin.type
+		appman[index].list[search].version = objin.version
+		appman[index].list[search].title = objin.title
+	end
+
+	--Restore Save from "ux0:data/ONEMenu/Saves
+	if files.exists("ux0:data/ONEMenu/SAVES/"..info_sfo.TITLE_ID) then
+		local info = files.info("ux0:data/ONEMenu/SAVES/"..info_sfo.TITLE_ID)
+		if os.message(strings.restoresave.."\n\n"..info.mtime or "", 1) == 1 then
+			files.copy("ux0:data/ONEMenu/SAVES/"..info_sfo.TITLE_ID, "ux0:user/00/savedata/")
+		end
+	end
+
+end
+
 function show_msg_vpk(obj_vpk)
 	bufftmp = screen.toimage()
 	local x,y = (960-420)/2,(544-420)/2
@@ -228,90 +303,11 @@ function show_msg_vpk(obj_vpk)
 
 		if os.message(strings.launchpbp.."\n\n"..scan_vpk.sfo.TITLE+" ?",1) == 1 then
 			if game.exists(scan_vpk.sfo.TITLE_ID) then
-				if scan_vpk.sfo.CATEGORY == "ME" then game.open(scan_vpk.sfo.TITLE_ID)
-				else game.launch(scan_vpk.sfo.TITLE_ID) end
+				if scan_vpk.sfo.CATEGORY == "ME" then game.open(scan_vpk.sfo.TITLE_ID) else game.launch(scan_vpk.sfo.TITLE_ID) end
 			end
 		end
 
-		tmp_vpk.path = string.format("ux0:app/%s",scan_vpk.sfo.TITLE_ID)
-		tmp_vpk.dev = "ux0"
-
-		--Size
-		if scan_vpk.realsize then
-			tmp_vpk.size = scan_vpk.realsize
-		else
-			tmp_vpk.size = files.size(tmp_vpk.path)
-		end
-		tmp_vpk.sizef = files.sizeformat(tmp_vpk.size or 0)
-
-		if not tmp_vpk.img then tmp_vpk.img = theme.data["icodef"] end
-		if tmp_vpk.img then
-			tmp_vpk.img:reset()
-			tmp_vpk.img:resize(120,120)
-			tmp_vpk.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
-		end
-
-		--id, type, version, dev, path, title
-		tmp_vpk.id = scan_vpk.sfo.TITLE_ID
-		tmp_vpk.type = scan_vpk.sfo.CATEGORY
-		tmp_vpk.version = scan_vpk.sfo.APP_VER or "00.00"
-		tmp_vpk.title = scan_vpk.sfo.TITLE or scan_vpk.sfo.TITLE_ID
-
-		--Update appman[x].list
-		local index = 1
-		if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5
-		else
-			if scan_vpk.sfo.CONTENT_ID and scan_vpk.sfo.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
-			tmp_vpk.region = regions[scan_vpk.sfo.CONTENT_ID[1]] or 5
-		end
-		tmp_vpk.Nregion = name_region[tmp_vpk.region] or ""
-
-		--Search game in appman[index].list
-		local search = 0
-		for i=1,appman[index].scroll.maxim do
-			if tmp_vpk.id == appman[index].list[i].id then search = i break end
-		end
-
-		if search == 0 then
-			if __FAV == 0 then
-				tmp_vpk.fav = false
-				table.insert(appman[index].list, tmp_vpk)
-
-				if index == 1 and appman[index].sort == 3 then
-					table.sort(appman[index].list, tableSortReg)
-				else
-					if appman[index].sort == 0 then
-						if appman[index].asc == 1 then
-							table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-						else
-							table.sort(appman[index].list ,function (a,b) return string.lower(a.id)>string.lower(b.id) end)
-						end
-					else
-						if appman[index].asc == 1 then
-							table.sort(appman[index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-						else
-							table.sort(appman[index].list ,function (a,b) return string.lower(a.title)>string.lower(b.title) end)
-						end
-					end
-				end
-
-				appman[index].scroll:set(appman[index].list,limit)
-			end
-		else
-			--update
-			appman[index].list[search].dev = "ux0"
-			appman[index].list[search].img = tmp_vpk.img
-
-			--size
-			appman[index].list[search].size = tmp_vpk.size
-			appman[index].list[search].sizef = tmp_vpk.sizef
-
-			appman[index].list[search].type = tmp_vpk.type
-			appman[index].list[search].version = tmp_vpk.version
-			appman[index].list[search].title = tmp_vpk.title
-
-		end
-
+		fillappmanlist(tmp_vpk, scan_vpk.sfo)
 		appman.len +=1
 		infodevices()
 

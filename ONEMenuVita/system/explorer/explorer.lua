@@ -70,9 +70,9 @@ end
 
 --Cycle Main for Explorer Files: show_explorer_list()
 local xtmp = 0
-function show_explorer_list()
+function show_explorer_list(first_path)
 
-	explorer.refresh(true)
+	explorer.refresh(true,first_path)
 	buttons.interval(16,5)
 	while true do
 
@@ -140,10 +140,11 @@ function show_explorer_list()
 
 end
 
-function explorer.refresh(onflag)
+function explorer.refresh(onflag,first_path)
 	if onflag then infosize = os.devinfo(Root2[Dev]) end
-	explorer.list = files.listsort(Root[Dev])
+	explorer.list = files.listsort(first_path or Root[Dev])
 	scroll.list:set(explorer.list,maxim_files)
+	if first_path then Root[Dev]=first_path end
 end
 
 function ctrls_explorer_list()
@@ -494,7 +495,7 @@ local installgame_callback = function ()
                 break
             end
         end
- 
+
         if res == false then
 			os.delay(15)
 			if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
@@ -511,80 +512,11 @@ local installgame_callback = function ()
 		if result ==1 then
 			if os.message(strings.launchpbp+"\n\n"+info.TITLE_ID+" ?",1) == 1 then
 				if game.exists(info.TITLE_ID) then
-					if info.CATEGORY == "ME" then game.open(info.TITLE_ID)
-					else game.launch(info.TITLE_ID) end
+					if info.CATEGORY == "ME" then game.open(info.TITLE_ID) else game.launch(info.TITLE_ID) end
 				end
 			end
 
-			tmp_vpk.path = string.format("ux0:app/%s",info.TITLE_ID)
-			tmp_vpk.dev = "ux0"
-
-			--Size
-			tmp_vpk.size = files.size(tmp_vpk.path)
-			tmp_vpk.sizef = files.sizeformat(tmp_vpk.size or 0)
- 
-			if not tmp_vpk.img then tmp_vpk.img = theme.data["icodef"] end
-			if tmp_vpk.img then
-				tmp_vpk.img:reset()
-				tmp_vpk.img:resize(120,120)
-				tmp_vpk.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
-			end
-
-			--id, type, version, dev, path, title
-			tmp_vpk.id = info.TITLE_ID
-			tmp_vpk.type = info.CATEGORY
-			tmp_vpk.version = info.APP_VER or "00.00"
-			tmp_vpk.title = info.TITLE or info.TITLE_ID
-
-			--Update appman[x].list
-			local index = 1
-			if files.exists(tmp_vpk.path.."/data/boot.inf") or tmp_vpk.id == "PSPEMUCFW" then index = 5
-			else
-				if info.CONTENT_ID and info.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
-				tmp_vpk.region = regions[info.CONTENT_ID[1]] or 5
-			end
-			tmp_vpk.Nregion = name_region[tmp_vpk.region] or ""
-
-			--Search game in appman[index].list
-			local search = 0
-			for i=1,appman[index].scroll.maxim do
-				if tmp_vpk.id == appman[index].list[i].id then search = i break end
-			end
-
-			if search == 0 then
-				if __FAV == 0 then
-					tmp_vpk.fav = false
-					table.insert(appman[index].list, tmp_vpk)
-
-					if index == 1 and appman[index].sort == 3 then
-						table.sort(appman[index].list, tableSortReg)
-					else
-						if appman[index].sort == 0 then
-							if appman[index].asc == 1 then
-								table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-							else
-								table.sort(appman[index].list ,function (a,b) return string.lower(a.id)>string.lower(b.id) end)
-							end
-						else
-							if appman[index].asc == 1 then
-								table.sort(appman[index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-							else
-								table.sort(appman[index].list ,function (a,b) return string.lower(a.title)>string.lower(b.title) end)
-							end
-						end
-					end
-
-					appman[index].scroll:set(appman[index].list,limit)
-				end
-			else
-				--update
-				appman[index].list[search].dev = "ux0"
-				appman[index].list[search].img = tmp_vpk.img
-				appman[index].list[search].type = tmp_vpk.type
-				appman[index].list[search].version = tmp_vpk.version
-				appman[index].list[search].title = tmp_vpk.title
-			end
-
+			fillappmanlist(tmp_vpk, info)
 			appman.len +=1
 			infodevices()
 
@@ -748,7 +680,7 @@ local usb_callback = function ()
 	menu_ctx.wakefunct2()
 	menu_ctx.scroll.sel = pos_menu
 
-	os.delay(15)
+	os.delay(150)
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
 
