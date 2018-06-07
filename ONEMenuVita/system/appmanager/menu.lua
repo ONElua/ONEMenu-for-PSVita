@@ -192,7 +192,7 @@ function focus_icon()
 				end
 			end
 			if pic1_crono then
-				pic1_crono:resize(960,460)
+				--pic1_crono:resize(960,460)
 				pic1_crono:center()
 			end
 		end

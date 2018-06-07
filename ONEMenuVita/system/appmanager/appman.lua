@@ -9,7 +9,7 @@
    Collaborators: BaltazaR4 & Wzjk.
 ]]
 
-__TITLE, __STITLE, __EDITB = "","",false
+__STITLE, __TITLE, __EDITB = "","",false
 
 categories = {
     { img = theme.data["psvita"] },  --cat 1
@@ -523,7 +523,7 @@ local editsfo_callback = function ()
 		obj.path = "ux0:appmeta/"..appman[cat].list[focus_index].id.."/param.sfo"
 		obj.ext = "sfo"
 		--Clean
-		__TITLE, __STITLE, __EDITB = "","",true
+		__STITLE, __TITLE, __EDITB = "","",true
 		local edit_sfo = visortxt(obj,true)
 
 	game.umount()
@@ -533,11 +533,13 @@ local editsfo_callback = function ()
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 		local reboot_updatedb, restart_only = false,false
+
 		--STitle,Title,ID
 		if __TITLE != "" then
 			os.titledb(__TITLE, appman[cat].list[focus_index].id)
 			if os.message(strings.Titleupdatedb,1) == 1 then reboot_updatedb = true end
 		end
+
 		if __STITLE != "" then
 			os.stitledb(__STITLE, appman[cat].list[focus_index].id)
 			if os.message(strings.Stitlerestart,1) == 1 then restart_only = true end
@@ -557,7 +559,7 @@ local editsfo_callback = function ()
 		end
 
 	end
-	__TITLE, __STITLE, __EDITB = "","",false
+	__STITLE, __TITLE, __EDITB = "","",false
 
 	submenu_ctx.wakefunct()
 	submenu_ctx.scroll.sel = pos_menu

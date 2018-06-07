@@ -339,7 +339,7 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
                 end
             end
         else
-            if os.message(strings.delete.." "..explorer.list[scroll.list.sel].name.." ?",1) == 1 then
+            if os.message(strings.delete.."\n\n"..explorer.list[scroll.list.sel].path.." ?",1) == 1 then
 				del=true
                 reboot=false
                     files.delete(explorer.list[scroll.list.sel].path)

@@ -62,6 +62,8 @@ toolarge =		"File too large",
 nimplemented =	"Not implemented",
 Titleupdatedb = "To apply the TITLE change you need to perform DB update\n\nOr you can use QCMA to backup/restore the game\n\nDo you want to update DB now ?",
 Stitlerestart = "To apply the STITLE change you need to restart the PSVita\n\nDo you want to restart now ?",
+simplestitle =	"After edit the STITLE a reboot is needed",
+simpletitle = 	"After edit the TITLE an update.db is needed to reflect changes",
 
 -- ## Music Player ##
 playing =		"Playing",

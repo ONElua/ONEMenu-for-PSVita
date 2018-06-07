@@ -168,14 +168,6 @@ function fillappmanlist(objin, info_sfo)
 		appman[index].list[search].title = objin.title
 	end
 
-	--Restore Save from "ux0:data/ONEMenu/Saves
-	if files.exists("ux0:data/ONEMenu/SAVES/"..info_sfo.TITLE_ID) then
-		local info = files.info("ux0:data/ONEMenu/SAVES/"..info_sfo.TITLE_ID)
-		if os.message(strings.restoresave.."\n\n"..info.mtime or "", 1) == 1 then
-			files.copy("ux0:data/ONEMenu/SAVES/"..info_sfo.TITLE_ID, "ux0:user/00/savedata/")
-		end
-	end
-
 end
 
 function show_msg_vpk(obj_vpk)
@@ -300,6 +292,14 @@ function show_msg_vpk(obj_vpk)
 				vpkdel=true
 			end
 		reboot=true
+
+		--Restore Save from "ux0:data/ONEMenu/Saves
+		if files.exists("ux0:data/ONEMenu/SAVES/"..scan_vpk.sfo.TITLE_ID) then
+			local info = files.info("ux0:data/ONEMenu/SAVES/"..scan_vpk.sfo.TITLE_ID)
+			if os.message(strings.restoresave.."\n\n"..info.mtime or "", 1) == 1 then
+				files.copy("ux0:data/ONEMenu/SAVES/"..scan_vpk.sfo.TITLE_ID, "ux0:user/00/savedata/")
+			end
+		end
 
 		if os.message(strings.launchpbp.."\n\n"..scan_vpk.sfo.TITLE+" ?",1) == 1 then
 			if game.exists(scan_vpk.sfo.TITLE_ID) then
@@ -589,7 +589,13 @@ function files.readlinesSFO(path)
 
 	local data = {}
 	for k,v in pairs(sfo) do
-		table.insert(data,tostring(k).." = "..tostring(v))
+		if __EDITB then
+			if tostring(k) == "STITLE" or tostring(k) == "TITLE" then
+				table.insert(data,tostring(k).." = "..tostring(v))
+			end
+		else
+			table.insert(data,tostring(k).." = "..tostring(v))
+		end
 	end
 	return data
 end
@@ -704,6 +710,11 @@ function visortxt(handle, flag_edit)
 				draw.fillrect(950, ybar-2 + ((hbar-pos_height)/(#texteditorInfo.list-1))*(texteditorInfo.focus-1), 8, pos_height, color.new(0,255,0))
 			end
 
+			if __EDITB then
+				screen.print(480, 425, strings.simplestitle, 1, color.white, color.black, __ACENTER)
+				screen.print(480, 450, strings.simpletitle, 1, color.white, color.black, __ACENTER)
+			end
+
 		end--if list > 0 the
 
 		if flag_edit and handle.ext != "sfo" then
@@ -770,21 +781,29 @@ function visortxt(handle, flag_edit)
 			local _flag = false
 			if textHadChange then
 				if os.message(strings.savechanges,1) == 1 then
+
 					if handle.ext == "sfo" then
 						-- To save changes if wish!
 						for k,v in pairs(changes) do
-							--if v.field != "VERSION" then
+
+							if __EDITB then
+								if v.field == "STITLE" then game.setsfo(handle.path, "STITLE_"..langs[os.language()], __STITLE)
+								elseif v.field == "TITLE" then game.setsfo(handle.path, "TITLE_"..langs[os.language()], __TITLE) end
+								game.setsfo(handle.path, k, tostring(v.string))
+							else
 								if v.number then
 									game.setsfo(handle.path, k, v.number)
 								elseif v.string then
 									game.setsfo(handle.path, k, tostring(v.string))
 								end
-							--end
+							end
+
 						end
 						_flag = true
 					else
 						write_txt(handle.path, texteditorInfo.list)
 					end
+
 					--Update file (info)
 					local info = files.info(handle.path)
 					if info then
@@ -806,42 +825,46 @@ function visortxt(handle, flag_edit)
 				field,value=texteditorInfo.list[texteditorInfo.focus]:match("(.+) = (.+)")
 
 				if field then
+					local name_field = field:upper()
+
 					if __EDITB then
-						if field:upper() == "STITLE" or field:upper() == "TITLE" then
-							local newStr = nil
-							if numeric then
-								if value then value=tonumber(value:gsub("0x", ""),16) end			--Hex-Dec
-								newStr = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
-							else
-								newStr = osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
-							end
-
-							if newStr then
-								if value != newStr then
-
-									textHadChange = true
-									if field:upper() == "STITLE" then __STITLE = newStr end
-									if field:upper() == "TITLE" then __TITLE = newStr end
-
-									changes[texteditorInfo.focus] = {}
-									if not changes[field] then changes[field] = {} end
-									--Update line & set changes to late save!
-									--changes[field].field = tostring(field:upper())
-									if numeric then
-										texteditorInfo.list[texteditorInfo.focus] = string.format("%s = 0x%X", field, tonumber(newStr))
-										changes[field].number = tonumber(newStr)
-										
-									else
-										changes[field].string = ""
-										texteditorInfo.list[texteditorInfo.focus] = string.format("%s = %s", field, newStr)
-										changes[field].string = newStr
-									end
-								end
-							end--newStr
+						local newStr = nil
+						if numeric then
+							if value then value=tonumber(value:gsub("0x", ""),16) end			--Hex-Dec
+							newStr = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
+						else
+							newStr = osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
 						end
+
+						if newStr then
+							if value != newStr then
+
+								textHadChange = true
+
+								if name_field == "STITLE" then __STITLE = newStr
+									elseif name_field == "TITLE" then __TITLE = newStr
+								end
+
+								changes[texteditorInfo.focus] = {}
+								if not changes[field] then changes[field] = {} end
+
+								--Update line & set changes to late save!
+								changes[field].field = tostring(field:upper())
+								if numeric then
+									texteditorInfo.list[texteditorInfo.focus] = string.format("%s = 0x%X", field, tonumber(newStr))
+									changes[field].number = tonumber(newStr)
+										
+								else
+									changes[field].string = ""
+									texteditorInfo.list[texteditorInfo.focus] = string.format("%s = %s", field, newStr)
+									changes[field].string = newStr
+								end
+							end
+						end--newStr
 					else
-						if field:upper() == "APP_VER" or field:upper() == "VERSION" or
-							field:upper() == "PSP2_DISP_VER" or field:upper() == "TITLE_ID" then os.message(strings.nimplemented)--Nothing.. ITs bug :(
+
+						if name_field == "APP_VER" or name_field == "VERSION" or
+							name_field == "PSP2_DISP_VER" or name_field == "TITLE_ID" then os.message(strings.nimplemented)--Nothing.. ITs bug :(
 						else
 							local newStr = nil
 							if numeric then
@@ -869,8 +892,11 @@ function visortxt(handle, flag_edit)
 								end
 							end
 						end
+
 					end--__EDITB
-				end
+
+				end--field
+
 			else
 				local editStr = texteditorInfo.list[texteditorInfo.focus]
 				local newStr = osk.init(strings.editline, editStr, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)

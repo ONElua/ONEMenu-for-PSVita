@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="03.02">
+      <![CDATA[
+- Fixed error with sfo files containing STITLE_XX AND TITLE_XX from the SFO at appmeta.<br>
+- Added option to backup/restore savedata to/from ux0:data/ONEMENU/saves when uninstalling/installing games.<br>
+    ]]>
   <changes app_ver="03.01">
       <![CDATA[
 - Added option Edit Bubble (by TheRadziu) allowing to edit the game STITLE and TITLE from the SFO at appmeta.<br>

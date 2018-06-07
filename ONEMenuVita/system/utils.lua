@@ -12,11 +12,34 @@
 __PATH_LANG = "ux0:data/ONEMENU/lang/"
 __LANG      = os.language()
 
+langs = {	JAPANESE = 		"00",
+			ENGLISH_US = 	"01",
+			FRENCH = 		"02",
+			SPANISH = 		"03",
+			GERMAN = 		"04",
+			ITALIAN = 		"05",
+			DUTCH = 		"06",
+			PORTUGUESE = 	"07",
+			RUSSIAN = 		"08",
+			KOREAN = 		"09",
+			CHINESE_T = 	"10",
+			CHINESE_S = 	"11",
+			FINNISH = 		"12",
+			SWEDISH = 		"13",
+			DANISH = 		"14",
+			NORWEGIAN = 	"15",
+			POLISH = 		"16",
+			PORTUGUESE_BR = "17",
+			ENGLISH_GB = 	"18",
+			TURKISH = 		"19",
+};
+ 
+
 -- Creamos carpeta de trabajo para los idiomas
 files.mkdir(__PATH_LANG)
 
 --Aqui checamos las traducciones
-__STRINGS   = 179
+__STRINGS   = 181
 
 if not files.exists(__PATH_LANG.."english_us.txt") then files.copy("system/lang/english_us.txt",__PATH_LANG)
 else
