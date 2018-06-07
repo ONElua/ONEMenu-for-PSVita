@@ -5,6 +5,10 @@
 **OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories.<br>
 Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db.
 
+### Changelog 3.02 ###
+- Fixed error with sfo files containing STITLE_XX AND TITLE_XX from the SFO at appmeta.<br>
+- Added option to backup/restore savedata to/from ux0:data/ONEMENU/saves when uninstalling/installing games.<br>
+
 ### Changelog 3.01 ###
 - Added option Edit Bubble (by TheRadziu) allowing to edit the game STITLE and TITLE from the SFO at appmeta (Thanks to TheFloW for User/Kernel Modules).<br>
 - Added sort list by Region.<br>
@@ -13,18 +17,16 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 - Now the pvf font is shown in Bold style (improving presentation).<br>
 - Took care of some bugs.<br>
 
-![header](screenshots/1MENUVITA7.png)
-
-![header](screenshots/1MENUVITA8.png)
-
-* NOTE: Translations support removed from the folder System, now the translation txt file must be uploaded to the repo Translations folder and copied manually to ux0:data/ONEMenu/lang
-
 ### Changelog 3.00 ###
 - Now the submenu in main screen have 2 pages (press triangle to open, and alternate pages with L and R), Same for submenu in Explorer.<br>
 - Added the option to download and install ONEMenu themes to the main screen submenu.<br>
 - Added the option "RELOAD Content" Allows to install games (NONPDRM) in ux0:app (Thanks the plugin Nonpdrm from TheFloW).<br>
 - Added the option "Shrink Game" to the main screen submenu, allows to free up some space by eliminating some game folders/files.<br>
 - Optimized the code a litle.<br>
+
+![header](screenshots/1MENUVITA7.png)
+
+![header](screenshots/1MENUVITA8.png)
 
 ### Changelog 2.05 ###
 - Edit param.sfo (decrypted).<br>
