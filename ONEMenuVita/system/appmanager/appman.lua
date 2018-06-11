@@ -203,7 +203,7 @@ local uninstall_callback = function ()
 			message_wait()
 
 			--Backup Save from ux0:user/00/savedata
-			if files.exists("ux0:user/00/savedata/"..appman[cat].list[focus_index].id) then
+			if files.exists("ux0:user/00/savedata/"..appman[cat].list[focus_index].id) and cat == 1 then
 				if os.message(strings.backupsave, 1) == 1 then
 					files.copy("ux0:user/00/savedata/"..appman[cat].list[focus_index].id, "ux0:data/ONEMenu/Saves/")
 				end

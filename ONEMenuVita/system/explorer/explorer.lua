@@ -510,6 +510,15 @@ local installgame_callback = function ()
  
 		bufftmp = nil
 		if result ==1 then
+
+			--Restore Save from "ux0:data/ONEMenu/Saves
+			if files.exists("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID) then
+				local info_time = files.info("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID)
+				if os.message(strings.restoresave.."\n\n"..info_time.mtime or "", 1) == 1 then
+					files.copy("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID, "ux0:user/00/savedata/")
+				end
+			end
+
 			if os.message(strings.launchpbp+"\n\n"+info.TITLE_ID+" ?",1) == 1 then
 				if game.exists(info.TITLE_ID) then
 					if info.CATEGORY == "ME" then game.open(info.TITLE_ID) else game.launch(info.TITLE_ID) end
