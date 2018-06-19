@@ -39,7 +39,7 @@ langs = {	JAPANESE = 		"00",
 files.mkdir(__PATH_LANG)
 
 --Aqui checamos las traducciones
-__STRINGS   = 181
+__STRINGS   = 184
 
 if not files.exists(__PATH_LANG.."english_us.txt") then files.copy("system/lang/english_us.txt",__PATH_LANG)
 else

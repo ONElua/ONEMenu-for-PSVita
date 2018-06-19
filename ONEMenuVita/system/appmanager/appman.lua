@@ -589,7 +589,6 @@ local fav_callback = function ()
 	local pos_menu = submenu_ctx.scroll.sel
 
 	appman[cat].list[focus_index].fav = not appman[cat].list[focus_index].fav
-	submenu_ctx.wakefunct()
 
 	if appman[cat].list[focus_index].fav then
 		favs = strings.yes
@@ -606,6 +605,29 @@ local fav_callback = function ()
 	write_favs(__PATH_FAVS)
 	submenu_ctx.wakefunct()
 	submenu_ctx.scroll.sel = pos_menu
+end
+
+local openfolder_callback = function ()
+
+	if cat == 1 or cat == 2 or cat == 5 then
+		for i=1,#categories do 
+			if #appman[i].list > 0 then
+				for j=1,#appman[i].list do
+					appman[i].list[j].pullsize = false
+				end
+			end
+		end
+
+		for i=1,#Root2 do
+			if (appman[cat].list[focus_index].dev..":" == Root2[i]) then
+				Dev = i
+				break
+			end
+		end
+		--submenu_ctx.close = true
+		show_explorer_list(appman[cat].list[focus_index].dev..":/app/"..appman[cat].list[focus_index].id)
+	end
+
 end
 
 ---------------------------------- SubMenu Contextual 2 ---------------------------------------------------
@@ -638,10 +660,10 @@ local togglefavs_callback = function ()
 			write_config()
 		else
 			os.message(strings.nofavorites)
+			os.delay(15)
+			if theme.data["back"] then theme.data["back"]:blit(0,0) end
 		end
 	end
-	os.delay(15)
-	if theme.data["back"] then theme.data["back"]:blit(0,0) end
 	submenu_ctx.wakefunct2()
 	submenu_ctx.scroll.sel = pos_menu
 end
@@ -823,6 +845,7 @@ function submenu_ctx.wakefunct()
 		{ text = strings.editbubble,        funct = editsfo_callback },
 		{ text = strings.pic1..showpic,     funct = pic1_callback, pad = true },
 		{ text = strings.fav..favs,         funct = fav_callback,  pad = true },
+		{ text = strings.openfolder,        funct = openfolder_callback,  pad = true },
 	}
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
 end
@@ -957,7 +980,7 @@ function submenu_ctx.draw()
 
 	if submenu_ctx.x >= 0 then
 		submenu_ctx.open = true
-		local h = submenu_ctx.y + 20 -- Punto de origen de las opciones
+		local h = submenu_ctx.y + 13 -- Punto de origen de las opciones
 
 		for i=submenu_ctx.scroll.ini,submenu_ctx.scroll.lim do
 
@@ -986,15 +1009,15 @@ function submenu_ctx.draw()
 
 				if screen.textwidth(strings.sortnow) > 320 then
 					if appman[cat].asc == 1 then
-						xprint = screen.print(xprint, 165, strings.sortnow.." "..sorting.."/"..strings.up_sort, 1, color.white,theme.style.TXTBKGCOLOR, __SLEFT,320)
+						xprint = screen.print(xprint, 160, strings.sortnow.." "..sorting.."/"..strings.up_sort, 1, color.white,theme.style.TXTBKGCOLOR, __SLEFT,320)
 					else
-						xprint = screen.print(xprint, 165, strings.sortnow.." "..sorting.."/"..strings.down_sort, 1, color.white,theme.style.TXTBKGCOLOR, __SLEFT,320)
+						xprint = screen.print(xprint, 160, strings.sortnow.." "..sorting.."/"..strings.down_sort, 1, color.white,theme.style.TXTBKGCOLOR, __SLEFT,320)
 					end
 				else
 					if appman[cat].asc == 1 then
-						screen.print(12, 165, strings.sortnow.." "..sorting.."/"..strings.up_sort, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
+						screen.print(12, 160, strings.sortnow.." "..sorting.."/"..strings.up_sort, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
 					else
-						screen.print(12, 165, strings.sortnow.." "..sorting.."/"..strings.down_sort, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
+						screen.print(12, 160, strings.sortnow.." "..sorting.."/"..strings.down_sort, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
 					end
 					xprint = 12
 				end
@@ -1008,6 +1031,9 @@ function submenu_ctx.draw()
 
 		--Textos informativos en el submenu
 		if submenu_ctx.type == 1 then
+			draw.gradline(5,268,submenu_ctx.w - 15,268,theme.style.GRADRECTCOLOR, theme.style.GRADSHADOWCOLOR)
+			draw.gradline(5,269,submenu_ctx.w - 15,269,theme.style.GRADSHADOWCOLOR, theme.style.GRADRECTCOLOR)
+
 			h = 480
 			draw.fillrect(10,h, 330, 15, color.gray)
 			draw.fillrect(10,h, math.map(infoux0.used, 0,infoux0.max, 0, 330 ), 15, color.shine:a(80))

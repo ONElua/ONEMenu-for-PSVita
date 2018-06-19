@@ -381,6 +381,26 @@ local rename_callback = function ()
         end
     end
 end
+
+local newfile_callback = function () -- Added suport multi-new-folder
+    local i=1
+    while files.exists(Root[Dev].."/"..string.format("%s%03d",strings.newfile,i)) do
+        i+=1
+    end
+    local name_folder = osk.init(strings.creatfile, string.format("%s%03d",strings.newfile,i))
+    if name_folder then
+        local dest = Root[Dev].."/"..name_folder
+        if Root[Dev]:sub(#Root[Dev]) == "/" then dest = Root[Dev]..name_folder end
+        files.new(dest)
+--clean
+        menu_ctx.wakefunct()
+        menu_ctx.close = true
+        action = false
+        explorer.refresh(true)
+        explorer.action = 0
+        multi={}
+    end
+end
  
 local makedir_callback = function () -- Added suport multi-new-folder
     local i=1
@@ -547,6 +567,18 @@ end
  
 local filesexport_callback = function ()
 
+	local _path = explorer.list[scroll.list.sel].path
+	local no_paths = {
+		"ux0:app", "ux0:/app", "ux0:patch", "ux0:/patch",
+		"ur0:app", "ur0:/app", "ur0:patch", "ur0:/patch",
+		"uma0:app", "uma0:/app", "uma0:patch", "uma0:/patch",
+	}
+
+	for i=1,#no_paths do
+		local x1,x2 = string.find(_path:lower(), no_paths[i], 1, true)
+		if x1 then return false	end
+	end
+
 	local vbuff = screen.toimage()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	local pos_menu = menu_ctx.scroll.sel
@@ -587,7 +619,7 @@ local filesexport_callback = function ()
 			end
 
 			if cont_multimedia > 0 then
-				os.message("\n"..strings.mp3s..cont_mp3.."\n"..strings.mp4s..cont_mp4.."\n"..strings.imgs..cont_img.."\n"..strings.openexport)
+				os.message(strings.mp3s..cont_mp3.."\n\n"..strings.mp4s..cont_mp4.."\n\n"..strings.imgs..cont_img.."\n\n"..strings.openexport)
 			else
 				os.message(strings.nofile)
 			end
@@ -763,6 +795,21 @@ local font_callback = function ()
 	menu_ctx.scroll.sel = pos_menu
 end
 
+local restart_callback = function ()
+    os.delay(150)
+    os.restart()
+end
+
+local reboot_callback = function ()
+    os.delay(1000)
+    power.restart()
+end
+
+local shutdown_callback = function ()
+    os.delay(1000)
+    power.shutdown()
+end
+
 menu_ctx = { -- Creamos un objeto menu contextual
     h = 544,				-- Height of menu
     w = 190,				-- Width of menu--170
@@ -779,9 +826,11 @@ menu_ctx = { -- Creamos un objeto menu contextual
 function menu_ctx.wakefunct()
     menu_ctx.options = { 	-- Handle Option Text and Option Function
 		{ text = strings.delete,        funct = delete_callback },
-        { text = strings.rename,        funct = rename_callback },
+		{ text = strings.rename,        funct = rename_callback },
+		{ text = strings.size,          funct = sizedir_callback },
+
+		{ text = strings.newfile,       funct = newfile_callback },
 		{ text = strings.makedir,       funct = makedir_callback },
-        { text = strings.size,          funct = sizedir_callback },
 
 		{ text = strings.insvpkfromdir, funct = installgame_callback },
         { text = strings.export,        funct = filesexport_callback },
@@ -807,6 +856,10 @@ function menu_ctx.wakefunct2()
         { text = strings.usb,           funct = usb_callback },
 		{ text = strings.ftp,           funct = ftp_callback },
 		{ text = strings.refresh,       funct = refresh_callback },
+
+		{ text = strings.restarthb,     funct = restart_callback },
+        { text = strings.reset,         funct = reboot_callback },
+        { text = strings.off,           funct = shutdown_callback },
 
 		{ text = strings.refreshdb, 	funct = updatedb_callback },
 		{ text = strings.rebuilddb, 	funct = rebuilddb_callback },
@@ -874,9 +927,9 @@ function menu_ctx.draw()
 			end
 			screen.clip()
 
-			if menu_ctx.type == 1 and (i == 3 or i == 7 or i == 10) then
+			if menu_ctx.type == 1 and (i == 3 or i == 6 or i == 8 or i == 11) then
 				h += 35
-			elseif menu_ctx.type == 2 and (i == 3 or i == 6) then
+			elseif menu_ctx.type == 2 and (i == 3 or i == 6 or i == 9) then
 				h += 35
 			else
 				h += 26
