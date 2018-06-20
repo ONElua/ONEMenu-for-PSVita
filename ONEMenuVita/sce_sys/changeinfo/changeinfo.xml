@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="03.03">
+      <![CDATA[
+- Updated kernel and user modules taken from vitashell.<br>
+- Added option to open ux0:app/(gameid) folder.<br>
+- Few small bugs fixed.<br>
+    ]]>
   <changes app_ver="03.02">
       <![CDATA[
 - Fixed error with sfo files containing STITLE_XX AND TITLE_XX from the SFO at appmeta.<br>
