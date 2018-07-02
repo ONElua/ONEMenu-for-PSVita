@@ -23,10 +23,31 @@ function fillapps(list, obj)
 			end
 
 			local index = 1
+			if obj.id == "PSPEMUCFW" then index = 5 
+			else
+
+				if info.CONTENT_ID and info.CONTENT_ID:len() > 9 then
+					index = 1
+				else
+
+					--checking magic
+					local fp = io.open(obj.path.."/data/boot.bin","r")
+					if fp then
+						local magic = str2int(fp:read(4))
+						fp:close()
+						if magic == 0x00424241 then	index = 5 else index = 2 end
+					else
+						index = 2
+					end
+				end
+			end
+
+			--[[
 			if files.exists(obj.path.."/data/boot.inf") or obj.id == "PSPEMUCFW" then index = 5
 			else
 				if info.CONTENT_ID and info.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
 			end
+			]]
 
 			table.insert(list, { id=info.TITLE_ID, type=info.CATEGORY, version=info.APP_VER or "00.00", title=info.TITLE or info.TITLE_ID,
 								 path=obj.path, index = index, resize = resize })

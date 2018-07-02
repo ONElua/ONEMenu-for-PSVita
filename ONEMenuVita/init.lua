@@ -56,6 +56,17 @@ if files.exists(__PATH_FAVS) then dofile(__PATH_FAVS) else
 write_favs(__PATH_FAVS) end
 ------------------------Checamos la lista de Favoritos------------------------
 
+-- Convert 4 bytes (32 bit) string to number int...
+function str2int(str)
+	local b1, b2, b3, b4 = string.byte(str, 1, 4)
+	return (b4 << 24) + (b3 << 16) + (b2 << 8) + b1
+end
+
+-- Convert Number (32bit) to a string 4 bytes...
+function int2str(data)
+	return string.char((data)&0xff)..string.char(((data)>>8)&0xff)..string.char(((data)>>16)&0xff)..string.char(((data)>>24)&0xff)
+end
+
 ------------------Busqueda y peticion de Iconos en modo hilo------------------
 __CATEGORIES = 5
 appman = {}
@@ -91,19 +102,44 @@ function fillappman(obj)
 		obj.path_img = "ur0:appmeta/"..obj.id.."/livearea/contents/startup.png"
 	else
 
-		if files.exists(obj.path.."/data/boot.inf") or obj.id == "PSPEMUCFW" then
-			index = 5
+		if obj.id == "PSPEMUCFW" then index = 5 
 		else
+
 			local sfo = game.info(obj.path.."/sce_sys/param.sfo")
+
 			if sfo and sfo.CONTENT_ID then
-				if sfo.CONTENT_ID:len() > 9 then index = 1 else	index = 2 end
-				obj.region = regions[sfo.CONTENT_ID[1]] or 5
+
+				if sfo.CONTENT_ID:len() > 9 then
+					index = 1
+					obj.region = regions[sfo.CONTENT_ID[1]] or 5
+				else
+
+					--checking magic
+					local fp = io.open(obj.path.."/data/boot.bin","r")
+					if fp then
+						local magic = str2int(fp:read(4))
+						fp:close()
+						if magic == 0x00424241 then	index = 5 else index = 2 end
+					else
+						index = 2
+					end
+				end
+
 			else
+				--[[
+				--checking magic
+				local fp = io.open(obj.path.."/data/boot.bin","r")
+				if fp then
+					local magic = str2int(fp:read(4))
+					fp:close()
+					if magic == 0x00424241 then	index = 5 else index = 2 end
+				else
+					index = 2
+				end
+				]]
 				index = 2
 			end
-
 		end
-
 		obj.path_img = "ur0:appmeta/"..obj.id.."/icon0.png"
 
 	end

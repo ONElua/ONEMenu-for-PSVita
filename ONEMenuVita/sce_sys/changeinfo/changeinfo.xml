@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="03.04">
+      <![CDATA[
+- Added support for detecting correctly the bubbles made with Adrenaline Bubble Booter v.06 and Adrenaline Bubbles Manager v5.05<br>
+    ]]>
   <changes app_ver="03.03">
       <![CDATA[
 - Updated kernel and user modules taken from vitashell.<br>

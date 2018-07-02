@@ -121,12 +121,33 @@ function fillappmanlist(objin, info_sfo)
 	objin.title = info_sfo.TITLE or info_sfo.TITLE_ID
 
 	local index = 1
-	if files.exists(objin.path.."/data/boot.inf") or objin.id == "PSPEMUCFW" then index = 5
+	if objin.id == "PSPEMUCFW" then index = 5 
 	else
-		if info_sfo.CONTENT_ID and info_sfo.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
-		objin.region = regions[info_sfo.CONTENT_ID[1]] or 5
+
+		if info_sfo.CONTENT_ID and info_sfo.CONTENT_ID:len() > 9  then
+			index = 1
+			objin.region = regions[info_sfo.CONTENT_ID[1]] or 5
+		else
+
+			--checking magic
+			local fp = io.open(objin.path.."/data/boot.bin","r")
+			if fp then
+				local magic = str2int(fp:read(4))
+				fp:close()
+				if magic == 0x00424241 then	index = 5 else index = 2 end
+			else
+				index = 2
+			end
+		end
 	end
 	objin.Nregion = name_region[objin.region] or ""
+
+	--if files.exists(objin.path.."/data/boot.inf") or objin.id == "PSPEMUCFW" then index = 5
+	--else
+	--	if info_sfo.CONTENT_ID and info_sfo.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
+	--	objin.region = regions[info_sfo.CONTENT_ID[1]] or 5
+	--end
+	--objin.Nregion = name_region[objin.region] or ""
 
 	--Search game in appman[index].list
 	local search = 0
