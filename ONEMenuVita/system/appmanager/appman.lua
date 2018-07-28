@@ -607,9 +607,62 @@ local fav_callback = function ()
 	submenu_ctx.scroll.sel = pos_menu
 end
 
+__OPEN = false
 local openfolder_callback = function ()
 
 	if cat == 1 or cat == 2 or cat == 5 then
+	
+		local options = {
+			{ text = "app", exit=false }
+		}
+
+		if files.exists(appman[cat].list[focus_index].dev..":/patch/"..appman[cat].list[focus_index].id) then
+			table.insert(options, { text = "patch", exit=false })
+		end
+		if files.exists(appman[cat].list[focus_index].dev..":/repatch/"..appman[cat].list[focus_index].id) then
+			table.insert(options, { text = "repatch", exit=false })
+		end
+		table.insert(options, { text = strings.cancel, exit=true })
+
+		local scroll_op,cccolor = newScroll(options, #options),""
+
+		if #options > 2 then
+			local vbuff = screen.toimage()
+			while true do
+				buttons.read()
+				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+				draw.line(230,50,220,submenu_ctx.y + 129, color.green)
+
+				local y = 100
+				for i=scroll_op.ini,scroll_op.lim do
+					if i == scroll_op.sel then cccolor = color.green else cccolor = color.white end
+					screen.print(350,y, options[i].text,1.0,cccolor,theme.style.TXTBKGCOLOR,__ARIGHT)
+					y+=22
+				end
+
+				screen.flip()
+
+				if buttons.up then scroll_op:up() elseif buttons.down then scroll_op:down() end
+
+				if buttons[cancel] then
+					os.delay(15)
+					if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+					return
+				end
+
+				if buttons[accept] then
+					if options[scroll_op.sel].exit then
+						os.delay(15)
+						if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+						return
+					end
+					break
+				end
+
+			end--while
+		end
+
 		for i=1,#categories do 
 			if #appman[i].list > 0 then
 				for j=1,#appman[i].list do
@@ -624,8 +677,11 @@ local openfolder_callback = function ()
 				break
 			end
 		end
-		--submenu_ctx.close = true
-		show_explorer_list(appman[cat].list[focus_index].dev..":/app/"..appman[cat].list[focus_index].id)
+
+		if files.exists(appman[cat].list[focus_index].dev..":/"..options[scroll_op.sel].text.."/"..appman[cat].list[focus_index].id) then
+			show_explorer_list(appman[cat].list[focus_index].dev..":/"..options[scroll_op.sel].text.."/"..appman[cat].list[focus_index].id)
+		end
+
 	end
 
 end

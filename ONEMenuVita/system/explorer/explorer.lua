@@ -153,6 +153,7 @@ function ctrls_explorer_list()
 	if not menu_ctx.close then return end
 
 	if buttons[cancel] then -- return directory
+
 		if check_root() then return end
 
 		Root[Dev]=files.nofile(Root[Dev])
@@ -207,6 +208,7 @@ function ctrls_explorer_list()
 
 	--Return AppManager
 	if buttons.select and menu_ctx.open==false then
+		submenu_ctx.close = true
 		restart_cronopic()
 		appman.launch()
 	end
@@ -231,7 +233,7 @@ function handle_files(cnt)
 		show_msg_pbp(cnt)
 	elseif extension == "mp3" or extension == "wav" or extension == "ogg" then
 		MusicPlayer(cnt)
-	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "inf" then
+	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "inf" or extension == "cfg" then
 		visortxt(cnt,true)
 	end
 
