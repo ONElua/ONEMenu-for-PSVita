@@ -193,7 +193,7 @@ local refresh_callback = function ()
 end
 
 local uninstall_callback = function ()
-	if appman[cat].list[focus_index].id != __ID then
+	if appman[cat].list[focus_index].id != __ID and appman[cat].list[focus_index].dev != "gro0" then
 
 		local vbuff = screen.toimage()
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
@@ -271,7 +271,7 @@ end
 
 local shrink_callback = function ()
 
-	if cat == 1 then--Only Vita Games in ux0:app
+	if cat == 1 and appman[cat].list[focus_index].dev != "gro0" then--Only Vita Games in ux0:app
 
 		local vbuff = screen.toimage()
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
@@ -511,6 +511,9 @@ local switch_callback = function ()
 end
 
 local editsfo_callback = function ()
+
+	if appman[cat].list[focus_index].dev == "gro0" then return end
+
 	local pos_menu = submenu_ctx.scroll.sel
 	local vbuff = screen.toimage()
 
@@ -632,7 +635,7 @@ local openfolder_callback = function ()
 				buttons.read()
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-				draw.line(230,50,220,submenu_ctx.y + 129, color.green)
+				draw.line(270,50,270,submenu_ctx.y + 129, color.green)
 
 				local y = 100
 				for i=scroll_op.ini,scroll_op.lim do
