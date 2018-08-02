@@ -89,6 +89,7 @@ for i=1,__CATEGORIES do static_void[i] = {x=1} end
 function fillappman(obj)
 
 	if obj.id == __ID then return end
+	if not game.exists(obj.id) then return end
 
 	local index = 1
 
@@ -169,6 +170,23 @@ function Scanning()
 
 	--id, type, version, dev, path, title
 	local list = game.list(__GAME_LIST_ALL)
+
+	--Detected gamecard
+	if files.exists("gro0:") then
+		local device_info = os.devinfo("gro0:")
+		if device_info then
+			local listf = files.listdirs("gro0:app")
+			if listf then
+				local sfo = game.info(listf[1].path.."/sce_sys/param.sfo")
+				if sfo then
+					table.insert(list,
+							{ id = sfo.TITLE_ID or listf[1].name, type = sfo.CATEGORY, version = sfo.APP_VER, dev = "gro0", path = listf[1].path, title = sfo.TITLE  }
+						)
+				end
+			end
+		end
+	end
+
 	local sort_vita = tonumber(ini.read(__PATH_INI,"sort","sort","0"))
 	if sort_vita == 1 then
 		table.sort(list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
