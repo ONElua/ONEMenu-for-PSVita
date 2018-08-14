@@ -10,7 +10,7 @@ Onemenu comes with a built in file explorer which has many advanced features suc
 - Added option to open ux0:app/(gameid), ux0:patch/(gameid) and ux0:repatch/(gameid) folder.<br>
 
 ### Changelog 3.04 ###
-- Soporte para la correcta detección de las nuevas burbujas creadas con Adrenaline Bubble Booter v.05 y Adrenaline Bubbles Manager v5.05<br>
+- Added support for detecting correctly the bubbles made with Adrenaline Bubble Booter v.06 and Adrenaline Bubbles Manager v5.05<br>
 
 ### Changelog 3.03 ###
 - Updated kernel and user modules taken from vitashell.<br>
