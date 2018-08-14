@@ -5,8 +5,12 @@
 **OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories.<br>
 Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db.
 
+### Changelog 3.05 ###
+- Support to detect a game cartridge.<br>
+- Added option to open ux0:app/(gameid), ux0:patch/(gameid) and ux0:repatch/(gameid) folder.<br>
+
 ### Changelog 3.04 ###
-- Added support for detecting correctly the bubbles made with Adrenaline Bubble Booter v.06 and Adrenaline Bubbles Manager v5.05<br>
+- Soporte para la correcta detección de las nuevas burbujas creadas con Adrenaline Bubble Booter v.05 y Adrenaline Bubbles Manager v5.05<br>
 
 ### Changelog 3.03 ###
 - Updated kernel and user modules taken from vitashell.<br>

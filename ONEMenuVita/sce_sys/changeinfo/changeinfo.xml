@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="03.05">
+      <![CDATA[
+- Support to detect a game cartridge.<br>
+- Added option to open ux0:app/(gameid), ux0:patch/(gameid) and ux0:repatch/(gameid) folder.<br>
+    ]]>
   <changes app_ver="03.04">
       <![CDATA[
 - Added support for detecting correctly the bubbles made with Adrenaline Bubble Booter v.06 and Adrenaline Bubbles Manager v5.05<br>
