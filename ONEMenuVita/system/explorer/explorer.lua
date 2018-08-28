@@ -110,9 +110,9 @@ function show_explorer_list(first_path)
 
 		if (multi and #multi > 0) and action then
 			if movx==0 then
-				screen.print(940-movx,515,strings.items+#multi,1,color.new(255,69,0),color.black,__ARIGHT)
+				screen.print(940-movx,515,STRINGS_SEL_ITEMS+#multi,1,color.new(255,69,0),color.black,__ARIGHT)
 			else
-				screen.print((940-movx)+160,515,strings.items+#multi,1,color.new(255,69,0),color.black,__ARIGHT)
+				screen.print((940-movx)+160,515,STRINGS_SEL_ITEMS+#multi,1,color.new(255,69,0),color.black,__ARIGHT)
 			end
 		end
 
@@ -126,7 +126,7 @@ function show_explorer_list(first_path)
 			end
 			explorer.listshow(y)
 		else
-			screen.print(10+movx,80,"...".."\n\n"..strings.back,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+			screen.print(10+movx,80,"...".."\n\n"..STRINGS_BACK,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 		end
 
 		screen.print(10+movx,515,os.date(_time.."  %m/%d/%y"),1,theme.style.DATETIMECOLOR,color.gray,__ALEFT)
@@ -296,8 +296,8 @@ local paste_callback = function ()
         if #multi>0 then
             reboot=false
             for i=1,#multi do
-                if os.message(multi[i]+"\n\n"+strings.pass,1)==1 then
-                    local pass = osk.init(strings.ospass, "" , 50)
+                if os.message(multi[i]+"\n\n"+STRINGS_PASS ,1)==1 then
+                    local pass = osk.init(STRINGS_OS_PASS , "" , 50)
                     if pass then
                         buttons.homepopup(0)
                             files.extract(multi[i],explorer.dst,pass)
@@ -333,7 +333,7 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
 		local del=false
         if explorer.list[scroll.list.sel].multi then
             if #multi>0 then
-                if os.message(strings.delete.." "..#multi.."\n\n"..strings.filesfolders.."(s) ?",1) == 1 then
+                if os.message(STRINGS_SUBMENU_DELETE.." "..#multi.."\n\n"..STRINGS_FILES_FOLDERS.."(s) ?",1) == 1 then
 					del=true
                     reboot=false
                         for i=1,#multi do files.delete(multi[i]) end
@@ -341,7 +341,7 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
                 end
             end
         else
-            if os.message(strings.delete.."\n\n"..explorer.list[scroll.list.sel].path.." ?",1) == 1 then
+            if os.message(STRINGS_SUBMENU_DELETE.."\n\n"..explorer.list[scroll.list.sel].path.." ?",1) == 1 then
 				del=true
                 reboot=false
                     files.delete(explorer.list[scroll.list.sel].path)
@@ -366,7 +366,7 @@ end
 
 local rename_callback = function ()
     if #explorer.list > 0 then
-        local new_name = osk.init(strings.rename,files.nopath(explorer.list[scroll.list.sel].path))
+        local new_name = osk.init(STRINGS_SUBMENU_RENAME,files.nopath(explorer.list[scroll.list.sel].path))
         if new_name then
             local fullpath = files.nofile(explorer.list[scroll.list.sel].path)
             files.rename(explorer.list[scroll.list.sel].path, new_name)
@@ -386,10 +386,10 @@ end
 
 local newfile_callback = function () -- Added suport multi-new-folder
     local i=1
-    while files.exists(Root[Dev].."/"..string.format("%s%03d",strings.newfile,i)) do
+    while files.exists(Root[Dev].."/"..string.format("%s%03d",STRINGS_NEW_FILE,i)) do
         i+=1
     end
-    local name_folder = osk.init(strings.creatfile, string.format("%s%03d",strings.newfile,i))
+    local name_folder = osk.init(STRINGS_CREAT_FILE, string.format("%s%03d",STRINGS_NEW_FILE,i))
     if name_folder then
         local dest = Root[Dev].."/"..name_folder
         if Root[Dev]:sub(#Root[Dev]) == "/" then dest = Root[Dev]..name_folder end
@@ -406,10 +406,10 @@ end
  
 local makedir_callback = function () -- Added suport multi-new-folder
     local i=1
-    while files.exists(Root[Dev].."/"..string.format("%s%03d",strings.newfolder,i)) do
+    while files.exists(Root[Dev].."/"..string.format("%s%03d",STRINGS_NEW_FOLDER,i)) do
         i+=1
     end
-    local name_folder = osk.init(strings.creatfolder, string.format("%s%03d",strings.newfolder,i))
+    local name_folder = osk.init(STRINGS_CREAT_FOLDER, string.format("%s%03d",STRINGS_NEW_FOLDER,i))
     if name_folder then
         local dest = Root[Dev].."/"..name_folder
         if Root[Dev]:sub(#Root[Dev]) == "/" then dest = Root[Dev]..name_folder end
@@ -438,14 +438,14 @@ local sizedir_callback = function ()
 				for i=1,#multi do
 					sizedir += files.size(multi[i])
 				end--for
-				os.message(strings.total_size.." "..files.sizeformat(sizedir or 0))
+				os.message(STRINGS_CALLBACKS_SIZE_ALL.." "..files.sizeformat(sizedir or 0))
 			end
 		else
 			if not explorer.list[scroll.list.sel].size then                -- Its Dir
 				message_wait()
-				os.message(explorer.list[scroll.list.sel].name+"\n\n"+strings.sizeis+files.sizeformat(files.size(explorer.list[scroll.list.sel].path) or 0))
+				os.message(explorer.list[scroll.list.sel].name+"\n\n"+STRINGS_SIZE_IS+files.sizeformat(files.size(explorer.list[scroll.list.sel].path) or 0))
 			else
-				os.message(explorer.list[scroll.list.sel].name+"\n\n"+strings.sizeis+explorer.list[scroll.list.sel].size)
+				os.message(explorer.list[scroll.list.sel].name+"\n\n"+STRINGS_SIZE_IS+explorer.list[scroll.list.sel].size)
 			end
 		end
     end
@@ -508,8 +508,8 @@ local installgame_callback = function ()
 				tmp_vpk.img:blit(960/2,544/2)
             end
  
-            screen.print(960/2,y+325,strings.insvpkfromdir +" ?",1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-            screen.print(960/2,y+395,Xa..strings.confirm.." | "..Oa..strings.cancel,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+            screen.print(960/2,y+325,STRINGS_SUBMENU_INSTALL_GAME +" ?",1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+            screen.print(960/2,y+395,Xa..STRINGS_CONFIRM.." | "..Oa..STRINGS_SUBMENU_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
             screen.flip()
  
             if buttons[accept] or buttons[cancel] then
@@ -536,12 +536,12 @@ local installgame_callback = function ()
 			--Restore Save from "ux0:data/ONEMenu/Saves
 			if files.exists("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID) then
 				local info_time = files.info("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID)
-				if os.message(strings.restoresave.."\n\n"..info_time.mtime or "", 1) == 1 then
+				if os.message(STRINGS_APP_RESTORE_SAVE.."\n\n"..info_time.mtime or "", 1) == 1 then
 					files.copy("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID, "ux0:user/00/savedata/")
 				end
 			end
 
-			if os.message(strings.launchpbp+"\n\n"+info.TITLE_ID+" ?",1) == 1 then
+			if os.message(STRINGS_LAUNCH_GAME+"\n\n"+info.TITLE_ID+" ?",1) == 1 then
 				if game.exists(info.TITLE_ID) then
 					if info.CATEGORY == "ME" then game.open(info.TITLE_ID) else game.launch(info.TITLE_ID) end
 				end
@@ -552,7 +552,7 @@ local installgame_callback = function ()
 			infodevices()
 
 		else
-			os.message(strings.errorinstall)
+			os.message(STRINGS_INSTALL_ERROR)
 		end
 
 --clean
@@ -613,7 +613,7 @@ local filesexport_callback = function ()
 								elseif ext == "mp3" then cont_mp3+=1
 									else cont_mp4+=1 end
 						else
-							os.message(strings.fail.."\n\n"..tmp[i].name,0)
+							os.message(STRINGS_EXPORT_FAIL.."\n\n"..tmp[i].name,0)
 						end
 					end
 				end--for
@@ -621,9 +621,9 @@ local filesexport_callback = function ()
 			end
 
 			if cont_multimedia > 0 then
-				os.message(strings.mp3s..cont_mp3.."\n\n"..strings.mp4s..cont_mp4.."\n\n"..strings.imgs..cont_img.."\n\n"..strings.openexport)
+				os.message(STRINGS_EXPORT_MP3..cont_mp3.."\n\n"..STRINGS_EXPORT_MP4..cont_mp4.."\n\n"..STRINGS_EXPORT_IMG..cont_img.."\n\n"..STRINGS_EXPORT_OPEN)
 			else
-				os.message(strings.nofile)
+				os.message(STRINGS_EXPORT_NO_FILES)
 			end
 
 		else
@@ -636,14 +636,14 @@ local filesexport_callback = function ()
 				reboot=true
 
 				if result == 1 then
-					if os.message(strings.opensettings,1)==1 then
+					if os.message(STRINGS_EXPORT_OPEN_APP,1)==1 then
 						os.delay(150)
 						if ext == "mp3" then os.uri("music:browse?category=ALL")
 						elseif ext == "mp4" then os.uri("video:browse?category=ALL")
 						else os.uri("photo:browse?category=ALL") end
 					end
 				else
-					os.message(strings.fail.."\n\n"..explorer.list[scroll.list.sel].name,0)
+					os.message(STRINGS_EXPORT_FAIL.."\n\n"..explorer.list[scroll.list.sel].name,0)
 				end
 			end
 		end
@@ -664,42 +664,185 @@ local filesexport_callback = function ()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
 
+url = nil
+
+--Parse MF
+parseMF_callback = function ()
+
+	http.getfile(url, "ux0:downloads/tmp")
+
+	local data = {}
+    for line in io.lines("ux0:downloads/tmp") do
+		if line:find('gbtnSecondary" href=') then
+			local en=line:find('gbtnSecondary" href=')  --Guardo dónde termina ese patrón
+			local en2,urlf
+			en=line:find("'",en) --ara busco la comilla sencilla, empezando por donde terminaba el patron anterior
+			en2=line:find("'",en+1) -- busco la siguiente comilla
+
+			urlf=line:sub( en+1, en2-1) --y recorto la URL
+
+			data.url = urlf
+			data.name = files.nopath(urlf)
+		end
+
+		if line:find("<span class='dlFileSize'>") then
+			data.size = line:match("%<span class='dlFileSize'%>%((.+)%)%</span%>")
+		end
+
+	end
+	return data
+
+end
+
+--Parse Zippyshare
+parseZY_callback = function ()
+
+	http.getfile(url, "ux0:downloads/tmp")
+	local data,nflag={},false
+	for line in io.lines("ux0:downloads/tmp") do
+
+		if line:find("getElementById%('dlbutton'%)") then
+			line=line:match("href = (.+);")
+			p1=line:match('(/.+/)"')
+				nb=line:match(" %((.+)%) ")
+					assert(loadstring('nb='..nb))()
+				p2=line:match(' "(/.+4)"')
+			data.url=p1..nb..p2
+		end
+
+		if nflag then
+			data.name = line:match('"%>(.+)%</')
+			nflag=false
+		end
+
+		if line:find('"%>Name:%</') then
+			nflag=true
+		end
+
+		if line:find('"%>Size:%</') then
+			data.size = line:match('px;"%>(.+)%</')
+		end
+
+	end
+
+	data.url=url:match("http.+%.com")..data.url
+
+	return data
+
+end
+
+--Parse GDrive
+parseGD_callback = function ()
+
+	local data, ID = {url="https://drive.google.com/uc?export=download&id="}, ""
+
+	if url:find("?id=") then
+		ID=url:match("?id=(.+)")
+	elseif url:find("file/d/") then
+		ID=url:match("file/d/(.+)/.+")
+	else return nil end
+	data.url=data.url..ID
+
+	http.getfile(url, "ux0:downloads/tmp")
+	local file=io.open("ux0:downloads/tmp")
+	if file then
+		local line=file:read()
+		data.name=line:match("title%>(.+) %- Google Drive%</")
+			
+		file:close()
+	end
+
+	return data
+
+end
+
+__NAME_DOWNLOAD = ""
 local qr_callback = function ()
+
+	__NAME_DOWNLOAD = ""
+	files.delete("ux0:downloads/tmp")
+	if not wlan.isconnected() then wlan.connect() end
+
 	local vbuff = screen.toimage()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+
 	local pos_menu = menu_ctx.scroll.sel
 	menu_ctx.wakefunct()
 
-	local url = nil
+	url = cam.scanqr(STRINGS_SUBMENU_QR_SCAN,theme.style.TXTBKGCOLOR)
 
-	url=cam.scanqr(strings.qrscan,theme.style.TXTBKGCOLOR)
+	local servers = {
+		{ name = "mediafire", 		funct = parseMF_callback },
+		{ name = "zippyshare",		funct = parseZY_callback },
+		{ name = "drive.google",	funct = parseGD_callback },
+	}
 
+	local parse,url_backup,pflag = {},"",false
 	if url then
-		if not wlan.isconnected() then wlan.connect() end
-		if wlan.isconnected() then
-			buttons.homepopup(0)
-				local res,filename = http.getfile(url,"ux0:downloads/")
-			buttons.homepopup(1)
-			if res then
-				if filename then
+
+		url_backup = url
+
+		for i=1,#servers do
+			if string.find(url:lower(), servers[i].name, 1, true) then
+				parse = servers[i].funct()
+				pflag = true
+				break
+			end
+		end
+
+		local res,filename = "",false
+		if parse and pflag then
+			if wlan.isconnected() then
+
+				__NAME_DOWNLOAD = parse.name or ""
+				buttons.homepopup(0)
+					res,filename = http.getfile(parse.url,"ux0:downloads/"..parse.name or "")
+				buttons.homepopup(1)
+
+				if parse.name then filename = parse.name end
+
+				if res then
 					if files.exists("ux0:downloads/"..filename) then
-						os.message(strings.success.." ux0:downloads\n\n"..filename)
+						os.message(STRINGS_DOWNLOAD_SUCCESS.." ux0:downloads\n\n"..filename)
 						explorer.refresh(true)
 					end
+				else
+					files.delete("ux0:downloads/"..filename)
+					os.message(STRINGS_DOWNLOAD_FAILED.." ux0:downloads\n\n"..filename)
 				end
+			end
+		else
+
+			res,filename = http.getfile(url_backup,"ux0:downloads/")
+
+			if not res then
+				filename = osk.init(STRINGS_SUBMENU_QR_DOWNLOAD, STRINGS_SUBMENU_QR_FILENAME)
+				if filename then tmp = filename else tmp = "file" end
+				__NAME_DOWNLOAD = tmp or ""
+				http.download(url_backup,"ux0:downloads/"..filename)
+			end
+			if filename then tmp = filename else tmp = "file" end
+
+			if files.exists("ux0:downloads/"..tmp) then
+				os.message(STRINGS_DOWNLOAD_SUCCESS.." ux0:downloads\n\n"..tmp)
+				explorer.refresh(true)
 			else
-				os.message(strings.failed.." ux0:downloads\n\n"..filename)
+				files.delete("ux0:downloads/"..tmp)
+				os.message(STRINGS_DOWNLOAD_FAILED.." ux0:downloads\n\n"..tmp)
 			end
 		end
 	end
+	files.delete("ux0:downloads/tmp")
 
 --clean
+	__NAME_DOWNLOAD = ""
 	action = false
 	explorer.action = 0
 	multi={}
 	menu_ctx.scroll.sel = pos_menu
 	os.delay(15)
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+	os.delay(50)
 end
 
 local cancel_callback = function ()
@@ -757,7 +900,7 @@ local updatedb_callback = function ()
 	os.delay(150)
 	_print=false
 	os.updatedb()
-	os.message(strings.restartupdb)
+	os.message(STRINGS_RESTART_UPDATEDB)
 	os.delay(1500)
 	power.restart()
 end
@@ -766,7 +909,7 @@ local rebuilddb_callback = function ()
 	os.delay(150)
 	_print=false
 	os.rebuilddb()
-	os.message(strings.restartredb)
+	os.message(STRINGS_RESTART_REBUILDDB)
 	os.delay(1500)
 	power.restart()
 end
@@ -774,7 +917,7 @@ end
 local reloadconfig_callback = function ()
 	local pos_menu = menu_ctx.scroll.sel
 	os.taicfgreload()
-	os.message(strings.configtxt)
+	os.message(STRINGS_CONFIG_SUCCESS)
 	menu_ctx.scroll.sel = pos_menu
 end
 
@@ -827,52 +970,52 @@ menu_ctx = { -- Creamos un objeto menu contextual
 
 function menu_ctx.wakefunct()
     menu_ctx.options = { 	-- Handle Option Text and Option Function
-		{ text = strings.delete,        funct = delete_callback },
-		{ text = strings.rename,        funct = rename_callback },
-		{ text = strings.size,          funct = sizedir_callback },
+		{ text = STRINGS_SUBMENU_DELETE,        funct = delete_callback },
+		{ text = STRINGS_SUBMENU_RENAME,        funct = rename_callback },
+		{ text = STRINGS_SUBMENU_SIZE,          funct = sizedir_callback },
 
-		{ text = strings.newfile,       funct = newfile_callback },
-		{ text = strings.makedir,       funct = makedir_callback },
+		{ text = STRINGS_NEW_FILE,       funct = newfile_callback },
+		{ text = STRINGS_SUBMENU_MAKEDIR,       funct = makedir_callback },
 
-		{ text = strings.insvpkfromdir, funct = installgame_callback },
-        { text = strings.export,        funct = filesexport_callback },
-		{ text = strings.qr,            funct = qr_callback },
+		{ text = STRINGS_SUBMENU_INSTALL_GAME, funct = installgame_callback },
+        { text = STRINGS_SUBMENU_EXPORT,        funct = filesexport_callback },
+		{ text = STRINGS_SUBMENU_QR,            funct = qr_callback },
 
-		{ text = strings.cancel,        funct = cancel_callback },
+		{ text = STRINGS_SUBMENU_CANCEL,        funct = cancel_callback },
 
     }
     if menu_ctx.wait_action==__ACTION_WAIT_PASTE then
-        table.insert(menu_ctx.options, 1, { text = strings.paste,       funct = paste_callback })
+        table.insert(menu_ctx.options, 1, { text = STRINGS_SUBMENU_PASTE,       funct = paste_callback })
     elseif menu_ctx.wait_action==__ACTION_WAIT_EXTRACT then
-        table.insert(menu_ctx.options, 1, { text = strings.extractto,   funct = paste_callback })
+        table.insert(menu_ctx.options, 1, { text = STRINGS_SUBMENU_EXTRACT_TO,   funct = paste_callback })
     else
-        table.insert(menu_ctx.options, 1, { text = strings.copy,        funct =  src_path_callback })
-        table.insert(menu_ctx.options, 2, { text = strings.move,        funct = src_path_callback })
-        table.insert(menu_ctx.options, 3, { text = strings.extract,     funct = src_path_callback })
+        table.insert(menu_ctx.options, 1, { text = STRINGS_SUBMENU_COPY,        funct =  src_path_callback })
+        table.insert(menu_ctx.options, 2, { text = STRINGS_SUBMENU_MOVE,        funct = src_path_callback })
+        table.insert(menu_ctx.options, 3, { text = STRINGS_SUBMENU_EXTRACT,     funct = src_path_callback })
     end
     menu_ctx.scroll = newScroll(menu_ctx.options, #menu_ctx.options)
 end
 
 function menu_ctx.wakefunct2()
     menu_ctx.options = { -- Handle Option Text and Option Function
-        { text = strings.usb,           funct = usb_callback },
-		{ text = strings.ftp,           funct = ftp_callback },
-		{ text = strings.refresh,       funct = refresh_callback },
+        { text = STRINGS_USB,           funct = usb_callback },
+		{ text = STRINGS_SUBMENU_FTP,           funct = ftp_callback },
+		{ text = STRINGS_REFRESH_LIVEAREA,       funct = refresh_callback },
 
-		{ text = strings.restarthb,     funct = restart_callback },
-        { text = strings.reset,         funct = reboot_callback },
-        { text = strings.off,           funct = shutdown_callback },
+		{ text = STRINGS_SUBMENU_RESTART,     funct = restart_callback },
+        { text = STRINGS_SUBMENU_RESET,         funct = reboot_callback },
+        { text = STRINGS_SUBMENU_POWEROFF,           funct = shutdown_callback },
 
-		{ text = strings.refreshdb, 	funct = updatedb_callback },
-		{ text = strings.rebuilddb, 	funct = rebuilddb_callback },
-		{ text = strings.reloadconfig,	funct = reloadconfig_callback },
+		{ text = STRINGS_UPDATE_DB, 	funct = updatedb_callback },
+		{ text = STRINGS_REBUILD_DB, 	funct = rebuilddb_callback },
+		{ text = STRINGS_RELOAD_CONFIG,	funct = reloadconfig_callback },
 
-		{ text = strings.favorites,		funct = scanfavs_callback },
+		{ text = STRINGS_FAVORITES_SECTION,		funct = scanfavs_callback },
     }
 	if __FNT == 3 then 
-		table.insert(menu_ctx.options, { text = "< "..strings.pvf.." >", funct = font_callback, pad = true })
+		table.insert(menu_ctx.options, { text = "< "..STRINGS_PVF_FONT.." >", funct = font_callback, pad = true })
 	else
-		table.insert(menu_ctx.options, { text = "< "..strings.pgf.." >", funct = font_callback, pad = true })
+		table.insert(menu_ctx.options, { text = "< "..STRINGS_PGF_FONT.." >", funct = font_callback, pad = true })
 	end
 
     menu_ctx.scroll = newScroll(menu_ctx.options, #menu_ctx.options)

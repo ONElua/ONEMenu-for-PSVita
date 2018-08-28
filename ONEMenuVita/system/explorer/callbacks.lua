@@ -16,7 +16,7 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
     	if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 		draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
-		screen.print(10,10,strings.searchunsafe)
+		screen.print(10,10,STRINGS_INSTALL_SEARCH_UNSAFE)
 
 		screen.flip()
 	elseif step == 2 then -- Alerta Vpk requiere confirmacion!
@@ -34,15 +34,15 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 			draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
 
 			if size_argv == 1 then
-				screen.print(10,10,strings.unsafevpk)
+				screen.print(10,10,STRINGS_WARNING_UNSAFE)
 			elseif size_argv == 2 then
-				screen.print(10,10,strings.dangerousvpk)
+				screen.print(10,10,STRINGS_WARNING_DANGEROUS)
 			end
 
 			if accept_x == 1 then
-				screen.print(10,505,string.format("%s "..strings.confirm.." | %s "..strings.cancel,SYMBOL_CROSS, SYMBOL_CIRCLE),1.0,color.white, color.blue)
+				screen.print(10,505,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CROSS, SYMBOL_CIRCLE),1.0,color.white, color.blue)
 			else
-				screen.print(10,505,string.format("%s "..strings.confirm.." | %s "..strings.cancel,SYMBOL_CIRCLE, SYMBOL_CROSS),1.0,color.white, color.blue)
+				screen.print(10,505,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CIRCLE, SYMBOL_CROSS),1.0,color.white, color.blue)
 			end
 			screen.flip()
 		end
@@ -50,10 +50,10 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 		if theme.data["back"] then theme.data["back"]:blit(0,0)	end
 		draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
 
-		screen.print(10,10,strings.vpkunpack)
-		screen.print(925,10,strings.percent_total..math.floor((totalwritten*100)/totalsize).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-		screen.print(10,70,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-		screen.print(10,90,strings.percent..math.floor((written*100)/size_argv).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+		screen.print(10,10,STRINGS_UNPACK_VPK)
+		screen.print(925,10,STRINGS_CALLBACKS_PERCENT_ALL..math.floor((totalwritten*100)/totalsize).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+		screen.print(10,70,STRINGS_CALLBACKS_FILE..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+		screen.print(10,90,STRINGS_CALLBACKS_PERCENT..math.floor((written*100)/size_argv).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 		
 		draw.fillrect(0,544-30,(totalwritten*960)/totalsize,30, color.new(0,255,0))
 
@@ -62,7 +62,7 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 		if theme.data["back"] then theme.data["back"]:blit(0,0)	end
 		draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
 
-		screen.print(10,10,strings.install)
+		screen.print(10,10,STRINGS_INSTALLING)
 		screen.print(10,55,__TITTLEAPP, 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
 		screen.print(10,80,__IDAPP, 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
 		screen.flip()
@@ -76,14 +76,14 @@ function onExtractFiles(size,written,file,totalsize,totalwritten)
 	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 	if explorer.dst then
-		screen.print(10,10,strings.extraction+" <- -> "+explorer.dst)
+		screen.print(10,10,STRINGS_EXTRACTION+" <- -> "+explorer.dst)
 	else
-		screen.print(10,10,strings.extraction)
+		screen.print(10,10,STRINGS_EXTRACTION)
 	end
 
-	screen.print(925,10,strings.percent_total..math.floor((totalwritten*100)/totalsize).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-	screen.print(10,70,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-	screen.print(10,90,strings.percent..math.floor((written*100)/size).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+	screen.print(925,10,STRINGS_CALLBACKS_PERCENT_ALL..math.floor((totalwritten*100)/totalsize).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+	screen.print(10,70,STRINGS_CALLBACKS_FILE..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+	screen.print(10,90,STRINGS_CALLBACKS_PERCENT..math.floor((written*100)/size).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
 	screen.flip()
 	
@@ -101,8 +101,8 @@ function onScanningFiles(file,unsize,position,unsafe)
 
 	local x,y = (960-420)/2,(544-420)/2
 
-	screen.print(__DISPLAYW/2,y+7,strings.file..tostring(file),1,ccc,color.black,__ACENTER)
-	screen.print(__DISPLAYW/2,y+37,strings.unsafe..tostring(unsafe),1,ccc,color.black,__ACENTER)
+	screen.print(__DISPLAYW/2,y+7,STRINGS_CALLBACKS_FILE..tostring(file),1,ccc,color.black,__ACENTER)
+	screen.print(__DISPLAYW/2,y+37,STRINGS_CALLBACKS_UNSAFE..tostring(unsafe),1,ccc,color.black,__ACENTER)
 
 	draw.fillrect(x,y,420,420,theme.style.CBACKSBARCOLOR)
 	draw.rect(x,y,420,420,color.black)
@@ -113,7 +113,7 @@ function onScanningFiles(file,unsize,position,unsafe)
 	draw.framearc(__DISPLAYW/2, __DISPLAYH/2, 40, color.new(255,255,255), 0, 360, 20, 30)
 	draw.framearc(__DISPLAYW/2, __DISPLAYH/2, 40, color.new(0,255,0), angle, 90, 20, 30)
 
-	screen.print(__DISPLAYW/2,(__DISPLAYH/2)+45,strings.scanning,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+	screen.print(__DISPLAYW/2,(__DISPLAYH/2)+45,STRINGS_SCANNING,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 
 	screen.flip()
 end
@@ -129,24 +129,24 @@ function onCopyFiles(size,written,file)
 		draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 		if explorer.dst then
-			screen.print(10,10,strings.copyfile+" <- -> "+explorer.dst)
+			screen.print(10,10,STRINGS_COPYFILE.." <- -> "+explorer.dst)
 		else
-			screen.print(10,10,strings.copyfile)
+			screen.print(10,10,STRINGS_COPYFILE)
 		end
 
 		screen.print(945,10,math.floor((written*100)/size).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-		screen.print(10,70,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+		screen.print(10,70,STRINGS_CALLBACKS_FILE..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
 		if game_move then
 			if file != fileant then	cont+=1 end
 
 			if cont <= files_move or cont == files_move+1 then
 				if cont == files_move+1 then cont = files_move end
-				screen.print(480,415,strings.movefiles.." ( "..(cont).." / "..files_move.." )",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ACENTER)
+				screen.print(480,415,STRINGS_CALLBACKS_MOVE_FILES.." ( "..(cont).." / "..files_move.." )",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ACENTER)
 				draw.rect(0, 440, 960, 24, theme.style.CBACKSBARCOLOR)
 				draw.fillrect(0,440, (cont*960)/files_move,24, theme.style.CBACKSBARCOLOR)
 			else
-				screen.print(480,415,strings.updatedb,1,color.white,color.blue, __ACENTER)
+				screen.print(480,415,STRINGS_CALLBACKS_UPDATE_DB,1,color.white,color.blue, __ACENTER)
 			end
 
 			fileant = file
@@ -162,8 +162,8 @@ function onDeleteFiles(file)
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
 		draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
-		screen.print(10,10,strings.delfile,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-		screen.print(10,70,strings.file..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+		screen.print(10,10,STRINGS_DELFILE,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+		screen.print(10,70,STRINGS_CALLBACKS_FILE..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
 		screen.flip()
 	end
@@ -173,9 +173,11 @@ function onNetGetFile(size,written,speed)
 	if theme.data["list"] then theme.data["list"]:blit(0,0) end
 	draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
 
-	screen.print(10,10,strings.download)
-	screen.print(10,30,strings.total_size..tostring(files.sizeformat(size) or 0))
-	screen.print(10,50,strings.percent_total..math.floor((written*100)/size).."%")
+	screen.print(10,10,STRINGS_DOWNLOAD)
+	screen.print(10,80,STRINGS_CALLBACKS_FILE.." "..__NAME_DOWNLOAD)
+	screen.print(10,105,STRINGS_CALLBACKS_SIZE_ALL..tostring(files.sizeformat(size) or 0))
+	screen.print(10,130,STRINGS_CALLBACKS_PERCENT_ALL..math.floor((written*100)/size).."%")
+
 	draw.fillrect(0,520,((written*960)/size),24,color.new(0,255,0))
 	screen.flip()
 

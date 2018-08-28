@@ -167,20 +167,20 @@ function refresh_init(img)
 				--Restore Save from "ux0:data/ONEMenu/Saves
 				if files.exists("ux0:data/ONEMenu/SAVES/"..list[i].id) then
 					local info = files.info("ux0:data/ONEMenu/SAVES/"..list[i].id)
-					if os.message(strings.restoresave.."\n\n"..info.mtime or "", 1) == 1 then
+					if os.message(STRINGS_APP_RESTORE_SAVE.."\n\n"..info.mtime or "", 1) == 1 then
 						files.copy("ux0:data/ONEMenu/SAVES/"..list[i].id, "ux0:user/00/savedata/")
 					end
 				end
 				appman.len +=1
 
 			else
-				os.message(strings.notinstalled..list[i].id)
+				os.message(STRINGS_LIVEAREA_NOTINSTALLED..list[i].id)
 			end
 		end
-		os.message(strings.gamesinst..count)
+		os.message(STRINGS_LIVEAREA_GAMES..count)
 
 	else
-		os.message(strings.nogames)
+		os.message(STRINGS_LIVEAREA_NO_GAMES)
 	end
 
 	infodevices()

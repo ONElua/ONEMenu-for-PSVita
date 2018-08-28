@@ -249,7 +249,7 @@ function focus_icon()
 				end
 				draw.rect(95,fill, appman[cat].list[focus_index].img:getw()+10, 230,color.shine)
 				draw.gradrect(95,fill, appman[cat].list[focus_index].img:getw()+10, 230, theme.style.GRADRECTCOLOR, theme.style.GRADSHADOWCOLOR, __DIAGONAL)--__DOUBLEVER
-				screen.print(95 + (appman[cat].list[focus_index].img:getw()+10)/2,350,SYMBOL_CROSS.." "..strings.start,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ACENTER)
+				screen.print(95 + (appman[cat].list[focus_index].img:getw()+10)/2,350,SYMBOL_CROSS.." "..STRINGS_APP_START,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ACENTER)
 
 			end
 

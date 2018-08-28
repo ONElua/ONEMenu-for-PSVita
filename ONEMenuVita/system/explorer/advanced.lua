@@ -34,13 +34,13 @@ end
 
 function menuadv.wakefunct()
 	menuadv.options = {
-		{ text = strings.favorites,		funct = scanfavs_callback },
+		{ text = STRINGS_FAVORITES_SECTION,		funct = scanfavs_callback },
 
 	}
 	if __FNT == 3 then 
-		table.insert(menuadv.options, { text = " < "..strings.pvf.." > ",	funct = font_callback })
+		table.insert(menuadv.options, { text = " < "..STRINGS_PVF_FONT.." > ",	funct = font_callback })
 	else
-		table.insert(menuadv.options, { text = " < "..strings.pgf.." > ",	funct = font_callback })
+		table.insert(menuadv.options, { text = " < "..STRINGS_PGF_FONT.." > ",	funct = font_callback })
 	end
 
 	menuadv.scroll = newScroll(menuadv.options, #menuadv.options)
@@ -55,7 +55,7 @@ function advanced_options()
 
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
 
-		screen.print(480,15,strings.advanced,1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		screen.print(480,15,STRINGS_ADVANCED,1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 
 		if buttons.up or buttons.analogly < -60 then menuadv.scroll:up() end
 		if buttons.down or buttons.analogly > 60 then menuadv.scroll:down() end

@@ -1,233 +1,211 @@
 --Texts
-strings = {
-
 -------------	Explorer	---------------------------------------------------------------------------------
-back =			"Indietro",
-copyfile =		"Copia in corso: ",
-delfile =		"Cancellazione in corso: ",
-creatfile =		"Create File",
-creatfolder =	"Crea Cartella",
-newfile =		"New File",
-newfolder =		"Nuova Cartella",
-pass =			"Usare Pass?",
-ospass =		"PASS",
+STRINGS_BACK =					"Indietro"
+STRINGS_COPYFILE =				"Copia in corso: "
+STRINGS_DELFILE =				"Cancellazione in corso: "
+STRINGS_CREAT_FILE =			"Create File"
+STRINGS_CREAT_FOLDER =			"Crea Cartella"
+STRINGS_NEW_FILE =				"New File"
+STRINGS_NEW_FOLDER =			"Nuova Cartella"
+STRINGS_PASS =					"Usare Pass?"
+STRINGS_OS_PASS =				"PASS"
 
 --SubMenu
-copy =			"Copia",
-delete =		"Cancella",
-makedir =		"MakeDir",
-rename =		"Rinomina",
-extract =		"Estrai",
-cancel =		"Cancella",
-insvpkfromdir = "Installa Gioco",
-extractto =		"Estrai su",
-paste =			"Incolla",
-move =			"Sposta",
-size =			"Dimensione",
-export =		"Esporta file Multimediale",
-themes =		"Temi ONEMenu",
-ftp =			"FTP",
-restarthb =		"Riavvia ONEMenu",
-reset =			"Power Reset",
-off =			"Spegni",
-qr =			"QR DownLoader",
-qrscan =		"QR Scanning",
+STRINGS_SUBMENU_COPY =			"Copia"
+STRINGS_SUBMENU_DELETE =		"Cancella"
+STRINGS_SUBMENU_MAKEDIR =		"MakeDir"
+STRINGS_SUBMENU_RENAME =		"Rinomina"
+STRINGS_SUBMENU_EXTRACT =		"Estrai"
+STRINGS_SUBMENU_CANCEL =		"Cancella"
+STRINGS_SUBMENU_INSTALL_GAME = "Installa Gioco"
+STRINGS_SUBMENU_EXTRACT_TO =	"Estrai su"
+STRINGS_SUBMENU_PASTE =			"Incolla"
+STRINGS_SUBMENU_MOVE =			"Sposta"
+STRINGS_SUBMENU_SIZE =			"Dimensione"
+STRINGS_SUBMENU_EXPORT =		"Esporta file Multimediale"
+STRINGS_SUBMENU_THEMES =		"Temi ONEMenu"
+STRINGS_SUBMENU_FTP =			"FTP"
+STRINGS_SUBMENU_RESTART =		"Riavvia ONEMenu"
+STRINGS_SUBMENU_RESET =			"Power Reset"
+STRINGS_SUBMENU_POWEROFF =		"Spegni"
+STRINGS_SUBMENU_QR =			"QR DownLoader"
+STRINGS_SUBMENU_QR_SCAN =		"QR Scanning"
+STRINGS_SUBMENU_QR_DOWNLOAD =	"File to download"
+STRINGS_SUBMENU_QR_FILENAME =	"Input full name+ext here"
 
-items =			"Elementi selezionati: ",
+STRINGS_SEL_ITEMS =				"Elementi selezionati: "
 
 ------------	Ftp 		---------------------------------------------------------------------------------
-textftp =		"Inserisci questo indirizzo FTP sul tuo dispositivo o PC",
-closeftp =		"Premere START per chiudere la connessione FTP",
-loseftp =		"Connessione FTP chiusa",
+STRINGS_FTP_TEXT =				"Inserisci questo indirizzo FTP sul tuo dispositivo o PC"
+STRINGS_FTP_CLOSE =				"Premere START per chiudere la connessione FTP"
+STRINGS_FTP_LOSE =				"Connessione FTP chiusa"
 
 ------------	USB 		---------------------------------------------------------------------------------
-usb =			"USB",
-connectusb =	"Collegare un cavo USB",
-usbconnection = "Connessione USB abilitata",
-cancelusb =		"Disconnetti",
-usbmode =		"Modalità di connessione USB",
-usbfail =		"Errore... Connessione Fallita",
-sd2vita =		"SD2VITA",
-memcard =		"Memory Card",
-gamecard =		"Game Card",
+STRINGS_USB =					"USB"
+STRINGS_USB_CABLE =				"Collegare un cavo USB"
+STRINGS_USB_CONNECTION = 		"Connessione USB abilitata"
+STRINGS_USB_CANCEL =			"Disconnetti"
+STRINGS_USB_MODE =				"Modalità di connessione USB"
+STRINGS_USB_ERROR =				"Errore... Connessione Fallita"
+STRINGS_USB_SD2VITA =			"SD2VITA"
+STRINGS_USB_MEMORYCARD =		"Memory Card"
+STRINGS_USB_GAMECARD =			"Game Card"
 
-imgerror =		"Errore Immagine non supportata",
-
-background =	"Sfondo: Premere △",
+STRINGS_ERROR_PREVIEW_IMG =		"Errore Immagine non supportata"
+STRINGS_BACKGROUND_IMG =		"Sfondo: Premere △"
 
 -- ## Visor TXT ##
-editline =		"Modifica linea",
-savechanges =	"Vuoi salvare le modifiche?",
-insertline =	"+ -> Inserisci Linea",
-deleteline =	"+ <- Cancella Linea",
-toolarge =		"File troppo grande",
-nimplemented =	"Non implementato",
-Titleupdatedb = "Per applicare la modifica al TITLE è necessario eseguire l'aggiornamento del DB\n\nOppure puoi usare QCMA per fare il backup / ripristinare il gioco\n\nVuoi aggiornareil DB ora?",
-Stitlerestart = "Per applicare la modifica al STITLE è necessario riavviare la PSVita\n\nVuoi riavviare ora?",
-simplestitle =	"After edit the STITLE a reboot is needed",
-simpletitle = 	"After edit the TITLE an update.db is needed to reflect changes",
+STRINGS_EDIT_LINE =				"Modifica linea"
+STRINGS_EDIT_SAVE_CHANGES =		"Vuoi salvare le modifiche?"
+STRINGS_EDIT_INSERT_LINE =		"+ -> Inserisci Linea"
+STRINGS_EDIT_DELETE_LINE =		"+ <- Cancella Linea"
+STRINGS_EDIT_TOO_LARGE =		"File troppo grande"
+STRINGS_EDIT_NOT_IMPLEMENTED =	"Non implementato"
+STRINGS_TITLE_UPDATE_DB = 		"Per applicare la modifica al TITLE è necessario eseguire l'aggiornamento del DB\n\nOppure puoi usare QCMA per fare il backup / ripristinare il gioco\n\nVuoi aggiornareil DB ora?"
+STRINGS_STITLE_RESTART = 		"Per applicare la modifica al STITLE è necessario riavviare la PSVita\n\nVuoi riavviare ora?"
+STRINGS_STITLE_MGE =			"After edit the STITLE a reboot is needed"
+STRINGS_TITLE_MGE = 			"After edit the TITLE an update.db is needed to reflect changes"
 
 -- ## Music Player ##
-playing =		"In riproduzione",
-paused =		"In pausa",
-time =			"Tempo: ",
-tags =			"xx:xx:xx",
-sounderror =	"Errore audio non valido",
-display =		"Blocca Display",
+STRINGS_MUSIC_PLAYING =			"In riproduzione"
+STRINGS_MUSIC_PAUSED =			"In pausa"
+STRINGS_MUSIC_TIME =			"Tempo: "
+STRINGS_MUSIC_ID3 =				"id3: "
+STRINGS_MUSIC_ERROR =			"Errore audio non valido"
+STRINGS_MUSIC_LOCK_DISPLAY =	"Blocca Display"
 
 --ONEMenu
-wait =			"Attendere prego...",
+STRINGS_WAIT_MGE =				"Attendere prego..."
 
-switch =		"Sicuro di voler spostare: ",
-nomemory =		"Memoria insufficiente...",
-appremove =		"Sicuro di voler disinstallare: ",
-backupsave =	"You want to create a backup of the game savedata\n\nTo ux0:data/ONEMenu/Saves ?",
-restoresave =	"You want to restore the game savedata\n\nFrom ux0:data/ONEMenu/Saves ?",
-manual =		"Si desidera rimuovere questo manuale? ",
-notmanual =		"Manuale è stato rimosso!",
-notfindmanual =	"Manuale non esiste",
-removemanual =	"Rimosso manuale",
-shrink =		"Vuoi davvero rimpicciolire questo gioco ?",
-shrinkgame =	"Gioco rimpicciolito",
-nofiles =		"Nessun file duplicato rilevato",
-free =			"Libero",
-pressremove =	"Disinstalla",
-switchapp =		"Sposta App",
-empty =			"Vuoto/Errore",
-toexplorer =	"Explorer",
-openfolder =	"Open App Folder",
-partitions =	"Partizioni",
-version =		"Versione",
-size_ind =		"Dimensione",
-size_patch =	"patch",
-getsize =		"Calcolo in corso...",
-slides =		"Stile: ",
-pic1 =			"Visualizza PIC1s: ",
-fav =			"Seleziona Preferiti: ",
-up =			"Su",
-down =			"Giu",
-original=		"Originale",
-ps4 =			"PS4 XMB",
-yes =			"Si",
-no =			"No",
-start =			"START",
-list_sort =		"Ordina",
-sortnow =		"Adesso: ",
-sort =			"Ordina categoria per: ",
-title =			"Titolo",
-id =			"Id",
-region =		"Regione",
-up_sort =		"Asc",
-down_sort =		"Disc",
-list_refresh =	"Aggiorna...",
-editbubble =	"Modifica bolla",
-confirmdb =		"\n\nVuoi aggiornare il tuo database adesso?\n\nQuesto è necessario per la PSvita per riconoscere i nuovi cambiamenti delle bolle.",
+STRINGS_APP_NOT_MEMORY =		"Memoria insufficiente..."
+STRINGS_APP_REMOVE =			"Sicuro di voler disinstallare: "
+STRINGS_APP_BACKUP_SAVE =		"You want to create a backup of the game savedata\n\nTo ux0:data/ONEMenu/Saves ?"
+STRINGS_APP_RESTORE_SAVE =		"You want to restore the game savedata\n\nFrom ux0:data/ONEMenu/Saves ?"
+STRINGS_APP_DELETE_MANUAL =		"Si desidera rimuovere questo manuale? "
+STRINGS_APP_NOTFIND_MANUAL =	"Manuale non esiste"
+STRINGS_APP_SHRINK =			"Vuoi davvero rimpicciolire questo gioco ?"
+STRINGS_APP_SHRINK_GAME =		"Gioco rimpicciolito"
+STRINGS_APP_SHRINK_NO_FILES =	"Nessun file duplicato rilevato"
+STRINGS_APP_SHRINK_FREE =		"Libero"
+STRINGS_APP_UNINSTALL =			"Disinstalla"
+STRINGS_APP_SWITCH =			"Sposta App"
+STRINGS_APP_EMPTY =				"Vuoto/Errore"
+STRINGS_APP_OPEN_FOLDER =		"Open App Folder"
+STRINGS_APP_PARTITIONS =		"Partizioni"
+STRINGS_APP_VERSION =			"Versione"
+STRINGS_APP_SIZE_IND =			"Dimensione"
+STRINGS_APP_GET_SIZE =			"Calcolo in corso..."
+STRINGS_APP_SLIDES =			"Stile: "
+STRINGS_APP_SHOW_PIC =			"Visualizza PIC1s: "
+STRINGS_APP_MARK_FAV =			"Seleziona Preferiti: "
+STRINGS_APP_SLIDE_ORIGINAL =	"Originale"
+STRINGS_APP_SLIDE_PS4 =			"PS4 XMB"
+STRINGS_APP_YES =				"Si"
+STRINGS_APP_NO =				"No"
+STRINGS_APP_START =				"START"
+STRINGS_APP_LIST_SORT =			"Ordina"
+STRINGS_APP_LIST_SORT_NOW =		"Adesso: "
+STRINGS_APP_SORT_CATEGORY =		"Ordina categoria per: "
+STRINGS_APP_SORT_TITLE =		"Titolo"
+STRINGS_APP_SORT_ID =			"Id"
+STRINGS_APP_SORT_REGION =		"Regione"
+STRINGS_APP_SORT_ASCENDENT =	"Asc"
+STRINGS_APP_SORT_DESCENDENT =	"Disc"
+STRINGS_APP_LIST_REFRESH =		"Aggiorna..."
+STRINGS_APP_EDIT_BUBBLE =		"Modifica bolla"
 
 --LiveArea Apps
-liveareapps =	"Livearea Apps",
-noliveareapps =	"LiveArea Apps non disponibili",
+STRINGS_APP_LIVEAREA =			"Livearea Apps"
+STRINGS_APP_NOT_LIVEAREA =		"LiveArea Apps non disponibili"
 
 -------------		Callbacks		-------------------------------------------------------------------------
-unsafe =		"Non Sicuro: ",
-file =			"File: ",
-percent =		"Percentuale: ",
-percent_total = "Percentuale Totale: ",
-total_size =	"Dimensione Totale: ",
-movefiles =		"File",
-updatedb =		"Aggiornamento db in corso...",
+STRINGS_CALLBACKS_UNSAFE =		"Non Sicuro: "
+STRINGS_CALLBACKS_FILE =		"File: "
+STRINGS_CALLBACKS_PERCENT =		"Percentuale: "
+STRINGS_CALLBACKS_PERCENT_ALL = "Percentuale Totale: "
+STRINGS_CALLBACKS_SIZE_ALL =	"Dimensione Totale: "
+STRINGS_CALLBACKS_MOVE_FILES =	"File"
+STRINGS_CALLBACKS_UPDATE_DB =	"Aggiornamento db in corso..."
 
 --onAppInstall
-searchunsafe =	"Cerca file VPK, non sicuri o pericolosi!",
-unsafevpk =		"Sono richieste autorizzazioni estese e accesso alle informazioni personali! \n\nUsa con cautela i packages non affidabili! \n\nVuoi installare a tuo rischio?",
-dangerousvpk =	"Attenzione!!! Alto rischio di brick del dispositivo se questo VPK è installato! \n\nUsa con cautela i packages non affidabili! \n\nVuoi installare a tuo rischio?",
-vpkunpack =		"Unpacking VPK...",
-install =		"Installazione in corso...",
+STRINGS_INSTALL_SEARCH_UNSAFE =	"Cerca file VPK, non sicuri o pericolosi!"
+STRINGS_WARNING_UNSAFE =		"Sono richieste autorizzazioni estese e accesso alle informazioni personali! \n\nUsa con cautela i packages non affidabili! \n\nVuoi installare a tuo rischio?"
+STRINGS_WARNING_DANGEROUS =		"Attenzione!!! Alto rischio di brick del dispositivo se questo VPK è installato! \n\nUsa con cautela i packages non affidabili! \n\nVuoi installare a tuo rischio?"
+STRINGS_UNPACK_VPK =			"Unpacking VPK..."
+STRINGS_INSTALLING =			"Installazione in corso..."
 
 --onExtractFiles
-extraction =	"Estrazione in corso...",
+STRINGS_EXTRACTION =			"Estrazione in corso..."
 
 --onScanningFiles
-scanning =		"Scansione in corso...",
-size_unpk =		"Dimensione di spacchettamento: ",
+STRINGS_SCANNING =				"Scansione in corso..."
 
 --onNetGetFile
-download =		"Scaricamento in corso...",
-success =		"Scaricamento riuscito in",
-failed =		"Scaricamento fallito",
+STRINGS_DOWNLOAD =				"Scaricamento in corso..."
+STRINGS_DOWNLOAD_SUCCESS =		"Scaricamento riuscito in"
+STRINGS_DOWNLOAD_FAILED =		"Scaricamento fallito"
 
 -------------------------------------------------------------------------------------------------------------
 
 --Launch PBP or VPK
-launchpbp =		"Avvia il gioco/app: ",
-confirm =		"Accetta",
-warningvpk =	"\n\nATTENZIONE ACCESSO COMPLETO\n\nVPK NON SICURO",
-warningvpk2 =	"ATTENZIONE ACCESSO COMPLETO",
-safevpk =		"VPK SICURO",
-total_sizevpk = "Totale Dimensione VPK: ",
-installvpk =	"INSTALLA VPK",
-installgame =	"INSTALLA APP",
-alertunsafe =	"VPK NON SICURO!!!!",
-alertdang =		"VPK PERICOLOSO!!!!",
-installvpkdir =	"INSTALLA APP DALLA CARTELLA",
-launchbin =		"Avvia app: ",
-errorinstall =	"Si è verificato un errore durante l'installazione",
+STRINGS_LAUNCH_GAME =			"Avvia il gioco/app: "
+STRINGS_CONFIRM =				"Accetta"
+STRINGS_VPK_TOTAL_SIZE = 		"Totale Dimensione VPK: "
+STRINGS_VPK_INSTALL =			"INSTALLA VPK"
+STRINGS_VPK_ALERT_UNSAFE =		"VPK NON SICURO!!!!"
+STRINGS_VPK_ALERT_DANGEROUS =	"VPK PERICOLOSO!!!!"
+STRINGS_INSTALL_ERROR =			"Si è verificato un errore durante l'installazione"
 
 ------------	ThemesONEMenu	----------------------------------------------------------------------------
-themesdone =	"Installazione Completata!",
-notthemesmenu =	"Non ci sono ancora temi per ONEMenu",
-themeisready =	"Il tema esiste già, scaricarlo di nuovo ?",
-reload =		"Ricarica il tema originale",
-settinsthemes =	"Vai a Impostazioni del tema?",
-themeactual =	"Adesso: ",
-search =		"Cerca Online",
-themesonline =	"Temi Online",
-errordecode =	"Errore di decodifica del database dei temi!",
-errorgetbase =	"Errore nell'ottenere un database di temi!",
-themeinstall =	"Tema Installato!",
-errorunpack =	"Errore Unpack theme!",
-notdown =		"Errore nello scaricamento del Tema!",
+STRINGS_THEMES_INSTALL_DONE =	"Installazione Completata!"
+STRINGS_THEMES_IS_READY =		"Il tema esiste già, scaricarlo di nuovo ?"
+STRINGS_THEMES_RELOAD =			"Ricarica il tema originale"
+STRINGS_THEMES_NOW =			"Adesso: "
+STRINGS_THEMES_SEARCH =			"Cerca Online"
+STRINGS_THEMES_ONLINE =			"Temi Online"
+STRINGS_THEMES_ERROR_DECODE =	"Errore di decodifica del database dei temi!"
+STRINGS_THEMES_ERROR_BASE =		"Errore nell'ottenere un database di temi!"
+STRINGS_THEMES_INSTALLED =		"Tema Installato!"
+STRINGS_THEMES_ERROR_UNPACK =	"Errore Unpack theme!"
+STRINGS_THEMES_ERROR_DOWNLOAD =	"Errore nello scaricamento del Tema!"
 
 ------------	Advanced	---------------------------------------------------------------------------------
-advanced =		"Avanzato",
-refresh =		"RICARICA Contenuto",
-refreshdb =		"Aggiorna DB",
-rebuilddb =		"Ricostruisci DB",
-reloadconfig =	"Ricarica file Config",
-configtxt =		"Ricarica taiHEN config.txt",
-favorites =		"Sezione Preferiti",
-restartupdb =	"La tua PSVita si riavvierà...\n\ne il tuo database sarà aggiornato",
-restartredb =	"La tua PSVita si riavvierà...\n\ne il tuo database sarà ricostruito",
-restart =		"La tua PSVita sta effettuando il Riavvio...",
-shutdown =		"La tua PSVita sta effettuando lo Spegnimento...",
-update =		"Abilita Auto-Aggiornamento: ",
-pgf =			"PGF Font",
-pvf =			"PVF Font",
+STRINGS_ADVANCED =				"Avanzato"
+STRINGS_REFRESH_LIVEAREA =		"RICARICA Contenuto"
+STRINGS_UPDATE_DB =				"Aggiorna DB"
+STRINGS_REBUILD_DB =			"Ricostruisci DB"
+STRINGS_RELOAD_CONFIG =			"Ricarica file Config"
+STRINGS_CONFIG_SUCCESS =		"Ricarica taiHEN config.txt"
+STRINGS_FAVORITES_SECTION =		"Sezione Preferiti"
+STRINGS_RESTART_UPDATEDB =		"La tua PSVita si riavvierà...\n\ne il tuo database sarà aggiornato"
+STRINGS_RESTART_REBUILDDB =		"La tua PSVita si riavvierà...\n\ne il tuo database sarà ricostruito"
+STRINGS_RESTART =				"La tua PSVita sta effettuando il Riavvio..."
+STRINGS_ENABLE_UPDATE =			"Abilita Auto-Aggiornamento: "
+STRINGS_PGF_FONT =				"PGF Font"
+STRINGS_PVF_FONT =				"PVF Font"
 
 ------------	Favorites	---------------------------------------------------------------------------------
-nofavorites =	"Questa funzione non può essere attivata...\n\nHai bisogno di almeno un preferito",
-delfavorites =	"Rimuovere dai preferiti?",
-activate =		"Scansione Solo per i preferiti: ",
-removefav =		"Pulisci la lista dei preferiti",
-emptyfav =		"Vuoi davvero svuotare\n\nla lista dei Preferiti?",
-togglescan =	"Scansiona Preferiti: ",
+STRINGS_FAVORITES_ACTIVED =		"Questa funzione non può essere attivata...\n\nHai bisogno di almeno un preferito"
+STRINGS_FAVORITES_REMOVE =		"Rimuovere dai preferiti?"
+STRINGS_FAVORITES_SCANNING =	"Scansione Solo per i preferiti: "
+STRINGS_FAVORITES_CLEAN =		"Pulisci la lista dei preferiti"
+STRINGS_FAVORITES_EMPTY =		"Vuoi davvero svuotare\n\nla lista dei Preferiti?"
+STRINGS_FAVORITES_TOGGLE =		"Scansiona Preferiti: "
 
-result =		"\n\nRisultato: ",
-count =			"Count: ",
-sizeis =		"La dimensione è: ",
-filesfolders =	"File/Cartelle",
+STRINGS_COUNT =					"Count: "
+STRINGS_SIZE_IS =				"La dimensione è: "
+STRINGS_FILES_FOLDERS =			"File/Cartelle"
 
 ------------	Export Mulimedia	-------------------------------------------------------------------------
-opensettings =	"Aprire l'app per MP3/Galleria/Video?",
-nofile =		"Nessun file multimediale",
-mp3s =			"File MP3  : ",
-mp4s =			"File MP4  : ",
-imgs =			"File IMG  : ",
-openexport =	"\n\nEsportazione completata, avvia l'applicazione Musica/Foto/Video\n\nper leggere i tuoi file !",
-fail =			"Errore",
+STRINGS_EXPORT_OPEN_APP =		"Aprire l'app per MP3/Galleria/Video?"
+STRINGS_EXPORT_NO_FILES =		"Nessun file multimediale"
+STRINGS_EXPORT_MP3 =			"File MP3  : "
+STRINGS_EXPORT_MP4 =			"File MP4  : "
+STRINGS_EXPORT_IMG =			"File IMG  : "
+STRINGS_EXPORT_OPEN =			"\n\nEsportazione completata, avvia l'applicazione Musica/Foto/Video\n\nper leggere i tuoi file !"
+STRINGS_EXPORT_FAIL =			"Errore"
 
 ------------	Refresh LiveArea	-------------------------------------------------------------------------
-notinstalled =	"\n\nGioco non installato: ",
-gamesinst =		"\n\nTotale Giochi Installati: ",
-nogames =		"\n\nNessun Gioco trovato",
-
-}
+STRINGS_LIVEAREA_NOTINSTALLED =	"\n\nGioco non installato: "
+STRINGS_LIVEAREA_GAMES =		"\n\nTotale Giochi Installati: "
+STRINGS_LIVEAREA_NO_GAMES =		"\n\nNessun Gioco trovato"

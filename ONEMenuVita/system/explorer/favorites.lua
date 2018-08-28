@@ -14,14 +14,14 @@ function favorites_manager()
 	local srcn = newScroll(apps,15)
 	buttons.interval(16,5)
 
-	if __FAV == 1 then fav = strings.yes else fav = strings.no end
+	if __FAV == 1 then fav = STRINGS_APP_YES else fav = STRINGS_APP_NO end
 	while true do
 		buttons.read()
 
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
 
-		screen.print(480,15,strings.favorites,1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-		screen.print(950,15,strings.count + srcn.maxim,1,theme.style.COUNTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
+		screen.print(480,15,STRINGS_FAVORITES_SECTION,1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		screen.print(950,15,STRINGS_COUNT + srcn.maxim,1,theme.style.COUNTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
 
 		if srcn.maxim > 0 then
 
@@ -40,15 +40,15 @@ function favorites_manager()
 			if theme.data["buttons2"] then
 				theme.data["buttons2"]:blitsprite(5,515,0)--select
 			end
-			screen.print(40,520,strings.removefav,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			screen.print(40,520,STRINGS_FAVORITES_CLEAN,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 
 			if theme.data["buttons2"] then
 				theme.data["buttons2"]:blitsprite(960-30,515,1)--start
 			end
-			screen.print(960-40,520,strings.activate..fav,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
+			screen.print(960-40,520,STRINGS_FAVORITES_SCANNING..fav,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
 
 		else
-			screen.print(480,272,strings.empty,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			screen.print(480,272,STRINGS_APP_EMPTY,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		end
 		screen.flip()
 
@@ -59,23 +59,23 @@ function favorites_manager()
 
 			if buttons.start then
 				if __FAV == 1 then
-					__FAV,fav = 0,strings.no
+					__FAV,fav = 0,STRINGS_APP_NO
 					write_config()
 				else
 					if srcn.maxim > 0 then
-						__FAV,fav = 1,strings.yes
+						__FAV,fav = 1,STRINGS_APP_YES
 						write_config()
 					else
-						os.message(strings.nofavorites)
+						os.message(STRINGS_FAVORITES_ACTIVED)
 					end
 				end
 			end
 
 			if buttons.select then
-				if os.message(strings.emptyfav,1) == 1 then
+				if os.message(STRINGS_FAVORITES_EMPTY,1) == 1 then
 					apps={}
 					srcn:set(apps,15)
-					if __FAV == 1 then __FAV,fav = 0,strings.no end
+					if __FAV == 1 then __FAV,fav = 0,STRINGS_APP_NO end
 					write_favs(__PATH_FAVS)
 					write_config()
 
@@ -88,7 +88,7 @@ function favorites_manager()
 			end
 
 			if buttons.square then
-				if os.message(strings.delfavorites,1) == 1 then
+				if os.message(STRINGS_FAVORITES_REMOVE,1) == 1 then
 					for i=1, #appman do
 						for j=1, #appman[i].list do
 							if appman[i].list[j].id == apps[srcn.sel] then appman[i].list[j].fav = false end
@@ -100,7 +100,7 @@ function favorites_manager()
 					write_favs(__PATH_FAVS)
 
 					if srcn.maxim <=0 then
-						if __FAV == 1 then __FAV,fav = 0,strings.no end
+						if __FAV == 1 then __FAV,fav = 0,STRINGS_APP_NO end
 					end
 					write_config()
 				end

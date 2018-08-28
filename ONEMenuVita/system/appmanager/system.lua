@@ -82,7 +82,7 @@ function system.run()
 			pic1_sys:blit(0,55,125)
 		end
 
-		screen.print(480,15,strings.liveareapps,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
+		screen.print(480,15,STRINGS_APP_LIVEAREA,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
 
 		if system.len > 0 then
 
@@ -115,7 +115,7 @@ function system.run()
 
 			screen.print(10,520,system.data[scroll.sel].id,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		else
-			screen.print(480,15,strings.noliveareapps,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
+			screen.print(480,15,STRINGS_APP_NOT_LIVEAREA,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
 
 		end
 		screen.flip()

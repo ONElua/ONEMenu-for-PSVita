@@ -147,7 +147,7 @@ function reload_theme()
 	write_config()
 
 	local vbuff = screen.toimage()
-	local titlew = string.format(strings.wait)
+	local titlew = string.format(STRINGS_WAIT_MGE)
 	local w,h = screen.textwidth(titlew,1) + 30,70
 	local x,y = 480 - (w/2), 272 - (h/2)
 
@@ -203,7 +203,7 @@ function theme.manager()
 	end
 	tmp = nil
 	collectgarbage("collect")
-	table.insert(list[1], 1, {id="", title = strings.search, author = "", preview = nil, ext = true})
+	table.insert(list[1], 1, {id="", title = STRINGS_THEMES_SEARCH, author = "", preview = nil, ext = true})
 
 	local scr = { newScroll(list[1],15), newScroll(list[2],15) }
 	local sect = 1
@@ -214,7 +214,7 @@ function theme.manager()
 		buttons.read()
 		if themesimg then themesimg:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 		
-		screen.print(480,15,({strings.themes, strings.themesonline })[sect],1,theme.style.TITLECOLOR,color.gray,__ACENTER)
+		screen.print(480,15,({STRINGS_SUBMENU_THEMES, STRINGS_THEMES_ONLINE })[sect],1,theme.style.TITLECOLOR,color.gray,__ACENTER)
 		local y = 70
 		for i=scr[sect].ini,scr[sect].lim do
 			if i == scr[sect].sel then
@@ -236,12 +236,12 @@ function theme.manager()
 			y+=26
 		end
 
-		screen.print(15,520,strings.themeactual..__THEME,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
+		screen.print(15,520,STRINGS_THEMES_NOW..__THEME,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
 
 		if theme.data["buttons2"] then
 			theme.data["buttons2"]:blitsprite(960-30,515,1)--start
 		end
-		screen.print(960-40,520,strings.reload,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
+		screen.print(960-40,520,STRINGS_THEMES_RELOAD,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
 	
 		screen.flip()
 
@@ -283,33 +283,33 @@ function theme.manager()
 							local j = 1
 							while list[2][j] do list[2].mask[list[2][j].id] = list[2][j]; THEME_PORT_O:push({id = list[2][j].id}); j+=1; end
 						else
-							os.message(strings.errordecode)
+							os.message(STRINGS_THEMES_ERROR_DECODE)
 						end
 					else
-						os.message(strings.errorgetbase)
+						os.message(STRINGS_THEMES_ERROR_BASE)
 					end
 					os.delay(15)
 					if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 				end
-			elseif files.exists(string.format("%s%s",__PATH_THEMES,list[sect][scr[sect].sel].id)) == false or os.message(list[sect][scr[sect].sel].id.." "..strings.themeisready, 1) == 1 then --sect == 2
+			elseif files.exists(string.format("%s%s",__PATH_THEMES,list[sect][scr[sect].sel].id)) == false or os.message(list[sect][scr[sect].sel].id.." "..STRINGS_THEMES_IS_READY, 1) == 1 then --sect == 2
 
 				local vbuff = screen.toimage()
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 				message_wait()
 				os.delay(15)
 
-				local url = string.format("https://raw.githubusercontent.com/%s/%s/master/Themes/%s.zip", APP_REPO, APP_PROJECT, list[sect][scr[sect].sel].id)
+				local url_themes = string.format("https://raw.githubusercontent.com/%s/%s/master/Themes/%s.zip", APP_REPO, APP_PROJECT, list[sect][scr[sect].sel].id)
 				local path = string.format("ux0:data/ONEMENU/tmp/%s.zip", list[sect][scr[sect].sel].id)
-				if http.getfile(url, path) then
+				if http.getfile(url_themes, path) then
 					if files.extract(path, __PATH_THEMES) == 1 then
 						changes = true
-						os.message(strings.themeinstall)
+						os.message(STRINGS_THEMES_INSTALLED)
 					else
-						os.message(strings.errorunpack)
+						os.message(STRINGS_THEMES_ERROR_UNPACK)
 					end
 					files.delete(path)
 				else
-					os.message(strings.notdown)
+					os.message(STRINGS_THEMES_ERROR_DOWNLOAD)
 				end
 				os.delay(15)
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
@@ -339,7 +339,7 @@ function theme.manager()
 					end
 					tmp = nil
 					collectgarbage("collect")
-					table.insert(list[1], 1, {id="", title = strings.search, author = "", preview = nil, ext = true})
+					table.insert(list[1], 1, {id="", title = STRINGS_THEMES_SEARCH, author = "", preview = nil, ext = true})
 					scr[1]:set(list[1],15)
 				end
 				changes = false

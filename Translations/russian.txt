@@ -1,0 +1,211 @@
+--Texts
+-------------	Explorer	---------------------------------------------------------------------------------
+STRINGS_BACK =					"Возврат"
+STRINGS_COPYFILE =				"Копирование: "
+STRINGS_DELFILE =				"Удаление: "
+STRINGS_CREAT_FILE =			"Создать файл"
+STRINGS_CREAT_FOLDER =			"Создать папку"
+STRINGS_NEW_FILE =				"Новый файл"
+STRINGS_NEW_FOLDER =			"Новая папка"
+STRINGS_PASS =					"Использовать пароль ?"
+STRINGS_OS_PASS =				"ПАРОЛЬ"
+
+--SubMenu
+STRINGS_SUBMENU_COPY =			"Копировать"
+STRINGS_SUBMENU_DELETE =		"Удалить"
+STRINGS_SUBMENU_MAKEDIR =		"MakeDir"
+STRINGS_SUBMENU_RENAME =		"Переименовать"
+STRINGS_SUBMENU_EXTRACT =		"Извлечь"
+STRINGS_SUBMENU_CANCEL =		"Отмена"
+STRINGS_SUBMENU_INSTALL_GAME = 	"Установить игру"
+STRINGS_SUBMENU_EXTRACT_TO =	"Извлечь в"
+STRINGS_SUBMENU_PASTE =			"Вставить"
+STRINGS_SUBMENU_MOVE =			"Переместить"
+STRINGS_SUBMENU_SIZE =			"Размер"
+STRINGS_SUBMENU_EXPORT =		"Экспорт Мультимедиа"
+STRINGS_SUBMENU_THEMES =		"Темы ONEMenu"
+STRINGS_SUBMENU_FTP =			"FTP"
+STRINGS_SUBMENU_RESTART =		"Перезапуск ONEMenu"
+STRINGS_SUBMENU_RESET =			"Сброс"
+STRINGS_SUBMENU_POWEROFF =		"Выключение"
+STRINGS_SUBMENU_QR =			"QR Загрузчик"
+STRINGS_SUBMENU_QR_SCAN =		"QR Сканирование"
+STRINGS_SUBMENU_QR_DOWNLOAD =	"File to download"
+STRINGS_SUBMENU_QR_FILENAME =	"Input full name+ext here"
+
+STRINGS_SEL_ITEMS =				"Выберите: "
+
+------------	Ftp 		---------------------------------------------------------------------------------
+STRINGS_FTP_TEXT =				"Введите этот FTP-адрес на своем устройстве или ПК"
+STRINGS_FTP_CLOSE =				"Нажмите START, чтобы закрыть FTP-соединение."
+STRINGS_FTP_LOSE =				"FTP-соединение закрыто"
+
+------------	USB 		---------------------------------------------------------------------------------
+STRINGS_USB =					"USB"
+STRINGS_USB_CABLE =				"Подключите USB-кабель"
+STRINGS_USB_CONNECTION = 		"Подключение USB включено"
+STRINGS_USB_CANCEL =			"Отключить"
+STRINGS_USB_MODE =				"Режим подключения USB"
+STRINGS_USB_ERROR =				"Ошибка ... Подключение не выполнено"
+STRINGS_USB_SD2VITA =			"SD2VITA"
+STRINGS_USB_MEMORYCARD =		"Карта памяти"
+STRINGS_USB_GAMECARD =			"Game Card"
+
+STRINGS_ERROR_PREVIEW_IMG =		"Ошибка, образ не поддерживается"
+STRINGS_BACKGROUND_IMG =		"В фоне: Нажмите △"
+
+-- ## Visor TXT ##
+STRINGS_EDIT_LINE =				"Изменить строку"
+STRINGS_EDIT_SAVE_CHANGES =		"Вы хотите сохранить изменения ?"
+STRINGS_EDIT_INSERT_LINE =		"+ -> Вставить строку"
+STRINGS_EDIT_DELETE_LINE =		"+ <- Удалить строку"
+STRINGS_EDIT_TOO_LARGE =		"Файл слишком большой"
+STRINGS_EDIT_NOT_IMPLEMENTED =	"Не реализовано"
+STRINGS_TITLE_UPDATE_DB = 		"Чтобы применить изменение TITLE, вам необходимо выполнить обновление DB\n\nИли вы можете использовать QCMA для резервного копирования/восстановления игры\n\nВы хотите обновить DB сейчас ?"
+STRINGS_STITLE_RESTART = 		"Чтобы применить изменение STITLE, вам необходимо перезапустить PS Vita\n\nВы хотите перезапустить сейчас ?"
+STRINGS_STITLE_MGE =			"После редактирования STITLE требуется перезагрузка"
+STRINGS_TITLE_MGE = 			"После редактирования TITLE необходимо обновить .db, чтобы отразить изменения"
+
+-- ## Music Player ##
+STRINGS_MUSIC_PLAYING =			"Воспроизведение"
+STRINGS_MUSIC_PAUSED =			"Приостановлено"
+STRINGS_MUSIC_TIME =			"Время: "
+STRINGS_MUSIC_ID3 =				"id3: "
+STRINGS_MUSIC_ERROR =			"Ошибка, звук недействительный"
+STRINGS_MUSIC_LOCK_DISPLAY =	"Блокировка дисплея"
+
+--ONEMenu
+STRINGS_WAIT_MGE =				"Пожалуйста, подождите..."
+
+STRINGS_APP_NOT_MEMORY =		"Недостаточно памяти..."
+STRINGS_APP_REMOVE =			"Действительно хотите удалить: "
+STRINGS_APP_BACKUP_SAVE =		"Вы хотите создать резервную копию сохраненной игры\n\nTo ux0:data/ONEMenu/Saves ?"
+STRINGS_APP_RESTORE_SAVE =		"Вы хотите восстановить сохраненную игру\n\nFrom ux0:data/ONEMenu/Saves ?"
+STRINGS_APP_DELETE_MANUAL =		"Вы действительно хотите удалить это руководство? ? "
+STRINGS_APP_NOTFIND_MANUAL =	"Руководства не существует"
+STRINGS_APP_SHRINK =			"Вы действительно хотите сжать эту игру? ?"
+STRINGS_APP_SHRINK_GAME =		"Сжать игру"
+STRINGS_APP_SHRINK_NO_FILES =	"Не обнаружено дубликатов файлов"
+STRINGS_APP_SHRINK_FREE =		"Свободно"
+STRINGS_APP_UNINSTALL =			"Удалить"
+STRINGS_APP_SWITCH =			"Переместить App"
+STRINGS_APP_EMPTY =				"Пусто/Ошибка"
+STRINGS_APP_OPEN_FOLDER =		"Открыть папку App"
+STRINGS_APP_PARTITIONS =		"Разделы"
+STRINGS_APP_VERSION =			"Версия"
+STRINGS_APP_SIZE_IND =			"Размер"
+STRINGS_APP_GET_SIZE =			"Расчет..."
+STRINGS_APP_SLIDES =			"Стиль: "
+STRINGS_APP_SHOW_PIC =			"Показать PIC1s: "
+STRINGS_APP_MARK_FAV =			"Отметить Избранное: "
+STRINGS_APP_SLIDE_ORIGINAL =	"Оригинал"
+STRINGS_APP_SLIDE_PS4 =			"PS4 XMB"
+STRINGS_APP_YES =				"Да"
+STRINGS_APP_NO =				"Нет"
+STRINGS_APP_START =				"START"
+STRINGS_APP_LIST_SORT =			"Сортировка"
+STRINGS_APP_LIST_SORT_NOW =		"Сейчас: "
+STRINGS_APP_SORT_CATEGORY =		"Сортировать категории по: "
+STRINGS_APP_SORT_TITLE =		"Названию"
+STRINGS_APP_SORT_ID =			"Id"
+STRINGS_APP_SORT_REGION =		"Региону"
+STRINGS_APP_SORT_ASCENDENT =	"Возр"
+STRINGS_APP_SORT_DESCENDENT =	"Убыв"
+STRINGS_APP_LIST_REFRESH =		"Обновить..."
+STRINGS_APP_EDIT_BUBBLE =		"Редактировать пузырь"
+
+--LiveArea Apps
+STRINGS_APP_LIVEAREA =			"Приложения Livearea"
+STRINGS_APP_NOT_LIVEAREA =		"Приложения LiveArea недоступны"
+
+-------------		Callbacks		-------------------------------------------------------------------------
+STRINGS_CALLBACKS_UNSAFE =		"Небезопасно: "
+STRINGS_CALLBACKS_FILE =		"Файл: "
+STRINGS_CALLBACKS_PERCENT =		"Процент: "
+STRINGS_CALLBACKS_PERCENT_ALL = "Всего процентов: "
+STRINGS_CALLBACKS_SIZE_ALL =	"Общий размер: "
+STRINGS_CALLBACKS_MOVE_FILES =	"Файл"
+STRINGS_CALLBACKS_UPDATE_DB =	"Обновление db..."
+
+--onAppInstall
+STRINGS_INSTALL_SEARCH_UNSAFE =	"Поиск VPK, небезопасных или опасных файлов!"
+STRINGS_WARNING_UNSAFE =		"Требуются расширенные разрешения и доступ к персональной информации! \n\nСоблюдайте осторожность при использовании непроверенных исходных пакетов! \n\nВы хотите установить на свой страх и риск ?"
+STRINGS_WARNING_DANGEROUS =		"Предупреждение!!! Высокий риск взлома вашего устройства, если этот VPK будет установлен! \n\nСоблюдайте осторожность при использовании непроверенных исходных пакетов! \n\nВы хотите установить на свой страх и риск ?"
+STRINGS_UNPACK_VPK =			"Распаковка VPK..."
+STRINGS_INSTALLING =			"Установка..."
+
+--onExtractFiles
+STRINGS_EXTRACTION =			"Извлечение..."
+
+--onScanningFiles
+STRINGS_SCANNING =				"Сканирование..."
+
+--onNetGetFile
+STRINGS_DOWNLOAD =				"Скачивание..."
+STRINGS_DOWNLOAD_SUCCESS =		"Успешная загрузка"
+STRINGS_DOWNLOAD_FAILED =		"Не удалось скачать"
+
+-------------------------------------------------------------------------------------------------------------
+
+--Launch PBP or VPK
+STRINGS_LAUNCH_GAME =			"Запуск game/app: "
+STRINGS_CONFIRM =				"Принять"
+STRINGS_VPK_TOTAL_SIZE = 		"Общий размер VPK: "
+STRINGS_VPK_INSTALL =			"УСТАНОВКА VPK"
+STRINGS_VPK_ALERT_UNSAFE =		"VPK НЕБЕЗОПАСНЫЙ!!!!"
+STRINGS_VPK_ALERT_DANGEROUS =	"VPK ОПАСНЫЙ!!!!"
+STRINGS_INSTALL_ERROR =			"Произошла ошибка при установке"
+
+------------	ThemesONEMenu	----------------------------------------------------------------------------
+STRINGS_THEMES_INSTALL_DONE =	"Установка завершена!"
+STRINGS_THEMES_IS_READY =		"Тема уже существует, загрузить снова ?"
+STRINGS_THEMES_RELOAD =			"Обновить оригинальную тему"
+STRINGS_THEMES_NOW =			"Сейчас: "
+STRINGS_THEMES_SEARCH =			"Поиск в Интернете"
+STRINGS_THEMES_ONLINE =			"Темы в Интернете"
+STRINGS_THEMES_ERROR_DECODE =	"Ошибка декодирования базы данных тем!"
+STRINGS_THEMES_ERROR_BASE =		"Ошибка получения базы данных тем!"
+STRINGS_THEMES_INSTALLED =		"Тема установлена!"
+STRINGS_THEMES_ERROR_UNPACK =	"Ошибка распаковки темы!"
+STRINGS_THEMES_ERROR_DOWNLOAD =	"Ошибка загрузки темы!"
+
+------------	Advanced	---------------------------------------------------------------------------------
+STRINGS_ADVANCED =				"Продвинутые"
+STRINGS_REFRESH_LIVEAREA =		"ОБНОВИТЬ контент"
+STRINGS_UPDATE_DB =				"Обновить DB"
+STRINGS_REBUILD_DB =			"Реконструировать DB"
+STRINGS_RELOAD_CONFIG =			"Обновить конфигурацию"
+STRINGS_CONFIG_SUCCESS =		"Обновить taiHEN config.txt"
+STRINGS_FAVORITES_SECTION =		"Раздел Избранное"
+STRINGS_RESTART_UPDATEDB =		"Ваша PSVita перезагрузится...\n\nи ваша база данных будет обновлена"
+STRINGS_RESTART_REBUILDDB =		"Ваша PSVita перезагрузится...\n\nи ваша база данных будет реконструирована"
+STRINGS_RESTART =				"Ваша PSVita будет перезагружена..."
+STRINGS_ENABLE_UPDATE =			"Включить автообновление: "
+STRINGS_PGF_FONT =				"PGF шрифт"
+STRINGS_PVF_FONT =				"PVF шрифт"
+
+------------	Favorites	---------------------------------------------------------------------------------
+STRINGS_FAVORITES_ACTIVED =		"Эта функция не может быть активирована...\n\nНужно по крайней мере одно Избранное"
+STRINGS_FAVORITES_REMOVE =		"Удалить из Избранного ?"
+STRINGS_FAVORITES_SCANNING =	"Сканирование только для Избранных: "
+STRINGS_FAVORITES_CLEAN =		"Очистить список Избранного"
+STRINGS_FAVORITES_EMPTY =		"Вы действительно хотите очистить\n\nСписок Избранного ?"
+STRINGS_FAVORITES_TOGGLE =		"Сканировать Избранное: "
+
+STRINGS_COUNT =					"Счет: "
+STRINGS_SIZE_IS =				"Размер: "
+STRINGS_FILES_FOLDERS =			"Файлов/Папок"
+
+------------	Export Mulimedia	-------------------------------------------------------------------------
+STRINGS_EXPORT_OPEN_APP =		"Открыть app для MP3/Gallery/Video ?"
+STRINGS_EXPORT_NO_FILES =		"Нет мультимедийных файлов"
+STRINGS_EXPORT_MP3 =			"MP3 файл(ов) : "
+STRINGS_EXPORT_MP4 =			"MP4 файл(ов) : "
+STRINGS_EXPORT_IMG =			"IMG файл(ов) : "
+STRINGS_EXPORT_OPEN =			"\n\nЭкспорт завершен, пожалуйста, запустите Music/Photos/Videos\n\nприложение для чтения ваших файлов !"
+STRINGS_EXPORT_FAIL =			"Ошибка"
+
+------------	Refresh LiveArea	-------------------------------------------------------------------------
+STRINGS_LIVEAREA_NOTINSTALLED =	"\n\nИгра не установлена: "
+STRINGS_LIVEAREA_GAMES =		"\n\nВсего установленных игр: "
+STRINGS_LIVEAREA_NO_GAMES =		"\n\nИгры не найдены"

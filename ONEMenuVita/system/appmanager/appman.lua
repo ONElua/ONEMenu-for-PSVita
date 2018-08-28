@@ -157,7 +157,7 @@ function appman.launch()
 			main_draw()
 			submenu_ctx.run()
 		else
-			screen.print(10,30,strings.empty,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+			screen.print(10,30,STRINGS_APP_EMPTY,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 		end
 
 		screen.flip()
@@ -198,13 +198,13 @@ local uninstall_callback = function ()
 		local vbuff = screen.toimage()
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-		if os.message(strings.appremove + appman[cat].list[focus_index].id + "?",1) == 1 then
+		if os.message(STRINGS_APP_REMOVE + appman[cat].list[focus_index].id + "?",1) == 1 then
 			if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 			message_wait()
 
 			--Backup Save from ux0:user/00/savedata
 			if files.exists("ux0:user/00/savedata/"..appman[cat].list[focus_index].id) and cat == 1 then
-				if os.message(strings.backupsave, 1) == 1 then
+				if os.message(STRINGS_APP_BACKUP_SAVE, 1) == 1 then
 					files.copy("ux0:user/00/savedata/"..appman[cat].list[focus_index].id, "ux0:data/ONEMenu/Saves/")
 				end
 			end
@@ -219,7 +219,7 @@ local uninstall_callback = function ()
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 				if files.exists("ux0:repatch/"..appman[cat].list[focus_index].id) then
-					if os.message(strings.delete.."\n\n".."ux0:rePatch/"..appman[cat].list[focus_index].id.."?",1) == 1 then
+					if os.message(STRINGS_SUBMENU_DELETE.."\n\n".."ux0:rePatch/"..appman[cat].list[focus_index].id.."?",1) == 1 then
 						reboot=false
 							files.delete("ux0:rePatch/"..appman[cat].list[focus_index].id)
 						reboot=true
@@ -311,7 +311,7 @@ local shrink_callback = function ()
 		end
 
 		if #list_del > 0 then
-			if os.message(strings.shrink.."\n\n                        ux0:patch:\n\n"..strings.count..#list_del.." "..strings.movefiles.." "..files.sizeformat(size_del or 0).." "..strings.free,1) == 1 then
+			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:patch:\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -320,7 +320,7 @@ local shrink_callback = function ()
 				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
 			end
 		else
-			os.message(strings.nofiles)
+			os.message(STRINGS_APP_SHRINK_NO_FILES)
 		end
 		os.delay(15)
 
@@ -345,7 +345,7 @@ local shrink_callback = function ()
 		end
 
 		if #list_del > 0 then
-			if os.message(strings.shrink.."\n\n                        ux0:rePatch:\n\n"..strings.count..#list_del.." "..strings.movefiles.." "..files.sizeformat(size_del or 0).." "..strings.free,1) == 1 then
+			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:rePatch:\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -354,7 +354,7 @@ local shrink_callback = function ()
 				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
 			end
 		else
-			os.message(strings.nofiles)
+			os.message(STRINGS_APP_SHRINK_NO_FILES)
 		end
 		os.delay(15)
 
@@ -378,7 +378,7 @@ local shrink_callback = function ()
 		end
 
 		if scesys_manual or patch_manual then
-			if os.message(strings.manual.."\n\n"..strings.count..files_manual.." "..strings.movefiles.." "..files.sizeformat(size_manual or 0).." "..strings.free,1) == 1 then
+			if os.message(STRINGS_APP_DELETE_MANUAL.."\n\n"..STRINGS_COUNT..files_manual.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_manual or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
 				if scesys_manual then
 					reboot=false
 						files.delete(pathmanual)
@@ -398,7 +398,7 @@ local shrink_callback = function ()
 				appman[cat].list[focus_index].sizef_patch = files.sizeformat(files.size("ux0:patch/"..appman[cat].list[focus_index].id or 0))
 			end
 		else
-			os.message(strings.notfindmanual)
+			os.message(STRINGS_APP_NOTFIND_MANUAL)
 		end
 
 		infodevices()
@@ -432,7 +432,7 @@ local switch_callback = function ()
 	local options = {
 			{ text = loc1 },
 			{ text = loc2 },
-			{ text = strings.cancel }
+			{ text = STRINGS_SUBMENU_CANCEL }
 		}
 	local scroll_op,cccolor = newScroll(options, #options),""
 
@@ -441,7 +441,7 @@ local switch_callback = function ()
 		buttons.read()
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-		screen.print(350,80,strings.partitions,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+		screen.print(350,80,STRINGS_APP_PARTITIONS,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
 		draw.line(220,50,220,submenu_ctx.y + 129, color.green)
 
 		local y = 100
@@ -500,10 +500,10 @@ local switch_callback = function ()
 			appman[cat].list[focus_index].dev = "uma0"
 		end
 		if appman[cat].list[focus_index].id == __ID then
-			os.message(strings.restart)
+			os.message(STRINGS_RESTART)
 			power.restart()
 		end
-	elseif result ==-4 then os.message(strings.nomemory) end
+	elseif result ==-4 then os.message(STRINGS_APP_NOT_MEMORY) end
 
 	infodevices()
 	os.delay(15)
@@ -539,20 +539,20 @@ local editsfo_callback = function ()
 
 		--STitle,Title,ID
 		if __TITLE != "" then
-			os.titledb(__TITLE, appman[cat].list[focus_index].id)
-			if os.message(strings.Titleupdatedb,1) == 1 then reboot_updatedb = true end
+			os.titledb(string.sub(__TTITLE,1,127), appman[cat].list[focus_index].id)
+			if os.message(STRINGS_TITLE_UPDATE_DB,1) == 1 then reboot_updatedb = true end
 		end
 
 		if __STITLE != "" then
-			os.stitledb(__STITLE, appman[cat].list[focus_index].id)
-			if os.message(strings.Stitlerestart,1) == 1 then restart_only = true end
+			os.stitledb(string.sub(__STITLE,1,51), appman[cat].list[focus_index].id)
+			if os.message(STRINGS_STITLE_RESTART,1) == 1 then restart_only = true end
 		end
 
 		if reboot_updatedb then
 			os.delay(150)
 			_print=false
 			os.updatedb()
-			os.message(strings.restartupdb)
+			os.message(STRINGS_RESTART_UPDATEDB)
 			os.delay(1500)
 			power.restart()
 		end
@@ -576,9 +576,9 @@ local pic1_callback = function ()
 	local pos_menu = submenu_ctx.scroll.sel
 
 	if __PIC1 == 1 then
-		__PIC1,showpic = 0,strings.no
+		__PIC1,showpic = 0,STRINGS_APP_NO
 	else
-		__PIC1,showpic = 1,strings.yes
+		__PIC1,showpic = 1,STRINGS_APP_YES
 	end
 
 	submenu_ctx.wakefunct()
@@ -594,10 +594,10 @@ local fav_callback = function ()
 	appman[cat].list[focus_index].fav = not appman[cat].list[focus_index].fav
 
 	if appman[cat].list[focus_index].fav then
-		favs = strings.yes
+		favs = STRINGS_APP_YES
 		table.insert(apps, appman[cat].list[focus_index].id)
 	else
-		favs = strings.no
+		favs = STRINGS_APP_NO
 		for j=1,#apps do
 			if appman[cat].list[focus_index].id == apps[j] then
 				table.remove(apps, j)
@@ -625,7 +625,7 @@ local openfolder_callback = function ()
 		if files.exists(appman[cat].list[focus_index].dev..":/repatch/"..appman[cat].list[focus_index].id) then
 			table.insert(options, { text = "repatch", exit=false })
 		end
-		table.insert(options, { text = strings.cancel, exit=true })
+		table.insert(options, { text = STRINGS_SUBMENU_CANCEL, exit=true })
 
 		local scroll_op,cccolor = newScroll(options, #options),""
 
@@ -635,13 +635,14 @@ local openfolder_callback = function ()
 				buttons.read()
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-				draw.line(270,50,270,submenu_ctx.y + 129, color.green)
+				draw.line(260,47,260,submenu_ctx.y + 145, color.green)
+				draw.line(260,submenu_ctx.y + 145,360,submenu_ctx.y + 145, color.green)
 
-				local y = 100
+				local y = 80
 				for i=scroll_op.ini,scroll_op.lim do
 					if i == scroll_op.sel then cccolor = color.green else cccolor = color.white end
 					screen.print(350,y, options[i].text,1.0,cccolor,theme.style.TXTBKGCOLOR,__ARIGHT)
-					y+=22
+					y+=25
 				end
 
 				screen.flip()
@@ -711,14 +712,14 @@ local togglefavs_callback = function ()
 	local pos_menu = submenu_ctx.scroll.sel
 
 	if __FAV == 1 then
-		__FAV,_favs = 0,strings.no
+		__FAV,_favs = 0,STRINGS_APP_NO
 		write_config()
 	else
 		if #apps > 0 then
-			__FAV,_favs = 1,strings.yes
+			__FAV,_favs = 1,STRINGS_APP_YES
 			write_config()
 		else
-			os.message(strings.nofavorites)
+			os.message(STRINGS_FAVORITES_ACTIVED)
 			os.delay(15)
 			if theme.data["back"] then theme.data["back"]:blit(0,0) end
 		end
@@ -730,11 +731,11 @@ end
 local sort_callback = function ()
 
 	local options = {
-		{ text = strings.id },
-		{ text = strings.title },
+		{ text = STRINGS_APP_SORT_ID },
+		{ text = STRINGS_APP_SORT_TITLE },
 	}
 	if cat == 1 then
-		table.insert(options, { text = strings.region })
+		table.insert(options, { text = STRINGS_APP_SORT_REGION })
 	end
 
 	local scroll_op,cccolor,mov = newScroll(options, #options),"",1
@@ -744,7 +745,7 @@ local sort_callback = function ()
 		buttons.read()
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-		screen.print(350,80,strings.list_sort,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+		screen.print(350,80,STRINGS_APP_LIST_SORT,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
 
 		local y = 100
 		for i=scroll_op.ini,scroll_op.lim do
@@ -774,8 +775,8 @@ local sort_callback = function ()
 	end--while
 
 	options = {
-		{ text = strings.up_sort },
-		{ text = strings.down_sort },
+		{ text = STRINGS_APP_SORT_ASCENDENT },
+		{ text = STRINGS_APP_SORT_DESCENDENT },
 	}
 	scroll_op:set(options, #options)
 	cccolor = ""
@@ -812,18 +813,18 @@ local sort_callback = function ()
 
 	os.delay(250)
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-		message_wait(strings.list_refresh)
+		message_wait(STRINGS_APP_LIST_REFRESH)
 	os.delay(250)
 
 	
 	if cat == 1 and mov == 3 then
 		appman[cat].sort,appman[cat].asc = 2,sort_asc
-		sorting = strings.region
+		sorting = STRINGS_APP_SORT_REGION
 		table.sort(appman[cat].list, tableSortReg)
 	else
 		if mov == 1 then
 			appman[cat].sort,appman[cat].asc = 0,sort_asc
-			sorting = strings.id
+			sorting = STRINGS_APP_SORT_ID
 			if appman[cat].asc == 1 then
 				table.sort(appman[cat].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
 			else
@@ -831,7 +832,7 @@ local sort_callback = function ()
 			end
 		elseif mov == 2 then
 			appman[cat].sort,appman[cat].asc = 1,sort_asc
-			sorting = strings.title
+			sorting = STRINGS_APP_SORT_TITLE
 			if appman[cat].asc == 1 then
 				table.sort(appman[cat].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
 			else
@@ -850,10 +851,10 @@ local update_callback = function ()
 	local pos_menu = submenu_ctx.scroll.sel
 
 	if __UPDATE == 1 then 
-		_update = strings.no
+		_update = STRINGS_APP_NO
 		__UPDATE = 0
 	else
-		_update = strings.yes
+		_update = STRINGS_APP_YES
 		__UPDATE = 1
 	end
 
@@ -894,36 +895,36 @@ submenu_ctx = {
 
 function submenu_ctx.wakefunct()
 
-	if __PIC1 == 1 then showpic = strings.yes else showpic = strings.no end
+	if __PIC1 == 1 then showpic = STRINGS_APP_YES else showpic = STRINGS_APP_NO end
 
 	submenu_ctx.options = { -- Handle Option Text and Option Function
-		{ text = strings.refresh,           funct = refresh_callback },
-		{ text = strings.pressremove,       funct = uninstall_callback },
-		{ text = strings.shrinkgame,        funct = shrink_callback },
-		{ text = strings.switchapp,         funct = switch_callback },
-		{ text = strings.editbubble,        funct = editsfo_callback },
-		{ text = strings.pic1..showpic,     funct = pic1_callback, pad = true },
-		{ text = strings.fav..favs,         funct = fav_callback,  pad = true },
-		{ text = strings.openfolder,        funct = openfolder_callback,  pad = true },
+		{ text = STRINGS_REFRESH_LIVEAREA,           funct = refresh_callback },
+		{ text = STRINGS_APP_UNINSTALL,       funct = uninstall_callback },
+		{ text = STRINGS_APP_SHRINK_GAME,        funct = shrink_callback },
+		{ text = STRINGS_APP_SWITCH,         funct = switch_callback },
+		{ text = STRINGS_APP_EDIT_BUBBLE,        funct = editsfo_callback },
+		{ text = STRINGS_APP_SHOW_PIC..showpic,     funct = pic1_callback, pad = true },
+		{ text = STRINGS_APP_MARK_FAV..favs,         funct = fav_callback,  pad = true },
+		{ text = STRINGS_APP_OPEN_FOLDER,        funct = openfolder_callback,  pad = true },
 	}
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
 end
 
 function submenu_ctx.wakefunct2()
 
-	if __SLIDES == 100 then var = strings.original else var = strings.ps4 end
-	if __FAV == 1 then _favs = strings.yes else _favs = strings.no end
+	if __SLIDES == 100 then var = STRINGS_APP_SLIDE_ORIGINAL else var = STRINGS_APP_SLIDE_PS4 end
+	if __FAV == 1 then _favs = STRINGS_APP_YES else _favs = STRINGS_APP_NO end
 
     submenu_ctx.options = { -- Handle Option Text and Option Function
-        { text = strings.themes,            funct = themesONEMenu_callback },
-        { text = strings.slides..var,       funct = slides_callback,     pad = true },
-		{ text = strings.togglescan.._favs, funct = togglefavs_callback, pad = true },
-		{ text = strings.sort..sorting,     funct = sort_callback,       pad = true },
-		{ text = strings.update.._update,   funct = update_callback,     pad = true },
+        { text = STRINGS_SUBMENU_THEMES,            funct = themesONEMenu_callback },
+        { text = STRINGS_APP_SLIDES..var,       funct = slides_callback,     pad = true },
+		{ text = STRINGS_FAVORITES_TOGGLE.._favs, funct = togglefavs_callback, pad = true },
+		{ text = STRINGS_APP_SORT_CATEGORY..sorting,     funct = sort_callback,       pad = true },
+		{ text = STRINGS_ENABLE_UPDATE.._update,   funct = update_callback,     pad = true },
 
-		{ text = strings.restarthb,         funct = restart_callback },
-        { text = strings.reset,             funct = reboot_callback },
-        { text = strings.off,               funct = shutdown_callback },
+		{ text = STRINGS_SUBMENU_RESTART,         funct = restart_callback },
+        { text = STRINGS_SUBMENU_RESET,             funct = reboot_callback },
+        { text = STRINGS_SUBMENU_POWEROFF,               funct = shutdown_callback },
     }
     submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
 end
@@ -954,11 +955,11 @@ function submenu_ctx.draw()
 		restart_cronopic()
 	end
 
-	if appman[cat].list[focus_index].fav then favs = strings.yes else favs = strings.no end
+	if appman[cat].list[focus_index].fav then favs = STRINGS_APP_YES else favs = STRINGS_APP_NO end
 
-	if appman[cat].sort == 0 then sorting = strings.id
-		elseif appman[cat].sort == 1 then sorting = strings.title
-			elseif appman[cat].sort == 2 then sorting = strings.region
+	if appman[cat].sort == 0 then sorting = STRINGS_APP_SORT_ID
+		elseif appman[cat].sort == 1 then sorting = STRINGS_APP_SORT_TITLE
+			elseif appman[cat].sort == 2 then sorting = STRINGS_APP_SORT_REGION
 	end
 
 	--gd,gp PSVITA:1	hbsvita2	mb PSM:3	EG PSP & ME PSX: 4		AdrenalineBubbles:5
@@ -1066,17 +1067,17 @@ function submenu_ctx.draw()
 			if submenu_ctx.type == 2 and i == 3 then
 				h += 70
 
-				if screen.textwidth(strings.sortnow) > 320 then
+				if screen.textwidth(STRINGS_APP_LIST_SORT_NOW) > 320 then
 					if appman[cat].asc == 1 then
-						xprint = screen.print(xprint, 160, strings.sortnow.." "..sorting.."/"..strings.up_sort, 1, color.white,theme.style.TXTBKGCOLOR, __SLEFT,320)
+						xprint = screen.print(xprint, 160, STRINGS_APP_LIST_SORT_NOW.." "..sorting.."/"..STRINGS_APP_SORT_ASCENDENT, 1, color.white,theme.style.TXTBKGCOLOR, __SLEFT,320)
 					else
-						xprint = screen.print(xprint, 160, strings.sortnow.." "..sorting.."/"..strings.down_sort, 1, color.white,theme.style.TXTBKGCOLOR, __SLEFT,320)
+						xprint = screen.print(xprint, 160, STRINGS_APP_LIST_SORT_NOW.." "..sorting.."/"..STRINGS_APP_SORT_DESCENDENT, 1, color.white,theme.style.TXTBKGCOLOR, __SLEFT,320)
 					end
 				else
 					if appman[cat].asc == 1 then
-						screen.print(12, 160, strings.sortnow.." "..sorting.."/"..strings.up_sort, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
+						screen.print(12, 160, STRINGS_APP_LIST_SORT_NOW.." "..sorting.."/"..STRINGS_APP_SORT_ASCENDENT, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
 					else
-						screen.print(12, 160, strings.sortnow.." "..sorting.."/"..strings.down_sort, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
+						screen.print(12, 160, STRINGS_APP_LIST_SORT_NOW.." "..sorting.."/"..STRINGS_APP_SORT_DESCENDENT, 1, color.white,theme.style.TXTBKGCOLOR, __ALEFT)
 					end
 					xprint = 12
 				end
@@ -1119,15 +1120,15 @@ function submenu_ctx.draw()
 
 			h-=35
 			screen.print(10,h, "ux0:RePatch: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			screen.print(340,h,(appman[cat].list[focus_index].sizef_repatch or strings.getsize),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+			screen.print(340,h,(appman[cat].list[focus_index].sizef_repatch or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
 			h-=23
 			screen.print(10,h, "ux0:Patch: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
-			screen.print(340,h,(appman[cat].list[focus_index].sizef_patch or strings.getsize),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+			screen.print(340,h,(appman[cat].list[focus_index].sizef_patch or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
 			h-=23
-			screen.print(10,h, strings.size_ind..": ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			screen.print(340,h,(appman[cat].list[focus_index].sizef or strings.getsize),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+			screen.print(10,h, STRINGS_APP_SIZE_IND..": ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			screen.print(340,h,(appman[cat].list[focus_index].sizef or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
 			h-=23
-			screen.print(10,h, strings.version..": "..appman[cat].list[focus_index].version or "", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			screen.print(10,h, STRINGS_APP_VERSION..": "..appman[cat].list[focus_index].version or "", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		end
 
 	else

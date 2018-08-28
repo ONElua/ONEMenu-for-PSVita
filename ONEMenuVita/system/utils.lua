@@ -38,28 +38,10 @@ langs = {	JAPANESE = 		"00",
 -- Creamos carpeta de trabajo para los idiomas
 files.mkdir(__PATH_LANG)
 
---Aqui checamos las traducciones
-__STRINGS   = 184
-
-if not files.exists(__PATH_LANG.."english_us.txt") then files.copy("system/lang/english_us.txt",__PATH_LANG)
-else
-	dofile(__PATH_LANG.."english_us.txt")
-	local cont_strings = 0
-	for key,value in pairs(strings) do cont_strings += 1 end
---os.message(cont_strings)
-	if cont_strings != __STRINGS then files.copy("system/lang/english_us.txt",__PATH_LANG) end
-end
-
---Ya no puedo dar soporte por mi cuenta con sus traducciones,
---si requieren ONEMenu en su idioma, colocar su traducción en "ux0:data/ONEMENU/lang/__LANG.txt"
-if files.exists(__PATH_LANG..__LANG..".txt") then
-	dofile(__PATH_LANG..__LANG..".txt")
-	local cont_strings = 0
-	for key,value in pairs(strings) do cont_strings += 1 end
-	if cont_strings != __STRINGS then dofile("system/lang/english_us.txt") end
-else
-	dofile("system/lang/english_us.txt")
-end
+-- Loading language file
+dofile("system/lang/english_us.txt")
+if not files.exists(__PATH_LANG.."english_us.txt") then files.copy("system/lang/english_us.txt",__PATH_LANG) end
+if files.exists(__PATH_LANG..__LANG..".txt") then dofile(__PATH_LANG..__LANG..".txt") end
 
 color.loadpalette()
 
@@ -82,15 +64,15 @@ end
 if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
 
 if __FAV == 1 and #apps>0 then
-	_favs = strings.yes
+	_favs = STRINGS_APP_YES
 else
 	__FAV=0
-	_favs = strings.no
+	_favs = STRINGS_APP_NO
 end
 
 __UPDATE = tonumber(ini.read(__PATH_INI,"update","update","1"))
-_update = strings.no
-if __UPDATE == 1 then _update = strings.yes end
+_update = STRINGS_APP_NO
+if __UPDATE == 1 then _update = STRINGS_APP_YES end
 
 --Get avatar
 function getavatar(path)
@@ -266,7 +248,7 @@ function write_config()
 end
 
 function message_wait(message)
-	local mge = (message or strings.wait)
+	local mge = (message or STRINGS_WAIT_MGE)
 	local titlew = string.format(mge)
 	local w,h = screen.textwidth(titlew,1) + 30,70
 	local x,y = 480 - (w/2), 272 - (h/2)

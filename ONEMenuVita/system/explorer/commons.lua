@@ -90,8 +90,8 @@ function show_scan(infovpk)
 		draw.framerect(x,y,420,420,color.black, color.shine,6)
 
 		screen.print(960/2,y+35,infovpk.name,1,color.white,color.blue,__ACENTER)
-		screen.print(960/2,y+85,strings.total_sizevpk..tostring(realsize),1,color.white,color.blue,__ACENTER)
-		screen.print(960/2,y+115,strings.count..tostring(vpk.len),1,color.white,color.blue,__ACENTER)
+		screen.print(960/2,y+85,STRINGS_VPK_TOTAL_SIZE..tostring(realsize),1,color.white,color.blue,__ACENTER)
+		screen.print(960/2,y+115,STRINGS_COUNT..tostring(vpk.len),1,color.white,color.blue,__ACENTER)
 		screen.flip()
 
 		if buttons[accept] or buttons[cancel] then
@@ -267,7 +267,7 @@ function show_msg_vpk(obj_vpk)
 			end
 			screen.print(960/2,y+60,tostring(scan_vpk.sfo.TITLE_ID),1,color.black,color.blue,__ACENTER)
 		end
-		screen.print(960/2,y+85,strings.total_sizevpk..tostring(realsize),1,color.black,color.blue,__ACENTER)
+		screen.print(960/2,y+85,STRINGS_VPK_TOTAL_SIZE..tostring(realsize),1,color.black,color.blue,__ACENTER)
 
 		if tmp_vpk.img then
 			tmp_vpk.img:scale(150)
@@ -276,18 +276,18 @@ function show_msg_vpk(obj_vpk)
 			tmp_vpk.img:blit(960/2,544/2)
 		end
 
-		screen.print(960/2,y+315,strings.installvpk +" ?",1,color.black,color.blue,__ACENTER)
+		screen.print(960/2,y+315,STRINGS_VPK_INSTALL +" ?",1,color.black,color.blue,__ACENTER)
 		if dang then
-			screen.print(960/2,y+340,strings.alertdang,1,color.black,color.blue,__ACENTER)
+			screen.print(960/2,y+340,STRINGS_VPK_ALERT_DANGEROUS,1,color.black,color.blue,__ACENTER)
 			screen.print(960/2,y+365,dangname,0.8,color.black,color.blue,__ACENTER)
 		elseif unsafe == 1 then 
-			screen.print(960/2,y+340,strings.alertunsafe,1,color.black,color.blue,__ACENTER)
+			screen.print(960/2,y+340,STRINGS_VPK_ALERT_UNSAFE,1,color.black,color.blue,__ACENTER)
 		end
 
 		if accept_x == 1 then
-			screen.print(960/2,y+395,string.format("%s "..strings.confirm.." | %s "..strings.cancel,SYMBOL_CROSS, SYMBOL_CIRCLE),1,color.black,color.blue,__ACENTER)
+			screen.print(960/2,y+395,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CROSS, SYMBOL_CIRCLE),1,color.black,color.blue,__ACENTER)
 		else
-			screen.print(960/2,y+395,string.format("%s "..strings.confirm.." | %s "..strings.cancel,SYMBOL_CIRCLE, SYMBOL_CROSS),1,color.black,color.blue,__ACENTER)
+			screen.print(960/2,y+395,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CIRCLE, SYMBOL_CROSS),1,color.black,color.blue,__ACENTER)
 		end
 		screen.flip()
 
@@ -308,7 +308,7 @@ function show_msg_vpk(obj_vpk)
 
 	if result == 1 then
 		reboot=false
-			if os.message(strings.delete+"\n\n"+obj_vpk.path+" ? ",1)==1 then
+			if os.message(STRINGS_SUBMENU_DELETE+"\n\n"+obj_vpk.path+" ? ",1)==1 then
 				files.delete(obj_vpk.path)
 				vpkdel=true
 			end
@@ -317,12 +317,12 @@ function show_msg_vpk(obj_vpk)
 		--Restore Save from "ux0:data/ONEMenu/Saves
 		if files.exists("ux0:data/ONEMenu/SAVES/"..scan_vpk.sfo.TITLE_ID) then
 			local info = files.info("ux0:data/ONEMenu/SAVES/"..scan_vpk.sfo.TITLE_ID)
-			if os.message(strings.restoresave.."\n\n"..info.mtime or "", 1) == 1 then
+			if os.message(STRINGS_APP_RESTORE_SAVE.."\n\n"..info.mtime or "", 1) == 1 then
 				files.copy("ux0:data/ONEMenu/SAVES/"..scan_vpk.sfo.TITLE_ID, "ux0:user/00/savedata/")
 			end
 		end
 
-		if os.message(strings.launchpbp.."\n\n"..scan_vpk.sfo.TITLE+" ?",1) == 1 then
+		if os.message(STRINGS_LAUNCH_GAME.."\n\n"..scan_vpk.sfo.TITLE+" ?",1) == 1 then
 			if game.exists(scan_vpk.sfo.TITLE_ID) then
 				if scan_vpk.sfo.CATEGORY == "ME" then game.open(scan_vpk.sfo.TITLE_ID) else game.launch(scan_vpk.sfo.TITLE_ID) end
 			end
@@ -333,7 +333,7 @@ function show_msg_vpk(obj_vpk)
 		infodevices()
 
 	else
-		os.message(strings.errorinstall)
+		os.message(STRINGS_INSTALL_ERROR)
 	end
 
 	os.delay(15)
@@ -368,12 +368,12 @@ function show_msg_pbp(handle)
 
 		if sfo then
 			if launch then
-				screen.print(960/2,y+15,strings.launchpbp,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+				screen.print(960/2,y+15,STRINGS_LAUNCH_GAME,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 	
 				if accept_x == 1 then
-					screen.print(960/2,y+400,string.format("%s "..strings.confirm.." | %s "..strings.cancel,SYMBOL_CROSS, SYMBOL_CIRCLE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+					screen.print(960/2,y+400,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CROSS, SYMBOL_CIRCLE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 				else
-					screen.print(960/2,y+400,string.format("%s "..strings.confirm.." | %s "..strings.cancel,SYMBOL_CIRCLE, SYMBOL_CROSS),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+					screen.print(960/2,y+400,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CIRCLE, SYMBOL_CROSS),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 				end
 			end
 
@@ -448,18 +448,18 @@ function MusicPlayer(handle)
 			end
 
 			if snd:playing() then
-				screen.print(425,90,strings.playing,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+				screen.print(425,90,STRINGS_MUSIC_PLAYING,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 			else
-				screen.print(425,90,strings.paused,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+				screen.print(425,90,STRINGS_MUSIC_PAUSED,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 			end
 
 			if isMp3 then -- Solo los mp3 tienen tiempos :P
 
-				local str = strings.time..tostring(snd:time()).." / " 
+				local str = STRINGS_MUSIC_TIME..tostring(snd:time()).." / " 
 				if id3 then
-					str += id3.time or strings.id3 
+					str += id3.time or STRINGS_MUSIC_ID3 
 				else
-					str += strings.id3
+					str += STRINGS_MUSIC_ID3
 				end
 				screen.print(425,120, str,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
@@ -491,7 +491,7 @@ function MusicPlayer(handle)
 			end
 
 			if theme.data["buttons1"] then theme.data["buttons1"]:blitsprite(5,518,1) end--triangle
-			screen.print(30,520,strings.display,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			screen.print(30,520,STRINGS_MUSIC_LOCK_DISPLAY,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 
 			screen.flip()
 
@@ -514,7 +514,7 @@ function MusicPlayer(handle)
 		collectgarbage("collect")
 		os.delay(250)
 	else
-		os.message(strings.sounderror)
+		os.message(STRINGS_MUSIC_ERROR)
 	end
 end
 
@@ -552,7 +552,7 @@ function visorimg(path)
 				screen.print(940,3,"w: "..infoimg.w,0.8,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
 				screen.print(940,24,"h: "..infoimg.h,0.8,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
 				if (infoimg.w>800 and infoimg.h>500) then
-					screen.print(10,30,strings.background,0.7,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+					screen.print(10,30,STRINGS_BACKGROUND_IMG,0.7,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 				end
 			end
 
@@ -575,7 +575,7 @@ function visorimg(path)
 					__BACKG = path
 					write_config()
 					changeimg = true
-					os.message(strings.themesdone,0)
+					os.message(STRINGS_THEMES_INSTALL_DONE,0)
 				end
 			end
 
@@ -587,7 +587,7 @@ function visorimg(path)
 			theme.data["back"]:resize(__DISPLAYW, __DISPLAYH)
 		end
 	else
-		os.message(strings.imgerror)
+		os.message(STRINGS_ERROR_PREVIEW_IMG)
 	end
 	screen.clear(color.black)
 end
@@ -627,7 +627,7 @@ function files.readlines(path,index) -- Lee una table o string si se especifica 
 		for line in io.lines(path) do
 
 			cont_lines += 1
-			if cont_lines > 9999 then os.message(strings.toolarge) return nil end
+			if cont_lines > 9999 then os.message(STRINGS_EDIT_TOO_LARGE) return nil end
 
 			if line:byte(#line) == 13 then line = line:sub(1,#line-1) end --Remove CR == 13
 			table.insert(contenido,line)
@@ -662,7 +662,7 @@ function visortxt(handle, flag_edit)
 
 	if handle.ext == "sfo" then table.sort(texteditorInfo.list) end
 
-	if #texteditorInfo.list > 9999 then os.message(strings.toolarge) return false end
+	if #texteditorInfo.list > 9999 then os.message(STRINGS_EDIT_TOO_LARGE) return false end
 
 	local texteditorOrdinal_x = 10
 	if __FNT == 3 then texteditorOrdinal_x = 15 end
@@ -732,21 +732,21 @@ function visortxt(handle, flag_edit)
 			end
 
 			if __EDITB then
-				screen.print(480, 425, strings.simplestitle, 1, color.white, color.black, __ACENTER)
-				screen.print(480, 450, strings.simpletitle, 1, color.white, color.black, __ACENTER)
+				screen.print(480, 425, STRINGS_STITLE_RESTART, 1, color.white, color.black, __ACENTER)
+				screen.print(480, 450, STRINGS_TITLE_MGE, 1, color.white, color.black, __ACENTER)
 			end
 
 		end--if list > 0 the
 
 		if flag_edit and handle.ext != "sfo" then
-			local text_line = string.format(strings.insertline)
+			local text_line = string.format(STRINGS_EDIT_INSERT_LINE)
 			local tempx = screen.textwidth(text_line,1) + 60
 
 			if theme.data["buttons1"] then theme.data["buttons1"]:blitsprite(5,518,1) end--triangle
 			screen.print(25,520,text_line,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 
 			if theme.data["buttons1"] then theme.data["buttons1"]:blitsprite(tempx,518,1) end
-			screen.print(tempx+20,520,strings.deleteline,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			screen.print(tempx+20,520,STRINGS_EDIT_DELETE_LINE,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		end
 
 		screen.flip()
@@ -801,15 +801,15 @@ function visortxt(handle, flag_edit)
 		if buttons[cancel] then
 			local _flag = false
 			if textHadChange then
-				if os.message(strings.savechanges,1) == 1 then
+				if os.message(STRINGS_EDIT_SAVE_CHANGES,1) == 1 then
 
 					if handle.ext == "sfo" then
 						-- To save changes if wish!
 						for k,v in pairs(changes) do
 
 							if __EDITB then
-								if v.field == "STITLE" then game.setsfo(handle.path, "STITLE_"..langs[os.language()], __STITLE)
-								elseif v.field == "TITLE" then game.setsfo(handle.path, "TITLE_"..langs[os.language()], __TITLE) end
+								if v.field == "STITLE" then game.setsfo(handle.path, "STITLE_"..langs[os.language()], string.sub(__STITLE,1,51))
+								elseif v.field == "TITLE" then game.setsfo(handle.path, "TITLE_"..langs[os.language()], string.sub(__TTITLE,1,127)) end
 								game.setsfo(handle.path, k, tostring(v.string))
 							else
 								if v.number then
@@ -885,7 +885,7 @@ function visortxt(handle, flag_edit)
 					else
 
 						if name_field == "APP_VER" or name_field == "VERSION" or
-							name_field == "PSP2_DISP_VER" or name_field == "TITLE_ID" then os.message(strings.nimplemented)--Nothing.. ITs bug :(
+							name_field == "PSP2_DISP_VER" or name_field == "TITLE_ID" then os.message(STRINGS_EDIT_NOT_IMPLEMENTED)--Nothing.. ITs bug :(
 						else
 							local newStr = nil
 							if numeric then
@@ -920,7 +920,7 @@ function visortxt(handle, flag_edit)
 
 			else
 				local editStr = texteditorInfo.list[texteditorInfo.focus]
-				local newStr = osk.init(strings.editline, editStr, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
+				local newStr = osk.init(STRINGS_EDIT_LINE, editStr, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
 				if newStr and newStr ~= editStr then
 					texteditorInfo.list[texteditorInfo.focus] = newStr
 					textHadChange = true
@@ -971,16 +971,16 @@ function startftp()
 		power.tick()
 		buttons.read()
 		if ftpimg then ftpimg:blit(0,0) end
-		screen.print(960/2,300,strings.textftp,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		screen.print(960/2,300,STRINGS_FTP_TEXT,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		screen.print(327,333,"FTP://"+tostring(wlan.getip())..":1337",1,theme.style.FTPCOLOR,color.black)
-		screen.print(960/2,375,strings.closeftp,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		screen.print(960/2,375,STRINGS_FTP_CLOSE,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		screen.flip()
 
 		if buttons.start then
 			if ftpimg then ftpimg:blit(0,0) end
-			screen.print(960/2,300,strings.textftp,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			screen.print(960/2,300,STRINGS_FTP_TEXT,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 			screen.print(327,333,"FTP://"+tostring(wlan.getip())..":1337",1,theme.style.FTPCOLOR,color.black)
-			screen.print(960/2,375,strings.loseftp,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			screen.print(960/2,375,STRINGS_FTP_LOSE,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 			screen.flip()
 			ftp.term()
 			os.delay(100)
@@ -1003,14 +1003,14 @@ function usbMassStorage()
 
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end 
 
-		local titlew = string.format(strings.connectusb)
+		local titlew = string.format(STRINGS_USB_CABLE)
 		local w,h = screen.textwidth(titlew,1) + 30,70
 		local x,y = 480 - (w/2), 272 - (h/2)
 
 		draw.fillrect(x, y, w, h, theme.style.BARCOLOR)
 		draw.rect(x, y, w, h,color.white)
 			screen.print(480,y+13, titlew,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-			screen.print(480,y+40, textXO..strings.cancelusb,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			screen.print(480,y+40, textXO..STRINGS_USB_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		screen.flip()
 
 		if buttons[cancel] then return false end
@@ -1024,7 +1024,7 @@ function usbMassStorage()
 		"ux0:","ur0:","uma0:","gro0:","grw0:"
 	]]
 	local mode_usb = -1
-	local title = string.format(strings.usbmode)
+	local title = string.format(STRINGS_USB_MODE)
 	local w,h = screen.textwidth(title,1) + 120,145
 	local x,y = 480 - (w/2), 272 - (h/2)
 
@@ -1036,10 +1036,10 @@ function usbMassStorage()
 		draw.fillrect(x, y, w, h, theme.style.BARCOLOR)
 		draw.rect(x,y,w,h,color.white)
 			screen.print(480, y+10, title,1,color.white,color.black, __ACENTER)
-			screen.print(480,y+40,SYMBOL_CROSS.." "..strings.sd2vita, 1,color.white,color.black, __ACENTER)
-			screen.print(480,y+65,SYMBOL_SQUARE.." "..strings.memcard, 1,color.white,color.black, __ACENTER)
-			screen.print(480,y+90,SYMBOL_TRIANGLE.." "..strings.gamecard, 1,color.white,color.black, __ACENTER)
-			screen.print(480,y+115,SYMBOL_CIRCLE.." "..strings.cancel, 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+40,SYMBOL_CROSS.." "..STRINGS_USB_SD2VITA, 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+65,SYMBOL_SQUARE.." "..STRINGS_USB_MEMORYCARD, 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+90,SYMBOL_TRIANGLE.." "..STRINGS_USB_GAMECARD, 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+115,SYMBOL_CIRCLE.." "..STRINGS_SUBMENU_CANCEL, 1,color.white,color.black, __ACENTER)
 		screen.flip()
 
 		if buttons[accept] or buttons.square or buttons.triangle or buttons[cancel] then
@@ -1056,11 +1056,11 @@ function usbMassStorage()
 	local conexion = usb.start(mode_usb)
 	if conexion == -1 then
 		buttons.homepopup(1)
-		os.message(strings.usbfail,0)
+		os.message(STRINGS_USB_ERROR,0)
 		return false
 	end
 
-	local titlew = string.format(strings.usbconnection)
+	local titlew = string.format(STRINGS_USB_CONNECTION)
 	local w,h = screen.textwidth(titlew,1) + 30,70
 	local x,y = 480 - (w/2), 272 - (h/2)
 	while not buttons[cancel] do
@@ -1070,8 +1070,8 @@ function usbMassStorage()
 
 		draw.fillrect(x,y,w,h,theme.style.BARCOLOR)
 		draw.rect(x,y,w,h,color.white)
-			screen.print(480,y+13, strings.usbconnection,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-			screen.print(480,y+40, textXO..strings.cancelusb,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			screen.print(480,y+13, STRINGS_USB_CONNECTION,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			screen.print(480,y+40, textXO..STRINGS_USB_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		screen.flip()
 	end
 
