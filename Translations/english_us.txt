@@ -1,0 +1,211 @@
+--Texts
+-------------	Explorer	---------------------------------------------------------------------------------
+STRINGS_BACK =					"Return"
+STRINGS_COPYFILE =				"Copying: "
+STRINGS_DELFILE =				"Deleting: "
+STRINGS_CREAT_FILE =			"Create File"
+STRINGS_CREAT_FOLDER =			"Create Folder"
+STRINGS_NEW_FILE =				"New File"
+STRINGS_NEW_FOLDER =			"New Folder"
+STRINGS_PASS =					"Use Pass ?"
+STRINGS_OS_PASS =				"PASS"
+
+--SubMenu
+STRINGS_SUBMENU_COPY =			"Copy"
+STRINGS_SUBMENU_DELETE =		"Delete"
+STRINGS_SUBMENU_MAKEDIR =		"MakeDir"
+STRINGS_SUBMENU_RENAME =		"Rename"
+STRINGS_SUBMENU_EXTRACT =		"Extract"
+STRINGS_SUBMENU_CANCEL =		"Cancel"
+STRINGS_SUBMENU_INSTALL_GAME =	"Install Game"
+STRINGS_SUBMENU_EXTRACT_TO =	"Extract To"
+STRINGS_SUBMENU_PASTE =			"Paste"
+STRINGS_SUBMENU_MOVE =			"Move"
+STRINGS_SUBMENU_SIZE =			"Size"
+STRINGS_SUBMENU_EXPORT =		"Export Multimedia"
+STRINGS_SUBMENU_THEMES =		"Themes ONEMenu"
+STRINGS_SUBMENU_FTP =			"FTP"
+STRINGS_SUBMENU_RESTART =		"Restart ONEMenu"
+STRINGS_SUBMENU_RESET =			"Power Reset"
+STRINGS_SUBMENU_POWEROFF =		"Shutdown"
+STRINGS_SUBMENU_QR =			"QR DownLoader"
+STRINGS_SUBMENU_QR_SCAN =		"QR Scanning"
+STRINGS_SUBMENU_QR_DOWNLOAD =	"File to download"
+STRINGS_SUBMENU_QR_FILENAME =	"Input full name+ext here"
+
+STRINGS_SEL_ITEMS =				"Sel Items: "
+
+------------	Ftp 		---------------------------------------------------------------------------------
+STRINGS_FTP_TEXT =				"Enter this FTP address to your device or PC"
+STRINGS_FTP_CLOSE =				"Press START to close FTP connection"
+STRINGS_FTP_LOSE =				"FTP Connection Closed"
+
+------------	USB 		---------------------------------------------------------------------------------
+STRINGS_USB =					"USB"
+STRINGS_USB_CABLE =				"Connect a USB cable"
+STRINGS_USB_CONNECTION = 		"USB Connection Enabled"
+STRINGS_USB_CANCEL =			"Disconnect"
+STRINGS_USB_MODE =				"USB Connection Mode"
+STRINGS_USB_ERROR =				"Error... Connection Failed"
+STRINGS_USB_SD2VITA =			"SD2VITA"
+STRINGS_USB_MEMORYCARD =		"Memory Card"
+STRINGS_USB_GAMECARD =			"Game Card"
+
+STRINGS_ERROR_PREVIEW_IMG =		"Error Image not supported"
+STRINGS_BACKGROUND_IMG =		"Background: Press △"
+
+-- ## Visor TXT ##
+STRINGS_EDIT_LINE =				"Edit line"
+STRINGS_EDIT_SAVE_CHANGES =		"Would you like to save changes ?"
+STRINGS_EDIT_INSERT_LINE =		"+ -> Insert Line"
+STRINGS_EDIT_DELETE_LINE =		"+ <- Delete Line"
+STRINGS_EDIT_TOO_LARGE =		"File too large"
+STRINGS_EDIT_NOT_IMPLEMENTED =	"Not implemented"
+STRINGS_TITLE_UPDATE_DB =		"To apply the TITLE change you need to perform DB update\n\nOr you can use QCMA to backup/restore the game\n\nDo you want to update DB now ?"
+STRINGS_STITLE_RESTART =		"To apply the STITLE change you need to restart the PSVita\n\nDo you want to restart now ?"
+STRINGS_STITLE_MGE =			"After edit the STITLE a reboot is needed"
+STRINGS_TITLE_MGE =				"After edit the TITLE an update.db is needed to reflect changes"
+
+-- ## Music Player ##
+STRINGS_MUSIC_PLAYING =			"Playing"
+STRINGS_MUSIC_PAUSED =			"Paused"
+STRINGS_MUSIC_TIME =			"Time: "
+STRINGS_MUSIC_ID3 =				"id3: "
+STRINGS_MUSIC_ERROR =			"Error Sound Invalid"
+STRINGS_MUSIC_LOCK_DISPLAY =	"Lock Display"
+
+--ONEMenu
+STRINGS_WAIT_MGE =				"Please wait..."
+
+STRINGS_APP_NOT_MEMORY =		"Not enough memory..."
+STRINGS_APP_REMOVE =			"Really wish to Uninstall: "
+STRINGS_APP_BACKUP_SAVE =		"You want to create a backup of the game savedata\n\nTo ux0:data/ONEMenu/Saves ?"
+STRINGS_APP_RESTORE_SAVE =		"You want to restore the game savedata\n\nFrom ux0:data/ONEMenu/Saves ?"
+STRINGS_APP_DELETE_MANUAL =		"Do you really want to remove this manual ? "
+STRINGS_APP_NOTFIND_MANUAL =	"Manual not exist"
+STRINGS_APP_SHRINK =			"Do you really want to shrink this game ?"
+STRINGS_APP_SHRINK_GAME =		"Shrink Game"
+STRINGS_APP_SHRINK_NO_FILES =	"No duplicate files detected"
+STRINGS_APP_SHRINK_FREE =		"Free"
+STRINGS_APP_UNINSTALL =			"Uninstall"
+STRINGS_APP_SWITCH =			"Move App"
+STRINGS_APP_EMPTY =				"Empty/Error"
+STRINGS_APP_OPEN_FOLDER =		"Open App Folder"
+STRINGS_APP_PARTITIONS =		"Partitions"
+STRINGS_APP_VERSION =			"Version"
+STRINGS_APP_SIZE_IND =			"Size"
+STRINGS_APP_GET_SIZE =			"Calculating..."
+STRINGS_APP_SLIDES =			"Style: "
+STRINGS_APP_SHOW_PIC =			"Show PIC1s: "
+STRINGS_APP_MARK_FAV =			"Mark Favorite: "
+STRINGS_APP_SLIDE_ORIGINAL =	"Original"
+STRINGS_APP_SLIDE_PS4 =			"PS4 XMB"
+STRINGS_APP_YES =				"Yes"
+STRINGS_APP_NO =				"No"
+STRINGS_APP_START =				"START"
+STRINGS_APP_LIST_SORT =			"Sort"
+STRINGS_APP_LIST_SORT_NOW =		"Now: "
+STRINGS_APP_SORT_CATEGORY =		"Sort Category by: "
+STRINGS_APP_SORT_TITLE =		"Title"
+STRINGS_APP_SORT_ID =			"Id"
+STRINGS_APP_SORT_REGION =		"Region"
+STRINGS_APP_SORT_ASCENDENT =	"Asc"
+STRINGS_APP_SORT_DESCENDENT =	"Desc"
+STRINGS_APP_LIST_REFRESH =		"Refresh..."
+STRINGS_APP_EDIT_BUBBLE =		"Edit bubble"
+
+--LiveArea Apps
+STRINGS_APP_LIVEAREA =			"Livearea Apps"
+STRINGS_APP_NOT_LIVEAREA =		"LiveArea Apps Unavailable"
+
+-------------		Callbacks		-------------------------------------------------------------------------
+STRINGS_CALLBACKS_UNSAFE =		"Unsafe: "
+STRINGS_CALLBACKS_FILE =		"File: "
+STRINGS_CALLBACKS_PERCENT =		"Percent: "
+STRINGS_CALLBACKS_PERCENT_ALL = "Percent Total: "
+STRINGS_CALLBACKS_SIZE_ALL =	"Total Size: "
+STRINGS_CALLBACKS_MOVE_FILES =	"File"
+STRINGS_CALLBACKS_UPDATE_DB =	"Update db..."
+
+--onAppInstall
+STRINGS_INSTALL_SEARCH_UNSAFE =	"Search VPK, Unsafe or Dangerous files!"
+STRINGS_WARNING_UNSAFE =		"Extended permissions and personal info access required! \n\nUse caution with non trusted source packages! \n\nDo you want to install at your own risk ?"
+STRINGS_WARNING_DANGEROUS =		"Warning!!! High risk of bricking your device if this VPK is installed! \n\nUse caution with non trusted source packages! \n\nDo you want to install at your own risk ?"
+STRINGS_UNPACK_VPK =			"Unpacking VPK..."
+STRINGS_INSTALLING =			"Installing..."
+
+--onExtractFiles
+STRINGS_EXTRACTION =			"Extraction..."
+
+--onScanningFiles
+STRINGS_SCANNING =				"Scanning..."
+
+--onNetGetFile
+STRINGS_DOWNLOAD =				"Downloading..."
+STRINGS_DOWNLOAD_SUCCESS =		"Successful download in"
+STRINGS_DOWNLOAD_FAILED =		"Failed download"
+
+-------------------------------------------------------------------------------------------------------------
+
+--Launch PBP or VPK
+STRINGS_LAUNCH_GAME =			"Launch game/app: "
+STRINGS_CONFIRM =				"Accept"
+STRINGS_VPK_TOTAL_SIZE = 		"Total Size VPK: "
+STRINGS_VPK_INSTALL =			"INSTALL VPK"
+STRINGS_VPK_ALERT_UNSAFE =		"VPK UNSAFE!!!!"
+STRINGS_VPK_ALERT_DANGEROUS =	"VPK DANGEOROUS!!!!"
+STRINGS_INSTALL_ERROR =			"An error occurred while installing"
+
+------------	ThemesONEMenu	----------------------------------------------------------------------------
+STRINGS_THEMES_INSTALL_DONE =	"Installation Completed!"
+STRINGS_THEMES_IS_READY =		"Theme already exists, download again ?"
+STRINGS_THEMES_RELOAD =			"Reload Original Theme"
+STRINGS_THEMES_NOW =			"Now: "
+STRINGS_THEMES_SEARCH =			"Search Online"
+STRINGS_THEMES_ONLINE =			"Themes Online"
+STRINGS_THEMES_ERROR_DECODE =	"Error Decode Database of Themes!"
+STRINGS_THEMES_ERROR_BASE =		"Error Get Database of Themes!"
+STRINGS_THEMES_INSTALLED =		"Theme Installed!"
+STRINGS_THEMES_ERROR_UNPACK =	"Error Unpack theme!"
+STRINGS_THEMES_ERROR_DOWNLOAD =	"Error Downloading Theme!"
+
+------------	Advanced	---------------------------------------------------------------------------------
+STRINGS_ADVANCED =				"Advanced"
+STRINGS_REFRESH_LIVEAREA =		"RELOAD Content"
+STRINGS_UPDATE_DB =				"Update DB"
+STRINGS_REBUILD_DB =			"Rebuild DB"
+STRINGS_RELOAD_CONFIG =			"Reload Config"
+STRINGS_CONFIG_SUCCESS =		"Reload taiHEN config.txt"
+STRINGS_FAVORITES_SECTION =		"Favorites Section"
+STRINGS_RESTART_UPDATEDB =		"Your PSVita will Restart...\n\nand your database will be update"
+STRINGS_RESTART_REBUILDDB =		"Your PSVita will Restart...\n\nand your database will be rebuilt"
+STRINGS_RESTART =				"Your PSVita will Restart..."
+STRINGS_ENABLE_UPDATE =			"Enable AutoUpdate: "
+STRINGS_PGF_FONT =				"PGF Font"
+STRINGS_PVF_FONT =				"PVF Font"
+
+------------	Favorites	---------------------------------------------------------------------------------
+STRINGS_FAVORITES_ACTIVED =		"This function can't be activated...\n\nNeed at least one favorite"
+STRINGS_FAVORITES_REMOVE =		"Remove from favorites ?"
+STRINGS_FAVORITES_SCANNING =	"Scanning Only for favorites: "
+STRINGS_FAVORITES_CLEAN =		"Clean up Favorites list"
+STRINGS_FAVORITES_EMPTY =		"You really want to empty\n\nthe Favorites list ?"
+STRINGS_FAVORITES_TOGGLE =		"Scan Favorites: "
+
+STRINGS_COUNT =					"Count: "
+STRINGS_SIZE_IS =				"Size is: "
+STRINGS_FILES_FOLDERS =			"Files/Folders"
+
+------------	Export Mulimedia	-------------------------------------------------------------------------
+STRINGS_EXPORT_OPEN_APP =		"Open app for MP3/Gallery/Video ?"
+STRINGS_EXPORT_NO_FILES =		"No multimedia files"
+STRINGS_EXPORT_MP3 =			"MP3 file(s) : "
+STRINGS_EXPORT_MP4 =			"MP4 file(s) : "
+STRINGS_EXPORT_IMG =			"IMG file(s) : "
+STRINGS_EXPORT_OPEN =			"\n\nExport completed, please launch Music/Photos/Videos\n\napplication to read your files !"
+STRINGS_EXPORT_FAIL =			"Error"
+
+------------	Refresh LiveArea	-------------------------------------------------------------------------
+STRINGS_LIVEAREA_NOTINSTALLED =	"\n\nGame not installed: "
+STRINGS_LIVEAREA_GAMES =		"\n\nTotal Installed Games: "
+STRINGS_LIVEAREA_NO_GAMES =		"\n\nNo Games found"
