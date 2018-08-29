@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="03.06">
+      <![CDATA[
+- Fixed downloads using QR SCAN, added ability to download from servers: Mediafire, Zippyshare, Gdrive.<br>
+- Totally renewed the translation method, all translations must be updated according to new english_us.txt file.<br>
+- Fixed STITLE error (max length 52) when editing bubbles.<br>
+- Few small bugs fixed.<br>
+    ]]>
   <changes app_ver="03.05">
       <![CDATA[
 - Support to detect a game cartridge.<br>
