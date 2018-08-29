@@ -732,7 +732,7 @@ function visortxt(handle, flag_edit)
 			end
 
 			if __EDITB then
-				screen.print(480, 425, STRINGS_STITLE_RESTART, 1, color.white, color.black, __ACENTER)
+				screen.print(480, 425, STRINGS_STITLE_MGE, 1, color.white, color.black, __ACENTER)
 				screen.print(480, 450, STRINGS_TITLE_MGE, 1, color.white, color.black, __ACENTER)
 			end
 
