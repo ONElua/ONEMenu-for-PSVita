@@ -209,3 +209,11 @@ STRINGS_EXPORT_FAIL =			"Error"
 STRINGS_LIVEAREA_NOTINSTALLED =	"\n\nJuego no instalado: "
 STRINGS_LIVEAREA_GAMES =		"\n\nTotal de juegos instalados: "
 STRINGS_LIVEAREA_NO_GAMES =		"\n\nNingún Juego detectado"
+
+------------	Updater	-------------------------------------------------------------------------
+STRINGS_UPDATER_QUESTION = 		"ahora está disponible.\n\n¿Desea actualizar la aplicación?"
+STRINGS_UPDATER = 				"Descargando actualización..."
+STRINGS_UPDATER_SIZE = 			"Tamaño: "
+STRINGS_UPDATER_WRITTEN = 		"Escrito: "
+STRINGS_UPDATER_SPEED = 		"Velocidad: "
+STRINGS_UPDATER_PERCENT = 		"Porcentaje: "
