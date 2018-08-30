@@ -566,7 +566,45 @@ local installgame_callback = function ()
 	os.delay(15)
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
+
+local installtheme_callback = function ()
+    if #explorer.list > 0 then
  
+        if not files.exists(string.format("%s/theme.xml",explorer.list[scroll.list.sel].path)) then return end
+       
+        local path_tmp = explorer.list[scroll.list.sel].path
+ 
+        if Root2[Dev] != "ux0:" then --return end
+            if files.copy(explorer.list[scroll.list.sel].path,"ux0:data/customtheme")==1 then files.delete(explorer.list[scroll.list.sel].path) end
+            path_tmp = "ux0:data/customtheme/"..explorer.list[scroll.list.sel].name
+        end
+ 
+        buttons.homepopup(0)
+            reboot=false
+                local result = themes.install(path_tmp)
+            buttons.homepopup(1)
+        reboot=true
+ 
+        os.message(STRINGS_SUBMENU_INSTALLCTHEME.."\n\n"..STRINGS_RESULT..result)
+        if result == 1 then
+            if os.message(STRINGS_THEMES_SETTINGS,1)==1 then
+                os.delay(150)
+                os.uri("settings_dlg:custom_themes")
+            end
+        end
+ 
+--clean
+        menu_ctx.wakefunct()
+        menu_ctx.close = true
+        action = false
+        explorer.refresh(true)
+        explorer.action = 0
+        multi={}
+    end
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+end
+
 local filesexport_callback = function ()
 
 	local _path = explorer.list[scroll.list.sel].path
@@ -928,6 +966,13 @@ local scanfavs_callback = function ()
 	menu_ctx.scroll.sel = pos_menu
 end
 
+local themesLiveArea_callback = function ()
+	local pos_menu = menu_ctx.scroll.sel
+	customthemes()
+	menu_ctx.wakefunct2()
+	menu_ctx.scroll.sel = pos_menu
+end
+
 local font_callback = function ()
 	local pos_menu = menu_ctx.scroll.sel
 	if not __USERFNT then
@@ -974,10 +1019,11 @@ function menu_ctx.wakefunct()
 		{ text = STRINGS_SUBMENU_RENAME,        funct = rename_callback },
 		{ text = STRINGS_SUBMENU_SIZE,          funct = sizedir_callback },
 
-		{ text = STRINGS_NEW_FILE,       funct = newfile_callback },
+		{ text = STRINGS_NEW_FILE,       		funct = newfile_callback },
 		{ text = STRINGS_SUBMENU_MAKEDIR,       funct = makedir_callback },
 
-		{ text = STRINGS_SUBMENU_INSTALL_GAME, funct = installgame_callback },
+		{ text = STRINGS_SUBMENU_INSTALL_GAME, 	funct = installgame_callback },
+		{ text = STRINGS_SUBMENU_INSTALLCTHEME,	funct = installtheme_callback },
         { text = STRINGS_SUBMENU_EXPORT,        funct = filesexport_callback },
 		{ text = STRINGS_SUBMENU_QR,            funct = qr_callback },
 
@@ -987,7 +1033,7 @@ function menu_ctx.wakefunct()
     if menu_ctx.wait_action==__ACTION_WAIT_PASTE then
         table.insert(menu_ctx.options, 1, { text = STRINGS_SUBMENU_PASTE,       funct = paste_callback })
     elseif menu_ctx.wait_action==__ACTION_WAIT_EXTRACT then
-        table.insert(menu_ctx.options, 1, { text = STRINGS_SUBMENU_EXTRACT_TO,   funct = paste_callback })
+        table.insert(menu_ctx.options, 1, { text = STRINGS_SUBMENU_EXTRACT_TO,  funct = paste_callback })
     else
         table.insert(menu_ctx.options, 1, { text = STRINGS_SUBMENU_COPY,        funct =  src_path_callback })
         table.insert(menu_ctx.options, 2, { text = STRINGS_SUBMENU_MOVE,        funct = src_path_callback })
@@ -998,19 +1044,20 @@ end
 
 function menu_ctx.wakefunct2()
     menu_ctx.options = { -- Handle Option Text and Option Function
-        { text = STRINGS_USB,           funct = usb_callback },
-		{ text = STRINGS_SUBMENU_FTP,           funct = ftp_callback },
-		{ text = STRINGS_REFRESH_LIVEAREA,       funct = refresh_callback },
+        { text = STRINGS_USB,           		funct = usb_callback },
+		{ text = STRINGS_SUBMENU_FTP,       	funct = ftp_callback },
+		{ text = STRINGS_REFRESH_LIVEAREA,  	funct = refresh_callback },
 
-		{ text = STRINGS_SUBMENU_RESTART,     funct = restart_callback },
-        { text = STRINGS_SUBMENU_RESET,         funct = reboot_callback },
-        { text = STRINGS_SUBMENU_POWEROFF,           funct = shutdown_callback },
+		{ text = STRINGS_SUBMENU_RESTART,   	funct = restart_callback },
+        { text = STRINGS_SUBMENU_RESET,     	funct = reboot_callback },
+        { text = STRINGS_SUBMENU_POWEROFF,  	funct = shutdown_callback },
 
-		{ text = STRINGS_UPDATE_DB, 	funct = updatedb_callback },
-		{ text = STRINGS_REBUILD_DB, 	funct = rebuilddb_callback },
-		{ text = STRINGS_RELOAD_CONFIG,	funct = reloadconfig_callback },
+		{ text = STRINGS_UPDATE_DB, 			funct = updatedb_callback },
+		{ text = STRINGS_REBUILD_DB, 			funct = rebuilddb_callback },
+		{ text = STRINGS_RELOAD_CONFIG,			funct = reloadconfig_callback },
 
 		{ text = STRINGS_FAVORITES_SECTION,		funct = scanfavs_callback },
+		{ text = STRINGS_SUBMENU_CUSTOMTHEMES,	funct = themesLiveArea_callback },
     }
 	if __FNT == 3 then 
 		table.insert(menu_ctx.options, { text = "< "..STRINGS_PVF_FONT.." >", funct = font_callback, pad = true })
