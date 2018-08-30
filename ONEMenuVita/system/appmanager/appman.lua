@@ -539,7 +539,7 @@ local editsfo_callback = function ()
 
 		--STitle,Title,ID
 		if __TITLE != "" then
-			os.titledb(string.sub(__TTITLE,1,127), appman[cat].list[focus_index].id)
+			os.titledb(string.sub(__TITLE,1,127), appman[cat].list[focus_index].id)
 			if os.message(STRINGS_TITLE_UPDATE_DB,1) == 1 then reboot_updatedb = true end
 		end
 

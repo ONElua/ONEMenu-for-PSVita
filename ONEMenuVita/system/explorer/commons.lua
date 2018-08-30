@@ -540,7 +540,7 @@ function visorimg(path)
 
 		local changeimg,angle = false,0
 		while true do
-			if theme.data["back"] then theme.data["back"]:blit(0,0) end
+			if theme.data["list"] then theme.data["list"]:blit(0,0) end
 			buttons.read()
 	
 			tmp:blit(__DISPLAYW/2,__DISPLAYH/2)
@@ -809,7 +809,7 @@ function visortxt(handle, flag_edit)
 
 							if __EDITB then
 								if v.field == "STITLE" then game.setsfo(handle.path, "STITLE_"..langs[os.language()], string.sub(__STITLE,1,51))
-								elseif v.field == "TITLE" then game.setsfo(handle.path, "TITLE_"..langs[os.language()], string.sub(__TTITLE,1,127)) end
+								elseif v.field == "TITLE" then game.setsfo(handle.path, "TITLE_"..langs[os.language()], string.sub(__TITLE,1,127)) end
 								game.setsfo(handle.path, k, tostring(v.string))
 							else
 								if v.number then
