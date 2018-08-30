@@ -20,7 +20,7 @@ function screen.flip()
 		elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 		screen.flip()
 
-		if os.message(string.format("%s v%s ", APP_PROJECT, string.format("%X.%02X",major, minor).." is now available.\n\n".."Do you want to update the application?"), 1) == 1 then
+		if os.message(string.format("%s v%s ", APP_PROJECT, string.format("%X.%02X",major, minor).." "..STRINGS_UPDATER_QUESTION), 1) == 1 then
 			buttons.homepopup(0)
 
 			if update then update:blit(0,0)
@@ -38,9 +38,9 @@ function screen.flip()
 				if update then update:blit(0,0)
 				elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 
-				screen.print(10,10,"Downloading Update...")
-				screen.print(10,30,"Size: "..tostring(size).." Written: "..tostring(written).." Speed: "..tostring(speed).."Kb/s")
-				screen.print(10,50,"Percent: "..math.floor((written*100)/size).."%")
+				screen.print(10,10,STRINGS_UPDATER)
+				screen.print(10,30,STRINGS_UPDATER_SIZE..tostring(size).." "..STRINGS_UPDATER_WRITTEN..tostring(written).." "..STRINGS_UPDATER_SPEED..tostring(speed).."Kb/s")
+				screen.print(10,50,STRINGS_UPDATER_PERCENT..math.floor((written*100)/size).."%")
 				draw.fillrect(0,520,((written*960)/size),24,color.new(0,255,0))
 				screen.flip()
 				buttons.read()

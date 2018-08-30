@@ -33,7 +33,12 @@ function customthemes()
 		end
 		list.len = #list
 
-		if list.len<=0 then os.message(STRINGS_CUSTOMTHEMES_EMPTY) return end
+		if list.len<=0 then
+			os.message(STRINGS_CUSTOMTHEMES_EMPTY)
+			os.delay(15)
+			if themesimg then themesimg:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+			return
+		end
 
 		local themesimg = image.load(__PATH_THEMES..__THEME.."/themesmanager.png") or image.load("system/theme/default/themesmanager.png")
 
@@ -62,6 +67,8 @@ function customthemes()
 						livetheme:set(list,15)
 						list.len = #list
 					end
+					os.delay(15)
+					if themesimg then themesimg:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 				end
 
 				draw.rect(700-1,84-1,252+2,151+2,color.white)
