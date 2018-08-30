@@ -2,7 +2,11 @@
 
 ### Shared your Translation ###
 
-You can translate the file ux0:data/ONEMENU/english_us.txt and rename it to corresponding language:.<br>
+You can translate the file:<br>
+ux0:app/ONEMENU/system/lang/english_us.txt<br>
+ux0:data/ONEMENU/english_us.txt<br>
+rename it to corresponding language:.<br>
+
 JAPANESE.txt<br>
 ENGLISH_US.txt<br>
 FRENCH.txt<br>
