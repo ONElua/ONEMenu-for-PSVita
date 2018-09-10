@@ -498,11 +498,7 @@ function MusicPlayer(handle)
 			power.tick(__POWER_TICK_SUSPEND) -- reset a power timers only for block suspend..
 
 			if buttons[accept] then
-				--[[if snd:endstream() then
-					snd:play()
-				else]]
 				snd:pause() -- pause/resume
-				--end
 			end
 
 			if buttons[cancel] or snd:endstream() then break end
@@ -849,14 +845,7 @@ function visortxt(handle, flag_edit)
 					local name_field = field:upper()
 
 					if __EDITB then
-						local newStr = nil
-						if numeric then
-							if value then value=tonumber(value:gsub("0x", ""),16) end			--Hex-Dec
-							newStr = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
-						else
-							newStr = osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
-						end
-
+						local newStr = osk.init(field, value, 512)
 						if newStr then
 							if value != newStr then
 
@@ -871,15 +860,9 @@ function visortxt(handle, flag_edit)
 
 								--Update line & set changes to late save!
 								changes[field].field = tostring(field:upper())
-								if numeric then
-									texteditorInfo.list[texteditorInfo.focus] = string.format("%s = 0x%X", field, tonumber(newStr))
-									changes[field].number = tonumber(newStr)
-										
-								else
-									changes[field].string = ""
-									texteditorInfo.list[texteditorInfo.focus] = string.format("%s = %s", field, newStr)
-									changes[field].string = newStr
-								end
+								changes[field].string = ""
+								texteditorInfo.list[texteditorInfo.focus] = string.format("%s = %s", field, newStr)
+								changes[field].string = newStr
 							end
 						end--newStr
 					else

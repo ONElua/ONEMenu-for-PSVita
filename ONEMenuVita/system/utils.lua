@@ -45,22 +45,26 @@ if files.exists(__PATH_LANG..__LANG..".txt") then dofile(__PATH_LANG..__LANG..".
 
 color.loadpalette()
 
-SYMBOL_CROSS	= string.char(0xe2)..string.char(0x95)..string.char(0xb3)
 SYMBOL_SQUARE	= string.char(0xe2)..string.char(0x96)..string.char(0xa1)
 SYMBOL_TRIANGLE	= string.char(0xe2)..string.char(0x96)..string.char(0xb3)
-SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
 
-accept,cancel = "cross","circle"
-textXO = "O: "
-accept_x = 1
-if buttons.assign()==0 then
-	accept,cancel = "circle","cross"
-	textXO = "X: "
-	accept_x = 0
-	SYMBOL_CROSS	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
-	SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x95)..string.char(0xb3)
-	
+function buttons_reasign()
+	accept,cancel = "cross","circle"
+	textXO = "O: "
+	accept_x = 1
+	SYMBOL_CROSS	= string.char(0xe2)..string.char(0x95)..string.char(0xb3)
+	SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
+	if buttons.assign()==0 then
+		accept,cancel = "circle","cross"
+		textXO = "X: "
+		accept_x = 0
+		SYMBOL_CROSS	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
+		SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x95)..string.char(0xb3)
+	end
 end
+
+buttons_reasign()
+
 if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
 
 if __FAV == 1 and #apps>0 then

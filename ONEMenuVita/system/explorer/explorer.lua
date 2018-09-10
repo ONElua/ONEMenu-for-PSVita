@@ -297,7 +297,7 @@ local paste_callback = function ()
             reboot=false
             for i=1,#multi do
                 if os.message(multi[i]+"\n\n"+STRINGS_PASS ,1)==1 then
-                    local pass = osk.init(STRINGS_OS_PASS , "" , 50)
+                    local pass = osk.init(STRINGS_OS_PASS , "" , 50, __OSK_TYPE_LATIN, __OSK_MODE_PASSW)
                     if pass then
                         buttons.homepopup(0)
                             files.extract(multi[i],explorer.dst,pass)
@@ -366,7 +366,7 @@ end
 
 local rename_callback = function ()
     if #explorer.list > 0 then
-        local new_name = osk.init(STRINGS_SUBMENU_RENAME,files.nopath(explorer.list[scroll.list.sel].path))
+        local new_name = osk.init(STRINGS_SUBMENU_RENAME, files.nopath(explorer.list[scroll.list.sel].path), 256, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
         if new_name then
             local fullpath = files.nofile(explorer.list[scroll.list.sel].path)
             files.rename(explorer.list[scroll.list.sel].path, new_name)
@@ -389,7 +389,7 @@ local newfile_callback = function () -- Added suport multi-new-folder
     while files.exists(Root[Dev].."/"..string.format("%s%03d",STRINGS_NEW_FILE,i)) do
         i+=1
     end
-    local name_folder = osk.init(STRINGS_CREAT_FILE, string.format("%s%03d",STRINGS_NEW_FILE,i))
+    local name_folder = osk.init(STRINGS_CREAT_FILE, string.format("%s%03d",STRINGS_NEW_FILE,i), 256, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
     if name_folder then
         local dest = Root[Dev].."/"..name_folder
         if Root[Dev]:sub(#Root[Dev]) == "/" then dest = Root[Dev]..name_folder end
@@ -409,7 +409,7 @@ local makedir_callback = function () -- Added suport multi-new-folder
     while files.exists(Root[Dev].."/"..string.format("%s%03d",STRINGS_NEW_FOLDER,i)) do
         i+=1
     end
-    local name_folder = osk.init(STRINGS_CREAT_FOLDER, string.format("%s%03d",STRINGS_NEW_FOLDER,i))
+    local name_folder = osk.init(STRINGS_CREAT_FOLDER, string.format("%s%03d",STRINGS_NEW_FOLDER,i), 256, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
     if name_folder then
         local dest = Root[Dev].."/"..name_folder
         if Root[Dev]:sub(#Root[Dev]) == "/" then dest = Root[Dev]..name_folder end
@@ -854,7 +854,7 @@ local qr_callback = function ()
 			res,filename = http.getfile(url_backup,"ux0:downloads/")
 
 			if not res then
-				filename = osk.init(STRINGS_SUBMENU_QR_DOWNLOAD, STRINGS_SUBMENU_QR_FILENAME)
+				filename = osk.init(STRINGS_SUBMENU_QR_DOWNLOAD, STRINGS_SUBMENU_QR_FILENAME, 256, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
 				if filename then tmp = filename else tmp = "file" end
 				__NAME_DOWNLOAD = tmp or ""
 				http.download(url_backup,"ux0:downloads/"..filename)

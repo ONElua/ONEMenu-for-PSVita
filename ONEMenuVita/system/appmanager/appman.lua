@@ -149,7 +149,10 @@ function appman.launch()
 		if counter == appman.len then -- Recv all request, then all exists is loaded and return CPU/GPU
 			os.cpu(__CPU)
 			os.gpuclock(__GPU)
+			flag_begin = true
 		end
+
+		buttons_reasign()
 
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
