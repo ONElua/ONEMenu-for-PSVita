@@ -5,6 +5,9 @@
 **OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories.<br>
 Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db.
 
+### Changelog 3.08 ###
+- Bug Fixes.<br>
+
 ### Changelog 3.07 ###
 - Updated kernel and user modules taken from vitashell.<br>
 - Added fix for the USB connection and udcd_uvc.skprx. 100% thanks to TheOfficialFloW and Xerpi.<br>
