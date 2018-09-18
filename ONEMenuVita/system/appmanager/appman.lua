@@ -297,6 +297,7 @@ local shrink_callback = function ()
 			end
 		end
 		message_wait("ux0:Patch")
+		os.delay(15)
 
 		getlist("ux0:patch/"..appman[cat].list[focus_index].id, list_patch, "ux0:patch")
 		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, "ux0:patch")
@@ -314,7 +315,7 @@ local shrink_callback = function ()
 		end
 
 		if #list_del > 0 then
-			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:patch:\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:patch\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -330,6 +331,7 @@ local shrink_callback = function ()
 ----------------repatch
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 		message_wait("ux0:rePatch")
+		os.delay(15)
 
 		list_patch, list_app = {},{}
 		getlist("ux0:repatch/"..appman[cat].list[focus_index].id, list_patch, "ux0:repatch")
@@ -348,7 +350,7 @@ local shrink_callback = function ()
 		end
 
 		if #list_del > 0 then
-			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:rePatch:\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:rePatch\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -361,9 +363,58 @@ local shrink_callback = function ()
 		end
 		os.delay(15)
 
+----------------readdcont
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait("ux0:readdcont")
+		os.delay(15)
+
+		function getlistaddcont(_path, _list, substring)
+			local tmp = files.list(_path)	
+			if tmp and #tmp > 0 then
+				for i=1, #tmp do
+					if tmp[i].directory then
+						if not tmp[i].name:find("sce_",1) then getlistaddcont(tmp[i].path, _list, substring) end
+					else
+						if tmp[i].name != "eboot.bin" then
+							local _size = (tmp[i].size or files.size(tmp[i].path))
+							table.insert(_list, {path = tmp[i].path:gsub(substring,'ux0:addcont'):lower(), size = _size})
+						end
+					end
+				end
+			end
+		end
+
+		list_patch, list_app = {},{}
+		getlistaddcont("ux0:readdcont/"..appman[cat].list[focus_index].id, list_patch, "ux0:readdcont")
+		getlistaddcont("ux0:addcont/"..appman[cat].list[focus_index].id, list_app, "ux0:readdcont")
+
+		local size_del,list_del = 0,{}
+		if #list_patch > 0 and #list_app > 0 then
+			for i=1,#list_patch do
+				for j=1,#list_app do
+					if list_patch[i].path == list_app[j].path then
+						size_del += list_app[j].size
+						table.insert(list_del,list_app[j].path)
+					end
+				end
+			end
+		end
+
+		if #list_del > 0 then
+			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:readdcont\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+				for i=1,#list_del do
+					files.delete(list_del[i])
+				end
+			end
+		else
+			os.message(STRINGS_APP_SHRINK_NO_FILES)
+		end
+		os.delay(15)
+
 ----------------sce_sys/manual/
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 		message_wait("sce_sys/manual/")
+		os.delay(15)
 
 		local pathmanual,pathpatch  = appman[cat].list[focus_index].path.."/sce_sys/manual/","ux0:patch/"..appman[cat].list[focus_index].id.."/sce_sys/manual/"
 		local scesys_manual, patch_manual, size_manual, dirs_manual, files_manual = false,false,0,0,0
