@@ -1,0 +1,229 @@
+--Texts
+-------------	Explorer	---------------------------------------------------------------------------------
+STRINGS_BACK =					"返回"
+STRINGS_COPYFILE =				"正在复制: "
+STRINGS_DELFILE =				"正在删除: "
+STRINGS_CREAT_FILE =			"创建文件"
+STRINGS_CREAT_FOLDER =			"创建目录"
+STRINGS_NEW_FILE =				"新建文件"
+STRINGS_NEW_FOLDER =			"新建文件夹"
+STRINGS_PASS =					"使用密码 ?"
+STRINGS_OS_PASS =				"密码"
+
+--SubMenu
+STRINGS_SUBMENU_COPY =			"复制"
+STRINGS_SUBMENU_DELETE =		"删除"
+STRINGS_SUBMENU_MAKEDIR =		"建立文件夹"
+STRINGS_SUBMENU_RENAME =		"重命名"
+STRINGS_SUBMENU_EXTRACT =		"解压"
+STRINGS_SUBMENU_CANCEL =		"取消"
+STRINGS_SUBMENU_INSTALL_GAME =	"安装游戏"
+STRINGS_SUBMENU_INSTALLCTHEME =	"安装自定义主题"
+STRINGS_SUBMENU_EXTRACT_TO =	"解压到"
+STRINGS_SUBMENU_PASTE =			"粘贴"
+STRINGS_SUBMENU_MOVE =			"移动"
+STRINGS_SUBMENU_SIZE =			"大小"
+STRINGS_SUBMENU_EXPORT =		"导出多媒体"
+STRINGS_SUBMENU_THEMES =		"应用 ONEMenu 主题"
+STRINGS_SUBMENU_CUSTOMTHEMES =	"LiveArea 自定义主题"
+STRINGS_SUBMENU_FTP =			"FTP"
+STRINGS_SUBMENU_RESTART =		"重启 ONEMenu"
+STRINGS_SUBMENU_RESET =			"重启 Vita"
+STRINGS_SUBMENU_POWEROFF =		"关机"
+STRINGS_SUBMENU_QR =			"QR 下载器"
+STRINGS_SUBMENU_QR_SCAN =		"QR 码扫描"
+STRINGS_SUBMENU_QR_DOWNLOAD =	"待下载文件"
+STRINGS_SUBMENU_QR_FILENAME =	"在这里输入完整的 文件名+扩展名 "
+
+STRINGS_SEL_ITEMS =				"选择项目: "
+
+------------	Ftp 		---------------------------------------------------------------------------------
+STRINGS_FTP_TEXT =				"在您打设备或电脑输入这个 FTP 地址"
+STRINGS_FTP_CLOSE =				"按 START 键断开 FTP 连接"
+STRINGS_FTP_LOSE =				"FTP 连接已关闭"
+
+------------	USB 		---------------------------------------------------------------------------------
+STRINGS_USB =					"USB"
+STRINGS_USB_CABLE =				"请连接 USB 数据线"
+STRINGS_USB_CONNECTION = 		"USB 连接已启用"
+STRINGS_USB_CANCEL =			"断开"
+STRINGS_USB_MODE =				"USB 连接模式"
+STRINGS_USB_ERROR =				"错误... 连接失败"
+STRINGS_USB_SD2VITA =			"SD2VITA"
+STRINGS_USB_MEMORYCARD =		"储存卡"
+STRINGS_USB_GAMECARD =			"游戏卡"
+
+STRINGS_ERROR_PREVIEW_IMG =		"不支持错误的图片"
+STRINGS_BACKGROUND_IMG =		"背景: 按 △"
+
+-- ## Visor TXT ##
+STRINGS_EDIT_LINE =				"编辑行"
+STRINGS_EDIT_SAVE_CHANGES =		"您想要保存变更吗 ?"
+STRINGS_EDIT_INSERT_LINE =		"+ -> 插入行"
+STRINGS_EDIT_DELETE_LINE =		"+ <- 删除行"
+STRINGS_EDIT_TOO_LARGE =		"文件过大"
+STRINGS_EDIT_NOT_IMPLEMENTED =	"未执行"
+STRINGS_TITLE_UPDATE_DB =		"为了让 TITLE 修改生效,您需要执行数据库更新\n\n您也可以用 QCMA 来备份/还原游戏\n\n您想在现在更新数据库吗 ?"
+STRINGS_STITLE_RESTART =		"要应用 STITLE 更改，您需要重新启动 PS Vita \n\n您想现在重启吗 ?"
+STRINGS_STITLE_MGE =			"更新 STITLE 之后需要重启"
+STRINGS_TITLE_MGE =				"编辑 TITLE 后，需要 更新数据库 来应用更改"
+
+-- ## Music Player ##
+STRINGS_MUSIC_PLAYING =			"正在播放"
+STRINGS_MUSIC_PAUSED =			"暂停"
+STRINGS_MUSIC_TIME =			"时间: "
+STRINGS_MUSIC_ID3 =				"id3: "
+STRINGS_MUSIC_ERROR =			"错误 声音无效"
+STRINGS_MUSIC_LOCK_DISPLAY =	"锁定显示"
+
+--ONEMenu
+STRINGS_WAIT_MGE =				"请稍候..."
+
+STRINGS_APP_NOT_MEMORY =		"内存空间不足..."
+STRINGS_APP_REMOVE =			"确定要卸载: "
+STRINGS_APP_BACKUP_SAVE =		"您想要建立游戏存档备份\n\n到 ux0:data/ONEMenu/Saves 目录吗?"
+STRINGS_APP_RESTORE_SAVE =		"您想要从 ux0:data/ONEMenu/ 目录\n\n还原游戏存档吗 ?"
+STRINGS_APP_DELETE_MANUAL =		"您想要移除这个手册吗 ? "
+STRINGS_APP_NOTFIND_MANUAL =	"手册不存在"
+STRINGS_APP_SHRINK =			"您确定要缩减这个游戏吗 ?"
+STRINGS_APP_SHRINK_GAME =		"缩减游戏"
+STRINGS_APP_SHRINK_NO_FILES =	"未检测到重复文件"
+STRINGS_APP_SHRINK_FREE =		"空闲"
+STRINGS_APP_UNINSTALL =			"卸载"
+STRINGS_APP_SWITCH =			"移动程序"
+STRINGS_APP_EMPTY =				"空白/错误"
+STRINGS_APP_OPEN_FOLDER =		"打开程序目录"
+STRINGS_APP_PARTITIONS =		"分区"
+STRINGS_APP_VERSION =			"版本"
+STRINGS_APP_SIZE_IND =			"大小"
+STRINGS_APP_GET_SIZE =			"正在计算..."
+STRINGS_APP_SLIDES =			"风格: "
+STRINGS_APP_SHOW_PIC =			"显示主页图: "
+STRINGS_APP_MARK_FAV =			"标为 喜欢: "
+STRINGS_APP_SLIDE_ORIGINAL =	"原始"
+STRINGS_APP_SLIDE_PS4 =			"PS4 XMB"
+STRINGS_APP_YES =				"是"
+STRINGS_APP_NO =				"否"
+STRINGS_APP_START =				"启动"
+STRINGS_APP_LIST_SORT =			"分类选项"
+STRINGS_APP_LIST_SORT_NOW =		"当前: "
+STRINGS_APP_SORT_CATEGORY =		"分类方式: "
+STRINGS_APP_SORT_TITLE =		"标题"
+STRINGS_APP_SORT_ID =			"Id"
+STRINGS_APP_SORT_REGION =		"地区"
+STRINGS_APP_SORT_ASCENDENT =	"升序"
+STRINGS_APP_SORT_DESCENDENT =	"降序"
+STRINGS_APP_LIST_REFRESH =		"刷新..."
+STRINGS_APP_EDIT_BUBBLE =		"编辑气泡"
+
+------------	ThemesLivearea		-------------------------------------------------------------------------
+STRINGS_CUSTOMTHEMES_TITLE =	"LiveArea 自定义主题"
+STRINGS_CUSTOMTHEMES_EMPTY =	"主题列表 为空/错误!"
+STRINGS_CUSTOMTHEMES_DELETE =	"从 app.db 卸载自定义主题"
+STRINGS_CUSTOMTHEMES_DELFILES = "从自定义主题里删除文件 ?"
+
+--LiveArea Apps
+STRINGS_APP_LIVEAREA =			"Livearea 程序"
+STRINGS_APP_NOT_LIVEAREA =		"LiveArea 程序不可用"
+
+-------------		Callbacks		-------------------------------------------------------------------------
+STRINGS_CALLBACKS_UNSAFE =		"不安全: "
+STRINGS_CALLBACKS_FILE =		"文件: "
+STRINGS_CALLBACKS_PERCENT =		"百分比: "
+STRINGS_CALLBACKS_PERCENT_ALL = "总百分比: "
+STRINGS_CALLBACKS_SIZE_ALL =	"合计大小: "
+STRINGS_CALLBACKS_MOVE_FILES =	"文件"
+STRINGS_CALLBACKS_UPDATE_DB =	"更新数据库..."
+
+--onAppInstall
+STRINGS_INSTALL_SEARCH_UNSAFE =	"搜索 VPK ,不安全或危险文件!"
+STRINGS_WARNING_UNSAFE =		"需要扩展权限和个人信息访问! \n\n请谨慎使用不受信任的资源包! \n\n您想承担风险安装它吗 ?"
+STRINGS_WARNING_DANGEROUS =		"警告!!! 安装这个 VPK 有较高风险让您的设备变砖! \n\n请谨慎使用不受信任的资源包! \n\n您想承担风险安装它吗 ?"
+STRINGS_UNPACK_VPK =			"正在解包 VPK..."
+STRINGS_INSTALLING =			"正在安装..."
+
+--onExtractFiles
+STRINGS_EXTRACTION =			"正在解压..."
+
+--onScanningFiles
+STRINGS_SCANNING =				"正在扫描..."
+
+--onNetGetFile
+STRINGS_DOWNLOAD =				"正在下载..."
+STRINGS_DOWNLOAD_SUCCESS =		"成功下载到"
+STRINGS_DOWNLOAD_FAILED =		"下载失败"
+
+-------------------------------------------------------------------------------------------------------------
+
+--Launch PBP or VPK
+STRINGS_LAUNCH_GAME =			"启动 游戏/程序: "
+STRINGS_CONFIRM =				"接受"
+STRINGS_VPK_TOTAL_SIZE = 		"总大小 VPK: "
+STRINGS_VPK_INSTALL =			"安装 VPK"
+STRINGS_VPK_ALERT_UNSAFE =		"VPK 不安全!!!!"
+STRINGS_VPK_ALERT_DANGEROUS =	"VPK 危险!!!!"
+STRINGS_INSTALL_ERROR =			"安装过程中出现错误"
+
+------------	ThemesONEMenu	----------------------------------------------------------------------------
+STRINGS_THEMES_INSTALL_DONE =	"安装完成!"
+STRINGS_THEMES_IS_READY =		"主题已存在, 重新下载 ?"
+STRINGS_THEMES_RELOAD =			"重新加载原始主题"
+STRINGS_THEMES_NOW =			"当前: "
+STRINGS_THEMES_SETTINGS =		"跳转到主题设置 ?"
+STRINGS_THEMES_SEARCH =			"在线搜索"
+STRINGS_THEMES_ONLINE =			"在线主题"
+STRINGS_THEMES_ERROR_DECODE =	"主题数据库解码出错!"
+STRINGS_THEMES_ERROR_BASE =		"获取主题数据库出错!"
+STRINGS_THEMES_INSTALLED =		"主题已安装!"
+STRINGS_THEMES_ERROR_UNPACK =	"解包主题出错!"
+STRINGS_THEMES_ERROR_DOWNLOAD =	"下载主题出错!"
+
+------------	Advanced	---------------------------------------------------------------------------------
+STRINGS_ADVANCED =				"高级"
+STRINGS_REFRESH_LIVEAREA =		"重新读取内容"
+STRINGS_UPDATE_DB =				"更新数据库"
+STRINGS_REBUILD_DB =			"重建数据库"
+STRINGS_RELOAD_CONFIG =			"重新读取 Config"
+STRINGS_CONFIG_SUCCESS =		"重新读取 taiHEN config.txt"
+STRINGS_FAVORITES_SECTION =		"收藏夹"
+STRINGS_RESTART_UPDATEDB =		"您的 PSVita 即将重启...\n\n并且您的数据库将被更新"
+STRINGS_RESTART_REBUILDDB =		"您的 PSVita 即将重启...\n\n并且您的数据库将被重建"
+STRINGS_RESTART =				"您的 PSVita 即将重启..."
+STRINGS_ENABLE_UPDATE =			"启用自动更新: "
+STRINGS_PGF_FONT =				"PGF 字体"
+STRINGS_PVF_FONT =				"PVF 字体"
+
+------------	Favorites	---------------------------------------------------------------------------------
+STRINGS_FAVORITES_ACTIVED =		"此功能无法激活...\n\n需要收藏至少一个项目"
+STRINGS_FAVORITES_REMOVE =		"从收藏夹中删除 ?"
+STRINGS_FAVORITES_SCANNING =	"仅扫描收藏夹: "
+STRINGS_FAVORITES_CLEAN =		"清空收藏夹列表"
+STRINGS_FAVORITES_EMPTY =		"您确定要清空收藏夹\n\n列表吗 ?"
+STRINGS_FAVORITES_TOGGLE =		"扫描收藏夹: "
+
+STRINGS_RESULT =				"\n结果: "
+STRINGS_COUNT =					"数量: "
+STRINGS_SIZE_IS =				"大小为: "
+STRINGS_FILES_FOLDERS =			"文件/文件夹"
+
+------------	Export Mulimedia	-------------------------------------------------------------------------
+STRINGS_EXPORT_OPEN_APP =		"打开 MP3/图库/视频 相关程序?"
+STRINGS_EXPORT_NO_FILES =		"没有多媒体文件"
+STRINGS_EXPORT_MP3 =			"MP3 文件 : "
+STRINGS_EXPORT_MP4 =			"MP4 文件 : "
+STRINGS_EXPORT_IMG =			"IMG 文件 : "
+STRINGS_EXPORT_OPEN =			"\n\n导出完成, 请运行 音乐/照片/视频\n\程序来读取您的文件 !"
+STRINGS_EXPORT_FAIL =			"错误"
+
+------------	Refresh LiveArea	-------------------------------------------------------------------------
+STRINGS_LIVEAREA_NOTINSTALLED =	"\n\n尚未安装游戏: "
+STRINGS_LIVEAREA_GAMES =		"\n\n所有已安装游戏: "
+STRINGS_LIVEAREA_NO_GAMES =		"\n\n没有找到游戏"
+
+------------	Updater	-------------------------------------------------------------------------
+STRINGS_UPDATER_QUESTION = 		"当前可用.\n\n您确定要更新程序吗?"
+STRINGS_UPDATER = 				"正在下载更新..."
+STRINGS_UPDATER_SIZE = 			"大小: "
+STRINGS_UPDATER_WRITTEN = 		"写入: "
+STRINGS_UPDATER_SPEED = 		"速度: "
+STRINGS_UPDATER_PERCENT = 		"百分比: "
