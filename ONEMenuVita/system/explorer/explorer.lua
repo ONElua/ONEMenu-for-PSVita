@@ -129,7 +129,7 @@ function show_explorer_list(first_path)
 			screen.print(10+movx,80,"...".."\n\n"..STRINGS_BACK,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 		end
 
-		screen.print(10+movx,515,os.date(_time.."  %m/%d/%y"),1,theme.style.DATETIMECOLOR,color.gray,__ALEFT)
+		screen.print(10+movx,515,os.date(_time.." %m/%d/%y").."  "..batt.lifepercent().."%",1,theme.style.DATETIMECOLOR,color.gray,__ALEFT)
 
 		menu_ctx.run()
 

@@ -228,6 +228,13 @@ local uninstall_callback = function ()
 						reboot=true
 					end
 				end
+				if files.exists("ux0:readdcont/"..appman[cat].list[focus_index].id) then
+					if os.message(STRINGS_SUBMENU_DELETE.."\n\n".."ux0:readdcont/"..appman[cat].list[focus_index].id.."?",1) == 1 then
+						reboot=false
+							files.delete("ux0:readdcont/"..appman[cat].list[focus_index].id)
+						reboot=true
+					end
+				end
 
 				if cat == 5 then--Only Adrenaline Bubbles
 					for i=1,#apps do
@@ -405,6 +412,9 @@ local shrink_callback = function ()
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
+				--update addcont&readccont
+				appman[cat].list[focus_index].sizef_addcont = files.sizeformat(files.size("ux0:addcont/"..appman[cat].list[focus_index].id or 0))
+				appman[cat].list[focus_index].sizef_readdcont = files.sizeformat(files.size("ux0:readdcont/"..appman[cat].list[focus_index].id or 0))
 			end
 		else
 			os.message(STRINGS_APP_SHRINK_NO_FILES)
@@ -503,6 +513,30 @@ local switch_callback = function ()
 			if i == scroll_op.sel then cccolor = color.green else cccolor = color.white end
 			screen.print(350,y, options[i].text,1.0,cccolor,theme.style.TXTBKGCOLOR,__ARIGHT)
 			y+=22
+		end
+
+		local h = 480
+		draw.fillrect(10,h, 330, 15, color.gray)
+		draw.fillrect(10,h, math.map(infoux0.used, 0,infoux0.max, 0, 330 ), 15, color.shine:a(80))
+		draw.rect(10,h,330,15,color.white:a(200))
+		h-=20
+		screen.print(10,h,"(ux0) "..infoux0.maxf.."/"..infoux0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+		h-=20
+
+		if infour0 then
+			draw.fillrect(10,h, 330, 15, color.gray)
+			draw.fillrect(10,h, math.map(infour0.used, 0,infour0.max, 0, 330 ), 15, color.shine:a(80))
+			draw.rect(10,h,330,15,color.white:a(200))
+			h-=20
+			screen.print(10,h,"(ur0) "..infour0.maxf.."/"..infour0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			h-=20
+		end
+		if infouma0 then
+			draw.fillrect(10,h, 330, 15, color.gray)
+			draw.fillrect(10,h, math.map(infouma0.used, 0,infouma0.max, 0, 330 ), 15, color.shine:a(80))
+			draw.rect(10,h,330,15,color.white:a(200))
+			h-=20
+			screen.print(10,h,"(uma0) "..infouma0.maxf.."/"..infouma0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		end
 
 		screen.flip()
@@ -1061,6 +1095,8 @@ function submenu_ctx.draw()
 					appman[entry.cat].list[entry.focus].sizef = entry.sizef
 					appman[entry.cat].list[entry.focus].sizef_patch = entry.sizef_patch
 					appman[entry.cat].list[entry.focus].sizef_repatch = entry.sizef_repatch
+					appman[entry.cat].list[entry.focus].sizef_addcont = entry.sizef_addcont
+					appman[entry.cat].list[entry.focus].sizef_readdcont = entry.sizef_readdcont
 				end
 			end
 		end
@@ -1145,44 +1181,37 @@ function submenu_ctx.draw()
 
 		--Textos informativos en el submenu
 		if submenu_ctx.type == 1 then
+
 			draw.gradline(5,268,submenu_ctx.w - 15,268,theme.style.GRADRECTCOLOR, theme.style.GRADSHADOWCOLOR)
 			draw.gradline(5,269,submenu_ctx.w - 15,269,theme.style.GRADSHADOWCOLOR, theme.style.GRADRECTCOLOR)
 
-			h = 480
-			draw.fillrect(10,h, 330, 15, color.gray)
-			draw.fillrect(10,h, math.map(infoux0.used, 0,infoux0.max, 0, 330 ), 15, color.shine:a(80))
-			draw.rect(10,h,330,15,color.white:a(200))
-			h-=20
-			screen.print(10,h,"(ux0) "..infoux0.maxf.."/"..infoux0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			h-=20
-
-			if infour0 then
-				draw.fillrect(10,h, 330, 15, color.gray)
-				draw.fillrect(10,h, math.map(infour0.used, 0,infour0.max, 0, 330 ), 15, color.shine:a(80))
-				draw.rect(10,h,330,15,color.white:a(200))
-				h-=20
-				screen.print(10,h,"(ur0) "..infour0.maxf.."/"..infour0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-				h-=20
-			end
-			if infouma0 then
-				draw.fillrect(10,h, 330, 15, color.gray)
-				draw.fillrect(10,h, math.map(infouma0.used, 0,infouma0.max, 0, 330 ), 15, color.shine:a(80))
-				draw.rect(10,h,330,15,color.white:a(200))
-				h-=20
-				screen.print(10,h,"(uma0) "..infouma0.maxf.."/"..infouma0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			end
-
-			h-=35
-			screen.print(10,h, "ux0:RePatch: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			screen.print(340,h,(appman[cat].list[focus_index].sizef_repatch or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-			h-=23
-			screen.print(10,h, "ux0:Patch: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
-			screen.print(340,h,(appman[cat].list[focus_index].sizef_patch or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-			h-=23
-			screen.print(10,h, STRINGS_APP_SIZE_IND..": ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			screen.print(340,h,(appman[cat].list[focus_index].sizef or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-			h-=23
+			local h = 280
 			screen.print(10,h, STRINGS_APP_VERSION..": "..appman[cat].list[focus_index].version or "", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			h+=30
+			if cat == 3 or cat == 4 then
+				screen.print(10,h, STRINGS_APP_SIZE_IND..": ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			else
+				screen.print(10,h, "App: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			end
+			screen.print(340,h,(appman[cat].list[focus_index].sizef or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+
+			h+=35
+			if cat == 1 then
+
+				screen.print(10,h, "Patch: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
+				screen.print(340,h,(appman[cat].list[focus_index].sizef_patch or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+				h+=26
+				screen.print(10,h, "RePatch: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+				screen.print(340,h,(appman[cat].list[focus_index].sizef_repatch or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+				h+=35
+
+				screen.print(10,h, "Addcont: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+				screen.print(340,h,(appman[cat].list[focus_index].sizef_addcont or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+				h+=26
+				screen.print(10,h, "ReAddcont: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+				screen.print(340,h,(appman[cat].list[focus_index].sizef_readdcont or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+			end
+
 		end
 
 	else

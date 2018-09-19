@@ -142,13 +142,6 @@ function fillappmanlist(objin, info_sfo)
 	end
 	objin.Nregion = name_region[objin.region] or ""
 
-	--if files.exists(objin.path.."/data/boot.inf") or objin.id == "PSPEMUCFW" then index = 5
-	--else
-	--	if info_sfo.CONTENT_ID and info_sfo.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
-	--	objin.region = regions[info_sfo.CONTENT_ID[1]] or 5
-	--end
-	--objin.Nregion = name_region[objin.region] or ""
-
 	--Search game in appman[index].list
 	local search = 0
 	for i=1,appman[index].scroll.maxim do
