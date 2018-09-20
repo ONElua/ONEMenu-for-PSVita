@@ -161,8 +161,9 @@ STRINGS_CONFIRM =				"Accept"
 STRINGS_VPK_TOTAL_SIZE = 		"Total Size VPK: "
 STRINGS_VPK_INSTALL =			"INSTALL VPK"
 STRINGS_VPK_ALERT_UNSAFE =		"VPK UNSAFE!!!!"
-STRINGS_VPK_ALERT_DANGEROUS =	"VPK DANGEOROUS!!!!"
+STRINGS_VPK_ALERT_DANGEROUS =	"VPK DANGEROUS!!!!"
 STRINGS_INSTALL_ERROR =			"An error occurred while installing"
+STRINGS_INSTALL_NOBIN =			"eboot.bin or param.sfo not found"
 
 ------------	ThemesONEMenu	----------------------------------------------------------------------------
 STRINGS_THEMES_INSTALL_DONE =	"Installation Completed!"

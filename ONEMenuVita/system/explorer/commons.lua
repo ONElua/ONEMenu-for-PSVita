@@ -228,7 +228,10 @@ function show_msg_vpk(obj_vpk)
 		scan_vpk.sfo = game.info(obj_vpk.path, sfo_pos)
 	else scan_vpk.sfo = game.info(obj_vpk.path) end
 
-	if bin_pos == -1 or sfo_pos == -1 then return end
+	if bin_pos == -1 or sfo_pos == -1 then
+		os.message(STRINGS_INSTALL_NOBIN) 
+		return
+	end
 
 	local ccc = color.green
 	if dang then ccc=color.red
