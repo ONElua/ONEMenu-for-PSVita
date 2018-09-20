@@ -163,6 +163,7 @@ STRINGS_VPK_INSTALL =			"INSTALLA VPK"
 STRINGS_VPK_ALERT_UNSAFE =		"VPK NON SICURO!!!!"
 STRINGS_VPK_ALERT_DANGEROUS =	"VPK PERICOLOSO!!!!"
 STRINGS_INSTALL_ERROR =			"Si è verificato un errore durante l'installazione"
+STRINGS_INSTALL_NOBIN =			"eboot.bin or param.sfo not found"
 
 ------------	ThemesONEMenu	----------------------------------------------------------------------------
 STRINGS_THEMES_INSTALL_DONE =	"Installazione Completata!"

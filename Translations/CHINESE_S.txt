@@ -163,6 +163,7 @@ STRINGS_VPK_INSTALL =			"安装 VPK"
 STRINGS_VPK_ALERT_UNSAFE =		"VPK 不安全!!!!"
 STRINGS_VPK_ALERT_DANGEROUS =	"VPK 危险!!!!"
 STRINGS_INSTALL_ERROR =			"安装过程中出现错误"
+STRINGS_INSTALL_NOBIN =			"eboot.bin or param.sfo not found"
 
 ------------	ThemesONEMenu	----------------------------------------------------------------------------
 STRINGS_THEMES_INSTALL_DONE =	"安装完成!"
