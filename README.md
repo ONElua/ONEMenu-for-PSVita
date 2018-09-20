@@ -5,6 +5,16 @@
 **OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories.<br>
 Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db.
 
+### Changelog 3.09 ###
+- The bars showing the partitions sizes were removed and now the sizes for:
+addcont<br>
+readdcont<br>
+patch<br>
+repatch<br>
+folders are showed only for vita games.<br><br>
+- Also, added to the Shrink Game option, shrink the addcont/readdcont folders  of selected game.<br>
+- When a vita game is uninstalled, you'll be asked if Readdcont/GAMEID folder should be removed.<br>
+
 ### Changelog 3.08 ###
 - Bug Fixes.<br>
 
