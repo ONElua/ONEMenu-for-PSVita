@@ -228,6 +228,13 @@ local uninstall_callback = function ()
 						reboot=true
 					end
 				end
+				if files.exists("ux0:readdcont/"..appman[cat].list[focus_index].id) then
+					if os.message(STRINGS_SUBMENU_DELETE.."\n\n".."ux0:readdcont/"..appman[cat].list[focus_index].id.."?",1) == 1 then
+						reboot=false
+							files.delete("ux0:readdcont/"..appman[cat].list[focus_index].id)
+						reboot=true
+					end
+				end
 
 				if cat == 5 then--Only Adrenaline Bubbles
 					for i=1,#apps do
@@ -297,6 +304,7 @@ local shrink_callback = function ()
 			end
 		end
 		message_wait("ux0:Patch")
+		os.delay(15)
 
 		getlist("ux0:patch/"..appman[cat].list[focus_index].id, list_patch, "ux0:patch")
 		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, "ux0:patch")
@@ -314,7 +322,7 @@ local shrink_callback = function ()
 		end
 
 		if #list_del > 0 then
-			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:patch:\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:patch\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -330,6 +338,7 @@ local shrink_callback = function ()
 ----------------repatch
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 		message_wait("ux0:rePatch")
+		os.delay(15)
 
 		list_patch, list_app = {},{}
 		getlist("ux0:repatch/"..appman[cat].list[focus_index].id, list_patch, "ux0:repatch")
@@ -348,7 +357,7 @@ local shrink_callback = function ()
 		end
 
 		if #list_del > 0 then
-			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:rePatch:\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:rePatch\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -361,9 +370,61 @@ local shrink_callback = function ()
 		end
 		os.delay(15)
 
+----------------readdcont
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait("ux0:readdcont")
+		os.delay(15)
+
+		function getlistaddcont(_path, _list, substring)
+			local tmp = files.list(_path)	
+			if tmp and #tmp > 0 then
+				for i=1, #tmp do
+					if tmp[i].directory then
+						if not tmp[i].name:find("sce_",1) then getlistaddcont(tmp[i].path, _list, substring) end
+					else
+						if tmp[i].name != "eboot.bin" then
+							local _size = (tmp[i].size or files.size(tmp[i].path))
+							table.insert(_list, {path = tmp[i].path:gsub(substring,'ux0:addcont'):lower(), size = _size})
+						end
+					end
+				end
+			end
+		end
+
+		list_patch, list_app = {},{}
+		getlistaddcont("ux0:readdcont/"..appman[cat].list[focus_index].id, list_patch, "ux0:readdcont")
+		getlistaddcont("ux0:addcont/"..appman[cat].list[focus_index].id, list_app, "ux0:readdcont")
+
+		local size_del,list_del = 0,{}
+		if #list_patch > 0 and #list_app > 0 then
+			for i=1,#list_patch do
+				for j=1,#list_app do
+					if list_patch[i].path == list_app[j].path then
+						size_del += list_app[j].size
+						table.insert(list_del,list_app[j].path)
+					end
+				end
+			end
+		end
+
+		if #list_del > 0 then
+			if os.message(STRINGS_APP_SHRINK.."\n\n                        ux0:readdcont\n\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+				for i=1,#list_del do
+					files.delete(list_del[i])
+				end
+				--update addcont&readccont
+				appman[cat].list[focus_index].sizef_addcont = files.sizeformat(files.size("ux0:addcont/"..appman[cat].list[focus_index].id or 0))
+				appman[cat].list[focus_index].sizef_readdcont = files.sizeformat(files.size("ux0:readdcont/"..appman[cat].list[focus_index].id or 0))
+			end
+		else
+			os.message(STRINGS_APP_SHRINK_NO_FILES)
+		end
+		os.delay(15)
+
 ----------------sce_sys/manual/
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 		message_wait("sce_sys/manual/")
+		os.delay(15)
 
 		local pathmanual,pathpatch  = appman[cat].list[focus_index].path.."/sce_sys/manual/","ux0:patch/"..appman[cat].list[focus_index].id.."/sce_sys/manual/"
 		local scesys_manual, patch_manual, size_manual, dirs_manual, files_manual = false,false,0,0,0
@@ -452,6 +513,30 @@ local switch_callback = function ()
 			if i == scroll_op.sel then cccolor = color.green else cccolor = color.white end
 			screen.print(350,y, options[i].text,1.0,cccolor,theme.style.TXTBKGCOLOR,__ARIGHT)
 			y+=22
+		end
+
+		local h = 480
+		draw.fillrect(10,h, 330, 15, color.gray)
+		draw.fillrect(10,h, math.map(infoux0.used, 0,infoux0.max, 0, 330 ), 15, color.shine:a(80))
+		draw.rect(10,h,330,15,color.white:a(200))
+		h-=20
+		screen.print(10,h,"(ux0) "..infoux0.maxf.."/"..infoux0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+		h-=20
+
+		if infour0 then
+			draw.fillrect(10,h, 330, 15, color.gray)
+			draw.fillrect(10,h, math.map(infour0.used, 0,infour0.max, 0, 330 ), 15, color.shine:a(80))
+			draw.rect(10,h,330,15,color.white:a(200))
+			h-=20
+			screen.print(10,h,"(ur0) "..infour0.maxf.."/"..infour0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			h-=20
+		end
+		if infouma0 then
+			draw.fillrect(10,h, 330, 15, color.gray)
+			draw.fillrect(10,h, math.map(infouma0.used, 0,infouma0.max, 0, 330 ), 15, color.shine:a(80))
+			draw.rect(10,h,330,15,color.white:a(200))
+			h-=20
+			screen.print(10,h,"(uma0) "..infouma0.maxf.."/"..infouma0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		end
 
 		screen.flip()
@@ -1010,6 +1095,8 @@ function submenu_ctx.draw()
 					appman[entry.cat].list[entry.focus].sizef = entry.sizef
 					appman[entry.cat].list[entry.focus].sizef_patch = entry.sizef_patch
 					appman[entry.cat].list[entry.focus].sizef_repatch = entry.sizef_repatch
+					appman[entry.cat].list[entry.focus].sizef_addcont = entry.sizef_addcont
+					appman[entry.cat].list[entry.focus].sizef_readdcont = entry.sizef_readdcont
 				end
 			end
 		end
@@ -1094,44 +1181,37 @@ function submenu_ctx.draw()
 
 		--Textos informativos en el submenu
 		if submenu_ctx.type == 1 then
+
 			draw.gradline(5,268,submenu_ctx.w - 15,268,theme.style.GRADRECTCOLOR, theme.style.GRADSHADOWCOLOR)
 			draw.gradline(5,269,submenu_ctx.w - 15,269,theme.style.GRADSHADOWCOLOR, theme.style.GRADRECTCOLOR)
 
-			h = 480
-			draw.fillrect(10,h, 330, 15, color.gray)
-			draw.fillrect(10,h, math.map(infoux0.used, 0,infoux0.max, 0, 330 ), 15, color.shine:a(80))
-			draw.rect(10,h,330,15,color.white:a(200))
-			h-=20
-			screen.print(10,h,"(ux0) "..infoux0.maxf.."/"..infoux0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			h-=20
-
-			if infour0 then
-				draw.fillrect(10,h, 330, 15, color.gray)
-				draw.fillrect(10,h, math.map(infour0.used, 0,infour0.max, 0, 330 ), 15, color.shine:a(80))
-				draw.rect(10,h,330,15,color.white:a(200))
-				h-=20
-				screen.print(10,h,"(ur0) "..infour0.maxf.."/"..infour0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-				h-=20
-			end
-			if infouma0 then
-				draw.fillrect(10,h, 330, 15, color.gray)
-				draw.fillrect(10,h, math.map(infouma0.used, 0,infouma0.max, 0, 330 ), 15, color.shine:a(80))
-				draw.rect(10,h,330,15,color.white:a(200))
-				h-=20
-				screen.print(10,h,"(uma0) "..infouma0.maxf.."/"..infouma0.freef,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			end
-
-			h-=35
-			screen.print(10,h, "ux0:RePatch: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			screen.print(340,h,(appman[cat].list[focus_index].sizef_repatch or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-			h-=23
-			screen.print(10,h, "ux0:Patch: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
-			screen.print(340,h,(appman[cat].list[focus_index].sizef_patch or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-			h-=23
-			screen.print(10,h, STRINGS_APP_SIZE_IND..": ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-			screen.print(340,h,(appman[cat].list[focus_index].sizef or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-			h-=23
+			local h = 280
 			screen.print(10,h, STRINGS_APP_VERSION..": "..appman[cat].list[focus_index].version or "", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			h+=30
+			if cat == 3 or cat == 4 then
+				screen.print(10,h, STRINGS_APP_SIZE_IND..": ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			else
+				screen.print(10,h, "App: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+			end
+			screen.print(340,h,(appman[cat].list[focus_index].sizef or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+
+			h+=35
+			if cat == 1 then
+
+				screen.print(10,h, "Patch: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT )
+				screen.print(340,h,(appman[cat].list[focus_index].sizef_patch or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+				h+=26
+				screen.print(10,h, "RePatch: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+				screen.print(340,h,(appman[cat].list[focus_index].sizef_repatch or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+				h+=35
+
+				screen.print(10,h, "Addcont: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+				screen.print(340,h,(appman[cat].list[focus_index].sizef_addcont or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+				h+=26
+				screen.print(10,h, "ReAddcont: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+				screen.print(340,h,(appman[cat].list[focus_index].sizef_readdcont or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+			end
+
 		end
 
 	else
