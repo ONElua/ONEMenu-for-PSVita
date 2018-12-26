@@ -93,7 +93,7 @@ function fillappman(obj)
 
 	local index = 1
 
-	if obj.type == "mb" then
+	if obj.type == "mb" or obj.type == "mba" then
 		index = 3
 		obj.resize = true
 		obj.path_img = "ur0:appmeta/"..obj.id.."/pic0.png"

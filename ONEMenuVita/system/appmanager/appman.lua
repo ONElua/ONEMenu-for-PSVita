@@ -262,12 +262,13 @@ local uninstall_callback = function ()
 				else
 
 					if appman[cat].scroll.sel==appman[cat].scroll.lim then
+
 						if appman[cat].scroll.ini != 1 then appman[cat].scroll.ini-=1 end
-							appman[cat].scroll.sel-=1
-							appman[cat].scroll.lim=appman[cat].scroll.sel
-						elseif appman[cat].scroll.lim>#appman[cat].list then
-							appman[cat].scroll.lim-=1
-						end
+						appman[cat].scroll.sel-=1
+						appman[cat].scroll.lim=appman[cat].scroll.sel
+					elseif appman[cat].scroll.lim>#appman[cat].list then
+						appman[cat].scroll.lim-=1
+					end
 				end
 				appman.len -= 1
 				infodevices()

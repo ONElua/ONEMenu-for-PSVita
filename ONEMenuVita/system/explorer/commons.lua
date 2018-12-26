@@ -154,6 +154,8 @@ function fillappmanlist(objin, info_sfo)
 			objin.fav = false
 			table.insert(appman[index].list, objin)
 
+			table.sort(appman[index].list ,function (a,b) return string.lower(a.dev)<string.lower(b.dev) end)
+
 			if index == 1 and appman[index].sort == 3 then
 				table.sort(appman[index].list, tableSortReg)
 			else

@@ -72,7 +72,7 @@ function refresh_init(img)
 		table.sort(tmp ,function (a,b) return string.lower(a.name)<string.lower(b.name) end)
 		for i=1, #tmp do
 			if game.exists(tmp[i].name) then
-				if not game.rif(tmp[i].name) and not game.frif(tmp[i].name) then
+				if not game.rif(tmp[i].name) then
 					fillapps(list, tmp[i])
 				end
 			else
@@ -82,11 +82,12 @@ function refresh_init(img)
 	end
 
 	--Installing
+	local count = 0
 	if #list > 0 then
-		local count = 0
 		for i=1, #list do
-
-			if img then img:blit(0,0)	end
+			
+			__TITTLEAPP, __IDAPP = "",""
+			if img then img:blit(0,0) end
 			__TITTLEAPP, __IDAPP = list[i].title, list[i].id
 
 			buttons.homepopup(0)
@@ -135,6 +136,8 @@ function refresh_init(img)
 						list[i].fav = false
 						table.insert(appman[list[i].index].list, list[i])
 
+						table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.dev)<string.lower(b.dev) end)
+
 						if list[i].index == 1 and appman[list[i].index].sort == 3 then
 							table.sort(appman[list[i].index].list, tableSortReg)
 						else
@@ -171,21 +174,31 @@ function refresh_init(img)
 						files.copy("ux0:data/ONEMenu/SAVES/"..list[i].id, "ux0:user/00/savedata/")
 					end
 				end
-				appman.len +=1
+				appman.len+=1
 
 			else
 				os.message(STRINGS_LIVEAREA_NOTINSTALLED..list[i].id)
 			end
+
 		end
-		os.message(STRINGS_LIVEAREA_GAMES..count)
 
 	else
 		os.message(STRINGS_LIVEAREA_NO_GAMES)
 	end
 
+	__TITTLEAPP, __IDAPP = "",""
+
+	if count > 0 then os.message(STRINGS_LIVEAREA_GAMES..count) end
+
+	if img then img:blit(0,0) elseif vbuff then vbuff:blit(0,0) end
+	message_wait(STRINGS_LIVEAREA_EXTRAREFRESH)
+	os.delay(15)
+
+	local installs = game.extrarefresh()
+	os.message(STRINGS_LIVEAREA_TOTAL_EXTRA..installs)
+
 	infodevices()
 	os.delay(15)
 	if vbuff then vbuff:blit(0,0) elseif img then img:blit(0,0) end
-	__TITTLEAPP, __IDAPP = "",""
 
 end

@@ -61,11 +61,12 @@ function theme.load()
 	-- Load Resources
 	local path_resources = "system/theme/default/"
 	for i=1,#elements do
-		if files.exists(string.format("%s%s.png",path_theme,elements[i].name)) or files.exists(string.format("%s%s.ogg",path_theme,elements[i].name)) then
-			path_resources = path_theme else path_resources = "system/theme/default/" end
+		if files.exists(string.format("%s%s.png",path_theme,elements[i].name)) or files.exists(string.format("%s%s.ogg",path_theme,elements[i].name)) or
+			files.exists(string.format("%s%s.wav",path_theme,elements[i].name)) then
+				path_resources = path_theme else path_resources = "system/theme/default/" end
 
 		if elements[i].sound then
-			theme.data[elements[i].name] = sound.load(string.format("%s%s.ogg",path_resources,elements[i].name))--,1)
+			theme.data[elements[i].name] = sound.load(string.format("%s%s.ogg",path_resources,elements[i].name)) or sound.load(string.format("%s%s.wav",path_resources,elements[i].name))--,1)
 		elseif elements[i].sprite then
 			theme.data[elements[i].name] = image.load(string.format("%s%s.png",path_resources,elements[i].name),elements[i].w,elements[i].h)
 		else
