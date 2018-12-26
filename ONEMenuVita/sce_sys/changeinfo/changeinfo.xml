@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="03.10">
+      <![CDATA[
+- Fix DLCs & Updates with Reload Content (Nonpdrm).<br>
+    ]]>
   <changes app_ver="03.09">
       <![CDATA[
 - The bars showing the partitions sizes were removed and now the sizes for addcont,readdcont,patch,repatch folders are showed only for vita games.<br>
