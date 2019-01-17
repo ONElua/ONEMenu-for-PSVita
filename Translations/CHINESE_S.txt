@@ -220,6 +220,8 @@ STRINGS_EXPORT_FAIL =			"错误"
 STRINGS_LIVEAREA_NOTINSTALLED =	"\n\n尚未安装游戏: "
 STRINGS_LIVEAREA_GAMES =		"\n\n所有已安装游戏: "
 STRINGS_LIVEAREA_NO_GAMES =		"\n\n没有找到游戏"
+STRINGS_LIVEAREA_EXTRAREFRESH =	"搜索 DLCs & 更新"
+STRINGS_LIVEAREA_TOTAL_EXTRA =	"\n\n已安装 DLCs & 更新: "
 
 ------------	Updater	-------------------------------------------------------------------------
 STRINGS_UPDATER_QUESTION = 		"当前可用.\n\n您确定要更新程序吗?"
