@@ -220,6 +220,8 @@ STRINGS_EXPORT_FAIL =			"Error"
 STRINGS_LIVEAREA_NOTINSTALLED =	"\n\nGame not installed: "
 STRINGS_LIVEAREA_GAMES =		"\n\nTotal Installed Games: "
 STRINGS_LIVEAREA_NO_GAMES =		"\n\nNo Games found"
+STRINGS_LIVEAREA_EXTRAREFRESH =	"Search DLCs & Updates"
+STRINGS_LIVEAREA_TOTAL_EXTRA =	"\n\nInstalled DLCs & Updates: "
 
 ------------	Updater	-------------------------------------------------------------------------
 STRINGS_UPDATER_QUESTION = 		"is now available.\n\nDo you want to update the application?"
