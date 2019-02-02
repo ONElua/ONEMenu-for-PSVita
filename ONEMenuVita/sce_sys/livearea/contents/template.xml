@@ -20,7 +20,7 @@
 	<frame id="frame3">
 		<liveitem>
 			<text align="left" text-align="left" word-wrap="off" ellipsis="on">
-				<str size="26" color="#ffffff" shadow="on">v3.10</str>
+				<str size="26" color="#ffffff" shadow="on">v3.11</str>
 			</text>
 		</liveitem>
 	</frame>
@@ -28,7 +28,7 @@
 	<frame id="frame4">
 		<liveitem>
 			<text valign="top" align="left" text-align="left" text-valign="top" line-space="2" ellipsis="on">
-				<str size="22" shadow="on">Team ONElua® - ONElua.x10.mx - 2018</str>
+				<str size="22" shadow="on">Team ONElua® - ONElua.x10.mx - 2019</str>
 			</text>
 		</liveitem>
 	</frame>
