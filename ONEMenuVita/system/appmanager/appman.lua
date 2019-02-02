@@ -475,7 +475,7 @@ end
 
 local switch_callback = function ()
 
-	if cat == 1 or appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG" or appman[cat].list[focus_index].type == "ME" then return end
+	if appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG" or appman[cat].list[focus_index].type == "ME" then return end
 
 	--__GAME_MOVE_UX02UR0=1
 	--__GAME_MOVE_UR02UX0=2
@@ -954,6 +954,118 @@ local update_callback = function ()
 	submenu_ctx.scroll.sel = pos_menu
 end
 
+local themesONEMenu_callback = function ()
+	local pos_menu = submenu_ctx.scroll.sel
+	theme.manager()
+	submenu_ctx.wakefunct2()
+	submenu_ctx.scroll.sel = pos_menu
+end
+
+local slides_callback = function ()
+	local pos_menu = submenu_ctx.scroll.sel
+	if __SLIDES == 100 then __SLIDES = 415 else __SLIDES = 100 end
+
+	submenu_ctx.wakefunct2()
+	write_config()
+
+	submenu_ctx.scroll.sel = pos_menu
+end
+
+local togglefavs_callback = function ()
+	local pos_menu = submenu_ctx.scroll.sel
+
+	if __FAV == 1 then
+		__FAV,_favs = 0,STRINGS_APP_NO
+		write_config()
+	else
+		if #apps > 0 then
+			__FAV,_favs = 1,STRINGS_APP_YES
+			write_config()
+		else
+			os.message(STRINGS_FAVORITES_ACTIVED)
+			os.delay(15)
+			if theme.data["back"] then theme.data["back"]:blit(0,0) end
+		end
+	end
+	submenu_ctx.wakefunct2()
+	submenu_ctx.scroll.sel = pos_menu
+end
+
+local Re_Folders_Cleanup_callback = function ()
+
+	local vbuff = screen.toimage()
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+	local list_RePatch, list_ReAddcont = {},{}
+
+--ReAddcont
+
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait("ux0:ReAddcont")
+	os.delay(1250)
+
+	local tmp = files.listdirs("ux0:ReAddcont")
+	local size_Readdcont = 0
+	if tmp and #tmp > 0 then
+		for i=1, #tmp do
+			if tmp[i].directory then
+				if not game.exists(tmp[i].name) then
+					local _size = files.size(tmp[i].path) or 0
+					size_Readdcont += _size
+					if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+						message_wait("ReAddcont\n\n"..tmp[i].name)
+					os.delay(600)
+					table.insert(list_ReAddcont, { path = tmp[i].path, name = tmp[i].name, size = _size })
+				end
+			end
+		end
+	end
+
+--Repatch
+
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait("ux0:RePatch")
+	os.delay(1250)
+
+	local tmp = files.listdirs("ux0:RePatch")
+	local size_RePatch = 0
+	if tmp and #tmp > 0 then
+		for i=1, #tmp do
+			if tmp[i].directory then
+				if not game.exists(tmp[i].name) then
+					local _size = files.size(tmp[i].path) or 0
+					size_RePatch += _size
+					if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+					message_wait("RePatch\n\n"..tmp[i].name)
+					os.delay(600)
+					table.insert(list_RePatch, { path = tmp[i].path, name = tmp[i].name, size = _size })
+				end
+			end
+		end
+	end
+
+	--Delete?
+	if #list_ReAddcont > 0 then
+		if os.message(STRINGS_APP_FOUND_REFOLDERS.." : "..#list_ReAddcont.." "..STRINGS_APP_REFOLDERS_GAME.." ReAddcont\n\n"..STRINGS_CALLBACKS_SIZE_ALL..files.sizeformat(size_Readdcont or 0).."\n\n"..STRINGS_APP_REFOLDERS_DELETE,1) == 1 then
+			for i=1,#list_ReAddcont do
+				files.delete(list_ReAddcont[i].path)
+			end
+		end
+	end
+
+	if #list_RePatch > 0 then
+		if os.message(STRINGS_APP_FOUND_REFOLDERS.." : "..#list_RePatch.." "..STRINGS_APP_REFOLDERS_GAME.." RePatch\n\n"..STRINGS_CALLBACKS_SIZE_ALL..files.sizeformat(size_RePatch or 0).."\n\n"..STRINGS_APP_REFOLDERS_DELETE,1) == 1 then
+			for i=1,#list_RePatch do
+				files.delete(list_RePatch[i].path)
+			end
+		end
+	end
+
+
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+	submenu_ctx.close = true
+end
+
 local restart_callback = function ()
     os.delay(150)
     os.restart()
@@ -987,14 +1099,14 @@ function submenu_ctx.wakefunct()
 	if __PIC1 == 1 then showpic = STRINGS_APP_YES else showpic = STRINGS_APP_NO end
 
 	submenu_ctx.options = { -- Handle Option Text and Option Function
-		{ text = STRINGS_REFRESH_LIVEAREA,           funct = refresh_callback },
-		{ text = STRINGS_APP_UNINSTALL,       funct = uninstall_callback },
-		{ text = STRINGS_APP_SHRINK_GAME,        funct = shrink_callback },
-		{ text = STRINGS_APP_SWITCH,         funct = switch_callback },
-		{ text = STRINGS_APP_EDIT_BUBBLE,        funct = editsfo_callback },
-		{ text = STRINGS_APP_SHOW_PIC..showpic,     funct = pic1_callback, pad = true },
-		{ text = STRINGS_APP_MARK_FAV..favs,         funct = fav_callback,  pad = true },
-		{ text = STRINGS_APP_OPEN_FOLDER,        funct = openfolder_callback,  pad = true },
+		{ text = STRINGS_REFRESH_LIVEAREA,     	funct = refresh_callback },
+		{ text = STRINGS_APP_UNINSTALL,       	funct = uninstall_callback },
+		{ text = STRINGS_APP_SHRINK_GAME,       funct = shrink_callback },
+		{ text = STRINGS_APP_SWITCH,         	funct = switch_callback },
+		{ text = STRINGS_APP_EDIT_BUBBLE,       funct = editsfo_callback },
+		{ text = STRINGS_APP_SHOW_PIC..showpic, funct = pic1_callback, pad = true },
+		{ text = STRINGS_APP_MARK_FAV..favs,    funct = fav_callback,  pad = true },
+		{ text = STRINGS_APP_OPEN_FOLDER,       funct = openfolder_callback,  pad = true },
 	}
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
 end
@@ -1005,15 +1117,17 @@ function submenu_ctx.wakefunct2()
 	if __FAV == 1 then _favs = STRINGS_APP_YES else _favs = STRINGS_APP_NO end
 
     submenu_ctx.options = { -- Handle Option Text and Option Function
-        { text = STRINGS_SUBMENU_THEMES,            funct = themesONEMenu_callback },
-        { text = STRINGS_APP_SLIDES..var,       funct = slides_callback,     pad = true },
-		{ text = STRINGS_FAVORITES_TOGGLE.._favs, funct = togglefavs_callback, pad = true },
-		{ text = STRINGS_APP_SORT_CATEGORY..sorting,     funct = sort_callback,       pad = true },
-		{ text = STRINGS_ENABLE_UPDATE.._update,   funct = update_callback,     pad = true },
+        { text = STRINGS_SUBMENU_THEMES,            	funct = themesONEMenu_callback },
+        { text = STRINGS_APP_SLIDES..var,       		funct = slides_callback,     pad = true },
+		{ text = STRINGS_FAVORITES_TOGGLE.._favs,		funct = togglefavs_callback, pad = true },
+		{ text = STRINGS_APP_SORT_CATEGORY..sorting,	funct = sort_callback,       pad = true },
+		{ text = STRINGS_ENABLE_UPDATE.._update,   		funct = update_callback,     pad = true },
 
-		{ text = STRINGS_SUBMENU_RESTART,         funct = restart_callback },
-        { text = STRINGS_SUBMENU_RESET,             funct = reboot_callback },
-        { text = STRINGS_SUBMENU_POWEROFF,               funct = shutdown_callback },
+		{ text = STRINGS_REFOLDERS_CLEANUP,				funct = Re_Folders_Cleanup_callback },
+
+		{ text = STRINGS_SUBMENU_RESTART,         		funct = restart_callback },
+        { text = STRINGS_SUBMENU_RESET,             	funct = reboot_callback },
+        { text = STRINGS_SUBMENU_POWEROFF,              funct = shutdown_callback },
     }
     submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
 end
@@ -1172,7 +1286,7 @@ function submenu_ctx.draw()
 					end
 					xprint = 12
 				end
-			elseif submenu_ctx.type == 2 and i == 4 then
+			elseif submenu_ctx.type == 2 and (i == 4 or i==5 or i==6) then
 				h += 45
 			else
 				h += 26
