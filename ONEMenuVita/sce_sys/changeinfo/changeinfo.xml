@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <changeinfo>
+  <changes app_ver="03.12">
+      <![CDATA[
+- Fix accept/cancel in some dialogues.<br>
+    ]]>
   <changes app_ver="03.11">
       <![CDATA[
 - Added option to eliminate unwanted rePatch/reAddcont folders/files left by uninstalled games.<br>

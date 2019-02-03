@@ -89,7 +89,7 @@ for i=1,__CATEGORIES do static_void[i] = {x=1} end
 function fillappman(obj)
 
 	if obj.id == __ID then return end
-	if not game.exists(obj.id) then return end
+--	if not game.exists(obj.id) then os.message(obj.id) return end
 
 	local index = 1
 
@@ -180,7 +180,7 @@ function Scanning()
 
 	for i=1,#list do
 
-		if files.exists(list[i].path) then
+if files.exists(list[i].path) then
 			if list[i].title then list[i].title = list[i].title:gsub("\n"," ") end
 			list[i].fav = false
 			for j=1,#apps do
