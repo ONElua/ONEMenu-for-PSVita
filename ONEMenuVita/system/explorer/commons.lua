@@ -245,6 +245,9 @@ function show_msg_vpk(obj_vpk)
 	if scan_vpk.sfo.TITLE then scan_vpk.sfo.TITLE = scan_vpk.sfo.TITLE:gsub("\n"," ") end
 	local realsize = files.sizeformat(scan_vpk.realsize or 0)
 
+	local Xa = "O: "
+	local Oa = "X: "
+	if accept_x == 1 then Xa,Oa = "X: ","O: " end
 	while true do
 		buttons.read()
 		if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
@@ -282,11 +285,7 @@ function show_msg_vpk(obj_vpk)
 			screen.print(960/2,y+340,STRINGS_VPK_ALERT_UNSAFE,1,color.black,color.blue,__ACENTER)
 		end
 
-		if accept_x == 1 then
-			screen.print(960/2,y+395,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CROSS, SYMBOL_CIRCLE),1,color.black,color.blue,__ACENTER)
-		else
-			screen.print(960/2,y+395,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CIRCLE, SYMBOL_CROSS),1,color.black,color.blue,__ACENTER)
-		end
+		screen.print(960/2,y+395,Xa..STRINGS_CONFIRM.." | "..Oa..STRINGS_SUBMENU_CANCEL,1,color.black,color.blue,__ACENTER)
 		screen.flip()
 
 		if buttons[accept] or buttons[cancel] then
@@ -357,6 +356,9 @@ function show_msg_pbp(handle)
 	local name=handle.name:lower()
 	--Maybe work with PS1
 	local res,xscr = false,290
+	local Xa = "O: "
+	local Oa = "X: "
+	if accept_x == 1 then Xa,Oa = "X: ","O: " end
 	while true do
 		buttons.read()
 		if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
@@ -367,12 +369,7 @@ function show_msg_pbp(handle)
 		if sfo then
 			if launch then
 				screen.print(960/2,y+15,STRINGS_LAUNCH_GAME,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-	
-				if accept_x == 1 then
-					screen.print(960/2,y+400,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CROSS, SYMBOL_CIRCLE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-				else
-					screen.print(960/2,y+400,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CIRCLE, SYMBOL_CROSS),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-				end
+				screen.print(960/2,y+400,Xa..STRINGS_CONFIRM.." | "..Oa..STRINGS_SUBMENU_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 			end
 
 			if screen.textwidth(tostring(sfo.TITLE) or "UNK") > 380 then

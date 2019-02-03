@@ -20,6 +20,9 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 
 		screen.flip()
 	elseif step == 2 then -- Alerta Vpk requiere confirmacion!
+		local Xa = "O: "
+		local Oa = "X: "
+		if accept_x == 1 then Xa,Oa = "X: ","O: " end
 		while true do
 			buttons.read()
 			if buttons[accept] then
@@ -39,11 +42,7 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 				screen.print(10,10,STRINGS_WARNING_DANGEROUS)
 			end
 
-			if accept_x == 1 then
-				screen.print(10,505,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CROSS, SYMBOL_CIRCLE),1.0,color.white, color.blue)
-			else
-				screen.print(10,505,string.format("%s "..STRINGS_CONFIRM.." | %s "..STRINGS_SUBMENU_CANCEL,SYMBOL_CIRCLE, SYMBOL_CROSS),1.0,color.white, color.blue)
-			end
+			screen.print(10,505,Xa..STRINGS_CONFIRM.." | "..Oa..STRINGS_SUBMENU_CANCEL,1.0,color.white, color.blue)
 			screen.flip()
 		end
 	elseif step == 3 then -- Unpack :P
