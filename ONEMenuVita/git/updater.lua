@@ -18,14 +18,14 @@ function screen.flip()
 		update = image.load("git/updater/update.png")
 
 		if update then update:blit(0,0)
-		elseif back2 then back2:blit(0,0) end
+		elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 		screen.flip()
     
     if os.dialog(info[2].."\nDo you want to update the application?", string.format("New Update %s %s available.", APP_PROJECT, string.format("%X.%02X",major, minor)), __DIALOG_MODE_OK_CANCEL) == true then
 			buttons.homepopup(0)
 			
 			if update then update:blit(0,0)
-			elseif back2 then back2:blit(0,0) end
+			elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 
 			local url = "http://devdavisnunez.x10.mx/wikihb/download/?id=26"
 			local path = "ux0:data/"..APP_PROJECT..".vpk"
@@ -37,7 +37,7 @@ function screen.flip()
 			function onNetGetFile(size,written,speed)
 
 				if update then update:blit(0,0)
-				elseif back2 then back2:blit(0,0) end
+				elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 
 				screen.print(10,10,"Downloading Update...")
 				screen.print(480,470,tostring(files.sizeformat(written or 0)).." / "..tostring(files.sizeformat(size or 0)),1,color.white, color.blue:a(135),__ACENTER)
