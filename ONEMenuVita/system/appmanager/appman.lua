@@ -991,76 +991,102 @@ local togglefavs_callback = function ()
 	submenu_ctx.scroll.sel = pos_menu
 end
 
-local Re_Folders_Cleanup_callback = function ()
-
-	local vbuff = screen.toimage()
+function Search_ReFolders(path,mount)
 	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-
-	local list_RePatch, list_ReAddcont = {},{}
-
---ReAddcont
-
-	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-		message_wait("ux0:ReAddcont")
+		message_wait(path)
 	os.delay(1250)
 
-	local tmp = files.listdirs("ux0:ReAddcont")
-	local size_Readdcont = 0
+	local size = 0
+	local tmp, tb = files.listdirs(path), {}
 	if tmp and #tmp > 0 then
 		for i=1, #tmp do
 			if tmp[i].directory then
 				if not game.exists(tmp[i].name) then
-					local _size = files.size(tmp[i].path) or 0
-					size_Readdcont += _size
-					if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-						message_wait("ReAddcont\n\n"..tmp[i].name)
-					os.delay(600)
-					table.insert(list_ReAddcont, { path = tmp[i].path, name = tmp[i].name, size = _size })
-				end
-			end
-		end
-	end
 
---Repatch
+					local flg = false
+					if not files.exists(mount.."app/"..tmp[i].name) then
+						flg = true
+					end
+				
+					if flg then
+						local _size = files.size(tmp[i].path) or 0
+						size += _size
+						if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+							message_wait(path.."\n\n"..tmp[i].name)
+						os.delay(750)
+						table.insert(tb, { path = tmp[i].path, name = tmp[i].name, size = _size })
+					end
 
-	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-		message_wait("ux0:RePatch")
-	os.delay(1250)
-
-	local tmp = files.listdirs("ux0:RePatch")
-	local size_RePatch = 0
-	if tmp and #tmp > 0 then
-		for i=1, #tmp do
-			if tmp[i].directory then
-				if not game.exists(tmp[i].name) then
-					local _size = files.size(tmp[i].path) or 0
-					size_RePatch += _size
-					if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-					message_wait("RePatch\n\n"..tmp[i].name)
-					os.delay(600)
-					table.insert(list_RePatch, { path = tmp[i].path, name = tmp[i].name, size = _size })
-				end
+				end--not game.exists
 			end
 		end
 	end
 
 	--Delete?
-	if #list_ReAddcont > 0 then
-		if os.message(STRINGS_APP_FOUND_REFOLDERS.." : "..#list_ReAddcont.." "..STRINGS_APP_REFOLDERS_GAME.." ReAddcont\n\n"..STRINGS_CALLBACKS_SIZE_ALL..files.sizeformat(size_Readdcont or 0).."\n\n"..STRINGS_APP_REFOLDERS_DELETE,1) == 1 then
-			for i=1,#list_ReAddcont do
-				files.delete(list_ReAddcont[i].path)
+	if #tb > 0 then
+		if os.message(STRINGS_APP_FOUND_REFOLDERS.." : "..#tb.." "..STRINGS_APP_REFOLDERS_GAME.." "..path.."\n\n"..STRINGS_CALLBACKS_SIZE_ALL..files.sizeformat(size or 0).."\n\n"..STRINGS_APP_REFOLDERS_DELETE,1) == 1 then
+			for i=1,#tb do
+				files.delete(tb[i].path)
 			end
 		end
 	end
 
-	if #list_RePatch > 0 then
-		if os.message(STRINGS_APP_FOUND_REFOLDERS.." : "..#list_RePatch.." "..STRINGS_APP_REFOLDERS_GAME.." RePatch\n\n"..STRINGS_CALLBACKS_SIZE_ALL..files.sizeformat(size_RePatch or 0).."\n\n"..STRINGS_APP_REFOLDERS_DELETE,1) == 1 then
-			for i=1,#list_RePatch do
-				files.delete(list_RePatch[i].path)
+end
+
+local Re_Folders_Cleanup_callback = function ()
+
+	local vbuff = screen.toimage()
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+	local path_ReAddcont = { 
+		{ path="ux0:ReAddcont", mount="ux0:"},
+		{ path="uma0:ReAddcont", mount="uma0:"},
+		{ path="imc0:ReAddcont", mount="imc0:"},
+		{ path="xmc0:ReAddcont", mount="xmc0:"},
+	}
+	local path_RePatch = {
+		{ path="ux0:RePatch", mount="ux0:"},
+		{ path="uma0:RePatch", mount="uma0:"},
+		{ path="imc0:RePatch", mount="imc0:"},
+		{ path="xmc0:RePatch", mount="xmc0:"},
+	}
+
+--ReAddcont
+	for i=1, #path_ReAddcont do
+		Search_ReFolders(path_ReAddcont[i].path, path_ReAddcont[i].mount)
+	end
+
+--Repatch
+	for i=1, #path_RePatch do
+		Search_ReFolders(path_RePatch[i].path, path_RePatch[i].mount)
+	end
+
+--Eliminar carpetas vacias de picture y video
+	local tmp = files.listdirs("ux0:picture/SCREENSHOT")
+	if tmp and #tmp > 0 then
+		table.sort(tmp, function (a,b) return a.name<b.name end)
+		for i=1, #tmp do
+			local tmp2 = files.list("ux0:picture/SCREENSHOT/"..tmp[i].name)
+
+			if tmp2 and #tmp2> 0 then
+			else
+				files.delete("ux0:picture/SCREENSHOT/"..tmp[i].name)
 			end
 		end
 	end
 
+	local tmp = files.listdirs("ux0:video")
+	if tmp and #tmp > 0 then
+		table.sort(tmp, function (a,b) return a.name<b.name end)
+		for i=1, #tmp do
+			local tmp2 = files.list("ux0:video/"..tmp[i].name)
+
+			if tmp2 and #tmp2> 0 then
+			else
+				files.delete("ux0:video/"..tmp[i].name)
+			end
+		end
+	end
 
 	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 	submenu_ctx.close = true

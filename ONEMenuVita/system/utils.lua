@@ -100,7 +100,7 @@ function getavatar(path)
 		local databin = nil
 		databin = http.get(profile)
 		if databin then
-			avatar = image.loadfromdata(databin,__PNG)
+			avatar = image.loadfromdata(databin,__IMAGE_TYPE_PNG)
 			if avatar then
 				avatar:resize(35,35)
 				image.save(avatar, "ux0:data/ONEMENU/avatar.png")

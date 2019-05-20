@@ -61,7 +61,13 @@ function customthemes()
 						if os.message(STRINGS_CUSTOMTHEMES_DELFILES,1)==1 then
 							files.delete(list[livetheme.sel].id)
 						else
-							files.move(list[livetheme.sel].id,"ux0:data/uninstall_customtheme")
+							if list[livetheme.sel].id:sub(1,2) == "ux" then
+								files.move(list[livetheme.sel].id,"ux0:data/uninstall_customtheme")
+							elseif list[livetheme.sel].id:sub(1,2) == "ur" then
+								files.move(list[livetheme.sel].id,"ur0:data/uninstall_customtheme")
+							elseif list[livetheme.sel].id:sub(1,2) == "um" then
+								files.move(list[livetheme.sel].id,"uma0:data/uninstall_customtheme")
+							end
 						end
 						table.remove(list,livetheme.sel)
 						livetheme:set(list,15)

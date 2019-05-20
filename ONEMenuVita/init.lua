@@ -180,7 +180,7 @@ function Scanning()
 
 	for i=1,#list do
 
-if files.exists(list[i].path) then
+		if files.exists(list[i].path) then
 			if list[i].title then list[i].title = list[i].title:gsub("\n"," ") end
 			list[i].fav = false
 			for j=1,#apps do

@@ -573,15 +573,60 @@ local installtheme_callback = function ()
         if not files.exists(string.format("%s/theme.xml",explorer.list[scroll.list.sel].path)) then return end
        
         local path_tmp = explorer.list[scroll.list.sel].path
- 
-        if Root2[Dev] != "ux0:" then --return end
-            if files.copy(explorer.list[scroll.list.sel].path,"ux0:data/customtheme")==1 then files.delete(explorer.list[scroll.list.sel].path) end
+
+		local install_in = __THEMES_UX0
+		local title = string.format(STRINGS_SUBMENU_INSTALLCTHEME)
+		local w,h = screen.textwidth(title,1) + 120,145
+		local x,y = 480 - (w/2), 272 - (h/2)
+
+		local uma0_in = false
+		if files.exists("uma0:") then
+			local device_uma0 = os.devinfo("uma0:")
+			if device_uma0 then uma0_in = true end
+		end
+
+		while true do
+			buttons.read()
+			power.tick()
+			if theme.data["list"] then theme.data["list"]:blit(0,0) end 
+
+			draw.fillrect(x, y, w, h, theme.style.BARCOLOR)
+			draw.rect(x,y,w,h,color.white)
+				screen.print(480, y+12, title,1,color.white,color.black, __ACENTER)
+					screen.print(480,y+40,SYMBOL_CROSS.." ".."UX0:", 1,color.white,color.black, __ACENTER)
+					screen.print(480,y+65,SYMBOL_SQUARE.." ".."UR0:", 1,color.white,color.black, __ACENTER)
+					screen.print(480,y+90,SYMBOL_TRIANGLE.." ".."UMA0:", 1,color.white,color.black, __ACENTER)
+				screen.print(480,y+115,SYMBOL_CIRCLE.." "..STRINGS_SUBMENU_CANCEL, 1,color.white,color.black, __ACENTER)
+			screen.flip()
+
+			if buttons[accept] or buttons.triangle or buttons.square or buttons[cancel] then
+				if buttons[accept] then install_in = __THEMES_UX0
+				elseif buttons.square then install_in = __THEMES_UR0
+				elseif buttons.triangle then
+					if uma0_in then	install_in = __THEMES_UMA0 else os.message(STRINGS_THEMES_NO_PARTITION) return false end
+				else return false end
+				break
+			end
+
+		end--while
+		buttons.read()
+
+		if install_in == __THEMES_UX0 and Root2[Dev] != "ux0:" then
+			if files.copy(explorer.list[scroll.list.sel].path,"ux0:data/customtheme")==1 then files.delete(explorer.list[scroll.list.sel].path) end
             path_tmp = "ux0:data/customtheme/"..explorer.list[scroll.list.sel].name
-        end
- 
+		end
+		if install_in == __THEMES_UR0 and Root2[Dev] != "ur0:" then
+			if files.copy(explorer.list[scroll.list.sel].path,"ur0:data/customtheme")==1 then files.delete(explorer.list[scroll.list.sel].path) end
+            path_tmp = "ur0:data/customtheme/"..explorer.list[scroll.list.sel].name
+		end
+		if install_in == __THEMES_UMA0 and Root2[Dev] != "uma0:" then
+			if files.copy(explorer.list[scroll.list.sel].path,"uma0:data/customtheme")==1 then files.delete(explorer.list[scroll.list.sel].path) end
+            path_tmp = "uma0:data/customtheme/"..explorer.list[scroll.list.sel].name
+		end
+
         buttons.homepopup(0)
             reboot=false
-                local result = themes.install(path_tmp)
+                local result = themes.install(path_tmp, install_in)
             buttons.homepopup(1)
         reboot=true
  
