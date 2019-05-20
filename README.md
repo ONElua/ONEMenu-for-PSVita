@@ -5,6 +5,12 @@
 **OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories.<br>
 Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db.
 
+### Changelog 3.13 ###
+- Added support for firmware 3.69/3.70.<br>
+- Now when uninstalling PSVita games you can also eliminate corresponding folders from Repatch and Readdcont of following partitions: ux0.uma0.imc0,xmc0.<br>
+- Added partitions uma0,imc0 y xmc0 to Clean RePAtch folders option.<br>
+- Added support to install CustomThemes in ur0 and uma0.<br>
+
 ### Changelog 3.12 ###
 - Fix accept/cancel in some dialogues.<br>
 
