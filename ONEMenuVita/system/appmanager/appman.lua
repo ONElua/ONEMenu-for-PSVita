@@ -221,21 +221,28 @@ local uninstall_callback = function ()
 			if result_rmv == 1 then
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-				if files.exists("ux0:repatch/"..appman[cat].list[focus_index].id) then
-					if os.message(STRINGS_SUBMENU_DELETE.."\n\n".."ux0:rePatch/"..appman[cat].list[focus_index].id.."?",1) == 1 then
-						reboot=false
-							files.delete("ux0:rePatch/"..appman[cat].list[focus_index].id)
-						reboot=true
+				local path_ReAddcont = { "ux0:ReAddcont/", "uma0:ReAddcont/", "imc0:ReAddcont/", "xmc0:ReAddcont/" }
+				for i=1,#path_ReAddcont do
+					if files.exists(path_ReAddcont[i]..appman[cat].list[focus_index].id) then
+						if os.message(STRINGS_SUBMENU_DELETE.."\n\n"..path_ReAddcont[i]..appman[cat].list[focus_index].id.."?",1) == 1 then
+							reboot=false
+								files.delete(path_ReAddcont[i]..appman[cat].list[focus_index].id)
+							reboot=true
+						end
 					end
 				end
-				if files.exists("ux0:readdcont/"..appman[cat].list[focus_index].id) then
-					if os.message(STRINGS_SUBMENU_DELETE.."\n\n".."ux0:readdcont/"..appman[cat].list[focus_index].id.."?",1) == 1 then
-						reboot=false
-							files.delete("ux0:readdcont/"..appman[cat].list[focus_index].id)
-						reboot=true
+	
+				local path_RePatch = { "ux0:RePatch/", "uma0:RePatch/", "imc0:RePatch/", "xmc0:RePatch/" }
+				for i=1,#path_RePatch do
+					if files.exists(path_RePatch[i]..appman[cat].list[focus_index].id) then
+						if os.message(STRINGS_SUBMENU_DELETE.."\n\n"..path_RePatch[i]..appman[cat].list[focus_index].id.."?",1) == 1 then
+							reboot=false
+								files.delete(path_RePatch[i]..appman[cat].list[focus_index].id)
+							reboot=true
+						end
 					end
 				end
-
+	
 				if cat == 5 then--Only Adrenaline Bubbles
 					for i=1,#apps do
 						if apps[i] == appman[cat].list[focus_index].id then
