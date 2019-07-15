@@ -212,14 +212,15 @@ STRINGS_COUNT =					"Count: "
 STRINGS_SIZE_IS =				"Size is: "
 STRINGS_FILES_FOLDERS =			"Files/Folders"
 
-------------	Export Mulimedia	-------------------------------------------------------------------------
+------------	Export Multimedia	-------------------------------------------------------------------------
 STRINGS_EXPORT_OPEN_APP =		"Open app for MP3/Gallery/Video ?"
 STRINGS_EXPORT_NO_FILES =		"No multimedia files"
 STRINGS_EXPORT_MP3 =			"MP3 file(s) : "
 STRINGS_EXPORT_MP4 =			"MP4 file(s) : "
 STRINGS_EXPORT_IMG =			"IMG file(s) : "
-STRINGS_EXPORT_OPEN =			"\nExport completed, please launch Music/Photos/Videos\n\napplication to read your files !"
+STRINGS_EXPORT_OPEN =			"\nExport completed, please launch Music/Photos/Videos\napplication to read your files !"
 STRINGS_EXPORT_FAIL =			"Error"
+STRINGS_EXPORT_REBOOT =			"Restart PSvita is necessary"
 
 ------------	Refresh LiveArea	-------------------------------------------------------------------------
 STRINGS_LIVEAREA_NOTINSTALLED =	"\n\nGame not installed: "

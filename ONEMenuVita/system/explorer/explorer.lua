@@ -707,7 +707,7 @@ local filesexport_callback = function ()
 								elseif ext == "mp3" then cont_mp3+=1
 									else cont_mp4+=1 end
 						else
-							os.message(STRINGS_EXPORT_FAIL.."\n"..tmp[i].name.."\nReiniciar PSvita es necesario",0)
+							os.message(STRINGS_EXPORT_FAIL.."\n"..tmp[i].name.."\n"..STRINGS_EXPORT_REBOOT,0)
 						end
 					end
 				end--for
@@ -725,7 +725,7 @@ local filesexport_callback = function ()
 			if ext == "png" or ext == "jpg" or ext == "jpeg" or ext == "bmp" or ext == "gif" or ext == "mp3" or ext == "mp4" or ext == "mkv" then
 
 				if ext == "mp3" and not files.exists("music0:") then
-					os.message("Reiniciar PSvita es necesario",0) return
+					os.message(STRINGS_EXPORT_REBOOT,0) return
 				end
 
 				reboot=false
@@ -742,7 +742,7 @@ local filesexport_callback = function ()
 						else os.uri("photo:browse?category=ALL") end
 					end
 				else
-					os.message(STRINGS_EXPORT_FAIL.."\n"..explorer.list[scroll.list.sel].name.."\nReiniciar PSvita es necesario",0)
+					os.message(STRINGS_EXPORT_FAIL.."\n"..explorer.list[scroll.list.sel].name.."\n"..STRINGS_EXPORT_REBOOT,0)
 				end
 			end
 		end
