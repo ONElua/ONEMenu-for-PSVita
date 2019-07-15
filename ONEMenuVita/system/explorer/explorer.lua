@@ -126,7 +126,7 @@ function show_explorer_list(first_path)
 			end
 			explorer.listshow(y)
 		else
-			screen.print(10+movx,80,"...".."\n\n"..STRINGS_BACK,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+			screen.print(10+movx,80,"...".."\n"..STRINGS_BACK,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 		end
 
 		screen.print(10+movx,515,os.date(_time.." %m/%d/%y").."  "..batt.lifepercent().."%",1,theme.style.DATETIMECOLOR,color.gray,__ALEFT)
@@ -152,7 +152,7 @@ function ctrls_explorer_list()
 	if menu_ctx.open then return end
 	if not menu_ctx.close then return end
 
-	if buttons[cancel] then -- return directory
+	if buttons.cancel then -- return directory
 
 		if check_root() then return end
 
@@ -173,7 +173,7 @@ function ctrls_explorer_list()
 		if buttons.up or buttons.analogly < -60 then scroll.list:up() end
 		if buttons.down or buttons.analogly > 60 then scroll.list:down() end
 
-		if buttons[accept] then
+		if buttons.accept then
 			if explorer.list[scroll.list.sel].size then
 				handle_files(explorer.list[scroll.list.sel])
 			else
@@ -219,8 +219,7 @@ end
 
 function handle_files(cnt)
 	local extension = cnt.ext
-
-	if extension == "png" or extension == "jpg" or extension == "bmp" or extension == "gif" then
+	if extension == "png" or extension == "jpg" or extension == "jpeg" or extension == "bmp" or extension == "gif" then
 		visorimg(cnt.path)
 	elseif extension == "vpk" then
 		buttons.homepopup(0)
@@ -296,7 +295,7 @@ local paste_callback = function ()
         if #multi>0 then
             reboot=false
             for i=1,#multi do
-                if os.message(multi[i]+"\n\n"+STRINGS_PASS ,1)==1 then
+                if os.message(multi[i]+"\n"+STRINGS_PASS ,1)==1 then
                     local pass = osk.init(STRINGS_OS_PASS , "" , 50, __OSK_TYPE_LATIN, __OSK_MODE_PASSW)
                     if pass then
                         buttons.homepopup(0)
@@ -333,7 +332,7 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
 		local del=false
         if explorer.list[scroll.list.sel].multi then
             if #multi>0 then
-                if os.message(STRINGS_SUBMENU_DELETE.." "..#multi.."\n\n"..STRINGS_FILES_FOLDERS.."(s) ?",1) == 1 then
+                if os.message(STRINGS_SUBMENU_DELETE.." "..#multi.."\n"..STRINGS_FILES_FOLDERS.."(s) ?",1) == 1 then
 					del=true
                     reboot=false
                         for i=1,#multi do files.delete(multi[i]) end
@@ -341,7 +340,7 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
                 end
             end
         else
-            if os.message(STRINGS_SUBMENU_DELETE.."\n\n"..explorer.list[scroll.list.sel].path.." ?",1) == 1 then
+            if os.message(STRINGS_SUBMENU_DELETE.."\n"..explorer.list[scroll.list.sel].path.." ?",1) == 1 then
 				del=true
                 reboot=false
                     files.delete(explorer.list[scroll.list.sel].path)
@@ -443,9 +442,9 @@ local sizedir_callback = function ()
 		else
 			if not explorer.list[scroll.list.sel].size then                -- Its Dir
 				message_wait()
-				os.message(explorer.list[scroll.list.sel].name+"\n\n"+STRINGS_SIZE_IS+files.sizeformat(files.size(explorer.list[scroll.list.sel].path) or 0))
+				os.message(explorer.list[scroll.list.sel].name+"\n"+STRINGS_SIZE_IS+files.sizeformat(files.size(explorer.list[scroll.list.sel].path) or 0))
 			else
-				os.message(explorer.list[scroll.list.sel].name+"\n\n"+STRINGS_SIZE_IS+explorer.list[scroll.list.sel].size)
+				os.message(explorer.list[scroll.list.sel].name+"\n"+STRINGS_SIZE_IS+explorer.list[scroll.list.sel].size)
 			end
 		end
     end
@@ -512,8 +511,8 @@ local installgame_callback = function ()
             screen.print(960/2,y+395,Xa..STRINGS_CONFIRM.." | "..Oa..STRINGS_SUBMENU_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
             screen.flip()
  
-            if buttons[accept] or buttons[cancel] then
-                if buttons[accept] then res = true end
+            if buttons.accept or buttons.cancel then
+                if buttons.accept then res = true end
                 break
             end
         end
@@ -534,14 +533,27 @@ local installgame_callback = function ()
 		if result ==1 then
 
 			--Restore Save from "ux0:data/ONEMenu/Saves
-			if files.exists("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID) then
-				local info_time = files.info("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID)
-				if os.message(STRINGS_APP_RESTORE_SAVE.."\n\n"..info_time.mtime or "", 1) == 1 then
-					files.copy("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID, "ux0:user/00/savedata/")
-				end
+			if info.INSTALL_DIR_SAVEDATA and files.exists("ux0:data/ONEMenu/SAVES/"..info.INSTALL_DIR_SAVEDATA) then
+				--game.umount()
+					--game.mount("ux0:user/00/savedata/"..info.INSTALL_DIR_SAVEDATA)
+					local info_time = files.info("ux0:data/ONEMenu/SAVES/"..info.INSTALL_DIR_SAVEDATA)
+					if os.message(STRINGS_APP_RESTORE_SAVE.."\n"..info_time.mtime or "", 1) == 1 then
+						files.copy("ux0:data/ONEMenu/SAVES/"..info.INSTALL_DIR_SAVEDATA, "ux0:user/00/savedata/")
+						--personalize_savedata("ux0:user/00/savedata/"..scan_vpk.sfo.INSTALL_DIR_SAVEDATA.."/sce_sys/param.sfo")
+					end
+				--game.umount()
+			elseif files.exists("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID) then
+				--game.umount()
+					--game.mount("ux0:user/00/savedata/"..info.TITLE_ID)
+					local info_time = files.info("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID)
+					if os.message(STRINGS_APP_RESTORE_SAVE.."\n"..info_time.mtime or "", 1) == 1 then
+						files.copy("ux0:data/ONEMenu/SAVES/"..info.TITLE_ID, "ux0:user/00/savedata/")
+						--personalize_savedata("ux0:user/00/savedata/"..scan_vpk.sfo.TITLE_ID.."/sce_sys/param.sfo")
+					end
+				--game.umount()
 			end
 
-			if os.message(STRINGS_LAUNCH_GAME+"\n\n"+info.TITLE_ID+" ?",1) == 1 then
+			if os.message(STRINGS_LAUNCH_GAME+"\n"+info.TITLE_ID+" ?",1) == 1 then
 				if game.exists(info.TITLE_ID) then
 					if info.CATEGORY == "ME" then game.open(info.TITLE_ID) else game.launch(info.TITLE_ID) end
 				end
@@ -599,8 +611,8 @@ local installtheme_callback = function ()
 				screen.print(480,y+115,SYMBOL_CIRCLE.." "..STRINGS_SUBMENU_CANCEL, 1,color.white,color.black, __ACENTER)
 			screen.flip()
 
-			if buttons[accept] or buttons.triangle or buttons.square or buttons[cancel] then
-				if buttons[accept] then install_in = __THEMES_UX0
+			if buttons.accept or buttons.triangle or buttons.square or buttons.cancel then
+				if buttons.accept then install_in = __THEMES_UX0
 				elseif buttons.square then install_in = __THEMES_UR0
 				elseif buttons.triangle then
 					if uma0_in then	install_in = __THEMES_UMA0 else os.message(STRINGS_THEMES_NO_PARTITION) return false end
@@ -630,7 +642,7 @@ local installtheme_callback = function ()
             buttons.homepopup(1)
         reboot=true
  
-        os.message(STRINGS_SUBMENU_INSTALLCTHEME.."\n\n"..STRINGS_RESULT..result)
+        os.message(STRINGS_SUBMENU_INSTALLCTHEME.."\n"..STRINGS_RESULT..result)
         if result == 1 then
             if os.message(STRINGS_THEMES_SETTINGS,1)==1 then
                 os.delay(150)
@@ -682,21 +694,20 @@ local filesexport_callback = function ()
 
 				for i=1,#tmp do
 					local ext = tmp[i].ext:lower() or ""
-					if ext == "png" or ext == "jpg" or ext == "bmp" or ext == "gif" or ext == "mp3" or ext == "mp4" then
+					if ext == "png" or ext == "jpg" or ext == "jpeg" or ext == "bmp" or ext == "gif" or ext == "mp3" or ext == "mp4" then
 						cont_multimedia+=1
 						reboot=false
 							if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 							message_wait(tmp[i].name)
-							local res = files.export(tmp[i].path)
+							result = files.export(tmp[i].path)
 						reboot=true
 
-						if res == 1 then
-							result = 1
-							if ext == "png" or ext == "jpg" or ext == "bmp" or ext == "gif" then cont_img+=1
+						if result == 1 then
+							if ext == "png" or ext == "jpg" or ext == "jpeg" or ext == "bmp" or ext == "gif" then cont_img+=1
 								elseif ext == "mp3" then cont_mp3+=1
 									else cont_mp4+=1 end
 						else
-							os.message(STRINGS_EXPORT_FAIL.."\n\n"..tmp[i].name,0)
+							os.message(STRINGS_EXPORT_FAIL.."\n"..tmp[i].name.."\nReiniciar PSvita es necesario",0)
 						end
 					end
 				end--for
@@ -704,14 +715,19 @@ local filesexport_callback = function ()
 			end
 
 			if cont_multimedia > 0 then
-				os.message(STRINGS_EXPORT_MP3..cont_mp3.."\n\n"..STRINGS_EXPORT_MP4..cont_mp4.."\n\n"..STRINGS_EXPORT_IMG..cont_img.."\n\n"..STRINGS_EXPORT_OPEN)
+				os.message(STRINGS_EXPORT_MP3..cont_mp3.."\n"..STRINGS_EXPORT_MP4..cont_mp4.."\n"..STRINGS_EXPORT_IMG..cont_img.."\n"..STRINGS_EXPORT_OPEN)
 			else
 				os.message(STRINGS_EXPORT_NO_FILES)
 			end
 
 		else
 			local ext = explorer.list[scroll.list.sel].ext:lower() or ""
-			if ext == "png" or ext == "jpg" or ext == "bmp" or ext == "gif" or ext == "mp3" or ext == "mp4" then
+			if ext == "png" or ext == "jpg" or ext == "jpeg" or ext == "bmp" or ext == "gif" or ext == "mp3" or ext == "mp4" or ext == "mkv" then
+
+				if ext == "mp3" and not files.exists("music0:") then
+					os.message("Reiniciar PSvita es necesario",0) return
+				end
+
 				reboot=false
 					if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 					message_wait()
@@ -726,7 +742,7 @@ local filesexport_callback = function ()
 						else os.uri("photo:browse?category=ALL") end
 					end
 				else
-					os.message(STRINGS_EXPORT_FAIL.."\n\n"..explorer.list[scroll.list.sel].name,0)
+					os.message(STRINGS_EXPORT_FAIL.."\n"..explorer.list[scroll.list.sel].name.."\nReiniciar PSvita es necesario",0)
 				end
 			end
 		end
@@ -886,12 +902,12 @@ local qr_callback = function ()
 
 				if res then
 					if files.exists("ux0:downloads/"..filename) then
-						os.message(STRINGS_DOWNLOAD_SUCCESS.." ux0:downloads\n\n"..filename)
+						os.message(STRINGS_DOWNLOAD_SUCCESS.." ux0:downloads\n"..filename)
 						explorer.refresh(true)
 					end
 				else
 					files.delete("ux0:downloads/"..filename)
-					os.message(STRINGS_DOWNLOAD_FAILED.." ux0:downloads\n\n"..filename)
+					os.message(STRINGS_DOWNLOAD_FAILED.." ux0:downloads\n"..filename)
 				end
 			end
 		else
@@ -907,11 +923,11 @@ local qr_callback = function ()
 			if filename then tmp = filename else tmp = "file" end
 
 			if files.exists("ux0:downloads/"..tmp) then
-				os.message(STRINGS_DOWNLOAD_SUCCESS.." ux0:downloads\n\n"..tmp)
+				os.message(STRINGS_DOWNLOAD_SUCCESS.." ux0:downloads\n"..tmp)
 				explorer.refresh(true)
 			else
 				files.delete("ux0:downloads/"..tmp)
-				os.message(STRINGS_DOWNLOAD_FAILED.." ux0:downloads\n\n"..tmp)
+				os.message(STRINGS_DOWNLOAD_FAILED.." ux0:downloads\n"..tmp)
 			end
 		end
 	end
@@ -1004,29 +1020,10 @@ local reloadconfig_callback = function ()
 	menu_ctx.scroll.sel = pos_menu
 end
 
-local scanfavs_callback = function ()
-	local pos_menu = menu_ctx.scroll.sel
-	favorites_manager()
-	menu_ctx.wakefunct2()
-	menu_ctx.scroll.sel = pos_menu
-end
-
 local themesLiveArea_callback = function ()
 	local pos_menu = menu_ctx.scroll.sel
 	customthemes()
 	menu_ctx.wakefunct2()
-	menu_ctx.scroll.sel = pos_menu
-end
-
-local font_callback = function ()
-	local pos_menu = menu_ctx.scroll.sel
-	if not __USERFNT then
-		if __FNT == 2 then __FNT = 3 else __FNT = 2 end 
-		write_config()
-		os.delay(150)
-		font.setdefault(__FNT)
-		menu_ctx.wakefunct2()
-	end
 	menu_ctx.scroll.sel = pos_menu
 end
 
@@ -1101,14 +1098,8 @@ function menu_ctx.wakefunct2()
 		{ text = STRINGS_REBUILD_DB, 			funct = rebuilddb_callback },
 		{ text = STRINGS_RELOAD_CONFIG,			funct = reloadconfig_callback },
 
-		{ text = STRINGS_FAVORITES_SECTION,		funct = scanfavs_callback },
 		{ text = STRINGS_SUBMENU_CUSTOMTHEMES,	funct = themesLiveArea_callback },
     }
-	if __FNT == 3 then 
-		table.insert(menu_ctx.options, { text = "< "..STRINGS_PVF_FONT.." >", funct = font_callback, pad = true })
-	else
-		table.insert(menu_ctx.options, { text = "< "..STRINGS_PGF_FONT.." >", funct = font_callback, pad = true })
-	end
 
     menu_ctx.scroll = newScroll(menu_ctx.options, #menu_ctx.options)
 end
@@ -1183,11 +1174,11 @@ function menu_ctx.buttons()
 	if buttons.up or buttons.analogly < -60 then menu_ctx.scroll:up() end
 	if buttons.down or buttons.analogly > 60 then menu_ctx.scroll:down() end
 
-	if buttons[cancel] then -- Run function of cancel option.
+	if buttons.cancel then -- Run function of cancel option.
 		menu_ctx.close = not menu_ctx.close
 	end
 
-	if buttons[accept] then
+	if buttons.accept then
 		menu_ctx.options[menu_ctx.scroll.sel].funct()
     end
 	if (buttons.left or buttons.right) and menu_ctx.options[menu_ctx.scroll.sel].pad then

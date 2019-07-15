@@ -18,18 +18,14 @@ while true do
 
 		local entry = IMAGE_PORT_I:pop()
 
-		--IMAGE_PORT_O:push( {i = i, j=j, path = appman[i].list[j].path_img, fav = __FAV, resize = appman[i].list[j].resize } ) -- Enviamos peticion
+		--IMAGE_PORT_O:push( {i = i, j=j, path = appman[i].list[j].path_img, resize = appman[i].list[j].resize } ) -- Enviamos peticion
 		entry.img = image.load(entry.path)
 
 		if entry.img then
-			if entry.fav == 1 then
-				entry.img:resize(120,120)
+			if entry.resize then
+				entry.img:resize(120,100)
 			else
-				if entry.resize then
-					entry.img:resize(120,100)
-				else
-					entry.img:resize(120,120)
-				end	
+				entry.img:resize(120,120)
 			end
 			entry.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 		end

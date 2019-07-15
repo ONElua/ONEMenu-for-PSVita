@@ -13,10 +13,6 @@
 for i=1,#appman do
 
 	appman[i].scroll = newScroll(appman[i].list,limit)
-	appman[i].slide.img = categories[i].img
-	if appman[i].slide.img then
-		appman[i].slide.w = appman[i].slide.img:getw()
-	end
 
 	if i==1 then
 		appman[i].sort = tonumber(ini.read(__PATH_INI,"sort","sort","0"))
@@ -84,6 +80,10 @@ function main_draw()
 	focus_x = 210
 	movx = submenu_ctx.x+submenu_ctx.w
 
+	if not pic1_crono then
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
+	end
+
 	for i=appman[cat].scroll.ini,appman[cat].scroll.lim do
 
 		if i==appman[cat].scroll.sel then
@@ -122,7 +122,6 @@ function blit_icons(i,x1)
 
 	--Solo blitear los demás iconos cuando no se abra el submenu
 	if submenu_ctx.close then
-		pic1 = nil
 		if appman[cat].list[i].img then
 
 			if appman[cat].list[i].img:geth() == 120 then
@@ -138,13 +137,6 @@ function blit_icons(i,x1)
 				else y_init = 170 end
 			end
 			appman[cat].list[i].img:blit(x1,y_init,210)--175
-
-			--Blit for favorites
-			if appman[cat].list[i].fav then
-				if theme.data["buttons1"] then
-					theme.data["buttons1"]:blitsprite(x1,y_init,8)	
-				end
-			end
 
 			-----------------------------------Mirror-------------------------------------------------------------------
 			if __SLIDES == 100 then
@@ -164,7 +156,7 @@ function focus_icon()
 	if pic1_crono then
 		
 		if pic_alpha < 255 then
-			pic_alpha += 08
+			pic_alpha += 06
 			if not angle then angle = 0 end
 			angle += 24
 			if angle > 360 then angle = 0 end
@@ -174,40 +166,28 @@ function focus_icon()
 		pic1_crono:blit(960/2, 544/2, pic_alpha)
 	end
 
-	if __SLIDES == 100 or not submenu_ctx.close or pic1_crono then
-		screen.print(10,15, appman[cat].list[focus_index].title,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-	end
-
 	if submenu_ctx.close and not pic1_crono then
 		if show_pic and __PIC1==1 then
-			if appman[cat].list[focus_index].type == "mb" then
-				pic1_crono = game.bg0(appman[cat].list[focus_index].id)
-				if not pic1_crono then
-					pic1_crono = image.load("ur0:appmeta/"..appman[cat].list[focus_index].id.."/pic0.png")
-				end
+			if cat == 3 then--PSM
+				pic1_crono = game.bg0(appman[cat].list[focus_index].id) or image.load(appman[cat].list[focus_index].path_pic)
 			else
-				pic1_crono = image.load("ur0:appmeta/"..appman[cat].list[focus_index].id.."/pic0.png")
-				if not pic1_crono then
-					pic1_crono = game.bg0(appman[cat].list[focus_index].id)--id al recompilar
-				end
+				pic1_crono = image.load(appman[cat].list[focus_index].path_pic) or game.bg0(appman[cat].list[focus_index].id)
 			end
 			if pic1_crono then
-				--pic1_crono:resize(960,460)
+				if pic1_crono:getw() != 960 and pic1_crono:geth() != 544 then pic1_crono:resize(960,544) end
 				pic1_crono:center()
+				pic1_crono:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 			end
 		end
 	end
 
+	draw.fillrect(0,0,960,40, color.shine:a(15)) --UP
 	if appman[cat].list[focus_index].img then
 
 		if appman[cat].list[focus_index].img:geth() == 120 then
 			if __SLIDES == 100 then y_init = 200 else y_init = 170 end
 		else
 			if __SLIDES == 100 then y_init = 220 else y_init = 190 end
-		end
-
-		if submenu_ctx.open and __PIC1 == 1 then
-			if pic1 then pic1:blit(960/2, 544/2,185) end
 		end
 
 		--Resize +20
@@ -217,13 +197,6 @@ function focus_icon()
 		if __SLIDES == 100 then
 
 			appman[cat].list[focus_index].img:blit(100+movx,(y_init - (elev/2)- 35))			-- aqui debo dar mas para q suba mas el focus
-
-			--Blit for favorites
-			if appman[cat].list[focus_index].fav then
-				if theme.data["buttons1"] then
-					theme.data["buttons1"]:blitsprite(100+movx,(y_init - (elev/2)- 35),8)	
-				end
-			end
 
 			-----------------------------------Mirror-------------------------------------------------------------------
 			appman[cat].list[focus_index].img:flipv()
@@ -237,8 +210,7 @@ function focus_icon()
 
 			if submenu_ctx.close then
 
-				if appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG"	or appman[cat].list[focus_index].type == "ME" then
-				fill = 170 else fill = 150 end
+				if cat == 3 or cat == 4 then fill = 170 else fill = 150 end
 
 				if not pic1_crono then
 					screen.print(255,350, appman[cat].list[focus_index].title,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
@@ -255,13 +227,6 @@ function focus_icon()
 
 			appman[cat].list[focus_index].img:blit(100+movx,y_init + (elev/2))
 
-			--Blit for favorites
-			if appman[cat].list[focus_index].fav then
-				if theme.data["buttons1"] then
-					theme.data["buttons1"]:blitsprite(100+movx,y_init + (elev/2),8)	
-				end
-			end
-
 		end
 
 		--Restore Resize -20
@@ -272,7 +237,12 @@ function focus_icon()
 
 	end
 
-	screen.print(10,520,appman[cat].list[focus_index].dev..": "..appman[cat].list[focus_index].id.." "..appman[cat].list[focus_index].Nregion,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+	if __SLIDES == 100 or not submenu_ctx.close or pic1_crono then
+		screen.print(10,15, appman[cat].list[focus_index].title,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+	end
+
+	draw.fillrect(0,510,960,35, color.shine:a(15))--Down
+	screen.print(10,520,appman[cat].list[focus_index].dev..": "..appman[cat].list[focus_index].id.." "..(appman[cat].list[focus_index].Nregion or ""),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 	screen.print(955,520,os.date(_time.."  %m/%d/%y").." ("..#appman[cat].list..")",1,theme.style.DATETIMECOLOR,color.gray,__ARIGHT)
 
 end

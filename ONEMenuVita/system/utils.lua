@@ -45,17 +45,27 @@ if files.exists(__PATH_LANG..__LANG..".txt") then dofile(__PATH_LANG..__LANG..".
 
 color.loadpalette()
 
+__UPDATE = tonumber(ini.read(__PATH_INI,"update","update","1"))
+_update = STRINGS_APP_NO
+if __UPDATE == 1 then _update = STRINGS_APP_YES end
+
+dofile("git/shared.lua")
+if __UPDATE == 1 then
+    local wstrength = wlan.strength()
+    if wstrength then
+        if wstrength > 55 then dofile("git/updater.lua") end
+    end
+end
+
 SYMBOL_SQUARE	= string.char(0xe2)..string.char(0x96)..string.char(0xa1)
 SYMBOL_TRIANGLE	= string.char(0xe2)..string.char(0x96)..string.char(0xb3)
 
 function buttons_reasign()
-	accept,cancel = "cross","circle"
 	textXO = "O: "
 	accept_x = 1
 	SYMBOL_CROSS	= string.char(0xe2)..string.char(0x95)..string.char(0xb3)
 	SYMBOL_CIRCLE	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
 	if buttons.assign()==0 then
-		accept,cancel = "circle","cross"
 		textXO = "X: "
 		accept_x = 0
 		SYMBOL_CROSS	= string.char(0xe2)..string.char(0x97)..string.char(0x8b)
@@ -66,17 +76,6 @@ end
 buttons_reasign()
 
 if os.getreg("/CONFIG/DATE/", "time_format" , 1) == 1 then _time = "%R" else _time = "%r" end
-
-if __FAV == 1 and #apps>0 then
-	_favs = STRINGS_APP_YES
-else
-	__FAV=0
-	_favs = STRINGS_APP_NO
-end
-
-__UPDATE = tonumber(ini.read(__PATH_INI,"update","update","1"))
-_update = STRINGS_APP_NO
-if __UPDATE == 1 then _update = STRINGS_APP_YES end
 
 --Get avatar
 function getavatar(path)
@@ -154,89 +153,12 @@ function infodevices()
 end
 infodevices()
 
---[[
-	## Library Scroll ##
-	Designed By DevDavis (Davis Nuñez) 2011 - 2016.
-	Based on library of Robert Galarga.
-	Create a obj scroll, this is very usefull for list show
-	]]
-function newScroll(a,b,c)
-	local obj = {ini=1,sel=1,lim=1,maxim=1,minim = 1}
-
-	function obj:set(tab,mxn,modemintomin) -- Set a obj scroll
-		obj.ini,obj.sel,obj.lim,obj.maxim,obj.minim = 1,1,1,1,1
-		if(type(tab)=="number")then
-			if tab > mxn then obj.lim=mxn else obj.lim=tab end
-			obj.maxim = tab
-		else
-			if #tab > mxn then obj.lim=mxn else obj.lim=#tab end
-			obj.maxim = #tab
-		end
-		if modemintomin then obj.minim = obj.lim end
-	end
-
-	function obj:max(mx)
-		obj.maxim = #mx
-	end
-
-	function obj:up()
-		if obj.sel>obj.ini then obj.sel=obj.sel-1 return true
-		elseif obj.ini-1>=obj.minim then
-			obj.ini,obj.sel,obj.lim=obj.ini-1,obj.sel-1,obj.lim-1
-			return true
-		end
-	end
-
-	function obj:down()
-		if obj.sel<obj.lim then obj.sel=obj.sel+1 return true
-		elseif obj.lim+1<=obj.maxim then
-			obj.ini,obj.sel,obj.lim=obj.ini+1,obj.sel+1,obj.lim+1
-			return true
-		end
-	end
-
-	function obj:up_menu()
-		if obj.sel>obj.ini then
-			obj.sel-=1
-
-			if obj.sel==1 then 
-				if obj.lim-obj.ini>=limit then obj.lim-=1 end
-			else obj.ini-=1
-				if obj.lim-obj.ini>=limit+1 then obj.lim-=1 end
-			end
-			return true
-		end
-	end
-
-	function obj:down_menu()
-		if obj.sel<obj.lim then
-			obj.sel+=1
-
-			if obj.sel-1==1 then
-				if obj.lim+1<=obj.maxim then obj.lim+=1 end
-			else obj.ini+=1
-				if obj.lim+1<=obj.maxim then obj.lim+=1 end
-			end
-			return true
-		end
-	end
-
-	if a and b then
-		obj:set(a,b,c)
-	end
-
-	return obj
-
-end
-
 function write_config()
 	ini.write(__PATH_INI,"theme","id",__THEME)
+	ini.write(__PATH_INI,"update","update",__UPDATE)
 	ini.write(__PATH_INI,"backg","img",__BACKG) 
 	ini.write(__PATH_INI,"slides","pos",__SLIDES)
 	ini.write(__PATH_INI,"pics","show",__PIC1)
-	ini.write(__PATH_INI,"font","type",__FNT)
-	ini.write(__PATH_INI,"favs","scan",__FAV)
-	ini.write(__PATH_INI,"update","update",__UPDATE)
 --sort for categories
 	for i=1,#appman do
 		if i==1 then
@@ -247,8 +169,6 @@ function write_config()
 			ini.write(__PATH_INI,"sort","asc"..i,appman[i].asc)
 		end
 	end
---sort for sys apps
-	ini.write(__PATH_INI,"sys","sort",system.sort)
 end
 
 function message_wait(message)

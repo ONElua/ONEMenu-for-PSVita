@@ -56,7 +56,7 @@ function customthemes()
 				if buttons.down or buttons.analogly > 60 then livetheme:down() end
 
 				if buttons.square then
-					if os.message(STRINGS_CUSTOMTHEMES_DELETE.."\n\n"..list[livetheme.sel].info.title.." ?",1)==1 then
+					if os.message(STRINGS_CUSTOMTHEMES_DELETE.."\n"..list[livetheme.sel].info.title.." ?",1)==1 then
 						themes.delete(list[livetheme.sel].id)
 						if os.message(STRINGS_CUSTOMTHEMES_DELFILES,1)==1 then
 							files.delete(list[livetheme.sel].id)
@@ -100,7 +100,7 @@ function customthemes()
 
 			screen.flip()
 
-			if buttons[cancel] then
+			if buttons.cancel then
 				themesimg = nil
 				collectgarbage("collect")
 				os.delay(80)

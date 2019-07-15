@@ -1,26 +1,9 @@
---Init load prkxs
-__kernel, __user = false,false
-
-if files.exists("modules/kernel.skprx") then
-	if os.requirek("modules/kernel.skprx")==1 then __kernel = true end
-else
-	if os.requirek("ux0:VitaShell/module/kernel.skprx")==1 then	__kernel = true end
-end
-
-if files.exists("modules/user.suprx") then
-	if os.requireu("modules/user.suprx")==1 then __user = true end
-else
-	if os.requireu("ux0:VitaShell/module/user.suprx")==1 then __user = true end
-end
-
 --Creamos nuestra carpeta principal de Trabajo
 files.mkdir("ux0:data/ONEMENU/")
 
-__PATH_FAVS   = "ux0:data/ONEMENU/favs.txt"
 __PATH_INI    = "ux0:data/ONEMENU/config.ini"
 __PATH_THEMES = "ux0:data/ONEMENU/themes/"
 
-__FAV   = tonumber(ini.read(__PATH_INI,"favs","scan","0"))
 __THEME = ini.read(__PATH_INI,"theme","id","default")
 files.mkdir(__PATH_THEMES)
 
@@ -35,26 +18,6 @@ if splash then splash:blit(0,0) end
 screen.flip()
 
 iconDef = image.load(__PATH_THEMES..__THEME.."/icodef.png") or image.load("system/theme/default/icodef.png")
-------------------------Checamos la lista de Favoritos------------------------
-apps = {}
-function write_favs(pathini)
-    local file = io.open(pathini, "w+")
-    file:write("apps = {\n")
-
-	for i=1,#apps do
-		if i==#apps then
-			file:write(string.format('"%s"\n', tostring(apps[i])))
-		else
-			file:write(string.format('"%s",\n', tostring(apps[i])))
-		end
-	end
-	file:write("}\n")
-	file:close()
-end
-
-if files.exists(__PATH_FAVS) then dofile(__PATH_FAVS) else
-write_favs(__PATH_FAVS) end
-------------------------Checamos la lista de Favoritos------------------------
 
 -- Convert 4 bytes (32 bit) string to number int...
 function str2int(str)
@@ -68,31 +31,33 @@ function int2str(data)
 end
 
 ------------------Busqueda y peticion de Iconos en modo hilo------------------
-__CATEGORIES = 5
-appman = {}
-for i=1,__CATEGORIES do table.insert(appman, { list={}, scroll, sort = 0, slide = { img = nil, x=0 , acel=7, w= 0 } } ) end
+__CATEGORIES = 6
+appman,static_void = {},{}
+for i=1,__CATEGORIES do
+	table.insert(appman, { list={}, scroll, sort = 0, slide = { img = nil, x=0 , acel=7, w= 0 } } )
+	static_void[i] = {x=1}
+end
 cat, appman.len = 0,0
 
 IMAGE_PORT_I = channel.new("IMAGE_PORT_I")
 IMAGE_PORT_O = channel.new("IMAGE_PORT_O")
 THID_IMAGE = thread.new("system/appmanager/thread_img.lua")
 
+--Region:
 regions = { A=1,E=2,J=3,U=4 }
 name_region = { "(A)","(E)","(J)","(U)", "" }
---Region:
+
 --Asia,Eur,Jpn,Usa,Unk	<-- Asc: 1,2,3,4,5
 --Unk,Usa,Jpn,Eur,Asia	<-- Des: 5,4,3,2,1
-	
-static_void = {}
-for i=1,__CATEGORIES do static_void[i] = {x=1} end
 
 function fillappman(obj)
 
 	if obj.id == __ID then return end
---	if not game.exists(obj.id) then os.message(obj.id) return end
+
+	obj.save = obj.id
+	obj.path_pic = "ur0:appmeta/"..obj.id.."/pic0.png"
 
 	local index = 1
-
 	if obj.type == "mb" or obj.type == "mba" then
 		index = 3
 		obj.resize = true
@@ -107,6 +72,10 @@ function fillappman(obj)
 		else
 
 			local sfo = game.info(obj.path.."/sce_sys/param.sfo")
+
+			if sfo and sfo.INSTALL_DIR_SAVEDATA then
+				obj.save = sfo.INSTALL_DIR_SAVEDATA
+			end
 
 			if sfo and sfo.CONTENT_ID then
 
@@ -125,19 +94,7 @@ function fillappman(obj)
 						index = 2
 					end
 				end
-
 			else
-				--[[
-				--checking magic
-				local fp = io.open(obj.path.."/data/boot.bin","r")
-				if fp then
-					local magic = str2int(fp:read(4))
-					fp:close()
-					if magic == 0x00424241 then	index = 5 else index = 2 end
-				else
-					index = 2
-				end
-				]]
 				index = 2
 			end
 		end
@@ -147,17 +104,65 @@ function fillappman(obj)
 	obj.Nregion = name_region[obj.region] or ""
 
 	obj.img = iconDef
-	if __FAV == 1 then
-		obj.img:resize(120,120)
-	else
-		if obj.resize then obj.img:resize(120,100) else obj.img:resize(120,120) end
-	end
+	if obj.resize then obj.img:resize(120,100) else obj.img:resize(120,120) end
 	obj.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 
 	appman.len += 1
 
 	table.insert(appman[index].list,obj)
 
+--[[
+	-- Push request of icon! :D
+	local tempo = appman[index].list[ #appman[index].list ]
+	static_void[index][#appman[index].list] = tempo
+	IMAGE_PORT_O:push( { x = #appman[index].list, y = index, path = tempo.path_img, resize = tempo.resize or false } )
+]]
+
+end
+
+function FillSystemApps(obj)
+
+	local uri = {}
+		uri["NPXS10000"] = "near:"
+		uri["NPXS10001"] = "pspy:"
+		uri["NPXS10002"] = "psns:browse?category=STORE-MSF73008-VITAGAMES"
+		uri["NPXS10003"] = "wbapp0:"
+		uri["NPXS10008"] = "pstc:"
+		uri["NPXS10009"] = "music:" 
+		uri["NPXS10010"] = "video:"
+		uri["NPXS10014"] = "psnmsg:"
+		uri["NPXS10015"] = "settings_dlg:"
+		uri["NPXS10072"] = "email:"
+		uri["NPXS10091"] = "scecalendar:"
+	if uri[obj.id] then obj.uri = uri[obj.id] end
+
+	obj.img = iconDef
+	obj.img:resize(120,120)
+	obj.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
+
+	obj.path_img = obj.path.."/sce_sys/icon0.png"
+	obj.path_pic = obj.path.."/sce_sys/livearea/contents/bg0.png"
+
+	appman.len += 1
+
+	local index = 6
+	table.insert(appman[index].list,obj)
+
+--[[
+	-- Push request of icon! :D
+	local tempo = appman[index].list[ #appman[index].list ]
+	static_void[index][#appman[index].list] = tempo
+	IMAGE_PORT_O:push( { x = #appman[index].list, y = index, path = tempo.path_img, resize = false } )
+]]
+
+end
+
+function SortTypeId(a,b)
+	return (a.type < b.type) or (a.type == b.type and a.id < b.id)
+end
+
+function SortTypeTitle(a,b)
+	return (a.type < b.type) or (a.type == b.type and a.title < b.title)
 end
 
 function Scanning()
@@ -173,27 +178,23 @@ function Scanning()
 
 	local sort_vita = tonumber(ini.read(__PATH_INI,"sort","sort","0"))
 	if sort_vita == 1 then
-		table.sort(list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+		table.sort(list,SortTypeTitle)
 	else
-		table.sort(list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+		table.sort(list,SortTypeId)
 	end
 
 	for i=1,#list do
-
 		if files.exists(list[i].path) then
 			if list[i].title then list[i].title = list[i].title:gsub("\n"," ") end
-			list[i].fav = false
-			for j=1,#apps do
-				if list[i].id == apps[j] then list[i].fav = true end
-			end
-
-			if __FAV == 1 then
-				if list[i].fav then fillappman(list[i]) end--Scan only Favs
-			else
-				fillappman(list[i])
-			end
+			fillappman(list[i])
 		end
+	end
 
+	list = game.list(__GAME_LIST_SYS)
+	table.sort(list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+	for i=1,#list do
+		if list[i].title then list[i].title = list[i].title:gsub("\n"," ") end
+		FillSystemApps(list[i])
 	end
 
 	local y,x = 1,1
@@ -203,7 +204,7 @@ function Scanning()
 			-- Push request of icon! :D
 			local obj = appman[y].list[x]
 			static_void[y][x] = obj
-			IMAGE_PORT_O:push( { x = x, y = y, fav = __FAV, path = obj.path_img, resize = obj.resize } )
+			IMAGE_PORT_O:push( { x = x, y = y, path = obj.path_img, resize = obj.resize } )
 			x += 1
 		end
 		y += 1

@@ -22,15 +22,14 @@ function theme.load()
 	-- Get the id of theme pack
 	__THEME = ini.read(__PATH_INI,"theme","id","default")
 	__BACKG = ini.read(__PATH_INI,"backg","img","")
-	__FNT = tonumber(ini.read(__PATH_INI,"font","type","2"))
 
 	local elements = {
 
 		{name="list"},
-		{name="icons",sprite=true, w=16,h=16},    -- 112x16
-		{name="buttons1",sprite=true, w=20,h=20}, -- 120*20
-		{name="buttons2",sprite=true, w=30,h=20}, -- 120*20
-		{name="wifi",sprite=true, w=22,h=22},     -- 132*22
+		{name="icons",		sprite=true, w=16,h=16},	-- 112x16
+		{name="buttons1",	sprite=true, w=20,h=20},	-- 120*20
+		{name="buttons2",	sprite=true, w=30,h=20},	-- 120*20
+		{name="wifi",		sprite=true, w=22,h=22},	-- 132*22
 
 		{name="psvita"},
 		{name="hbvita"},
@@ -40,8 +39,8 @@ function theme.load()
 
 		{name="icodef"},
 
-		{name="jump", sound=true},
-		{name="slide", sound=true},
+		{name="jump",	sound=true},
+		{name="slide",	sound=true},
 	}
 
 	local path_theme = __PATH_THEMES..__THEME.."/"
@@ -114,33 +113,45 @@ function theme.load()
 
 	parseTheme(path_theme.."theme.ini",theme.style)
 
-	fnt, __USERFNT = nil,false
-	if files.exists(string.format("%s%s",path_theme,"font.ttf")) then
-		fnt = font.load(string.format("%s%s",path_theme,"font.ttf"))
-	elseif files.exists(string.format("%s%s",path_theme,"font.pgf")) then
-		fnt = font.load(string.format("%s%s",path_theme,"font.pgf"))
-	elseif files.exists(string.format("%s%s",path_theme,"font.pvf")) then
-		fnt = font.load(string.format("%s%s",path_theme,"font.pvf"))
-	end
-
+	__USERFNT = false
+	fnt = font.load(string.format("%s%s",path_theme,"font.ttf")) or font.load(string.format("%s%s",path_theme,"font.pgf")) or font.load(string.format("%s%s",path_theme,"font.pvf"))
 	if fnt then	font.setdefault(fnt)
 		__USERFNT = true
-	else font.setdefault(__FNT) end
+	else font.setdefault(__FONT_TYPE_PVF) end
 
 	icons_mimes={ 1,pbp=2,prx=2,bin=2,suprx=2,skprx=2,dat=2,db=2,a=2,prs=2,pmf=2,at9=2,dds=2,tmp=2,html=2,gft=2,sfm=2,icv=2,cer=2,dic=2,pgf=2,
 					rsc=2,rco=2,res=2,dreg=2,ireg=2,pdb=2,mai=2,bin_bak=2,psp2dmp=2,rif=2,trp=2,self=2,mp4=2,edat=2,log=2,ptf=2,ctf=2,inf=2,
-					png=3,gif=3,jpg=3,bmp=3,
+					png=3,gif=3,jpg=3,jpeg=3,bmp=3,
 					mp3=4,s3m=4,wav=4,at3=4,ogg=4,
 					rar=5,zip=5,vpk=5,gz=5,
 					cso=6,iso=6,dax=6
 				}
 
-	isopened = { png = theme.style.IMAGECOLOR, jpg = theme.style.IMAGECOLOR, gif = theme.style.IMAGECOLOR, bmp = theme.style.IMAGECOLOR,
+	isopened = { png = theme.style.IMAGECOLOR, jpg = theme.style.IMAGECOLOR, jpeg = theme.style.IMAGECOLOR, gif = theme.style.IMAGECOLOR, bmp = theme.style.IMAGECOLOR,
 				 mp3 = theme.style.MUSICCOLOR, ogg = theme.style.MUSICCOLOR, wav = theme.style.MUSICCOLOR,
 				 iso = theme.style.BINCOLOR, pbp = theme.style.BINCOLOR, cso = theme.style.BINCOLOR, dax = theme.style.BINCOLOR, bin = theme.style.BINCOLOR, suprx = theme.style.BINCOLOR, skprx = theme.style.BINCOLOR,
 				 zip = theme.style.ARCHIVECOLOR, rar = theme.style.ARCHIVECOLOR, vpk = theme.style.ARCHIVECOLOR, gz = theme.style.ARCHIVECOLOR,
 				 sfo = theme.style.SFOCOLOR,
 			}
+
+	--Load Slides
+	categories = {
+		{ img = theme.data["psvita"] },	--cat 1
+		{ img = theme.data["hbvita"] },	--cat 2
+		{ img = theme.data["psm"] },	--cat 3
+		{ img = theme.data["retro"]},	--cat 4
+		{ img = theme.data["adrbb"]},	--cat 5
+		{ img = theme.data["system"] }, --cat 6
+	}
+
+	--Asignamos limites y las img para nuestras categorias
+	for i=1,#appman do
+		appman[i].slide.img = categories[i].img
+		if appman[i].slide.img then
+			appman[i].slide.w = appman[i].slide.img:getw()
+		end
+	end
+
 end
 
 function reload_theme()
@@ -165,22 +176,6 @@ function reload_theme()
 
 	theme.load()
 
-	--RE-Load Slides
-	categories = {
-		{ img = theme.data["psvita"] },	--cat 1
-		{ img = theme.data["hbvita"] },	--cat 2
-		{ img = theme.data["psm"] },	--cat 3
-		{ img = theme.data["retro"]},	--cat 4
-		{ img = theme.data["adrbb"]},	--cat 5
-	}
-
-	--Asignamos limites y las img para nuestras categorias
-	for i=1,#appman do
-		appman[i].slide.img = categories[i].img
-		if appman[i].slide.img then
-			appman[i].slide.w = appman[i].slide.img:getw()
-		end
-	end
 end
 
 -- Thread Theme Vars
@@ -256,7 +251,7 @@ function theme.manager()
 		if buttons.up or buttons.analogly < -60 then scr[sect]:up() end
 		if buttons.down or buttons.analogly > 60 then scr[sect]:down() end
 
-		if buttons[accept] then
+		if buttons.accept then
 			if sect == 1 then
 				if not list[sect][scr[sect].sel].ext and list[sect][scr[sect].sel].id != __THEME then
 					__THEME = list[sect][scr[sect].sel].id
@@ -317,7 +312,7 @@ function theme.manager()
 			end
 		end
 
-		if buttons[cancel] then
+		if buttons.cancel then
 			local vbuff = screen.toimage()
 			if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 			if sect == 1 then

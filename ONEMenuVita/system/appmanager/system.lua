@@ -9,184 +9,232 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
-uri = {}
-uri["NPXS10000"] = "near:"
-uri["NPXS10001"] = "pspy:"
-uri["NPXS10002"] = "psns:browse?category=STORE-MSF73008-VITAGAMES"--"psns:browse?category="
-uri["NPXS10003"] = "wbapp0:"
---uri["NPXS10004"] = "camera:"
---uri["NPXS10006"] = "pspr:"			--friends
---uri["NPXS10007"] = ""					--welcome park
-uri["NPXS10008"] = "pstc:"
-uri["NPXS10009"] = "music:" 
-uri["NPXS10010"] = "video:"
---uri["NPXS10012"] = ""					--uso distancia PS3
---uri["NPXS10013"] = ""					--enlace ps4
-uri["NPXS10014"] = "psnmsg:"
-uri["NPXS10015"] = "settings_dlg:"
---uri["NPXS10026"] = ""					--CMA
-uri["NPXS10072"] = "email:"
-uri["NPXS10091"] = "scecalendar:"
---uri["NPXS10094"] = ""					--Parental Controls
+local pic1_callback = function ()
 
-system = { data = {}, len = 0, sort = 0 }
+	if __PIC1 == 1 then
+		__PIC1,showpic = 0,STRINGS_APP_NO
+	else
+		__PIC1,showpic = 1,STRINGS_APP_YES
+	end
 
--- Timer and Oldstate to click actions.
-local crono_sys, show_sys = timer.new(), false
-local crono2, clic = timer.new(), false
-
-function restart_crono_sys()
-	crono_sys:reset()
-	crono_sys:start()
-	show_sys,pic1_sys = false,nil
+	write_config()
+	os.delay(150)
+	 SubOptions()
 end
 
-function system.refresh()
+local update_callback = function ()
 
-	if system.len == 0 then
+	if __UPDATE == 1 then 
+		_update = STRINGS_APP_NO
+		__UPDATE = 0
+	else
+		_update = STRINGS_APP_YES
+		__UPDATE = 1
+	end
 
-		system.data = game.list(__GAME_LIST_SYS)
-		system.sort = tonumber(ini.read(__PATH_INI,"sort","sys","1"))
-		if system.sort == 1 then
-			table.sort(system.data, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-		else
-			table.sort(system.data, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+	write_config()
+	os.delay(150)
+
+	 SubOptions()
+end
+
+local slides_callback = function ()
+
+	if __SLIDES == 100 then
+		__SLIDES = 415
+		var = STRINGS_APP_SLIDE_ORIGINAL
+	else
+		__SLIDES = 100
+		var = STRINGS_APP_SLIDE_PS4
+	end
+
+	write_config()
+	os.delay(150)
+
+	 SubOptions()
+end
+
+local themesONEMenu_callback = function ()
+
+	local vbuff = screen.toimage()
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+		theme.manager()
+
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+end
+
+function Search_ReFolders(path,mount)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait(path)
+	os.delay(1250)
+
+	local size = 0
+	local tmp, tb = files.listdirs(path), {}
+	if tmp and #tmp > 0 then
+		for i=1, #tmp do
+			if tmp[i].directory then
+				if not game.exists(tmp[i].name) then
+
+					local flg = false
+					if not files.exists(mount.."app/"..tmp[i].name) then
+						flg = true
+					end
+				
+					if flg then
+						local _size = files.size(tmp[i].path) or 0
+						size += _size
+						if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+							message_wait(path.."\n"..tmp[i].name)
+						os.delay(750)
+						table.insert(tb, { path = tmp[i].path, name = tmp[i].name, size = _size })
+					end
+
+				end--not game.exists
+			end
 		end
-		system.len = #system.data
+	end
 
-		for i=1, system.len do
-			if uri[system.data[i].id] then system.data[i].uri = uri[system.data[i].id] end
-			if system.data[i].title	then system.data[i].title = system.data[i].title:gsub("\n"," ") end
+	--Delete?
+	if #tb > 0 then
+		if os.message(STRINGS_APP_FOUND_REFOLDERS.." : "..#tb.." "..STRINGS_APP_REFOLDERS_GAME.." "..path.."\n"..STRINGS_CALLBACKS_SIZE_ALL..files.sizeformat(size or 0).."\n"..STRINGS_APP_REFOLDERS_DELETE,1) == 1 then
+			for i=1,#tb do
+				files.delete(tb[i].path)
+			end
 		end
 	end
 
 end
 
---id, type, version, dev, path, title
-function system.run()
+local Re_Folders_Cleanup_callback = function ()
 
-	system.refresh()
+	local vbuff = screen.toimage()
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-	local scroll = newScroll(system.data,15)
+	local path_ReAddcont = { 
+		{ path="ux0:ReAddcont", mount="ux0:"},
+		{ path="uma0:ReAddcont", mount="uma0:"},
+		{ path="imc0:ReAddcont", mount="imc0:"},
+		{ path="xmc0:ReAddcont", mount="xmc0:"},
+	}
+	local path_RePatch = {
+		{ path="ux0:RePatch", mount="ux0:"},
+		{ path="uma0:RePatch", mount="uma0:"},
+		{ path="imc0:RePatch", mount="imc0:"},
+		{ path="xmc0:RePatch", mount="xmc0:"},
+	}
 
-	buttons.interval(15,4)
-	local preview = nil
-	local themesimg = image.load(__PATH_THEMES..__THEME.."/themesmanager.png") or image.load("system/theme/default/themesmanager.png")
+--ReAddcont
+	for i=1, #path_ReAddcont do
+		Search_ReFolders(path_ReAddcont[i].path, path_ReAddcont[i].mount)
+	end
+
+--Repatch
+	for i=1, #path_RePatch do
+		Search_ReFolders(path_RePatch[i].path, path_RePatch[i].mount)
+	end
+
+--Eliminar carpetas vacias de picture y video
+	local tmp = files.listdirs("ux0:picture/SCREENSHOT")
+	if tmp and #tmp > 0 then
+		table.sort(tmp, function (a,b) return a.name<b.name end)
+		for i=1, #tmp do
+			local tmp2 = files.list("ux0:picture/SCREENSHOT/"..tmp[i].name)
+
+			if tmp2 and #tmp2> 0 then
+			else
+				files.delete("ux0:picture/SCREENSHOT/"..tmp[i].name)
+			end
+		end
+	end
+
+	local tmp = files.listdirs("ux0:video")
+	if tmp and #tmp > 0 then
+		table.sort(tmp, function (a,b) return a.name<b.name end)
+		for i=1, #tmp do
+			local tmp2 = files.list("ux0:video/"..tmp[i].name)
+
+			if tmp2 and #tmp2> 0 then
+			else
+				files.delete("ux0:video/"..tmp[i].name)
+			end
+		end
+	end
+
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+end
+
+local restart_callback = function ()
+    os.delay(150)
+    os.restart()
+end
+
+local reboot_callback = function ()
+    os.delay(1000)
+    power.restart()
+end
+
+local shutdown_callback = function ()
+    os.delay(1000)
+    power.shutdown()
+end
+
+function SubOptions()
+	if __PIC1 == 1 then showpic = STRINGS_APP_YES else showpic = STRINGS_APP_NO end
+	if __SLIDES == 100 then var = STRINGS_APP_SLIDE_ORIGINAL else var = STRINGS_APP_SLIDE_PS4 end
+
+    Sub_Options = { -- Handle Option Text and Option Function
+		{ text = STRINGS_APP_SHOW_PIC..showpic, 		funct = pic1_callback,		pad = true },
+		{ text = STRINGS_APP_SLIDES..var,       		funct = slides_callback,	pad = true },
+
+		{ text = STRINGS_REFOLDERS_CLEANUP,				funct = Re_Folders_Cleanup_callback },
+
+		{ text = STRINGS_SUBMENU_THEMES,            	funct = themesONEMenu_callback },
+
+		{ text = STRINGS_ENABLE_UPDATE.._update,   		funct = update_callback,    pad = true },
+		{ text = STRINGS_SUBMENU_RESTART,         		funct = restart_callback },
+        { text = STRINGS_SUBMENU_RESET,             	funct = reboot_callback },
+        { text = STRINGS_SUBMENU_POWEROFF,              funct = shutdown_callback },
+    }
+
+end
+
+function SubSystem()
+
+	Sub_Options = {} -- Handle Option Text and Option Function
+    SubOptions()
+	local scrollsys = newScroll(Sub_Options, #Sub_Options)
+
 	while true do
 		buttons.read()
-		touch.read()
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-		if themesimg then themesimg:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-		
-		if pic1_sys then
-			pic1_sys:blit(0,55,125)
+		screen.print(480,15,"System Settings",1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+
+		local y = 70
+		for i=scrollsys.ini,scrollsys.lim do
+			if i == scrollsys.sel then draw.fillrect(10,y-2,930,23,theme.style.SELCOLOR) end
+
+			screen.print(480,y, Sub_Options[i].text,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+
+			y+=26
 		end
 
-		screen.print(480,15,STRINGS_APP_LIVEAREA,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
-
-		if system.len > 0 then
-
-			local y = 80
-			for i=scroll.ini,scroll.lim do
-				if i == scroll.sel then
-					draw.fillrect(10,y-2,675,23,theme.style.SELCOLOR)
-					if not preview then
-						preview = image.load(system.data[i].path.."/sce_sys/icon0.png")
-						if preview then preview:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR) end
-					end
-					if not pic1_sys and show_sys then
-						pic1_sys = image.load(system.data[i].path.."/sce_sys/livearea/contents/bg0.png")
-						if pic1_sys then
-							pic1_sys:resize(692,446)
-							pic1_sys:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
-						end
-					end
-				end
-				screen.print(15,y, system.data[i].title,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-				y+=26
-			end
-
-			if preview then
-				screen.clip(825,150, preview:geth()/2)--272
-					preview:center()
-					preview:blit(825,150)
-				screen.clip()
-			end
-
-			screen.print(10,520,system.data[scroll.sel].id,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
-		else
-			screen.print(480,15,STRINGS_APP_NOT_LIVEAREA,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
-
-		end
 		screen.flip()
-		
+
 		--Controls
-		if system.len > 0 then
+		if buttons.up or buttons.analogly < -60 then scrollsys:up() end
+		if buttons.down or buttons.analogly > 60 then scrollsys:down() end
 
-			if buttons.up or buttons.analogly<-60 then
-				if scroll:up() then
-					preview = nil
-					restart_crono_sys()
-				end
-			end
-
-			if buttons.down or buttons.analogly>60 then
-				if scroll:down() then
-					preview = nil
-					restart_crono_sys()
-				end
-			end
-
-			if buttons[accept] then
-				if not system.data[scroll.sel].uri then game.open(system.data[scroll.sel].id) else os.uri(system.data[scroll.sel].uri) end
-			end
-			if isTouched(770,90,128,128) and touch.front[1].released then
-				if clic then
-					clic = false
-					if crono2:time() <= 300 then -- Double click and in time to Go.
-						-- Your action here.
-						if not system.data[scroll.sel].uri then game.open(system.data[scroll.sel].id) else os.uri(system.data[scroll.sel].uri) end
-					end
-				else
-					-- Your action here.
-					clic = true
-					crono2:reset()
-					crono2:start()
-				end
-			end
-
-			if crono2:time() > 300 then -- First click, but long time to double click...
-				clic = false
-			end
-
-			if crono_sys:time() > 550 then
-				show_sys = true
-			end
-		end
-
-		if buttons.select then
-			if system.sort == 1 then
-				system.sort = 0
-				table.sort(system.data, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-			else
-				system.sort = 1
-				table.sort(system.data, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-			end
-			write_config()
-			pic1_sys,preview = nil,nil
-			os.delay(150)
-			restart_cronopic()
-		end
-
-		if buttons.start or buttons[cancel] then
-			restart_cronopic()
-			pic1_sys,preview = nil,nil
+		if buttons.cancel or buttons.start then
 			os.delay(80)
-			buttons.interval(10,10)
 			break
 		end
 
-		shortcuts()
+		if buttons.accept or ( (buttons.left or buttons.right) and Sub_Options[scrollsys.sel].pad ) then Sub_Options[scrollsys.sel].funct() end
 
-	end
+	end--while
+
 end

@@ -50,7 +50,7 @@ function fillapps(list, obj)
 			]]
 
 			table.insert(list, { id=info.TITLE_ID, type=info.CATEGORY, version=info.APP_VER or "00.00", title=info.TITLE or info.TITLE_ID,
-								 path=obj.path, index = index, resize = resize })
+								 path=obj.path, index = index, resize = resize, save = info.INSTALL_DIR_SAVEDATA or info.TITLE_ID })
 		end
 	end
 
@@ -107,14 +107,10 @@ function refresh_init(img)
 				local icon0 = image.load("ur0:appmeta/"..list[i].id.."/icon0.png")
 				if icon0 then
 					list[i].img = icon0
-					if __FAV == 1 then
-						list[i].img:resize(120,120)
+					if list[i].resize then
+						list[i].img:resize(120,100)
 					else
-						if list[i].resize then
-							list[i].img:resize(120,100)
-						else
-							list[i].img:resize(120,120)
-						end
+						list[i].img:resize(120,120)
 					end
 					list[i].img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 				else
@@ -132,32 +128,27 @@ function refresh_init(img)
 				end
 
 				if search == 0 then
-					if __FAV == 0 then
-						list[i].fav = false
-						table.insert(appman[list[i].index].list, list[i])
+					table.insert(appman[list[i].index].list, list[i])
+					table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.dev)<string.lower(b.dev) end)
 
-						table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.dev)<string.lower(b.dev) end)
-
-						if list[i].index == 1 and appman[list[i].index].sort == 3 then
-							table.sort(appman[list[i].index].list, tableSortReg)
-						else
-							if appman[list[i].index].sort == 0 then
-								if appman[list[i].index].asc == 1 then
-									table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-								else
-									table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.id)>string.lower(b.id) end)
-								end
+					if list[i].index == 1 and appman[list[i].index].sort == 3 then
+						table.sort(appman[list[i].index].list, tableSortReg)
+					else
+						if appman[list[i].index].sort == 0 then
+							if appman[list[i].index].asc == 1 then
+								table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
 							else
-								if appman[list[i].index].asc == 1 then
-									table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-								else
-									table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.title)>string.lower(b.title) end)
-								end
+								table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.id)>string.lower(b.id) end)
+							end
+						else
+							if appman[list[i].index].asc == 1 then
+								table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+							else
+								table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.title)>string.lower(b.title) end)
 							end
 						end
-
-						appman[list[i].index].scroll:set(appman[list[i].index].list,limit)
 					end
+					appman[list[i].index].scroll:set(appman[list[i].index].list,limit)
 				else
 					--Update
 					appman[list[i].index].list[search].dev = "ux0:"
@@ -165,14 +156,19 @@ function refresh_init(img)
 					appman[list[i].index].list[search].type = list[i].type
 					appman[list[i].index].list[search].version = list[i].version
 					appman[list[i].index].list[search].title = list[i].title
+					appman[list[i].index].list[search].save = list[i].save
 				end
 
 				--Restore Save from "ux0:data/ONEMenu/Saves
-				if files.exists("ux0:data/ONEMenu/SAVES/"..list[i].id) then
-					local info = files.info("ux0:data/ONEMenu/SAVES/"..list[i].id)
-					if os.message(STRINGS_APP_RESTORE_SAVE.."\n\n"..info.mtime or "", 1) == 1 then
-						files.copy("ux0:data/ONEMenu/SAVES/"..list[i].id, "ux0:user/00/savedata/")
-					end
+				if files.exists("ux0:data/ONEMenu/SAVES/"..list[i].save) then
+					local info = files.info("ux0:data/ONEMenu/SAVES/"..list[i].save)
+					if os.message(STRINGS_APP_RESTORE_SAVE.."\n"..info.mtime or "", 1) == 1 then
+						files.copy("ux0:data/ONEMenu/SAVES/"..list[i].save, "ux0:user/00/savedata/")
+							game.umount()
+								game.mount("ux0:user/00/savedata/"..list[i].save)
+								personalize_savedata("ux0:user/00/savedata/"..list[i].save.."/sce_sys/param.sfo")
+							game.umount()
+						end
 				end
 				appman.len+=1
 

@@ -25,10 +25,10 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 		if accept_x == 1 then Xa,Oa = "X: ","O: " end
 		while true do
 			buttons.read()
-			if buttons[accept] then
+			if buttons.accept then
 				buttons.read() -- Flush
 				return 10 -- Ok code
-			elseif buttons[cancel] then
+			elseif buttons.cancel then
 				buttons.read() -- Flush
 				return 0 -- Any other code 
 			end
@@ -87,7 +87,7 @@ function onExtractFiles(size,written,file,totalsize,totalwritten)
 	screen.flip()
 	
 	buttons.read()
-	if buttons[cancel] then return 0 end
+	if buttons.cancel then return 0 end
 	return 1
 end
 
@@ -181,7 +181,7 @@ function onNetGetFile(size,written,speed)
 	screen.flip()
 
 	buttons.read()
-	if buttons[cancel] then return 0 end --Cancel or Abort
+	if buttons.cancel then return 0 end --Cancel or Abort
 	return 1
 end
 
