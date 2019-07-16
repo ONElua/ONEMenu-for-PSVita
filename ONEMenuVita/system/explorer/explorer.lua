@@ -775,7 +775,7 @@ parseMF_callback = function ()
 		if line:find('gbtnSecondary" href=') then
 			local en=line:find('gbtnSecondary" href=')  --Guardo dónde termina ese patrón
 			local en2,urlf
-			en=line:find("'",en) --ara busco la comilla sencilla, empezando por donde terminaba el patron anterior
+			en=line:find("'",en) --busco la comilla sencilla, empezando por donde terminaba el patron anterior
 			en2=line:find("'",en+1) -- busco la siguiente comilla
 
 			urlf=line:sub( en+1, en2-1) --y recorto la URL

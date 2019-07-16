@@ -220,7 +220,7 @@ STRINGS_EXPORT_MP4 =			"MP4 file(s) : "
 STRINGS_EXPORT_IMG =			"IMG file(s) : "
 STRINGS_EXPORT_OPEN =			"\nExport completed, please launch Music/Photos/Videos\napplication to read your files !"
 STRINGS_EXPORT_FAIL =			"Error"
-STRINGS_EXPORT_REBOOT =			"Restart PSvita is necessary"
+STRINGS_EXPORT_REBOOT =			"It is necesary to restart your PS vita"
 
 ------------	Refresh LiveArea	-------------------------------------------------------------------------
 STRINGS_LIVEAREA_NOTINSTALLED =	"\n\nGame not installed: "

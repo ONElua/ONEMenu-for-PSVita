@@ -272,8 +272,7 @@ local shrink_callback = function ()
 
 	if cat == 1 and appman[cat].list[focus_index].dev != "gro0" then--Only Vita Games in ux0:app
 
-		local vbuff = screen.toimage()
-		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 		local list_patch, list_app = {},{}
 
@@ -293,7 +292,7 @@ local shrink_callback = function ()
 			end
 		end
 		message_wait("ux0:Patch")
-		os.delay(15)
+		os.delay(25)
 
 		getlist("ux0:patch/"..appman[cat].list[focus_index].id, list_patch, "ux0:patch")
 		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, "ux0:patch")
@@ -320,18 +319,32 @@ local shrink_callback = function ()
 				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
 			end
 		else
-			os.message(STRINGS_APP_SHRINK_NO_FILES)
+			os.message(STRINGS_APP_SHRINK_NO_FILES.."\nux0:Patch")
 		end
 		os.delay(15)
 
-----------------repatch
-		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-		message_wait("ux0:rePatch")
+----------------Repatch
+--ux0, uma0, imc0, grw0, xmc0
+
+	local Repatch_Find = nil
+	local path_RePatch = { "ux0:RePatch", "uma0:RePatch", "imc0:RePatch", "xmc0:RePatch" }
+
+	for i=1,#path_RePatch do
+		if files.exists(path_RePatch[i].."/"..appman[cat].list[focus_index].id) then
+			Repatch_Find = path_RePatch[i]
+			break
+		end
+	end
+
+	if Repatch_Find then
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait(Repatch_Find)
 		os.delay(15)
 
 		list_patch, list_app = {},{}
-		getlist("ux0:repatch/"..appman[cat].list[focus_index].id, list_patch, "ux0:repatch")
-		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, "ux0:repatch")
+
+		getlist(Repatch_Find.."/"..appman[cat].list[focus_index].id, list_patch, Repatch_Find)
+		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, Repatch_Find)
 
 		local size_del,list_del = 0,{}
 		if #list_patch > 0 and #list_app > 0 then
@@ -346,7 +359,7 @@ local shrink_callback = function ()
 		end
 
 		if #list_del > 0 then
-			if os.message(STRINGS_APP_SHRINK.."\n                        ux0:rePatch\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+			if os.message(STRINGS_APP_SHRINK.."\n                        "..Repatch_Find.."\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -355,13 +368,28 @@ local shrink_callback = function ()
 				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
 			end
 		else
-			os.message(STRINGS_APP_SHRINK_NO_FILES)
+			os.message(STRINGS_APP_SHRINK_NO_FILES.."\n"..Repatch_Find)
 		end
 		os.delay(15)
 
-----------------readdcont
-		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-		message_wait("ux0:readdcont")
+	end
+
+----------------ReAddcont
+
+	local ReAddcont_Find = nil
+	local path_ReAddcont = { "ux0:ReAddcont", "uma0:ReAddcont", "imc0:ReAddcont", "xmc0:ReAddcont" }
+
+	for i=1,#path_ReAddcont do
+		if files.exists(path_ReAddcont[i].."/"..appman[cat].list[focus_index].id) then
+			ReAddcont_Find = path_ReAddcont[i]
+			break
+		end
+	end
+
+	if ReAddcont_Find then
+
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait(ReAddcont_Find)
 		os.delay(15)
 
 		function getlistaddcont(_path, _list, substring)
@@ -381,8 +409,8 @@ local shrink_callback = function ()
 		end
 
 		list_patch, list_app = {},{}
-		getlistaddcont("ux0:readdcont/"..appman[cat].list[focus_index].id, list_patch, "ux0:readdcont")
-		getlistaddcont("ux0:addcont/"..appman[cat].list[focus_index].id, list_app, "ux0:readdcont")
+		getlistaddcont(ReAddcont_Find.."/"..appman[cat].list[focus_index].id, list_patch, ReAddcont_Find)
+		getlistaddcont("ux0:addcont/"..appman[cat].list[focus_index].id, list_app, ReAddcont_Find)
 
 		local size_del,list_del = 0,{}
 		if #list_patch > 0 and #list_app > 0 then
@@ -397,21 +425,23 @@ local shrink_callback = function ()
 		end
 
 		if #list_del > 0 then
-			if os.message(STRINGS_APP_SHRINK.."\n                        ux0:readdcont\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+			if os.message(STRINGS_APP_SHRINK.."\n                        "..ReAddcont_Find.."\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
 				--update addcont&readccont
-				appman[cat].list[focus_index].sizef_addcont = files.sizeformat(files.size("ux0:addcont/"..appman[cat].list[focus_index].id or 0))
-				appman[cat].list[focus_index].sizef_readdcont = files.sizeformat(files.size("ux0:readdcont/"..appman[cat].list[focus_index].id or 0))
+				appman[cat].list[focus_index].sizef_addcont = files.sizeformat(files.size(ReAddcont_Find.."/"..appman[cat].list[focus_index].id or 0))
+				appman[cat].list[focus_index].sizef_readdcont = files.sizeformat(files.size(ReAddcont_Find.."/"..appman[cat].list[focus_index].id or 0))
 			end
 		else
-			os.message(STRINGS_APP_SHRINK_NO_FILES)
+			os.message(STRINGS_APP_SHRINK_NO_FILES.."\n"..ReAddcont_Find)
 		end
 		os.delay(15)
 
+	end
+
 ----------------sce_sys/manual/
-		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 		message_wait("sce_sys/manual/")
 		os.delay(15)
 
@@ -456,14 +486,12 @@ local shrink_callback = function ()
 
 		infodevices()
 		os.delay(15)
-		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 	end
 end
 
 local switch_callback = function ()
-
-	if appman[cat].list[focus_index].type == "mb" or appman[cat].list[focus_index].type == "EG" or appman[cat].list[focus_index].type == "ME" then return end
 
 	--__GAME_MOVE_UX02UR0=1
 	--__GAME_MOVE_UR02UX0=2
@@ -670,58 +698,77 @@ local openfolder_callback = function ()
 	local options = { }
 
 	if cat == 1 or cat == 2 or cat == 5 then
-		table.insert(options, { text = "app", exit=false })
+		table.insert(options, { text = "App", path = appman[cat].list[focus_index].dev..":/app/"..appman[cat].list[focus_index].id, exit=false })
 
-		if files.exists(appman[cat].list[focus_index].dev..":/patch/"..appman[cat].list[focus_index].id) then
-			table.insert(options, { text = "patch", exit=false })
+		if cat == 1 then
+			--Patch
+			if files.exists(appman[cat].list[focus_index].dev..":/patch/"..appman[cat].list[focus_index].id) then
+				table.insert(options, { text = "Patch", path = appman[cat].list[focus_index].dev..":/patch/"..appman[cat].list[focus_index].id, exit = false })
+			end
+
+			--Repatch
+			local Repatch_Find = nil
+			local path_RePatch = { "ux0:/RePatch", "uma0:/RePatch", "imc0:/RePatch", "xmc0:/RePatch" }
+
+			for i=1,#path_RePatch do
+				if files.exists(path_RePatch[i].."/"..appman[cat].list[focus_index].id) then
+					Repatch_Find = path_RePatch[i]
+					break
+				end
+			end
+			if Repatch_Find and files.exists(Repatch_Find.."/"..appman[cat].list[focus_index].id) then
+				table.insert(options, { text = "RePatch", path = Repatch_Find.."/"..appman[cat].list[focus_index].id, exit = false })
+			end
 		end
-		if files.exists(appman[cat].list[focus_index].dev..":/repatch/"..appman[cat].list[focus_index].id) then
-			table.insert(options, { text = "repatch", exit=false })
-		end
-		table.insert(options, { text = STRINGS_SUBMENU_CANCEL, exit=true })
+
 	else
-		table.insert(options, { text = appman[cat].list[focus_index].path, exit=false })
+
+		if cat == 3 then
+			table.insert(options, { text = "PSM", path = appman[cat].list[focus_index].dev..":/psm/"..appman[cat].list[focus_index].id, exit = false })
+		elseif cat == 4 then
+			table.insert(options, { text = "PSPEMU", path = appman[cat].list[focus_index].dev..":/pspemu/psp/game/"..appman[cat].list[focus_index].id, exit = false })
+		end
+
 	end
+	table.insert(options, { text = STRINGS_SUBMENU_CANCEL, exit = true })
 
 	local scroll_op,cccolor = newScroll(options, #options),""
 
-	if #options > 2 then
-		local vbuff = screen.toimage()
-		while true do
-			buttons.read()
+	local vbuff = screen.toimage()
+	while true do
+		buttons.read()
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+		draw.line(260,47,260,submenu_ctx.y + 145, color.green)
+		draw.line(260,submenu_ctx.y + 145,360,submenu_ctx.y + 145, color.green)
+
+		local y = 80
+		for i=scroll_op.ini,scroll_op.lim do
+			if i == scroll_op.sel then cccolor = color.green else cccolor = color.white end
+			screen.print(350,y, options[i].text,1.0,cccolor,theme.style.TXTBKGCOLOR,__ARIGHT)
+			y+=25
+		end
+
+		screen.flip()
+
+		if buttons.up then scroll_op:up() elseif buttons.down then scroll_op:down() end
+
+		if buttons.cancel then
+			os.delay(15)
 			if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+			return
+		end
 
-			draw.line(260,47,260,submenu_ctx.y + 145, color.green)
-			draw.line(260,submenu_ctx.y + 145,360,submenu_ctx.y + 145, color.green)
-
-			local y = 80
-			for i=scroll_op.ini,scroll_op.lim do
-				if i == scroll_op.sel then cccolor = color.green else cccolor = color.white end
-				screen.print(350,y, options[i].text,1.0,cccolor,theme.style.TXTBKGCOLOR,__ARIGHT)
-				y+=25
-			end
-
-			screen.flip()
-
-			if buttons.up then scroll_op:up() elseif buttons.down then scroll_op:down() end
-
-			if buttons.cancel then
+		if buttons.accept then
+			if options[scroll_op.sel].exit then
 				os.delay(15)
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 				return
 			end
+			break
+		end
 
-			if buttons.accept then
-				if options[scroll_op.sel].exit then
-					os.delay(15)
-					if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-					return
-				end
-				break
-			end
-
-		end--while
-	end
+	end--while
 
 	for i=1,#categories - 1 do 
 		if #appman[i].list > 0 then
@@ -738,15 +785,7 @@ local openfolder_callback = function ()
 		end
 	end
 
-	if cat == 1 or cat == 2 or cat == 5 then
-		if files.exists(appman[cat].list[focus_index].dev..":/"..options[scroll_op.sel].text.."/"..appman[cat].list[focus_index].id) then
-			show_explorer_list(appman[cat].list[focus_index].dev..":/"..options[scroll_op.sel].text.."/"..appman[cat].list[focus_index].id)
-		end
-	else
-		if files.exists(options[scroll_op.sel].text) then
-			show_explorer_list(options[scroll_op.sel].text)
-		end
-	end
+	show_explorer_list(options[scroll_op.sel].path)
 
 end
 
@@ -940,10 +979,32 @@ function submenu_ctx.draw()
 	if submenu_ctx.x > -submenu_ctx.w then
 
 		if not appman[cat].list[focus_index].pullsize then
+
+			local Repatch_Find = ""
+			local path_RePatch = { "ux0:RePatch", "uma0:RePatch", "imc0:RePatch", "xmc0:RePatch" }
+
+			for i=1,#path_RePatch do
+				if files.exists(path_RePatch[i].."/"..appman[cat].list[focus_index].id) then
+					Repatch_Find = path_RePatch[i]
+					break
+				end
+			end
+			local ReAddcont_Find = ""
+			local path_ReAddcont = { "ux0:ReAddcont", "uma0:ReAddcont", "imc0:ReAddcont", "xmc0:ReAddcont" }
+
+			for i=1,#path_ReAddcont do
+				if files.exists(path_ReAddcont[i].."/"..appman[cat].list[focus_index].id) then
+					ReAddcont_Find = path_ReAddcont[i]
+					break
+				end
+			end
+
 			appman[cat].list[focus_index].pullsize = true
-			SIZES_PORT_O:push({cat = cat, focus = focus_index, path = appman[cat].list[focus_index].path, id = appman[cat].list[focus_index].id }) -- Enviamos peticion
+			SIZES_PORT_O:push(	{ cat = cat, focus = focus_index, path = appman[cat].list[focus_index].path, id = appman[cat].list[focus_index].id,
+								  repatch_path = Repatch_Find, readccont_path = ReAddcont_Find }) -- Enviamos peticion
 		end
 
+		
 		if SIZES_PORT_I:available() > 0 then -- De tal manera que si se quedo un previo, lo pueda setear..
 			local entry = SIZES_PORT_I:pop() -- Recibimos peticiones..
 			if appman[entry.cat].list[entry.focus] and appman[entry.cat].list[entry.focus].path == entry.path then -- Por si lo borran o cambio etc..

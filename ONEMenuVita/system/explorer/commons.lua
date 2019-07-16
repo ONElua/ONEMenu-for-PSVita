@@ -693,7 +693,7 @@ function visortxt(handle, flag_edit)
     buttons.analogtodpad(60)
     buttons.interval(16,5)
 	
---	if __USERFNT then font.setdefault(fnt) else font.setdefault(__FONT_TYPE_PGF) end
+	if __USERFNT then font.setdefault(fnt) else font.setdefault(__FONT_TYPE_PGF) end
     while true do
         buttons.read()
         if editorimg then editorimg:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
@@ -816,7 +816,7 @@ function visortxt(handle, flag_edit)
 
         if buttons.cancel then
 
-			--if __USERFNT then font.setdefault(fnt) else font.setdefault(__FONT_TYPE_PVF) end
+			if __USERFNT then font.setdefault(fnt) else font.setdefault(__FONT_TYPE_PVF) end
 
             local _flag = false
             if textHadChange then
@@ -829,16 +829,8 @@ function visortxt(handle, flag_edit)
                             if __EDITB then
                                 if v.field == "STITLE" then game.setsfo(handle.path, "STITLE_"..langs[os.language()], string.sub(__STITLE,1,51))
                                 elseif v.field == "TITLE" then game.setsfo(handle.path, "TITLE_"..langs[os.language()], string.sub(__TITLE,1,127)) end
-                                game.setsfo(handle.path, k, tostring(v.string))
-                            --[[
-                            else
-                                if v.number then
-                                    game.setsfo(handle.path, k, v.number)
-                                elseif v.string then
-                                    game.setsfo(handle.path, k, tostring(v.string))
-                                end
-                            ]]
-                            end
+								game.setsfo(handle.path, k, tostring(v.string))
+							end
 
                         end
                         _flag = true
@@ -890,43 +882,10 @@ function visortxt(handle, flag_edit)
                                 texteditorInfo.list[texteditorInfo.focus] = string.format("%s = %s", field, newStr)
                                 changes[field].string = newStr
                             end
-                        end--newStr
-                    --[[
-                    else
+						end--newStr
+					end--__EDITB
 
-                        if name_field == "APP_VER" or name_field == "VERSION" or
-                            name_field == "PSP2_DISP_VER" or name_field == "TITLE_ID" then os.message(STRINGS_EDIT_NOT_IMPLEMENTED)--Nothing.. ITs bug :(
-                        else
-                            local newStr = nil
-                            if numeric then
-                                if value then value=tonumber(value:gsub("0x", ""),16) end            --Hex-Dec
-                                newStr = osk.init(field, value, 10, __OSK_TYPE_NUMBER, __OSK_MODE_TEXT)
-                            else
-                                newStr = osk.init(field, value, 512, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
-                            end
-
-                            if newStr then
-                                if value != newStr then
-                                    textHadChange = true
-                                    changes[texteditorInfo.focus] = {}
-                                    if not changes[field] then changes[field] = {} end
-
-                                    --Update line & set changes to late save!
-                                    if numeric then
-                                        texteditorInfo.list[texteditorInfo.focus] = string.format("%s = 0x%X", field, tonumber(newStr))
-                                        changes[field].number = tonumber(newStr)
-                                    else
-                                        changes[field].string = ""
-                                        texteditorInfo.list[texteditorInfo.focus] = string.format("%s = %s", field, newStr)
-                                        changes[field].string = newStr
-                                    end
-                                end
-                            end
-                        end
-                    --]]
-                    end--__EDITB
-
-                end--field
+				end--field
 
             else
                 local editStr = texteditorInfo.list[texteditorInfo.focus]

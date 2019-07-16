@@ -15,13 +15,13 @@ SIZES_PORT_I = channel.new("SIZES_PORT_O")
 while true do
 	if SIZES_PORT_I:available() > 0 then
 		local entry = SIZES_PORT_I:pop()
-		--( {cat = cat, focus = focus_index, path = appman[cat].list[focus_index].path, id = appman[cat].list[focus_index].id } )
+		--({cat = cat, focus = focus_index, path = appman[cat].list[focus_index].path, id = appman[cat].list[focus_index].id, repatch_path = Repatch_Find, readccont_path = ReAddcont_Find })
 		entry.size, entry.folders, entry.filess = files.size(entry.path)
 		entry.sizef = files.sizeformat(entry.size or 0)
 		entry.sizef_patch = files.sizeformat(files.size("ux0:patch/"..entry.id or 0))
-		entry.sizef_repatch = files.sizeformat(files.size("ux0:repatch/"..entry.id or 0))
+		entry.sizef_repatch = files.sizeformat(files.size(entry.repatch_path.."/"..entry.id or 0))
 		entry.sizef_addcont = files.sizeformat(files.size("ux0:addcont/"..entry.id or 0))
-		entry.sizef_readdcont = files.sizeformat(files.size("ux0:readdcont/"..entry.id or 0))
+		entry.sizef_readdcont = files.sizeformat(files.size(entry.readccont_path.."/"..entry.id or 0))
 		SIZES_PORT_O:push(entry)
 	end
 	os.delay(16) -- ONE frame
