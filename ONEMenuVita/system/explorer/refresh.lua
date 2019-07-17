@@ -97,7 +97,7 @@ function refresh_init(img)
 			if result == 1 then
 
 				count += 1
-				list[i].dev = "ux0:"
+				list[i].dev = "ux0"
 
 				--Size
 				list[i].size = files.size(list[i].path)
@@ -116,6 +116,7 @@ function refresh_init(img)
 				else
 					list[i].img = theme.data["icodef"]
 				end
+				list[i].path_pic = "ur0:appmeta/"..list[i].id.."/pic0.png"
 
 				local sfo = game.info(list[i].path.."/sce_sys/param.sfo")
 				if sfo and sfo.CONTENT_ID then list[i].region = regions[sfo.CONTENT_ID[1]] or 5	end
@@ -151,7 +152,7 @@ function refresh_init(img)
 					appman[list[i].index].scroll:set(appman[list[i].index].list,limit)
 				else
 					--Update
-					appman[list[i].index].list[search].dev = "ux0:"
+					appman[list[i].index].list[search].dev = "ux0"
 					appman[list[i].index].list[search].img = list[i].img	--Icon New ??...Maybe
 					appman[list[i].index].list[search].type = list[i].type
 					appman[list[i].index].list[search].version = list[i].version

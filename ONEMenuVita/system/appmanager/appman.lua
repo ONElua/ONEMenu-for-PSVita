@@ -619,23 +619,6 @@ local editsfo_callback = function ()
 
 	if appman[cat].list[focus_index].dev == "gro0" then return end
 
-	--Init load prkxs
-	if not __kernel then
-		if files.exists("modules/kernel.skprx") then
-			if os.requirek("modules/kernel.skprx")==1 then __kernel = true end
-		else
-			if os.requirek("ux0:VitaShell/module/kernel.skprx")==1 then	__kernel = true end
-		end
-	end
-
-	if not __user then
-		if files.exists("modules/user.suprx") then
-			if os.requireu("modules/user.suprx")==1 then __user = true end
-		else
-			if os.requireu("ux0:VitaShell/module/user.suprx")==1 then __user = true end
-		end
-	end
-
 	local pos_menu = submenu_ctx.scroll.sel
 	local vbuff = screen.toimage()
 
@@ -702,7 +685,7 @@ local openfolder_callback = function ()
 
 		if cat == 1 then
 			--Patch
-			if files.exists(appman[cat].list[focus_index].dev..":/patch/"..appman[cat].list[focus_index].id) then
+			if files.exists(appman[cat].list[focus_index].dev.."/patch/"..appman[cat].list[focus_index].id) then
 				table.insert(options, { text = "Patch", path = appman[cat].list[focus_index].dev..":/patch/"..appman[cat].list[focus_index].id, exit = false })
 			end
 

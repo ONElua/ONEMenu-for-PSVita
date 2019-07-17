@@ -213,6 +213,17 @@ function ctrls_explorer_list()
 		appman.launch()
 	end
 
+	if buttons.start and menu_ctx.open==false then
+		submenu_ctx.close = true
+		local vbuff = screen.toimage()
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+			SubSystem2()
+
+		os.delay(15)
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+	end
+
 	shortcuts()
 
 end
@@ -763,187 +774,6 @@ local filesexport_callback = function ()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
 
-url = nil
-
---Parse MF
-parseMF_callback = function ()
-
-	http.getfile(url, "ux0:downloads/tmp")
-
-	local data = {}
-    for line in io.lines("ux0:downloads/tmp") do
-		if line:find('gbtnSecondary" href=') then
-			local en=line:find('gbtnSecondary" href=')  --Guardo dónde termina ese patrón
-			local en2,urlf
-			en=line:find("'",en) --busco la comilla sencilla, empezando por donde terminaba el patron anterior
-			en2=line:find("'",en+1) -- busco la siguiente comilla
-
-			urlf=line:sub( en+1, en2-1) --y recorto la URL
-
-			data.url = urlf
-			data.name = files.nopath(urlf)
-		end
-
-		if line:find("<span class='dlFileSize'>") then
-			data.size = line:match("%<span class='dlFileSize'%>%((.+)%)%</span%>")
-		end
-
-	end
-	return data
-
-end
-
---Parse Zippyshare
-parseZY_callback = function ()
-
-	http.getfile(url, "ux0:downloads/tmp")
-	local data,nflag={},false
-	for line in io.lines("ux0:downloads/tmp") do
-
-		if line:find("getElementById%('dlbutton'%)") then
-			line=line:match("href = (.+);")
-			p1=line:match('(/.+/)"')
-				nb=line:match(" %((.+)%) ")
-					assert(loadstring('nb='..nb))()
-				p2=line:match(' "(/.+4)"')
-			data.url=p1..nb..p2
-		end
-
-		if nflag then
-			data.name = line:match('"%>(.+)%</')
-			nflag=false
-		end
-
-		if line:find('"%>Name:%</') then
-			nflag=true
-		end
-
-		if line:find('"%>Size:%</') then
-			data.size = line:match('px;"%>(.+)%</')
-		end
-
-	end
-
-	data.url=url:match("http.+%.com")..data.url
-
-	return data
-
-end
-
---Parse GDrive
-parseGD_callback = function ()
-
-	local data, ID = {url="https://drive.google.com/uc?export=download&id="}, ""
-
-	if url:find("?id=") then
-		ID=url:match("?id=(.+)")
-	elseif url:find("file/d/") then
-		ID=url:match("file/d/(.+)/.+")
-	else return nil end
-	data.url=data.url..ID
-
-	http.getfile(url, "ux0:downloads/tmp")
-	local file=io.open("ux0:downloads/tmp")
-	if file then
-		local line=file:read()
-		data.name=line:match("title%>(.+) %- Google Drive%</")
-			
-		file:close()
-	end
-
-	return data
-
-end
-
-__NAME_DOWNLOAD = ""
-local qr_callback = function ()
-
-	__NAME_DOWNLOAD = ""
-	files.delete("ux0:downloads/tmp")
-	if not wlan.isconnected() then wlan.connect() end
-
-	local vbuff = screen.toimage()
-	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
-
-	local pos_menu = menu_ctx.scroll.sel
-	menu_ctx.wakefunct()
-
-	url = cam.scanqr(STRINGS_SUBMENU_QR_SCAN,theme.style.TXTBKGCOLOR)
-
-	local servers = {
-		{ name = "mediafire", 		funct = parseMF_callback },
-		{ name = "zippyshare",		funct = parseZY_callback },
-		{ name = "drive.google",	funct = parseGD_callback },
-	}
-
-	local parse,url_backup,pflag = {},"",false
-	if url then
-
-		url_backup = url
-
-		for i=1,#servers do
-			if string.find(url:lower(), servers[i].name, 1, true) then
-				parse = servers[i].funct()
-				pflag = true
-				break
-			end
-		end
-
-		local res,filename = "",false
-		if parse and pflag then
-			if wlan.isconnected() then
-
-				__NAME_DOWNLOAD = parse.name or ""
-				buttons.homepopup(0)
-					res,filename = http.getfile(parse.url,"ux0:downloads/"..parse.name or "")
-				buttons.homepopup(1)
-
-				if parse.name then filename = parse.name end
-
-				if res then
-					if files.exists("ux0:downloads/"..filename) then
-						os.message(STRINGS_DOWNLOAD_SUCCESS.." ux0:downloads\n"..filename)
-						explorer.refresh(true)
-					end
-				else
-					files.delete("ux0:downloads/"..filename)
-					os.message(STRINGS_DOWNLOAD_FAILED.." ux0:downloads\n"..filename)
-				end
-			end
-		else
-
-			res,filename = http.getfile(url_backup,"ux0:downloads/")
-
-			if not res then
-				filename = osk.init(STRINGS_SUBMENU_QR_DOWNLOAD, STRINGS_SUBMENU_QR_FILENAME, 256, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
-				if filename then tmp = filename else tmp = "file" end
-				__NAME_DOWNLOAD = tmp or ""
-				http.download(url_backup,"ux0:downloads/"..filename)
-			end
-			if filename then tmp = filename else tmp = "file" end
-
-			if files.exists("ux0:downloads/"..tmp) then
-				os.message(STRINGS_DOWNLOAD_SUCCESS.." ux0:downloads\n"..tmp)
-				explorer.refresh(true)
-			else
-				files.delete("ux0:downloads/"..tmp)
-				os.message(STRINGS_DOWNLOAD_FAILED.." ux0:downloads\n"..tmp)
-			end
-		end
-	end
-	files.delete("ux0:downloads/tmp")
-
---clean
-	__NAME_DOWNLOAD = ""
-	action = false
-	explorer.action = 0
-	multi={}
-	menu_ctx.scroll.sel = pos_menu
-	os.delay(15)
-	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
-	os.delay(50)
-end
-
 local cancel_callback = function ()
 	menu_ctx.wait_action = __ACTION_WAIT_NOTHING
 	menu_ctx.wakefunct()
@@ -988,45 +818,6 @@ local ftp_callback = function ()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
 
-local refresh_callback = function ()
-	local pos_menu = menu_ctx.scroll.sel
-	refresh_init(theme.data["list"])
-	menu_ctx.wakefunct2()
-	menu_ctx.scroll.sel = pos_menu
-end
-
-local updatedb_callback = function ()
-	os.delay(150)
-	_print=false
-	os.updatedb()
-	os.message(STRINGS_RESTART_UPDATEDB)
-	os.delay(1500)
-	power.restart()
-end
-
-local rebuilddb_callback = function ()
-	os.delay(150)
-	_print=false
-	os.rebuilddb()
-	os.message(STRINGS_RESTART_REBUILDDB)
-	os.delay(1500)
-	power.restart()
-end
-
-local reloadconfig_callback = function ()
-	local pos_menu = menu_ctx.scroll.sel
-	os.taicfgreload()
-	os.message(STRINGS_CONFIG_SUCCESS)
-	menu_ctx.scroll.sel = pos_menu
-end
-
-local themesLiveArea_callback = function ()
-	local pos_menu = menu_ctx.scroll.sel
-	customthemes()
-	menu_ctx.wakefunct2()
-	menu_ctx.scroll.sel = pos_menu
-end
-
 local restart_callback = function ()
     os.delay(150)
     os.restart()
@@ -1067,7 +858,6 @@ function menu_ctx.wakefunct()
 		{ text = STRINGS_SUBMENU_INSTALL_GAME, 	funct = installgame_callback },
 		{ text = STRINGS_SUBMENU_INSTALLCTHEME,	funct = installtheme_callback },
         { text = STRINGS_SUBMENU_EXPORT,        funct = filesexport_callback },
-		{ text = STRINGS_SUBMENU_QR,            funct = qr_callback },
 
 		{ text = STRINGS_SUBMENU_CANCEL,        funct = cancel_callback },
 
@@ -1084,37 +874,12 @@ function menu_ctx.wakefunct()
     menu_ctx.scroll = newScroll(menu_ctx.options, #menu_ctx.options)
 end
 
-function menu_ctx.wakefunct2()
-    menu_ctx.options = { -- Handle Option Text and Option Function
-        { text = STRINGS_USB,           		funct = usb_callback },
-		{ text = STRINGS_SUBMENU_FTP,       	funct = ftp_callback },
-		{ text = STRINGS_REFRESH_LIVEAREA,  	funct = refresh_callback },
-
-		{ text = STRINGS_SUBMENU_RESTART,   	funct = restart_callback },
-        { text = STRINGS_SUBMENU_RESET,     	funct = reboot_callback },
-        { text = STRINGS_SUBMENU_POWEROFF,  	funct = shutdown_callback },
-
-		{ text = STRINGS_UPDATE_DB, 			funct = updatedb_callback },
-		{ text = STRINGS_REBUILD_DB, 			funct = rebuilddb_callback },
-		{ text = STRINGS_RELOAD_CONFIG,			funct = reloadconfig_callback },
-
-		{ text = STRINGS_SUBMENU_CUSTOMTHEMES,	funct = themesLiveArea_callback },
-    }
-
-    menu_ctx.scroll = newScroll(menu_ctx.options, #menu_ctx.options)
-end
-
 menu_ctx.wakefunct()
-menu_ctx.wakefunct2()
 
 function menu_ctx.run()
 
     if buttons[menu_ctx.ctrl] then menu_ctx.close = not menu_ctx.close end
-	if buttons[menu_ctx.ctrl] then
-		menu_ctx.type = 1
-		menu_ctx.wakefunct()
-	end
-
+	if buttons[menu_ctx.ctrl] then menu_ctx.wakefunct()	end
     menu_ctx.draw()
 	menu_ctx.buttons()
 end
@@ -1155,9 +920,7 @@ function menu_ctx.draw()
 			end
 			screen.clip()
 
-			if menu_ctx.type == 1 and (i == 3 or i == 6 or i == 8 or i == 11) then
-				h += 35
-			elseif menu_ctx.type == 2 and (i == 3 or i == 6 or i == 9) then
+			if (i == 3 or i == 6 or i == 8 or i == 11) then
 				h += 35
 			else
 				h += 26
@@ -1181,18 +944,5 @@ function menu_ctx.buttons()
 	if buttons.accept then
 		menu_ctx.options[menu_ctx.scroll.sel].funct()
     end
-	if (buttons.left or buttons.right) and menu_ctx.options[menu_ctx.scroll.sel].pad then
-		menu_ctx.options[menu_ctx.scroll.sel].funct()
-	end
-
-	if buttons.released.l or buttons.released.r then
-		if menu_ctx.type == 1 then
-			menu_ctx.type = 2
-			menu_ctx.wakefunct2()
-		else
-			menu_ctx.type = 1
-			menu_ctx.wakefunct()
-		end
-	end
 
 end
