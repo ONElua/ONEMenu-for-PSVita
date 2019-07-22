@@ -110,8 +110,10 @@ local Multimedia_Folders_Cleanup_callback = function ()
 
 	if theme.data["back"] then theme.data["back"]:blit(0,0) end
 		message_wait(STRINGS_SCANNING)
-	os.delay(250)
+	os.delay(1500)
+
 	--Eliminar carpetas vacias de picture y video
+	local count = 0
 	local path_photo = { "ux0:music/", "ux0:picture/ALL/", "ux0:picture/CAMERA/", "ux0:picture/SCREENSHOT/", "ux0:video/" }
 	for i=1,#path_photo do
 		local tmp = files.listdirs(path_photo[i])
@@ -122,14 +124,17 @@ local Multimedia_Folders_Cleanup_callback = function ()
 
 				if tmp2 and #tmp2> 0 then
 				else
+					count += 1
 					files.delete(path_photo[i]..tmp[j].name)
 				end
 			end
 		end
 	end
 
-	os.delay(15)
 	if theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait(" [ "..count.." ] Carpetas Eliminadas")
+	os.delay(1500)
+
 end
 
 local restart_callback = function ()

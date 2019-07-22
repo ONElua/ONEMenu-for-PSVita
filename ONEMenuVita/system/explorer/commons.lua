@@ -116,7 +116,7 @@ function fillappmanlist(objin, info_sfo)
         objin.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
     end
 
-    --id, type, version, dev, path, title
+    --id, type, version, dev, path, title, sdk
     objin.id = info_sfo.TITLE_ID
     objin.type = info_sfo.CATEGORY
     objin.version = info_sfo.APP_VER or "00.00"
@@ -124,9 +124,10 @@ function fillappmanlist(objin, info_sfo)
     objin.path = string.format("ux0:app/%s",info_sfo.TITLE_ID)
     objin.title = info_sfo.TITLE or info_sfo.TITLE_ID
     objin.save = info_sfo.INSTALL_DIR_SAVEDATA or info_sfo.TITLE_ID
+	objin.sdk = tonumber(info_sfo.PSP2_SYSTEM_VER or 0)
 
     local index = 1
-    if objin.id == "PSPEMUCFW" then index = 5 
+    if objin.id == "PSPEMUCFW" then index = 3--index = 5 
     else
 
         if info_sfo.CONTENT_ID and info_sfo.CONTENT_ID:len() > 9  then
@@ -139,7 +140,7 @@ function fillappmanlist(objin, info_sfo)
             if fp then
                 local magic = str2int(fp:read(4))
                 fp:close()
-                if magic == 0x00424241 then    index = 5 else index = 2 end
+                if magic == 0x00424241 then index = 3 else index = 2 end
             else
                 index = 2
             end
@@ -156,25 +157,8 @@ function fillappmanlist(objin, info_sfo)
     --No Exist!!!
 	if search == 0 then
 		table.insert(appman[index].list, objin)
-		table.sort(appman[index].list ,function (a,b) return string.lower(a.dev)<string.lower(b.dev) end)
-
-		if index == 1 and appman[index].sort == 3 then
-			table.sort(appman[index].list, tableSortReg)
-		else
-			if appman[index].sort == 0 then
-				if appman[index].asc == 1 then
-					table.sort(appman[index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-				else
-					table.sort(appman[index].list ,function (a,b) return string.lower(a.id)>string.lower(b.id) end)
-				end
-			else
-				if appman[index].asc == 1 then
-					table.sort(appman[index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-				else
-					table.sort(appman[index].list ,function (a,b) return string.lower(a.title)>string.lower(b.title) end)
-				end
-			end
-		end
+		--table.sort(appman[index].list ,function (a,b) return string.lower(a.dev)<string.lower(b.dev) end)
+		SortGeneric(appman[index].list, appman[index].sort, appman[index].asc)
 		appman[index].scroll:set(appman[index].list,limit)
     else
         --Update

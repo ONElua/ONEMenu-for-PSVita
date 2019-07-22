@@ -23,24 +23,7 @@ for i=1,#appman do
 	end
 
 	if #appman[i].list > 0 then
-
-		if i == 1 and appman[i].sort == 2 then
-			table.sort(appman[i].list, tableSortReg)
-		else
-			if appman[i].sort == 0 then
-				if appman[i].asc == 1 then
-					table.sort(appman[i].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-				else
-					table.sort(appman[i].list, function (a,b) return string.lower(a.id)>string.lower(b.id) end)
-				end
-			elseif appman[i].sort == 1 then
-				if appman[i].asc == 1 then
-					table.sort(appman[i].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-				else
-					table.sort(appman[i].list, function (a,b) return string.lower(a.title)>string.lower(b.title) end)
-				end
-			end
-		end
+		SortGeneric(appman[i].list, appman[i].sort, appman[i].asc)
 	end
 end
 
@@ -210,7 +193,8 @@ function focus_icon()
 
 			if submenu_ctx.close then
 
-				if cat == 3 or cat == 4 then fill = 170 else fill = 150 end
+				--if cat == 3 or cat == 4 then fill = 170 else fill = 150 end
+				if appman[cat].cats == "psm" or appman[cat].cats == "retro" then fill = 170 else fill = 150 end
 
 				if not pic1_crono then
 					screen.print(255,350, appman[cat].list[focus_index].title,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)

@@ -34,9 +34,11 @@ dofile("system/themes.lua")
 dofile("system/swipeLib.lua")
 
 --Modulos para el Administrador Burbujas Apps
+dofile("system/appmanager/appsystem.lua")
 dofile("system/appmanager/appman.lua")
 dofile("system/appmanager/menu.lua")
 dofile("system/appmanager/system.lua")
+
 
 --Modulos para el Explorador de Archivos
 dofile("system/explorer/commons.lua")     -- Load Functions Commons

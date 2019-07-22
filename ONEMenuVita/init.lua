@@ -46,10 +46,10 @@ function int2str(data)
 end
 
 ------------------Busqueda y peticion de Iconos en modo hilo------------------
-__CATEGORIES = 6
-appman,static_void = {},{}
+__CATEGORIES = 5
+appman,static_void,cats = {},{},{ "psvita", "hbvita", "adrbb", "retro", "psm" }
 for i=1,__CATEGORIES do
-	table.insert(appman, { list={}, scroll, sort = 0, slide = { img = nil, x=0 , acel=7, w= 0 } } )
+	table.insert(appman, { list={}, scroll, sort = 0, slide = { img = nil, x=0 , acel=7, w= 0 }, cats = cats[i] } )
 	static_void[i] = {x=1}
 end
 cat, appman.len = 0,0
@@ -58,12 +58,9 @@ IMAGE_PORT_I = channel.new("IMAGE_PORT_I")
 IMAGE_PORT_O = channel.new("IMAGE_PORT_O")
 THID_IMAGE = thread.new("system/appmanager/thread_img.lua")
 
---Region:
+--Region
 regions = { A=1,E=2,J=3,U=4 }
 name_region = { "(A)","(E)","(J)","(U)", "" }
-
---Asia,Eur,Jpn,Usa,Unk	<-- Asc: 1,2,3,4,5
---Unk,Usa,Jpn,Eur,Asia	<-- Des: 5,4,3,2,1
 
 function fillappman(obj)
 
@@ -74,16 +71,18 @@ function fillappman(obj)
 
 	local index = 1
 	if obj.type == "mb" or obj.type == "mba" then
-		index = 3
+		--index = 3
+		index = 5
 		obj.resize = true
 		obj.path_img = "ur0:appmeta/"..obj.id.."/pic0.png"
 	elseif obj.type == "EG" or obj.type == "ME" then
+		--index = 4
 		index = 4
 		obj.resize = true
 		obj.path_img = "ur0:appmeta/"..obj.id.."/livearea/contents/startup.png"
 	else
 
-		if obj.id == "PSPEMUCFW" then index = 5 
+		if obj.id == "PSPEMUCFW" then index = 3--index = 5 
 		else
 
 			local sfo = game.info(obj.path.."/sce_sys/param.sfo")
@@ -104,7 +103,7 @@ function fillappman(obj)
 					if fp then
 						local magic = str2int(fp:read(4))
 						fp:close()
-						if magic == 0x00424241 then	index = 5 else index = 2 end
+						if magic == 0x00424241 then	index = 3 else index = 2 end--index = 5 else index = 2 end
 					else
 						index = 2
 					end
@@ -126,58 +125,54 @@ function fillappman(obj)
 
 	table.insert(appman[index].list,obj)
 
---[[
 	-- Push request of icon! :D
 	local tempo = appman[index].list[ #appman[index].list ]
 	static_void[index][#appman[index].list] = tempo
 	IMAGE_PORT_O:push( { x = #appman[index].list, y = index, path = tempo.path_img, resize = tempo.resize or false } )
-]]
 
 end
 
-function FillSystemApps(obj)
+--Asia,Eur,Jpn,Usa,Unk	<-- Asc: 1,2,3,4,5
+--Unk,Usa,Jpn,Eur,Asia	<-- Des: 5,4,3,2,1
 
-	local uri = {}
-		uri["NPXS10000"] = "near:"
-		uri["NPXS10001"] = "pspy:"
-		uri["NPXS10002"] = "psns:browse?category=STORE-MSF73008-VITAGAMES"
-		uri["NPXS10003"] = "wbapp0:"
-		uri["NPXS10008"] = "pstc:"
-		uri["NPXS10009"] = "music:" 
-		uri["NPXS10010"] = "video:"
-		uri["NPXS10014"] = "psnmsg:"
-		uri["NPXS10015"] = "settings_dlg:"
-		uri["NPXS10072"] = "email:"
-		uri["NPXS10091"] = "scecalendar:"
-	if uri[obj.id] then obj.uri = uri[obj.id] end
+function tableSortRegAsc(a,b)
+	return (tonumber(a.region) < tonumber(b.region)) or (tonumber(a.region) == tonumber(b.region) and a.id < b.id)
+end
 
-	obj.img = iconDef
-	obj.img:resize(120,120)
-	obj.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
+function tableSortRegDesc(a,b)
+	return (tonumber(a.region) > tonumber(b.region)) or (tonumber(a.region) == tonumber(b.region) and a.id < b.id)
+end
 
-	obj.path_img = obj.path.."/sce_sys/icon0.png"
-	obj.path_pic = obj.path.."/sce_sys/livearea/contents/bg0.png"
+function SortGeneric(tb,sort,asc)
 
-	appman.len += 1
-
-	local index = 6
-	table.insert(appman[index].list,obj)
-
---[[
-	-- Push request of icon! :D
-	local tempo = appman[index].list[ #appman[index].list ]
-	static_void[index][#appman[index].list] = tempo
-	IMAGE_PORT_O:push( { x = #appman[index].list, y = index, path = tempo.path_img, resize = false } )
-]]
+	if sort == 0 then
+		if asc == 1 then
+			table.sort(tb, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
+		else
+			table.sort(tb, function (a,b) return string.lower(a.id)>string.lower(b.id) end)
+		end
+	elseif sort == 1 then
+		if asc == 1 then
+			table.sort(tb, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
+		else
+			table.sort(tb, function (a,b) return string.lower(a.title)>string.lower(b.title) end)
+		end
+	elseif sort == 2 then
+		if asc == 1 then
+			table.sort(tb, tableSortRegAsc)
+		else
+			table.sort(tb, tableSortRegDesc)
+		end
+	end
 
 end
 
-function SortTypeId(a,b)
-	return (a.type < b.type) or (a.type == b.type and a.id < b.id)
+function SortSdkId(a,b)
+	return (tonumber(a.sdk) > tonumber(b.sdk)) or (tonumber(a.sdk) == tonumber(b.sdk) and a.id < b.id)
 end
 
-function SortTypeTitle(a,b)
-	return (a.type < b.type) or (a.type == b.type and a.title < b.title)
+function SortSdkTitle(a,b)
+	return (tonumber(a.sdk) > tonumber(b.sdk)) or (tonumber(a.sdk) == tonumber(b.sdk) and a.title < b.title)
 end
 
 function Scanning()
@@ -190,13 +185,7 @@ function Scanning()
 
 	--id, type, version, dev, path, title
 	local list = game.list(__GAME_LIST_ALL)
-
-	local sort_vita = tonumber(ini.read(__PATH_INI,"sort","sort","0"))
-	if sort_vita == 1 then
-		table.sort(list,SortTypeTitle)
-	else
-		table.sort(list,SortTypeId)
-	end
+	table.sort(list,SortSdkId)
 
 	for i=1,#list do
 		if files.exists(list[i].path) then
@@ -205,13 +194,13 @@ function Scanning()
 		end
 	end
 
-	list = game.list(__GAME_LIST_SYS)
-	table.sort(list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-	for i=1,#list do
-		if list[i].title then list[i].title = list[i].title:gsub("\n"," ") end
-		FillSystemApps(list[i])
+	for i=1, __CATEGORIES do
+		if cat == 0 and #appman[i].list > 0 then
+			cat = i
+			break
+		end
 	end
-
+--[[
 	local y,x = 1,1
 	while y <= __CATEGORIES do
 		if cat == 0 and appman[y].list[x] then cat = y end
@@ -227,6 +216,7 @@ function Scanning()
 	end
 
 	if cat <= 0 then appman.len = 0 end
+]]
 
 end
 ------------------Busqueda y peticion de Iconos en modo hilo------------------

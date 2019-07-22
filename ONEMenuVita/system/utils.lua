@@ -169,6 +169,8 @@ function write_config()
 			ini.write(__PATH_INI,"sort","asc"..i,appman[i].asc)
 		end
 	end
+--sort for sys apps
+	ini.write(__PATH_INI,"sys","sort",system.sort)
 end
 
 function message_wait(message)
@@ -188,11 +190,4 @@ function isTouched(x,y,sx,sy)
 		return true
 	end
 	return false
-end
-
-function tableSortReg(a,b)
-	if (string.lower(a.region) < string.lower(b.region)) then if appman[1].asc == 1 then return true else return false end
-		elseif (string.lower(a.region) > string.lower(b.region)) then if appman[1].asc == 1 then return false else return true end
-			else return string.lower(a.id) < string.lower(b.id)
-	end
 end

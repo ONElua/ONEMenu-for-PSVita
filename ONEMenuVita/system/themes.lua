@@ -135,18 +135,20 @@ function theme.load()
 			}
 
 	--Load Slides
+	--[[
 	categories = {
 		{ img = theme.data["psvita"] },	--cat 1
 		{ img = theme.data["hbvita"] },	--cat 2
 		{ img = theme.data["psm"] },	--cat 3
 		{ img = theme.data["retro"]},	--cat 4
 		{ img = theme.data["adrbb"]},	--cat 5
-		{ img = theme.data["system"] }, --cat 6
+		--{ img = theme.data["system"] }, --cat 6
 	}
-
+	]]
+	categories = {}
 	--Asignamos limites y las img para nuestras categorias
 	for i=1,#appman do
-		appman[i].slide.img = categories[i].img
+		appman[i].slide.img = theme.data[cats[i]]--categories[i].img
 		if appman[i].slide.img then
 			appman[i].slide.w = appman[i].slide.img:getw()
 		end

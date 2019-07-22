@@ -159,8 +159,12 @@ function appman.launch()
 			appman.ctrls()
 		end
 
+		if buttons.square and not submenu_ctx.open and (not buttons.held.l or buttons.held.r)  then
+			system.run()
+		end
+
 		if buttons.select and not submenu_ctx.open then
-			for i=1,#categories - 1 do 
+			for i=1,#appman do 
 				if #appman[i].list > 0 then
 					for j=1,#appman[i].list do
 						appman[i].list[j].pullsize = false
@@ -199,7 +203,7 @@ local uninstall_callback = function ()
 			message_wait()
 
 			--Backup Save from ux0:user/00/savedata
-			if files.exists("ux0:user/00/savedata/"..appman[cat].list[focus_index].save) and cat == 1 then
+			if files.exists("ux0:user/00/savedata/"..appman[cat].list[focus_index].save) and appman[cat].cats == "psvita" then--cat == 1 then
 				if os.message(STRINGS_APP_BACKUP_SAVE, 1) == 1 then
 					--game.umount()
 						--game.mount("ux0:user/00/savedata/"..appman[cat].list[focus_index].save)
@@ -270,7 +274,8 @@ end
 
 local shrink_callback = function ()
 
-	if cat == 1 and appman[cat].list[focus_index].dev != "gro0" then--Only Vita Games in ux0:app
+	--if cat == 1 and appman[cat].list[focus_index].dev != "gro0" then--Only Vita Games in ux0:app
+	if appman[cat].cats == "psvita" and appman[cat].list[focus_index].dev != "gro0" then--Only Vita Games in ux0:app
 
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
@@ -680,10 +685,12 @@ local openfolder_callback = function ()
 
 	local options = { }
 
-	if cat == 1 or cat == 2 or cat == 5 then
+	--if cat == 1 or cat == 2 or cat == 5 then
+	if appman[cat].cats == "psvita" or appman[cat].cats == "hbvita" or appman[cat].cats == "adrbb" then
 		table.insert(options, { text = "App", path = appman[cat].list[focus_index].dev..":/app/"..appman[cat].list[focus_index].id, exit=false })
 
-		if cat == 1 then
+		--if cat == 1 then
+		if appman[cat].cats == "psvita" then
 			--Patch
 			if files.exists(appman[cat].list[focus_index].dev.."/patch/"..appman[cat].list[focus_index].id) then
 				table.insert(options, { text = "Patch", path = appman[cat].list[focus_index].dev..":/patch/"..appman[cat].list[focus_index].id, exit = false })
@@ -706,9 +713,11 @@ local openfolder_callback = function ()
 
 	else
 
-		if cat == 3 then
+		--if cat == 3 then
+		if appman[cat].cats == "psm" then
 			table.insert(options, { text = "PSM", path = appman[cat].list[focus_index].dev..":/psm/"..appman[cat].list[focus_index].id, exit = false })
-		elseif cat == 4 then
+		--elseif cat == 4 then
+		elseif appman[cat].cats == "retro" then
 			table.insert(options, { text = "PSPEMU", path = appman[cat].list[focus_index].dev..":/pspemu/psp/game/"..appman[cat].list[focus_index].id, exit = false })
 		end
 
@@ -753,7 +762,7 @@ local openfolder_callback = function ()
 
 	end--while
 
-	for i=1,#categories - 1 do 
+	for i=1,#appman do 
 		if #appman[i].list > 0 then
 			for j=1,#appman[i].list do
 				appman[i].list[j].pullsize = false
@@ -778,7 +787,8 @@ local sort_callback = function ()
 		{ text = STRINGS_APP_SORT_ID },
 		{ text = STRINGS_APP_SORT_TITLE },
 	}
-	if cat == 1 then
+	--if cat == 1 then
+	if appman[cat].cats == "psvita" then
 		table.insert(options, { text = STRINGS_APP_SORT_REGION })
 	end
 
@@ -860,30 +870,15 @@ local sort_callback = function ()
 		message_wait(STRINGS_APP_LIST_REFRESH)
 	os.delay(250)
 
-	
-	if cat == 1 and mov == 3 then
-		appman[cat].sort,appman[cat].asc = 2,sort_asc
+	appman[cat].sort, appman[cat].asc = mov-1, sort_asc
+	if mov == 1 then
+		sorting = STRINGS_APP_SORT_ID
+	elseif mov == 2 then
+		sorting = STRINGS_APP_SORT_TITLE
+	elseif mov == 3 then
 		sorting = STRINGS_APP_SORT_REGION
-		table.sort(appman[cat].list, tableSortReg)
-	else
-		if mov == 1 then
-			appman[cat].sort,appman[cat].asc = 0,sort_asc
-			sorting = STRINGS_APP_SORT_ID
-			if appman[cat].asc == 1 then
-				table.sort(appman[cat].list, function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-			else
-				table.sort(appman[cat].list, function (a,b) return string.lower(a.id)>string.lower(b.id) end)
-			end
-		elseif mov == 2 then
-			appman[cat].sort,appman[cat].asc = 1,sort_asc
-			sorting = STRINGS_APP_SORT_TITLE
-			if appman[cat].asc == 1 then
-				table.sort(appman[cat].list, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-			else
-				table.sort(appman[cat].list, function (a,b) return string.lower(a.title)>string.lower(b.title) end)
-			end
-		end
 	end
+	SortGeneric(appman[cat].list,appman[cat].sort,appman[cat].asc)
 
 	write_config()
 	os.delay(15)
@@ -908,21 +903,24 @@ function submenu_ctx.wakefunct()
 	-- Handle Option Text and Option Function
 	submenu_ctx.options = {}
 
-	if cat != 6 then
+	--if cat != 6 then
 		table.insert(submenu_ctx.options, { text = STRINGS_APP_UNINSTALL, funct = uninstall_callback })
-	end
-	if cat == 1 then
+	--end
+	--if cat == 1 then
+	if appman[cat].cats == "psvita" then
 		table.insert(submenu_ctx.options, { text = STRINGS_APP_SHRINK_GAME, funct = shrink_callback })
 	end
-	if cat == 2 then
+	--if cat == 2 then
+	if appman[cat].cats == "hbvita" then
 		table.insert(submenu_ctx.options, { text = STRINGS_APP_SWITCH, funct = switch_callback })
 	end
-	if cat == 1 or cat == 2 or cat == 5 then
+	--if cat == 1 or cat == 2 or cat == 5 then
+	if appman[cat].cats == "psvita" or appman[cat].cats == "hbvita" or appman[cat].cats == "adrbb" then
 		table.insert(submenu_ctx.options, { text = STRINGS_APP_EDIT_BUBBLE, funct = editsfo_callback })
 	end
-	if cat != 6 then
+	--if cat != 6 then
 		table.insert(submenu_ctx.options, { text = STRINGS_APP_OPEN_FOLDER, funct = openfolder_callback, })
-	end
+	--end
 	table.insert(submenu_ctx.options, { text = STRINGS_APP_SORT_CATEGORY..sorting, funct = sort_callback, pad = true })
 
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)
@@ -1076,7 +1074,8 @@ function submenu_ctx.draw()
 		local h = 280
 		screen.print(10,h, STRINGS_APP_VERSION..": "..appman[cat].list[focus_index].version or "", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		h+=30
-		if cat == 3 or cat == 4 or cat == 6 then
+		--if cat == 3 or cat == 4 then--or cat == 6 then
+		if appman[cat].cats == "psm" or appman[cat].cats == "retro" then
 			screen.print(10,h, STRINGS_APP_SIZE_IND..": ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 		else
 			screen.print(10,h, "App: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
@@ -1084,7 +1083,8 @@ function submenu_ctx.draw()
 		screen.print(340,h,(appman[cat].list[focus_index].sizef or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
 
 		h+=26
-		if cat == 1 then
+		--if cat == 1 then
+		if appman[cat].cats == "psvita" then
 
 			screen.print(10,h, "SaveID: ", 1.0, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
 			screen.print(340,h,(appman[cat].list[focus_index].save),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)

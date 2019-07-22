@@ -23,7 +23,7 @@ function fillapps(list, obj)
 			end
 
 			local index = 1
-			if obj.id == "PSPEMUCFW" then index = 5 
+			if obj.id == "PSPEMUCFW" then index = 3--index = 5 
 			else
 
 				if info.CONTENT_ID and info.CONTENT_ID:len() > 9 then
@@ -35,22 +35,17 @@ function fillapps(list, obj)
 					if fp then
 						local magic = str2int(fp:read(4))
 						fp:close()
-						if magic == 0x00424241 then	index = 5 else index = 2 end
+						if magic == 0x00424241 then	index = 3 else index = 2 end
 					else
 						index = 2
 					end
 				end
 			end
 
-			--[[
-			if files.exists(obj.path.."/data/boot.inf") or obj.id == "PSPEMUCFW" then index = 5
-			else
-				if info.CONTENT_ID and info.CONTENT_ID:len() > 9 then index = 1 else index = 2 end
-			end
-			]]
-
 			table.insert(list, { id=info.TITLE_ID, type=info.CATEGORY, version=info.APP_VER or "00.00", title=info.TITLE or info.TITLE_ID,
-								 path=obj.path, index = index, resize = resize, save = info.INSTALL_DIR_SAVEDATA or info.TITLE_ID })
+								 path=obj.path, index = index, resize = resize, save = info.INSTALL_DIR_SAVEDATA or info.TITLE_ID,
+								 sdk = info.PSP2_SYSTEM_VER or 0,
+					    })
 		end
 	end
 
@@ -130,25 +125,8 @@ function refresh_init(img)
 
 				if search == 0 then
 					table.insert(appman[list[i].index].list, list[i])
-					table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.dev)<string.lower(b.dev) end)
-
-					if list[i].index == 1 and appman[list[i].index].sort == 3 then
-						table.sort(appman[list[i].index].list, tableSortReg)
-					else
-						if appman[list[i].index].sort == 0 then
-							if appman[list[i].index].asc == 1 then
-								table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.id)<string.lower(b.id) end)
-							else
-								table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.id)>string.lower(b.id) end)
-							end
-						else
-							if appman[list[i].index].asc == 1 then
-								table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.title)<string.lower(b.title) end)
-							else
-								table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.title)>string.lower(b.title) end)
-							end
-						end
-					end
+					--table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.dev)<string.lower(b.dev) end)
+					SortGeneric(appman[list[i].index].list,appman[list[i].index].sort,appman[list[i].index].asc)
 					appman[list[i].index].scroll:set(appman[list[i].index].list,limit)
 				else
 					--Update
@@ -158,6 +136,7 @@ function refresh_init(img)
 					appman[list[i].index].list[search].version = list[i].version
 					appman[list[i].index].list[search].title = list[i].title
 					appman[list[i].index].list[search].save = list[i].save
+					appman[list[i].index].list[search].sdk = list[i].sdk
 				end
 
 				--Restore Save from "ux0:data/ONEMenu/Saves
