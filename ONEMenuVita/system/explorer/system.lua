@@ -132,7 +132,7 @@ local Multimedia_Folders_Cleanup_callback = function ()
 	end
 
 	if theme.data["back"] then theme.data["back"]:blit(0,0) end
-		message_wait(" [ "..count.." ] Carpetas Eliminadas")
+		message_wait(" ( "..count.." )"..STRINGS_FOLDERS_DELETE)
 	os.delay(1500)
 
 end
