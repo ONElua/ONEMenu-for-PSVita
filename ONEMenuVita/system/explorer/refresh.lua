@@ -53,6 +53,23 @@ end
 
 function refresh_init(img)
 
+	--Init load prkxs
+	if not __kernel then
+		if files.exists("modules/kernel.skprx") then
+			if os.requirek("modules/kernel.skprx")==1 then __kernel = true end
+		else
+			if os.requirek("ux0:VitaShell/module/kernel.skprx")==1 then	__kernel = true end
+		end
+	end
+
+	if not __user then
+		if files.exists("modules/user.suprx") then
+			if os.requireu("modules/user.suprx")==1 then __user = true end
+		else
+			if os.requireu("ux0:VitaShell/module/user.suprx")==1 then __user = true end
+		end
+	end
+
 	if img then img:blit(0,0) end
 	message_wait()
 	os.delay(15)

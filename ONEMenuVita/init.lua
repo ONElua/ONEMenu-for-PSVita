@@ -1,17 +1,4 @@
---Init load prkxs
 __kernel, __user = false,false
-
-if files.exists("modules/kernel.skprx") then
-	if os.requirek("modules/kernel.skprx")==1 then __kernel = true end
-else
-	if os.requirek("ux0:VitaShell/module/kernel.skprx")==1 then	__kernel = true end
-end
-
-if files.exists("modules/user.suprx") then
-	if os.requireu("modules/user.suprx")==1 then __user = true end
-else
-	if os.requireu("ux0:VitaShell/module/user.suprx")==1 then __user = true end
-end
 
 --Creamos nuestra carpeta principal de Trabajo
 files.mkdir("ux0:data/ONEMENU/")
@@ -25,7 +12,7 @@ files.mkdir(__PATH_THEMES)
 __ID        = os.titleid()
 
 ---------------------Buscamos icono por defecto y splash----------------------
-local splash,iconDef = nil,nil
+local splash = nil
 splash = image.load(__PATH_THEMES..__THEME.."/splash.png") or image.load("system/theme/default/splash.png")
 
 --Show Splash
@@ -71,46 +58,47 @@ function fillappman(obj)
 
 	local index = 1
 	if obj.type == "mb" or obj.type == "mba" then
-		--index = 3
 		index = 5
 		obj.resize = true
 		obj.path_img = "ur0:appmeta/"..obj.id.."/pic0.png"
 	elseif obj.type == "EG" or obj.type == "ME" then
-		--index = 4
 		index = 4
 		obj.resize = true
 		obj.path_img = "ur0:appmeta/"..obj.id.."/livearea/contents/startup.png"
 	else
 
-		if obj.id == "PSPEMUCFW" then index = 3--index = 5 
+		if obj.id == "PSPEMUCFW" then index = 3
 		else
 
-			local sfo = game.info(obj.path.."/sce_sys/param.sfo")
+			if tonumber(obj.sdk) > 661 then
+				local sfo = game.info(obj.path.."/sce_sys/param.sfo")
 
-			if sfo and sfo.INSTALL_DIR_SAVEDATA then
-				obj.save = sfo.INSTALL_DIR_SAVEDATA
-			end
+				if sfo and sfo.INSTALL_DIR_SAVEDATA then
+					obj.save = sfo.INSTALL_DIR_SAVEDATA
+				end
 
-			if sfo and sfo.CONTENT_ID then
+				if sfo and sfo.CONTENT_ID then
 
-				if sfo.CONTENT_ID:len() > 9 then
-					index = 1
-					obj.region = regions[sfo.CONTENT_ID[1]] or 5
-				else
-
-					--checking magic
-					local fp = io.open(obj.path.."/data/boot.bin","r")
-					if fp then
-						local magic = str2int(fp:read(4))
-						fp:close()
-						if magic == 0x00424241 then	index = 3 else index = 2 end--index = 5 else index = 2 end
-					else
-						index = 2
+					if sfo.CONTENT_ID:len() > 9 then
+						index = 1
+						obj.region = regions[sfo.CONTENT_ID[1]] or 5
 					end
 				end
-			else
-				index = 2
+			elseif tonumber(obj.sdk) == 0 then
+				obj.region = 5
+				
+				--checking magic
+				local fp = io.open(obj.path.."/data/boot.bin","r")
+				if fp then
+					local magic = str2int(fp:read(4))
+					fp:close()
+					if magic == 0x00424241 then	index = 3 else index = 2 end
+				else
+					index = 2
+				end
+
 			end
+
 		end
 		obj.path_img = "ur0:appmeta/"..obj.id.."/icon0.png"
 
@@ -175,6 +163,15 @@ function SortSdkTitle(a,b)
 	return (tonumber(a.sdk) > tonumber(b.sdk)) or (tonumber(a.sdk) == tonumber(b.sdk) and a.title < b.title)
 end
 
+function writelist(pathini, tb)
+    local file = io.open(pathini, "w+")
+    for s,t in pairs(tb) do
+        file:write(string.format('%s	%s	%s	%s	%s	%s	%s\n',	tostring(t.dev),tostring(t.id),tostring(t.sdk),tostring(t.type),
+																		tostring(t.version),tostring(t.path),tostring(t.title) ))
+    end
+    file:close()
+end
+
 function Scanning()
 
 	-- Init with Max CPU/GPU
@@ -184,14 +181,23 @@ function Scanning()
 	os.gpuclock(166)
 
 	--id, type, version, dev, path, title
-	local list = game.list(__GAME_LIST_ALL)
-	table.sort(list,SortSdkId)
+	local list_tmp = game.list(__GAME_LIST_ALL)
+	table.sort(list_tmp,SortSdkId)
+
+	local list = {}
+	for i=1,#list_tmp do
+		if files.exists(list_tmp[i].path) then
+			if list_tmp[i].title then list_tmp[i].title = list_tmp[i].title:gsub("\n"," ") end
+			if tonumber(list_tmp[i].sdk) > 661 or tonumber(list_tmp[i].sdk) == 0 then
+				fillappman(list_tmp[i])
+			else
+				table.insert(list,list_tmp[i])
+			end
+		end
+	end
 
 	for i=1,#list do
-		if files.exists(list[i].path) then
-			if list[i].title then list[i].title = list[i].title:gsub("\n"," ") end
-			fillappman(list[i])
-		end
+		fillappman(list[i])
 	end
 
 	for i=1, __CATEGORIES do
@@ -200,23 +206,10 @@ function Scanning()
 			break
 		end
 	end
---[[
-	local y,x = 1,1
-	while y <= __CATEGORIES do
-		if cat == 0 and appman[y].list[x] then cat = y end
-		while appman[y].list[x] do
-			-- Push request of icon! :D
-			local obj = appman[y].list[x]
-			static_void[y][x] = obj
-			IMAGE_PORT_O:push( { x = x, y = y, path = obj.path_img, resize = obj.resize } )
-			x += 1
-		end
-		y += 1
-		x = 1
-	end
 
-	if cat <= 0 then appman.len = 0 end
-]]
+	--return CPU/GPU
+	os.cpu(__CPU)
+	os.gpuclock(__GPU)
 
 end
 ------------------Busqueda y peticion de Iconos en modo hilo------------------

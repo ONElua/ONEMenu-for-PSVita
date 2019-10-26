@@ -9,7 +9,7 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
---Asignamos limites y las img para nuestras categorias
+--Asignamos limites y las img para nuestras categorias, asi como el Sort de nuestras categorias
 for i=1,#appman do
 
 	appman[i].scroll = newScroll(appman[i].list,limit)

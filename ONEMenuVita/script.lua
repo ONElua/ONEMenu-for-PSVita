@@ -19,10 +19,7 @@ dofile("system/utils.lua")
 
 dofile("git/shared.lua")
 if __UPDATE == 1 then
-    local wstrength = wlan.strength()
-    if wstrength then
-        if wstrength > 55 then dofile("git/updater.lua") end
-    end
+	dofile("git/updater.lua")
 end
 
 dofile("system/scroll.lua")
@@ -39,13 +36,12 @@ dofile("system/appmanager/appman.lua")
 dofile("system/appmanager/menu.lua")
 dofile("system/appmanager/system.lua")
 
-
 --Modulos para el Explorador de Archivos
-dofile("system/explorer/commons.lua")     -- Load Functions Commons
-dofile("system/explorer/explorer.lua")    -- Load Explorer File
-dofile("system/explorer/callbacks.lua")   -- Load Callbacks
-dofile("system/explorer/refresh.lua")     -- Secction Refresh LiveaArea
-dofile("system/explorer/customthemes.lua")-- Secction livearea Customthemes
+dofile("system/explorer/commons.lua")     -- Commons
+dofile("system/explorer/explorer.lua")    -- Explorer File
+dofile("system/explorer/callbacks.lua")   -- Callbacks
+dofile("system/explorer/refresh.lua")     -- Refresh LiveaArea
+dofile("system/explorer/customthemes.lua")-- Livearea Customthemes
 dofile("system/explorer/system.lua")
 
 appman.launch()                           -- Main Cycle :D

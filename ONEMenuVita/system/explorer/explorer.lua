@@ -245,6 +245,8 @@ function handle_files(cnt)
 		MusicPlayer(cnt)
 	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "inf" or extension == "cfg" then
 		visortxt(cnt,true)
+	elseif extension == "mp4" then
+		VideoPlayer(cnt)
 	end
 
 end
@@ -684,14 +686,14 @@ local filesexport_callback = function ()
 
 	for i=1,#no_paths do
 		local x1,x2 = string.find(_path:lower(), no_paths[i], 1, true)
-		if x1 then return false	end
+		if x1 then return false	 end
 	end
 
-	local vbuff = screen.toimage()
+	--local vbuff = screen.toimage()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	local pos_menu = menu_ctx.scroll.sel
 
-    local result = 0
+    local result, ext = 0,""
 	if #explorer.list > 0 then
 		if not explorer.list[scroll.list.sel].size then                -- Its Dir
 
@@ -704,13 +706,15 @@ local filesexport_callback = function ()
 			if tmp and #tmp > 0 then
 
 				for i=1,#tmp do
-					local ext = tmp[i].ext:lower() or ""
+					ext = tmp[i].ext:lower() or ""
 					if ext == "png" or ext == "jpg" or ext == "jpeg" or ext == "bmp" or ext == "gif" or ext == "mp3" or ext == "mp4" then
 						cont_multimedia+=1
 						reboot=false
 							if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 							message_wait(tmp[i].name)
-							result = files.export(tmp[i].path)
+								musicfile = tmp[i].name
+							result = files.export(tmp[i].path,"OneMenu Export")
+								musicfile = ""
 						reboot=true
 
 						if result == 1 then
@@ -732,8 +736,8 @@ local filesexport_callback = function ()
 			end
 
 		else
-			local ext = explorer.list[scroll.list.sel].ext:lower() or ""
-			if ext == "png" or ext == "jpg" or ext == "jpeg" or ext == "bmp" or ext == "gif" or ext == "mp3" or ext == "mp4" or ext == "mkv" then
+			ext = explorer.list[scroll.list.sel].ext:lower() or ""
+			if ext == "png" or ext == "jpg" or ext == "jpeg" or ext == "bmp" or ext == "gif" or ext == "mp3" or ext == "mp4" then
 
 				if ext == "mp3" and not files.exists("music0:") then
 					os.message(STRINGS_EXPORT_REBOOT,0) return
@@ -742,7 +746,9 @@ local filesexport_callback = function ()
 				reboot=false
 					if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 					message_wait()
-					result = files.export(explorer.list[scroll.list.sel].path)
+						musicfile = explorer.list[scroll.list.sel].name
+					result = files.export(explorer.list[scroll.list.sel].path,"OneMenu Export")
+						musicfile = ""
 				reboot=true
 
 				if result == 1 then
@@ -763,10 +769,13 @@ local filesexport_callback = function ()
 --clean
 		menu_ctx.wakefunct()
 		menu_ctx.close = true
-		action = false
-		explorer.refresh(true)
-		multi={}
-		explorer.action = 0
+		if ext == "mp4" then
+			action = false
+			explorer.refresh(true)
+			multi={}
+			explorer.action = 0
+		end
+
     end
 
 	menu_ctx.scroll.sel = pos_menu
@@ -941,8 +950,6 @@ function menu_ctx.buttons()
 		menu_ctx.close = not menu_ctx.close
 	end
 
-	if buttons.accept then
-		menu_ctx.options[menu_ctx.scroll.sel].funct()
-    end
+	if buttons.accept then menu_ctx.options[menu_ctx.scroll.sel].funct() end
 
 end

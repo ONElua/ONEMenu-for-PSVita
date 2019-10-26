@@ -36,7 +36,7 @@ end
 function Search_ReFolders(path,mount)
 	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 		message_wait(path)
-	os.delay(1250)
+	os.delay(750)
 
 	local size = 0
 	local tmp, tb = files.listdirs(path), {}
@@ -71,6 +71,10 @@ function Search_ReFolders(path,mount)
 				files.delete(tb[i].path)
 			end
 		end
+	else
+		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+			message_wait(STRINGS_APP_NO.." "..STRINGS_APP_REFOLDERS_GAME.." "..path)
+		os.delay(1000)
 	end
 
 end
@@ -108,32 +112,37 @@ end
 
 local Multimedia_Folders_Cleanup_callback = function ()
 
-	if theme.data["back"] then theme.data["back"]:blit(0,0) end
+	if theme.data["list"] then theme.data["list"]:blit(0,0) end
 		message_wait(STRINGS_SCANNING)
-	os.delay(1500)
+	os.delay(1000)
 
+	local tb_delete = {}
 	--Eliminar carpetas vacias de picture y video
-	local count = 0
-	local path_photo = { "ux0:music/", "ux0:picture/ALL/", "ux0:picture/CAMERA/", "ux0:picture/SCREENSHOT/", "ux0:video/" }
-	for i=1,#path_photo do
-		local tmp = files.listdirs(path_photo[i])
+	local paths = { "ux0:music/", "ux0:picture/ALL/", "ux0:picture/CAMERA/", "ux0:picture/SCREENSHOT/", "ux0:video/" }
+	for i=1,#paths do
+		local tmp = files.listdirs(paths[i])
 		if tmp and #tmp > 0 then
 			table.sort(tmp, function (a,b) return a.name<b.name end)
 			for j=1, #tmp do
-				local tmp2 = files.list(path_photo[i]..tmp[j].name)
 
+				local tmp2 = files.list(paths[i]..tmp[j].name)
 				if tmp2 and #tmp2> 0 then
 				else
-					count += 1
-					files.delete(path_photo[i]..tmp[j].name)
+					table.insert(tb_delete,paths[i]..tmp[j].name)
 				end
 			end
 		end
 	end
 
-	if theme.data["back"] then theme.data["back"]:blit(0,0) end
-		message_wait(" [ "..count.." ] Carpetas Eliminadas")
-	os.delay(1500)
+	game_move = true
+	for i=1,#tb_delete do
+		files.delete(tb_delete[i])
+	end
+	game_move = false
+
+	if theme.data["list"] then theme.data["list"]:blit(0,0) end
+		message_wait(" ( "..#tb_delete.." ) "..STRINGS_FOLDERS_DELETE)
+	os.delay(750)
 
 end
 
@@ -174,26 +183,48 @@ local themesLiveArea_callback = function ()
 	customthemes()
 end
 
+local video_callback = function ()
+	os.delay(25)
+	while true do
+		buttons.read()
+
+		local mp4 = video.import(theme.data["back"])
+		if mp4 != -1 then
+			video.mount()
+				VideoPlayer(mp4)
+			video.umount()
+		else
+			break
+		end
+
+		if buttons.released.cancel then break end
+
+	end
+	os.delay(25)
+end
+
 function SubOptions2()
 
     Sub_Options2 = { -- Handle Option Text and Option Function
 
-		{ text = STRINGS_REFRESH_LIVEAREA,  	funct = refresh_callback },
+		{ text = STRINGS_REFRESH_LIVEAREA,  	funct = refresh_callback,						descr = STRINGS_RELOAD_CONTENT_DESCR },
 
-		{ text = STRINGS_USB,           		funct = usb_callback },
-		{ text = STRINGS_SUBMENU_FTP,       	funct = ftp_callback },
+		{ text = STRINGS_USB,           		funct = usb_callback,							descr = STRINGS_USB_DESCR },
+		{ text = STRINGS_SUBMENU_FTP,       	funct = ftp_callback,							descr = STRINGS_FTP_DESCR },
 
-		{ text = STRINGS_REFOLDERS_CLEANUP,		funct = Re_Folders_Cleanup_callback },
-		{ text = STRINGS_MULTIMEDIA_CLEANUP,	funct = Multimedia_Folders_Cleanup_callback },
+		{ text = STRINGS_REFOLDERS_CLEANUP,		funct = Re_Folders_Cleanup_callback,			descr = STRINGS_REFOLDERS_DESCR },
+		{ text = STRINGS_MULTIMEDIA_CLEANUP,	funct = Multimedia_Folders_Cleanup_callback,	descr = STRINGS_MULTIMEDIA_DESCR },
 
-		{ text = STRINGS_SUBMENU_RESTART,   	funct = restart_callback },
-        { text = STRINGS_SUBMENU_RESET,     	funct = reboot_callback },
-        { text = STRINGS_SUBMENU_POWEROFF,  	funct = shutdown_callback },
+		{ text = STRINGS_SUBMENU_RESTART,   	funct = restart_callback,						descr = STRINGS_RESTART_DESCR },
+        { text = STRINGS_SUBMENU_RESET,     	funct = reboot_callback,						descr = STRINGS_REBOOT_DESCR },
+        { text = STRINGS_SUBMENU_POWEROFF,  	funct = shutdown_callback,						descr = STRINGS_POWEROFF_DESCR },
 
-		{ text = STRINGS_UPDATE_DB, 			funct = updatedb_callback },
-		{ text = STRINGS_REBUILD_DB, 			funct = rebuilddb_callback },
+		{ text = STRINGS_UPDATE_DB, 			funct = updatedb_callback,						descr = STRINGS_UPDATE_DB_DESCR },
+		{ text = STRINGS_REBUILD_DB, 			funct = rebuilddb_callback,						descr = STRINGS_REBUILD_DB_DESCR },
 
-		{ text = STRINGS_SUBMENU_CUSTOMTHEMES,	funct = themesLiveArea_callback },
+		{ text = STRINGS_SUBMENU_CUSTOMTHEMES,	funct = themesLiveArea_callback,				descr = STRINGS_CUSTOMTHEMES_DESCR },
+
+		{ text = STRINGS_VIDEO_PLAYER,			funct = video_callback,							descr = STRINGS_VIDEO_PLAYER_DESCR },
     }
 
 end
@@ -204,6 +235,7 @@ function SubSystem2()
     SubOptions2()
 	local scrollsys = newScroll(Sub_Options2, #Sub_Options2)
 
+	local x_scrext = 20
 	buttons.interval(16,5)
 	while true do
 		buttons.read()
@@ -211,14 +243,14 @@ function SubSystem2()
 
 		draw.fillrect(0,0,960,544,color.black:a(105))
 
-		screen.print(480,15,"System Settings",1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		screen.print(480,15,STRINGS_SUBMENU_TITLE,1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		local y = 70
 		for i=scrollsys.ini,scrollsys.lim do
 			if i == scrollsys.sel then draw.fillrect(10,y-2,930,23,theme.style.SELCOLOR) end
 
 			screen.print(480,y, Sub_Options2[i].text,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 
-			if i == 1 or i == 3 or i == 5 or i == 8 or i == 10 then
+			if i == 1 or i == 3 or i == 5 or i == 8 or i == 10 or i == 11 then
 				y+=36
 			else
 				y+=26
@@ -226,11 +258,21 @@ function SubSystem2()
 
 		end
 
+		if screen.textwidth(Sub_Options2[scrollsys.sel].descr) > 935 then
+			x_scrext = screen.print(x_scrext, 520, Sub_Options2[scrollsys.sel].descr,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__SLEFT,915)
+		else
+			screen.print(480, 520, Sub_Options2[scrollsys.sel].descr,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		end
+
 		screen.flip()
 
 		--Controls
-		if buttons.up or buttons.analogly < -60 then scrollsys:up() end
-		if buttons.down or buttons.analogly > 60 then scrollsys:down() end
+		if buttons.up or buttons.analogly < -60 then
+			if scrollsys:up() then x_scrext = 20 end
+		end
+		if buttons.down or buttons.analogly > 60 then
+			if scrollsys:down() then x_scrext = 20 end
+		end
 
 		if buttons.cancel then
 			os.delay(80)

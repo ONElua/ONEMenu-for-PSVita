@@ -11,19 +11,19 @@
 
 --Functions Commons
 Dev = 1
-partitions = {"ux0:", "ur0:", "uma0:", "imc0:", "xmc0:", "ud0:", "gro0:", "grw0:", }
+partitions = {"ux0:", "ur0:", "uma0:", "imc0:", "xmc0:", "ud0:", "gro0:", "grw0:" }--"music0:", "photo0:", "video0:" }
 Root,Root2 ={},{}
 
 function Refresh_Partitions()
     Root,Root2 ={},{}
 	for i=1,#partitions do
-		if files.exists(partitions[i]) then
+if files.exists(partitions[i]) then
 			local device_info = os.devinfo(partitions[i])
-			if device_info then
+if device_info then
 				table.insert(Root,partitions[i])
 				table.insert(Root2,partitions[i])
-			end
-		end
+end
+end
 	end
 end
 Refresh_Partitions()
@@ -63,9 +63,9 @@ function files.listsort(path)
 end
 
 function shortcuts()
-    if (buttons.held.l and buttons.held.r and buttons.up) and reboot then os.restart() end
-    if (buttons.held.l and buttons.held.r and buttons.down) and reboot then power.restart() end
-    if (buttons.held.l and buttons.held.r and buttons.square) and reboot then power.shutdown() end
+    if (buttons.held.l and buttons.held.r and buttons.left) and reboot then os.restart() end
+    if (buttons.held.l and buttons.held.r and buttons.up) and reboot then power.restart() end
+    if (buttons.held.l and buttons.held.r and buttons.right) and reboot then power.shutdown() end
 end
 
 --===============================   vpk      ==========================================================================
@@ -125,6 +125,7 @@ function fillappmanlist(objin, info_sfo)
     objin.title = info_sfo.TITLE or info_sfo.TITLE_ID
     objin.save = info_sfo.INSTALL_DIR_SAVEDATA or info_sfo.TITLE_ID
 	objin.sdk = tonumber(info_sfo.PSP2_SYSTEM_VER or 0)
+	objin.path_pic = "ur0:appmeta/"..info_sfo.TITLE_ID.."/pic0.png"
 
     local index = 1
     if objin.id == "PSPEMUCFW" then index = 3--index = 5 
@@ -166,6 +167,7 @@ function fillappmanlist(objin, info_sfo)
         appman[index].list[search].type = objin.type
         appman[index].list[search].version = objin.version
         appman[index].list[search].title = objin.title
+		appman[index].list[search].sdk = objin.sdk
     end
 
 end
@@ -415,6 +417,92 @@ function show_msg_pbp(handle)
     
 end
 
+-- ## Video Player ##
+function VideoPlayer(obj)
+	local jump = -1
+	local set_per,r_mode,loop = 0,1,0
+	local res = video.init(obj.path)
+	if res == 1 then
+		local flag = false
+		local crono_mp4 = timer.new()
+
+		while video.actived() do
+			buttons.read()
+			touch.read()
+
+			if video.playing() then power.tick(__POWER_TICK_ALL) end
+
+			if touch.front[1].released or buttons.triangle or buttons.select or buttons.released.l or buttons.released.r then
+				flag = true
+				crono_mp4:reset()
+				crono_mp4:start()
+			end
+			if crono_mp4:time() >= 3500 then--3.5s
+				flag = false
+			end
+
+			--Stop
+			if buttons.cancel then video.stop() end
+
+			--Play/Pause/Resume
+			if buttons.accept then 
+				if video.playing() then video.pause() else video.play()	end
+			end
+
+			--JumptoTime en segundos
+			if buttons.released.l then jump = video.jump(-15) end
+			if buttons.released.r then jump = video.jump(15) end
+
+			--Change mode screen render
+			local w = video.getrealw()
+			local h = video.getrealh()
+
+			if buttons.square and ( w<960 or h<544 ) then
+				r_mode += 1
+				if r_mode > 2 then r_mode = 1 end
+			end
+
+			local x,y = 0,0
+			if r_mode == 1 then -- force all screen use
+				x = 0
+				y = 0
+				w = 960
+				h = 544
+			elseif r_mode == 2 then -- original centered
+				x = 480 - w/2
+				y = 272 - h/2
+			end
+
+			--Looping
+			if buttons.select then
+				loop = video.looping()
+				if loop then video.looping(0) else video.looping(1) end
+			end
+
+			video.render(x,y,w,h)
+
+			if flag or (video.percent() > 0 and not video.playing()) then
+				os.infobar(1,0,1)
+				screen.print(955,32, files.nopath(obj.path), 1, color.new(255, 255, 255), color.new(64, 64, 64), __ARIGHT)
+				screen.print(20,520,tostring(video.time()).." / "..tostring(video.totaltime()).."  "..tostring(video.percent()) .. " %", 1, color.new(255, 255, 255), color.new(64, 64, 64))
+				if video.looping() then
+					screen.print(190,520, "∞", 1, color.green, color.new(64, 64, 64))
+				end
+				draw.fillrect(0,540,math.map(video.percent(), 0, 100, 0, 960),5, color.new(0,0,255))
+			else
+				os.infobar()
+			end
+			if not video.playing() then screen.print(3,520, '||' , 1, color.new(255, 255, 255), color.new(64, 64, 64)) end--STRINGS_MUSIC_PAUSED
+
+			screen.flip()
+
+		end--while
+
+		os.infobar()
+		video.term()
+	end
+end
+
 -- ## Music Player ##
 function MusicPlayer(handle)
 
@@ -498,7 +586,7 @@ function MusicPlayer(handle)
 
             screen.flip()
 
-            power.tick(__POWER_TICK_SUSPEND) -- reset a power timers only for block suspend..
+            power.tick(__POWER_TICK_ALL) -- reset a power timers only for block suspend..
 
             if buttons.accept then
                 snd:pause() -- pause/resume
@@ -550,18 +638,19 @@ function visorimg(path)
                 screen.print(10,5,infoimg.name,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
                 screen.print(940,3,"w: "..infoimg.w,0.8,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
                 screen.print(940,24,"h: "..infoimg.h,0.8,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
-                if (infoimg.w>800 and infoimg.h>500) then
-                    screen.print(10,30,STRINGS_BACKGROUND_IMG,0.7,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-                end
+                --if (infoimg.w>800 and infoimg.h>500) then
+                    --screen.print(10,30,STRINGS_BACKGROUND_IMG,0.7,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+                --end
+				screen.print(10,30,STRINGS_EXPORT_IMAGE,0.8,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
             end
 
             screen.flip()
 
-            if buttons.r or buttons.l then
-                if buttons.r then angle+=90 elseif buttons.l then angle-=90 end
-                 if angle > 360 then angle = 90 end
-                 if angle < 0 then angle = 270 end
-                tmp:rotate(angle)
+			if buttons.r or buttons.l then
+				if buttons.r then angle+=90 elseif buttons.l then angle-=90 end
+				if angle > 360 then angle = 90 end
+				if angle < 0 then angle = 270 end
+				tmp:rotate(angle)
             end
             
             if buttons.square then show_bar_upper = not show_bar_upper end
@@ -569,22 +658,29 @@ function visorimg(path)
             if buttons.cancel or buttons.accept then break end
 
             if buttons.triangle then
-                if (infoimg.w>800 and infoimg.h>500) then
+				if theme.data["list"] then theme.data["list"]:blit(0,0) end
+				screen.flip()
+                image.review(path)
+				--[[
+				if (infoimg.w>800 and infoimg.h>500) then
                     theme.data["back"] = tmp
                     __BACKG = path
                     write_config()
                     changeimg = true
                     os.message(STRINGS_THEMES_INSTALL_DONE,0)
                 end
+				]]
             end
 
         end
 
         barblit=false
+		--[[
         if changeimg then
             theme.data["back"]:reset()
             theme.data["back"]:resize(__DISPLAYW, __DISPLAYH)
         end
+		]]
     else
         os.message(STRINGS_ERROR_PREVIEW_IMG)
     end
@@ -664,6 +760,7 @@ function visortxt(handle, flag_edit)
 
     if #texteditorInfo.list > 9999 then os.message(STRINGS_EDIT_TOO_LARGE) return false end
 
+	local xscr2 = 10
 	local texteditorOrdinal_x = 15
     local texteditorOrdinalWidth = texteditorOrdinal_x + screen.textwidth("0000") + texteditorOrdinal_x
     local texteditorDefaultText_x = texteditorOrdinalWidth
@@ -682,9 +779,9 @@ function visortxt(handle, flag_edit)
         buttons.read()
         if editorimg then editorimg:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 
-        if screen.textwidth(handle.path) > 860 then xscr2 = screen.print(xscr2,10,handle.path,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__SLEFT,860) else
-            screen.print(10,10,handle.path,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-        end
+        if screen.textwidth(handle.path) > 880 then
+			xscr2 = screen.print(xscr2,10,handle.path,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__SLEFT,880)
+		else screen.print(10,10,handle.path,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR) end
 
         local list_y = 70
         if texteditorInfo.list and #texteditorInfo.list > 0 then
@@ -949,7 +1046,8 @@ function usbMassStorage()
 
     while usb.actived() != 1 do
         buttons.read()
-        power.tick()
+        --power.tick(__POWER_TICK_SUSPEND)
+		power.tick(__POWER_TICK_ALL)
 
         if theme.data["list"] then theme.data["list"]:blit(0,0) end 
 
@@ -980,7 +1078,7 @@ function usbMassStorage()
 
     while true do
         buttons.read()
-        power.tick()
+        power.tick(__POWER_TICK_ALL)
         if theme.data["list"] then theme.data["list"]:blit(0,0) end 
 
         draw.fillrect(x, y, w, h, theme.style.BARCOLOR)
@@ -1015,7 +1113,9 @@ function usbMassStorage()
     local x,y = 480 - (w/2), 272 - (h/2)
     while not buttons.cancel do
         buttons.read()
-        power.tick()
+        power.tick(__POWER_TICK_ALL)
+		--info bar
+		os.infobar(1)
         if theme.data["list"] then theme.data["list"]:blit(0,0) end 
 
         draw.fillrect(x,y,w,h,theme.style.BARCOLOR)
@@ -1026,6 +1126,7 @@ function usbMassStorage()
     end
 
     usb.stop()
+	os.infobar()
     buttons.read()
     buttons.homepopup(1)
 

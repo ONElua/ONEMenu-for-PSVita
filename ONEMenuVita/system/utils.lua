@@ -156,7 +156,7 @@ infodevices()
 function write_config()
 	ini.write(__PATH_INI,"theme","id",__THEME)
 	ini.write(__PATH_INI,"update","update",__UPDATE)
-	ini.write(__PATH_INI,"backg","img",__BACKG) 
+	--ini.write(__PATH_INI,"backg","img",__BACKG) 
 	ini.write(__PATH_INI,"slides","pos",__SLIDES)
 	ini.write(__PATH_INI,"pics","show",__PIC1)
 --sort for categories

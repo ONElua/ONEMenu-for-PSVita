@@ -81,6 +81,7 @@ function appman.ctrls()
 			end
 
 			if tmp_cat != cat then
+				os.delay(10)
 				if theme.data["jump"] then theme.data["jump"]:play() end
 				elev=0
 				restart_cronopic()
@@ -112,7 +113,7 @@ function appman.ctrls()
 		clicked = false
 	end
 
-	if cronopic:time() > 950 then
+	if cronopic:time() > 900 then
 		show_pic = true
 	end
 
@@ -121,7 +122,6 @@ end
 function appman.launch()
 
 	buttons.interval(10,10)
-	local counter = 0
 	while true do
 
 		buttons.read()
@@ -131,17 +131,19 @@ function appman.launch()
 		while IMAGE_PORT_I:available() > 0 do -- While have availables request.
 			local entry = IMAGE_PORT_I:pop() -- Recibimos peticiones..
 			if static_void[entry.y][entry.x].path_img == entry.path then -- Check ident
-				if entry.img then 
-					static_void[entry.y][entry.x].img = entry.img
+				if not entry.img then
+					entry.img = iconDef
+					if entry.resize then
+						entry.img:resize(120,100)
+					else
+						entry.img:resize(120,120)
+					end
+					entry.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 				end
+				static_void[entry.y][entry.x].img = entry.img
+
 			end
-			counter += 1
 			entry = nil
-		end
-		
-		if counter == appman.len then -- Recv all request, then all exists is loaded and return CPU/GPU
-			os.cpu(__CPU)
-			os.gpuclock(__GPU)
 		end
 
 		buttons_reasign()
@@ -274,7 +276,6 @@ end
 
 local shrink_callback = function ()
 
-	--if cat == 1 and appman[cat].list[focus_index].dev != "gro0" then--Only Vita Games in ux0:app
 	if appman[cat].cats == "psvita" and appman[cat].list[focus_index].dev != "gro0" then--Only Vita Games in ux0:app
 
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
@@ -622,7 +623,24 @@ end
 
 local editsfo_callback = function ()
 
-	if appman[cat].list[focus_index].dev == "gro0" then return end
+	--Init load prkxs
+	if not __kernel then
+		if files.exists("modules/kernel.skprx") then
+			if os.requirek("modules/kernel.skprx")==1 then __kernel = true end
+		else
+			if os.requirek("ux0:VitaShell/module/kernel.skprx")==1 then	__kernel = true end
+		end
+	end
+
+	if not __user then
+		if files.exists("modules/user.suprx") then
+			if os.requireu("modules/user.suprx")==1 then __user = true end
+		else
+			if os.requireu("ux0:VitaShell/module/user.suprx")==1 then __user = true end
+		end
+	end
+
+	if appman[cat].list[focus_index].dev == "gro0" or (not __kernel and not __user) then return end
 
 	local pos_menu = submenu_ctx.scroll.sel
 	local vbuff = screen.toimage()
@@ -685,11 +703,9 @@ local openfolder_callback = function ()
 
 	local options = { }
 
-	--if cat == 1 or cat == 2 or cat == 5 then
 	if appman[cat].cats == "psvita" or appman[cat].cats == "hbvita" or appman[cat].cats == "adrbb" then
 		table.insert(options, { text = "App", path = appman[cat].list[focus_index].dev..":/app/"..appman[cat].list[focus_index].id, exit=false })
 
-		--if cat == 1 then
 		if appman[cat].cats == "psvita" then
 			--Patch
 			if files.exists(appman[cat].list[focus_index].dev.."/patch/"..appman[cat].list[focus_index].id) then
@@ -698,7 +714,7 @@ local openfolder_callback = function ()
 
 			--Repatch
 			local Repatch_Find = nil
-			local path_RePatch = { "ux0:/RePatch", "uma0:/RePatch", "imc0:/RePatch", "xmc0:/RePatch" }
+			local path_RePatch = { "ux0:RePatch", "uma0:RePatch", "imc0:RePatch", "xmc0:RePatch" }
 
 			for i=1,#path_RePatch do
 				if files.exists(path_RePatch[i].."/"..appman[cat].list[focus_index].id) then
@@ -709,14 +725,27 @@ local openfolder_callback = function ()
 			if Repatch_Find and files.exists(Repatch_Find.."/"..appman[cat].list[focus_index].id) then
 				table.insert(options, { text = "RePatch", path = Repatch_Find.."/"..appman[cat].list[focus_index].id, exit = false })
 			end
+
+			--ReAddcont
+			local ReAddcont_Find = nil
+			local path_ReAddcont = { "ux0:ReAddcont", "uma0:ReAddcont", "imc0:ReAddcont", "xmc0:ReAddcont" }
+
+			for i=1,#path_ReAddcont do
+				if files.exists(path_ReAddcont[i].."/"..appman[cat].list[focus_index].id) then
+					ReAddcont_Find = path_ReAddcont[i]
+					break
+				end
+			end
+			if ReAddcont_Find and files.exists(ReAddcont_Find.."/"..appman[cat].list[focus_index].id) then
+				table.insert(options, { text = "ReAddcont", path = ReAddcont_Find.."/"..appman[cat].list[focus_index].id, exit = false })
+			end
+
 		end
 
 	else
 
-		--if cat == 3 then
 		if appman[cat].cats == "psm" then
 			table.insert(options, { text = "PSM", path = appman[cat].list[focus_index].dev..":/psm/"..appman[cat].list[focus_index].id, exit = false })
-		--elseif cat == 4 then
 		elseif appman[cat].cats == "retro" then
 			table.insert(options, { text = "PSPEMU", path = appman[cat].list[focus_index].dev..":/pspemu/psp/game/"..appman[cat].list[focus_index].id, exit = false })
 		end
@@ -787,7 +816,7 @@ local sort_callback = function ()
 		{ text = STRINGS_APP_SORT_ID },
 		{ text = STRINGS_APP_SORT_TITLE },
 	}
-	--if cat == 1 then
+
 	if appman[cat].cats == "psvita" then
 		table.insert(options, { text = STRINGS_APP_SORT_REGION })
 	end
@@ -903,24 +932,22 @@ function submenu_ctx.wakefunct()
 	-- Handle Option Text and Option Function
 	submenu_ctx.options = {}
 
-	--if cat != 6 then
-		table.insert(submenu_ctx.options, { text = STRINGS_APP_UNINSTALL, funct = uninstall_callback })
-	--end
-	--if cat == 1 then
+	table.insert(submenu_ctx.options, { text = STRINGS_APP_UNINSTALL, funct = uninstall_callback })
+
 	if appman[cat].cats == "psvita" then
 		table.insert(submenu_ctx.options, { text = STRINGS_APP_SHRINK_GAME, funct = shrink_callback })
 	end
-	--if cat == 2 then
+
 	if appman[cat].cats == "hbvita" then
 		table.insert(submenu_ctx.options, { text = STRINGS_APP_SWITCH, funct = switch_callback })
 	end
-	--if cat == 1 or cat == 2 or cat == 5 then
+
 	if appman[cat].cats == "psvita" or appman[cat].cats == "hbvita" or appman[cat].cats == "adrbb" then
 		table.insert(submenu_ctx.options, { text = STRINGS_APP_EDIT_BUBBLE, funct = editsfo_callback })
 	end
-	--if cat != 6 then
-		table.insert(submenu_ctx.options, { text = STRINGS_APP_OPEN_FOLDER, funct = openfolder_callback, })
-	--end
+
+	table.insert(submenu_ctx.options, { text = STRINGS_APP_OPEN_FOLDER, funct = openfolder_callback, })
+
 	table.insert(submenu_ctx.options, { text = STRINGS_APP_SORT_CATEGORY..sorting, funct = sort_callback, pad = true })
 
 	submenu_ctx.scroll = newScroll(submenu_ctx.options, #submenu_ctx.options)

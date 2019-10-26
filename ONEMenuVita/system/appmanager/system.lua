@@ -77,13 +77,13 @@ function SubOptions()
 
     Sub_Options = { -- Handle Option Text and Option Function
 
-		{ text = STRINGS_REFRESH_LIVEAREA,  		funct = refresh_callback },
+		{ text = STRINGS_REFRESH_LIVEAREA,  		funct = refresh_callback,				descr = STRINGS_RELOAD_CONTENT_DESCR },
 
-		{ text = STRINGS_APP_SHOW_PIC..showpic, 	funct = pic1_callback,		pad = true },
-		{ text = STRINGS_APP_SLIDES..var,       	funct = slides_callback,	pad = true },
-		{ text = STRINGS_SUBMENU_THEMES,            funct = themesONEMenu_callback },
+		{ text = STRINGS_APP_SHOW_PIC..showpic, 	funct = pic1_callback,		pad = true, descr = STRINGS_SHOW_PIC_DESCR },
+		{ text = STRINGS_APP_SLIDES..var,       	funct = slides_callback,	pad = true,	descr = STRINGS_SLIDES_DESCR },
+		{ text = STRINGS_SUBMENU_THEMES,            funct = themesONEMenu_callback,			descr = STRINGS_THEMES1MENU_DESCR },
 
-		{ text = STRINGS_ENABLE_UPDATE.._update,   	funct = update_callback,    pad = true },
+		{ text = STRINGS_ENABLE_UPDATE.._update,   	funct = update_callback,    pad = true,	descr = STRINGS_ENABLE_UPDATE_DESCR },
     }
 
 end
@@ -94,6 +94,7 @@ function SubSystem()
     SubOptions()
 	local scrollsys = newScroll(Sub_Options, #Sub_Options)
 
+	local x_scrext = 20
 	buttons.interval(16,5)
 	while true do
 		buttons.read()
@@ -101,7 +102,7 @@ function SubSystem()
 
 		draw.fillrect(0,0,960,544,color.black:a(105))
 
-		screen.print(480,15,"System Settings",1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		screen.print(480,15,STRINGS_SUBMENU_TITLE,1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 		local y = 70
 		for i=scrollsys.ini,scrollsys.lim do
 			if i == scrollsys.sel then draw.fillrect(10,y-2,930,23,theme.style.SELCOLOR) end
@@ -116,11 +117,21 @@ function SubSystem()
 
 		end
 
+		if screen.textwidth(Sub_Options[scrollsys.sel].descr) > 935 then
+			x_scrext = screen.print(x_scrext, 520, Sub_Options[scrollsys.sel].descr,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__SLEFT,915)
+		else
+			screen.print(480, 520, Sub_Options[scrollsys.sel].descr,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		end
+
 		screen.flip()
 
 		--Controls
-		if buttons.up or buttons.analogly < -60 then scrollsys:up() end
-		if buttons.down or buttons.analogly > 60 then scrollsys:down() end
+		if buttons.up or buttons.analogly < -60 then
+			if scrollsys:up() then x_scrext = 20 end
+		end
+		if buttons.down or buttons.analogly > 60 then
+			if scrollsys:down() then x_scrext = 20 end
+		end
 
 		if buttons.cancel or buttons.start then
 			os.delay(80)

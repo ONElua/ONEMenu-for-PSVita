@@ -11,6 +11,7 @@ STRINGS_PASS =					"Use Pass ?"
 STRINGS_OS_PASS =				"PASS"
 
 --SubMenu
+STRINGS_SUBMENU_TITLE =			"System Settings"
 STRINGS_SUBMENU_COPY =			"Copy"
 STRINGS_SUBMENU_DELETE =		"Delete"
 STRINGS_SUBMENU_MAKEDIR =		"MakeDir"
@@ -29,6 +30,8 @@ STRINGS_SUBMENU_CUSTOMTHEMES =	"LiveArea CustomThemes"
 STRINGS_SUBMENU_FTP =			"FTP"
 STRINGS_REFOLDERS_CLEANUP =		"ReFolders Cleanup"
 STRINGS_MULTIMEDIA_CLEANUP =	"Multimedia Folders Cleanup"
+STRINGS_MESSAGE_DELETE =		"Deleting..."
+STRINGS_FOLDERS_DELETE =		"Folders Eliminated"
 STRINGS_SUBMENU_RESTART =		"Restart ONEMenu"
 STRINGS_SUBMENU_RESET =			"Power Reset"
 STRINGS_SUBMENU_POWEROFF =		"Shutdown"
@@ -57,6 +60,7 @@ STRINGS_USB_GAMECARD =			"Game Card"
 
 STRINGS_ERROR_PREVIEW_IMG =		"Error Image not supported"
 STRINGS_BACKGROUND_IMG =		"Background: Press △"
+STRINGS_EXPORT_IMAGE =			"Export Img: Press △"
 
 -- ## Visor TXT ##
 STRINGS_EDIT_LINE =				"Edit line"
@@ -69,6 +73,9 @@ STRINGS_TITLE_UPDATE_DB =		"To apply the TITLE change you need to perform DB upd
 STRINGS_STITLE_RESTART =		"To apply the STITLE change you need to restart the PSVita\n\nDo you want to restart now ?"
 STRINGS_STITLE_MGE =			"After edit the STITLE a reboot is needed"
 STRINGS_TITLE_MGE =				"After edit the TITLE an update.db is needed to reflect changes"
+
+-- ## Video Player ##
+STRINGS_VIDEO_PLAYER =			"Video Player"
 
 -- ## Music Player ##
 STRINGS_MUSIC_PLAYING =			"Playing"
@@ -229,6 +236,25 @@ STRINGS_LIVEAREA_GAMES =		"\n\nTotal Installed Games: "
 STRINGS_LIVEAREA_NO_GAMES =		"\n\nNo Games found"
 STRINGS_LIVEAREA_EXTRAREFRESH =	"Search DLCs & Updates"
 STRINGS_LIVEAREA_TOTAL_EXTRA =	"\n\nInstalled DLCs & Updates: "
+
+------------	System SubMenu	-----------------------------------------------------------------------------
+STRINGS_RELOAD_CONTENT_DESCR =	"You can install nonpdrm content"
+STRINGS_USB_DESCR =				"You can use the USB connection"
+STRINGS_FTP_DESCR =				"You can use the FTP connection"
+STRINGS_REFOLDERS_DESCR =		"Delete game content doesn't installed in the PS Vita from the directorioes Readdcont and Repatch (ux0,uma0,imc0,xmc0)"
+STRINGS_MULTIMEDIA_DESCR =		"Delete empty directories on multimedia directories: ux0:music/, ux0:picture/ALL/, ux0:picture/CAMERA/, ux0:picture/SCREENSHOT/, ux0:video/"
+STRINGS_RESTART_DESCR =			"Restart ONEMenu"
+STRINGS_REBOOT_DESCR =			"Restart PSVita"
+STRINGS_POWEROFF_DESCR =		"Shutdown PSVita"
+STRINGS_UPDATE_DB_DESCR =		"Update your database without lose your iconlayout"
+STRINGS_REBUILD_DB_DESCR =		"Rebuild the database (losing your iconlayout)"
+STRINGS_CUSTOMTHEMES_DESCR =	"You can uninstall CustomThemes (not official themes)"
+STRINGS_VIDEO_PLAYER_DESCR =	" Simple video player (Only reproduce videos with compatibility)"
+
+STRINGS_SHOW_PIC_DESCR =		"Show every bubble pic"
+STRINGS_SLIDES_DESCR =			"Change the style of the icons on ONEMenu"
+STRINGS_THEMES1MENU_DESCR =		"You can download/install/change Custom Themes on ONEMenu"
+STRINGS_ENABLE_UPDATE_DESCR =	"Enable/Disable the AutoUpdate feature to allow or block future ONEMenu updates"
 
 ------------	Updater	-------------------------------------------------------------------------
 STRINGS_UPDATER_QUESTION = 		"is now available.\n\nDo you want to update the application?"

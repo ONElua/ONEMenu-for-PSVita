@@ -21,7 +21,6 @@ function theme.load()
 
 	-- Get the id of theme pack
 	__THEME = ini.read(__PATH_INI,"theme","id","default")
-	__BACKG = ini.read(__PATH_INI,"backg","img","")
 
 	local elements = {
 
@@ -47,8 +46,7 @@ function theme.load()
 	if not files.exists(path_theme) then path_theme = "system/theme/default/" end
 
 	--Primero checamos si tienen una img de fondo para el back
-	theme.data["back"] = image.load(__BACKG)
-	if not theme.data["back"] then theme.data["back"] = image.load(path_theme.."back.png") or image.load("system/theme/default/back.png") end
+	theme.data["back"] = image.load(path_theme.."back.png") or image.load("system/theme/default/back.png")
 
 	if theme.data["back"] then 
 		if (image.getrealw(theme.data["back"]) < __DISPLAYW or image.getrealh(theme.data["back"]) < __DISPLAYH) or
@@ -122,13 +120,13 @@ function theme.load()
 	icons_mimes={ 1,pbp=2,prx=2,bin=2,suprx=2,skprx=2,dat=2,db=2,a=2,prs=2,pmf=2,at9=2,dds=2,tmp=2,html=2,gft=2,sfm=2,icv=2,cer=2,dic=2,pgf=2,
 					rsc=2,rco=2,res=2,dreg=2,ireg=2,pdb=2,mai=2,bin_bak=2,psp2dmp=2,rif=2,trp=2,self=2,mp4=2,edat=2,log=2,ptf=2,ctf=2,inf=2,
 					png=3,gif=3,jpg=3,jpeg=3,bmp=3,
-					mp3=4,s3m=4,wav=4,at3=4,ogg=4,
+					mp3=4,s3m=4,wav=4,at3=4,ogg=4,mp4=4,
 					rar=5,zip=5,vpk=5,gz=5,
 					cso=6,iso=6,dax=6
 				}
 
 	isopened = { png = theme.style.IMAGECOLOR, jpg = theme.style.IMAGECOLOR, jpeg = theme.style.IMAGECOLOR, gif = theme.style.IMAGECOLOR, bmp = theme.style.IMAGECOLOR,
-				 mp3 = theme.style.MUSICCOLOR, ogg = theme.style.MUSICCOLOR, wav = theme.style.MUSICCOLOR,
+				 mp3 = theme.style.MUSICCOLOR, ogg = theme.style.MUSICCOLOR, wav = theme.style.MUSICCOLOR, mp4 = theme.style.MUSICCOLOR,
 				 iso = theme.style.BINCOLOR, pbp = theme.style.BINCOLOR, cso = theme.style.BINCOLOR, dax = theme.style.BINCOLOR, bin = theme.style.BINCOLOR, suprx = theme.style.BINCOLOR, skprx = theme.style.BINCOLOR,
 				 zip = theme.style.ARCHIVECOLOR, rar = theme.style.ARCHIVECOLOR, vpk = theme.style.ARCHIVECOLOR, gz = theme.style.ARCHIVECOLOR,
 				 sfo = theme.style.SFOCOLOR,
@@ -245,7 +243,7 @@ function theme.manager()
 
 		if buttons.start and __THEME != "default" then
 			__THEME = "default"
-			__BACKG = ""
+			--__BACKG = ""
 			reload_theme()
 			themesimg = image.load(__PATH_THEMES..__THEME.."/themesmanager.png") or image.load("system/theme/default/themesmanager.png")
 		end
@@ -257,7 +255,7 @@ function theme.manager()
 			if sect == 1 then
 				if not list[sect][scr[sect].sel].ext and list[sect][scr[sect].sel].id != __THEME then
 					__THEME = list[sect][scr[sect].sel].id
-					__BACKG = ""
+					--__BACKG = ""
 					reload_theme()
 					themesimg = image.load(__PATH_THEMES..__THEME.."/themesmanager.png") or image.load("system/theme/default/themesmanager.png")
 				elseif list[sect][scr[sect].sel].ext then

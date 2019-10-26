@@ -185,3 +185,16 @@ function onNetGetFile(size,written,speed)
 	return 1
 end
 
+musicfile = ""
+function onMusicExportFile(progress)
+	if theme.data["list"] then theme.data["list"]:blit(0,0) end
+	draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
+
+	screen.print(10,10,"PROGRESS: "..tostring(progress or 0).." %")
+	screen.print(10,80,musicfile)
+	screen.flip()
+
+	--buttons.read()
+	--if buttons.cancel then return 0 end --Cancel or Abort
+	return 1
+end

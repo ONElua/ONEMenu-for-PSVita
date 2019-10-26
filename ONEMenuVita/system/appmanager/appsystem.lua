@@ -14,11 +14,13 @@ system = { data = {}, len = 0, sort = 0 }
 -- Timer and Oldstate to click actions.
 local crono_sys, show_sys = timer.new(), false
 local crono2, clic = timer.new(), false
+local crono_alpha = 0
 
 function restart_crono_sys()
 	crono_sys:reset()
 	crono_sys:start()
 	show_sys,pic1_sys = false,nil
+	crono_alpha = 0
 end
 
 function system.refresh()
@@ -39,7 +41,7 @@ function system.refresh()
 	if system.len == 0 then
 
 		system.data = game.list(__GAME_LIST_SYS)
-		system.sort = tonumber(ini.read(__PATH_INI,"sort","sys","1"))
+		system.sort = tonumber(ini.read(__PATH_INI,"sys","sort","1"))
 		if system.sort == 1 then
 			table.sort(system.data, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
 		else
@@ -52,6 +54,7 @@ function system.refresh()
 			if system.data[i].title	then system.data[i].title = system.data[i].title:gsub("\n"," ") end
 			system.data[i].path_img = system.data[i].path.."/sce_sys/icon0.png"
 			system.data[i].path_pic = system.data[i].path.."/sce_sys/livearea/contents/bg0.png"
+			system.data[i].path_pic2 = system.data[i].path.."/sce_sys/pic0.png" 
 		end
 	end
 
@@ -71,10 +74,19 @@ function system.run()
 		buttons.read()
 		touch.read()
 
-		if themesimg then themesimg:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-		
 		if pic1_sys then
-			pic1_sys:blit(0,55,125)
+
+			if crono_alpha < 155 then
+				crono_alpha += 04
+				if not angle then angle = 0 end
+				angle += 24
+				if angle > 360 then angle = 0 end
+				draw.framearc(925, 516, 18, theme.style.TXTCOLOR, 0, 360, 15, 20)
+				draw.framearc(925, 516, 18, theme.style.TXTBKGCOLOR, angle, 90, 15, 20)--gira
+			end
+			pic1_sys:blit(960/2, 544/2, crono_alpha)
+		else
+			if themesimg then themesimg:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 		end
 
 		screen.print(480,15,STRINGS_APP_LIVEAREA,1,theme.style.TITLECOLOR,color.gray,__ACENTER)
@@ -90,9 +102,10 @@ function system.run()
 						if preview then preview:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR) end
 					end
 					if not pic1_sys and show_sys then
-						pic1_sys = image.load(system.data[i].path_pic)
+						pic1_sys = image.load(system.data[i].path_pic) or image.load(system.data[i].path_pic2)
 						if pic1_sys then
-							pic1_sys:resize(692,446)
+							if pic1_sys:getw() != 960 and pic1_sys:geth() != 544 then pic1_sys:resize(960,544) end
+							pic1_sys:center()
 							pic1_sys:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 						end
 					end
@@ -167,11 +180,10 @@ function system.run()
 				system.sort = 1
 				table.sort(system.data, function (a,b) return string.lower(a.title)<string.lower(b.title) end)
 			end
-			--write_config()
 			ini.write(__PATH_INI,"sys","sort",system.sort)
 			pic1_sys,preview = nil,nil
+			restart_crono_sys()
 			os.delay(150)
-			restart_cronopic()
 		end
 
 		if buttons.cancel or buttons.square then
