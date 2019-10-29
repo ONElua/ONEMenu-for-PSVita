@@ -72,16 +72,16 @@ Shrink Game is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDR
 
 ![header](screenshots/1MENUVITA4.png)
 
-- Copy<br>
-- Move<br>
-- Extract (zips and rars).<br>
+- Copy
+- Move
+- Extract (zips and rars).
 
-- Delete<br>
-- Rename<br>
-- Size    (folder/file size)<br>
+- Delete
+- Rename
+- Size    (folder/file size)
 
-- NewFile<br>
-- MakeDir<br>
+- NewFile
+- MakeDir
 
 - Install games as vpk or folder<br>
 ![header](screenshots/1MENUVITA5.png)
@@ -104,19 +104,19 @@ Shrink Game is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDR
 - USB connection<br>
 ![header](screenshots/1MENUVITA10.png)
 
-- FTP<br>
-- ReFolder Cleanup: Delete game content doesn't installed in the PS Vita from the directorioes Readdcont and Repatch (ux0,uma0,imc0,xmc0).<br>
-- Multimedia Folders Cleanup: Delete empty directories on multimedia directories: "ux0:music/", "ux0:picture/ALL/", "ux0:picture/CAMERA/", "ux0:picture/SCREENSHOT/", "ux0:video/".<br>
+- FTP
+- ReFolder Cleanup: Delete game content doesn't installed in the PS Vita from the directorioes Readdcont and Repatch (ux0,uma0,imc0,xmc0).
+- Multimedia Folders Cleanup: Delete empty directories on multimedia directories: "ux0:music/", "ux0:picture/ALL/", "ux0:picture/CAMERA/", "ux0:picture/SCREENSHOT/", "ux0:video/".
 
-- Restart ONEMenu<br>
-- Power Reset<br>
-- Shutdown<br>
+- Restart ONEMenu
+- Power Reset
+- Shutdown
 
-- Update Database (app.db)<br>
-- Rebuild Database (app.db)<br>
+- Update Database (app.db)
+- Rebuild Database (app.db)
 
-- LiveArea CustomThemes: You can uninstall CustomThemes, not official themes.<br>
-- Video Player: Only plays mp4 videos compatibles with PSVita.<br>
+- LiveArea CustomThemes: You can uninstall CustomThemes, not official themes.
+- Video Player: Only plays mp4 videos compatibles with PSVita.
 
 ![header](screenshots/1MENUVITA11.png)
 
