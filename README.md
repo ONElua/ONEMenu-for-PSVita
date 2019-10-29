@@ -1,8 +1,7 @@
 # ONEMenu for PSVita
 
-![header](screenshots/1MENUVITA.png)
-
 **OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories.<br>
+![header](screenshots/1MENUVITA.png)
 
 - Onemenu comes with a built in File Explorer.
 - Installing/uninstalling apps/games, vpks (Including Nonpdrm content, you have to install the plugin Nonpdrm).
@@ -36,20 +35,21 @@ Shrink Game is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDR
 **L/R:** Fast scrolling.<br>
 **Square:** Opens system apps.<br>
 
+**Triangle:** Open Submenus<br>
 ![header](screenshots/1MENUVITA2.png)
 
-**Triangle:** Open Submenus<br>
 - Uninstall Bubbles
 - Shrink Game (Only for PSVita games)
 - Edit Bubble Title (Don't edit PSM games and PSP/PS1 official games)
 - Move App to ux0-ur0-uma0 (Only for Homebrews)
 - Sort Category bi Title, Id and Region.
 
-**System Settings (1) **
+## System Settings (1) ##
+
+**Start:**
 
 ![header](screenshots/1MENUVITA3.png)
 
-**Start:** Open System Settings (1)
 - Reload Content: Allows to install games in ux0:app (Thanks the plugin Nonpdrm from TheFloW)
 - Shows PICs: Show every bubble pic
 - Style: Change the style of the icons on ONEMenu
@@ -72,33 +72,33 @@ Shrink Game is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDR
 
 ![header](screenshots/1MENUVITA4.png)
 
-Copy<br>
-Move<br>
-Extract (zips and rars).<br>
+- Copy<br>
+- Move<br>
+- Extract (zips and rars).<br>
 
-Delete<br>
-Rename<br>
-Size    (folder/file size)<br>
+- Delete<br>
+- Rename<br>
+- Size    (folder/file size)<br>
 
-NewFile<br>
-MakeDir<br>
+- NewFile<br>
+- MakeDir<br>
 
-Install games as vpk or folder<br>
+- Install games as vpk or folder<br>
 ![header](screenshots/1MENUVITA5.png)
 
-Install CustomThemes for LiveArea<br>
+- Install CustomThemes for LiveArea<br>
 ![header](screenshots/1MENUVITA6.png)
 
-Export multimedia files (mp4, mp3, png, jpg).<br>
+- Export multimedia files (mp4, mp3, png, jpg).<br>
 ![header](screenshots/1MENUVITA7.png)
 
 ![header](screenshots/1MENUVITA8.png)
 
-**System Settings (2) **
+## System Settings (2) ##
+
+**Start:**
 
 ![header](screenshots/1MENUVITA9.png)
-
-**Start:** Open System Settings (2)
 
 - Reload Content: Allows to install games in ux0:app (Thanks the plugin Nonpdrm from TheFloW)<br>
 - USB connection<br>
