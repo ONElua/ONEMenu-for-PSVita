@@ -3,171 +3,124 @@
 ![header](screenshots/1MENUVITA.png)
 
 **OneMenu for PSVita** is a simple to use UI which separates the installed games and apps into categories.<br>
-Onemenu comes with a built in file explorer which has many advanced features such as installing/uninstalling apps/games, move the selected app/game to diferent partition (ux0-ur0-uma0) connect via ftp or usb to the pc, restart, shutdown, rebuild db.
 
-### Changelog 3.13 ###
-- Added support for firmware 3.69/3.70.<br>
-- Now when uninstalling PSVita games you can also eliminate corresponding folders from Repatch and Readdcont of following partitions: ux0.uma0.imc0,xmc0.<br>
-- Added partitions uma0,imc0 y xmc0 to Clean RePAtch folders option.<br>
-- Added support to install CustomThemes in ur0 and uma0.<br>
+- Onemenu comes with a built in File Explorer.
+- Installing/uninstalling apps/games, vpks (Including Nonpdrm content, you have to install the plugin Nonpdrm).
+- Move the selected homebrew to diferent partition (ux0-ur0-uma0).
+- Connect via ftp or usb to the pc (Memory Card, SD2Vita or GameCard).
+- Extract zip/rar files.
+- Edit the title show in the Bubbles in the LiveArea. 
+- Update the database without lose the IconLayout, very usefull to install PSM games (You have to install the plugins nopsdrm and nonpdrm).
+- Shrink Game: Allows to free up some space by eliminating some game folders/files such as: Game Manual, and some folders/files from ux0:app/(GAMEID) since those folders/files are also at ux0:patch/(GAMEID) (ux0:Repatch/(GAMEID)). 
+- Install CustomThemes in ux0, ur0 and uma0.
+- Delete game content doesn't installed in the PS Vita from the directorioes Readdcont and Repatch (ux0,uma0,imc0,xmc0)
+- Functions to export Multimedia files (images jpg,png, music mp3, videos mp4).
+- restart, shutdown, rebuild db.
 
-### Changelog 3.12 ###
-- Fix accept/cancel in some dialogues.<br>
+Shrink Game is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDRM-modding/wiki#saving-memory-space-while-using-mods
+* NOTE: Be very careful after using this option, because if the folders/files get deleted from ux0:patch/(GAMEID) or ux0:rePatch/(GAMEID) the game will stop booting cause there won't be any folders/files left at ux0:app/(GAMEID)
 
-### Changelog 3.11 ###
-- Added option to eliminate unwanted rePatch/reAddcont folders/files left by uninstalled games.<br>
-
-### Changelog 3.10 ###
-- Fix DLCs & Updates with Reload Content (Nonpdrm).<br>
-
-### Changelog 3.09 ###
-- The bars showing the partitions sizes were removed and now the sizes for:<br>
-addcont<br>
-readdcont<br>
-patch<br>
-repatch<br>
-folders are showed only for vita games.<br><br>
-- Also, added to the Shrink Game option, shrink the addcont/readdcont folders  of selected game.<br>
-- When a vita game is uninstalled, you'll be asked if Readdcont/GAMEID folder should be removed.<br>
-
-### Changelog 3.08 ###
-- Bug Fixes.<br>
-
-### Changelog 3.07 ###
-- Updated kernel and user modules taken from vitashell.<br>
-- Added fix for the USB connection and udcd_uvc.skprx. 100% thanks to TheOfficialFloW and Xerpi.<br>
-- Re-added "Install CustomThemes" from Livearea.<br>
-
-### Changelog 3.06 ###
-- Fixed downloads using QR SCAN, added ability to download from servers: Mediafire, Zippyshare, Gdrive.<br>
-- Totally renewed the translation method, all translations must be updated according to new english_us.txt file.<br>
-- Fixed STITLE error (max length 52) when editing bubbles.<br>
-- Few small bugs fixed.<br>
-
-### Changelog 3.05 ###
-- Support to detect a game cartridge.<br>
-- Added option to open ux0:app/(gameid), ux0:patch/(gameid) and ux0:repatch/(gameid) folder.<br>
-
-### Changelog 3.04 ###
-- Added support for detecting correctly the bubbles made with Adrenaline Bubble Booter v.06 and Adrenaline Bubbles Manager v5.05<br>
-
-### Changelog 3.03 ###
-- Updated kernel and user modules taken from vitashell.<br>
-- Added option to open ux0:app/(gameid) folder.<br>
-- Few small bugs fixed.<br>
-
-### Changelog 3.02 ###
-- Fixed error with sfo files containing STITLE_XX AND TITLE_XX from the SFO at appmeta.<br>
-- Added option to backup/restore savedata to/from ux0:data/ONEMENU/saves when uninstalling/installing games.<br>
-
-### Changelog 3.01 ###
-- Added option Edit Bubble (by TheRadziu) allowing to edit the game STITLE and TITLE from the SFO at appmeta (Thanks to TheFloW for User/Kernel Modules).<br>
-- Added sort list by Region.<br>
-- Now you can set the sorting categories to Ascendant/Descendant.<br>
-- Now the option Move App will only be enabled for homebrews.<br>
-- Now the pvf font is shown in Bold style (improving presentation).<br>
-- Took care of some bugs.<br>
-
-### Changelog 3.00 ###
-- Now the submenu in main screen have 2 pages (press triangle to open, and alternate pages with L and R), Same for submenu in Explorer.<br>
-- Added the option to download and install ONEMenu themes to the main screen submenu.<br>
-- Added the option "RELOAD Content" Allows to install games (NONPDRM) in ux0:app (Thanks the plugin Nonpdrm from TheFloW).<br>
-- Added the option "Shrink Game" to the main screen submenu, allows to free up some space by eliminating some game folders/files.<br>
-- Optimized the code a litle.<br>
-
-![header](screenshots/1MENUVITA7.png)
-
-![header](screenshots/1MENUVITA8.png)
-
-### Changelog 2.05 ###
-- Edit param.sfo (decrypted).<br>
-- Fix automatic network update (Add TLS v1.2 Support).<br>
-- Updated to the latest version of ONElua.<br>
+### Changelog 3.14 ###
+- Added support for firmware 3.71/3.72.<br>
+- Added a simple video player (Only plays compatible videos with the PSVita).<br>
+- In the game screen (Bubbles) you have to press the square button to access to system aplications.<br>
+- Now, to access to the system options of ONEMenu you have to press the start buttom.<br>
+- New option "Delete empty directories on multimedia directories" in the system options of ONEMenu.<br>
+- Bug fixes and improvements in the code.<br>
 
 ## ONEMenu icons ##
 
-![header](screenshots/1MENUVITA.png)
+![header](screenshots/1MENUVITA1.png)
 
 **UP/Down:** Category change (5 categories available: Vita/Hb games, PSM Games, PSP/Hbs Games, PS1 Games, Adrenaline Bubbles).<br>
 **L/R:** Fast scrolling.<br>
-**Start:** Opens a submenu with a list of system apps.<br>
-
-**Triangle:** Open Submenus<br>
-
-* NOTE: Press L/R to alternate between submenus (options).
-
-#### Submenu 1: <br>
+**Square:** Opens system apps.<br>
 
 ![header](screenshots/1MENUVITA2.png)
 
-**RELOAD Content** Allows to install games in ux0:app (Thanks the plugin Nonpdrm from TheFloW).
+**Triangle:** Open Submenus<br>
+- Uninstall Bubbles
+- Shrink Game (Only for PSVita games)
+- Edit Bubble Title (Don't edit PSM games and PSP/PS1 official games)
+- Move App to ux0-ur0-uma0 (Only for Homebrews)
+- Sort Category bi Title, Id and Region.
 
-**Uninstall**     Allows to uninstall selected app/game.
-
-**Shrink Game**  Allows to free up some space by eliminating some game folders/files such as: Game Manual, and some folders/files from ux0:app/(GAMEID) since those folders/files are also at ux0:patch/(GAMEID) (ux0:Repatch/(GAMEID)).
-
-This option is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDRM-modding/wiki#saving-memory-space-while-using-mods
-* NOTE: Be very careful after using this option, because if the folders/files get deleted from ux0:patch/(GAMEID) or ux0:rePatch/(GAMEID) the game will stop booting cause there won't be any folders/files left at ux0:app/(GAMEID)
-
-**Switch app**    Allows to move the selected app/game between the 3 available partitions (ux0-ur0-uma0).
-* NOTE: When moving apps/games to ur0 or uma0 some will not start or will give a savedata error.
-
-**Show PICS**     Allows to show the selected game PIC in the submenu.<br>
-
-**Mark Favorite** Allows to mark a game/app as favorite.<br>
-
-
-#### Submenu 2: <br>
+**System Settings (1) **
 
 ![header](screenshots/1MENUVITA3.png)
 
-**Themes ONEMenu** This option now allows to download and change themes for ONEMenu (moved to this submenu for best accessibility).
-
-**Style**       Allows to interchange ONEMenu category slides position and icon list style.
+**Start:** Open System Settings (1)
+- Reload Content: Allows to install games in ux0:app (Thanks the plugin Nonpdrm from TheFloW)
+- Shows PICs: Show every bubble pic
+- Style: Change the style of the icons on ONEMenu
 	Up: Clasic Menu style with mirrored icons and the category slides above the icons list.
 	Down: Simple menu similar to PS4 with the category slide below, this option does not have the icons reflections.
+- Themes OneMenu: download/install/change Themes for ONEMenu
 
-**Scan Favorites** If this option gets enabled, when ONEMenu is restarted the icon list will only show the games/apps marked as "Favorite", is necesary to have marked one game/app at least to enable the option. 
-If you want to have all the games/apps listed again then this option must be disabled.
+![header](screenshots/themes1.png)
 
-**Sort Category by** Allows to sort the icon list by Title (alphabetically) or Gameid.
+![header](screenshots/themes2.png)
 
-**Enable AutoUpdate** Enable/Disable the AutoUpdate feature to allow or block future ONEMenu updates.
+- Enable AutoUpdate: Enable/Disable the AutoUpdate feature to allow or block future ONEMenu updates.
 
+**Select:** File Explorer
 
-## ONEMenu Explorer Files ##
+## ONEMenu File Explorer ##
 
+**L/R:** Change partition.<br>
 **Triangle:** Open Submenus<br>
-
-* NOTE: Press L/R to alternate between submenus (options).
-
-#### Submenu 1 with basic functions as:
 
 ![header](screenshots/1MENUVITA4.png)
 
 Copy<br>
 Move<br>
 Extract (zips and rars).<br>
+
 Delete<br>
 Rename<br>
-MakeDir<br>
 Size    (folder/file size)<br>
 
+NewFile<br>
+MakeDir<br>
+
 Install games as vpk or folder<br>
-Export multimedia files (mp4, mp3, png, jpg).<br>
-
-
-#### Submenu 2 with advanced functions as:
-
 ![header](screenshots/1MENUVITA5.png)
 
-FTP<br>
-USB connection<br>
-Livearea Apps (install games in ux0:app)<br>
-Update Database (app.db)<br>
-Rebuild Database (app.db)<br>
-Reload config.txt<br>
-Favorites section to manage the games/apps marked as faverites and/or enable the option to scan only the favorites the next time you open ONEMenu.<br>
+Install CustomThemes for LiveArea<br>
+![header](screenshots/1MENUVITA6.png)
+
+Export multimedia files (mp4, mp3, png, jpg).<br>
+![header](screenshots/1MENUVITA7.png)
+
+![header](screenshots/1MENUVITA8.png)
+
+**System Settings (2) **
+
+![header](screenshots/1MENUVITA9.png)
+
+**Start:** Open System Settings (2)
+
+- Reload Content: Allows to install games in ux0:app (Thanks the plugin Nonpdrm from TheFloW)<br>
+- USB connection<br>
+![header](screenshots/1MENUVITA10.png)
+
+- FTP<br>
+- ReFolder Cleanup: Delete game content doesn't installed in the PS Vita from the directorioes Readdcont and Repatch (ux0,uma0,imc0,xmc0).<br>
+- Multimedia Folders Cleanup: Delete empty directories on multimedia directories: "ux0:music/", "ux0:picture/ALL/", "ux0:picture/CAMERA/", "ux0:picture/SCREENSHOT/", "ux0:video/".<br>
+
+- Restart ONEMenu<br>
+- Power Reset<br>
+- Shutdown<br>
+
+- Update Database (app.db)<br>
+- Rebuild Database (app.db)<br>
+
+- LiveArea CustomThemes: You can uninstall CustomThemes, not official themes.<br>
+- Video Player: Only plays mp4 videos compatibles with PSVita.<br>
+
+![header](screenshots/1MENUVITA11.png)
+
+![header](screenshots/1MENUVITA12.png)
 
 # Credits
 *Xerpi* for vita2d.<br>
@@ -176,6 +129,8 @@ Favorites section to manage the games/apps marked as faverites and/or enable the
 *Team Molecule* for Henkaku.<br>
 *WZ-JK* For Graphics.<br>
 *Yizhi gai* For the text editor.<br>
+Translate:<br>
+*([Z3R0](https://twitter.com/Z3R0N3__)).*<br>
 Testers:<br>
 *([BaltazaR4](https://twitter.com/baltazarregala4)).*<br>
 *([thehero_](https://twitter.com/TheheroGAC)).*<br>
