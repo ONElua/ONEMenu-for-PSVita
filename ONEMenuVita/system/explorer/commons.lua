@@ -158,7 +158,6 @@ function fillappmanlist(objin, info_sfo)
     --No Exist!!!
 	if search == 0 then
 		table.insert(appman[index].list, objin)
-		--table.sort(appman[index].list ,function (a,b) return string.lower(a.dev)<string.lower(b.dev) end)
 		SortGeneric(appman[index].list, appman[index].sort, appman[index].asc)
 		appman[index].scroll:set(appman[index].list,limit)
     else

@@ -163,15 +163,6 @@ function SortSdkTitle(a,b)
 	return (tonumber(a.sdk) > tonumber(b.sdk)) or (tonumber(a.sdk) == tonumber(b.sdk) and a.title < b.title)
 end
 
-function writelist(pathini, tb)
-    local file = io.open(pathini, "w+")
-    for s,t in pairs(tb) do
-        file:write(string.format('%s	%s	%s	%s	%s	%s	%s\n',	tostring(t.dev),tostring(t.id),tostring(t.sdk),tostring(t.type),
-																		tostring(t.version),tostring(t.path),tostring(t.title) ))
-    end
-    file:close()
-end
-
 function Scanning()
 
 	-- Init with Max CPU/GPU
