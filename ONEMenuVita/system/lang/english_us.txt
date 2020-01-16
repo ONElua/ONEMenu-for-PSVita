@@ -15,12 +15,14 @@ STRINGS_SUBMENU_TITLE =			"System Settings"
 STRINGS_SUBMENU_COPY =			"Copy"
 STRINGS_SUBMENU_DELETE =		"Delete"
 STRINGS_SUBMENU_MAKEDIR =		"MakeDir"
+STRINGS_SUBMENU_MAKEZIP =		"MakeZip"
 STRINGS_SUBMENU_RENAME =		"Rename"
 STRINGS_SUBMENU_EXTRACT =		"Extract"
 STRINGS_SUBMENU_CANCEL =		"Cancel"
 STRINGS_SUBMENU_INSTALL_GAME =	"Install Game"
 STRINGS_SUBMENU_INSTALLCTHEME =	"Install CustomTheme"
 STRINGS_SUBMENU_EXTRACT_TO =	"Extract To"
+STRINGS_COMPRESS =				"Compress..."
 STRINGS_SUBMENU_PASTE =			"Paste"
 STRINGS_SUBMENU_MOVE =			"Move"
 STRINGS_SUBMENU_SIZE =			"Size"
@@ -88,6 +90,8 @@ STRINGS_MUSIC_LOCK_DISPLAY =	"Lock Display"
 --ONEMenu
 STRINGS_WAIT_MGE =				"Please wait..."
 
+STRINGS_FILENAME =				"Filename"
+STRINGS_UNPACK =				"Unpack"
 STRINGS_APP_NOT_MEMORY =		"Not enough memory..."
 STRINGS_APP_REMOVE =			"Really wish to Uninstall: "
 STRINGS_APP_BACKUP_SAVE =		"You want to create a backup of the game savedata\n\nTo ux0:data/ONEMenu/Saves ?"
@@ -159,6 +163,7 @@ STRINGS_EXTRACTION =			"Extraction..."
 
 --onScanningFiles
 STRINGS_SCANNING =				"Scanning..."
+STRINGS_SUCCESSFUL =			"Successful"
 
 --onNetGetFile
 STRINGS_DOWNLOAD =				"Downloading..."
@@ -232,8 +237,10 @@ STRINGS_EXPORT_REBOOT =			"It is necesary to restart your PS vita"
 
 ------------	Refresh LiveArea	-------------------------------------------------------------------------
 STRINGS_LIVEAREA_NOTINSTALLED =	"\n\nGame not installed: "
-STRINGS_LIVEAREA_GAMES =		"\n\nTotal Installed Games: "
-STRINGS_LIVEAREA_NO_GAMES =		"\n\nNo Games found"
+STRINGS_LIVEAREA_GAMES =		"\n\nTotal Installed Vita Games/Homebrews: "
+STRINGS_LIVEAREA_GAMES_PSM =	"\n\nTotal Installed PSM Games: "
+STRINGS_LIVEAREA_NO_GAMES =		"\n\nNo Vita Games/Homebrews found"
+STRINGS_LIVEAREA_NO_PSM =		"\n\nNo PSM Games found"
 STRINGS_LIVEAREA_EXTRAREFRESH =	"Search DLCs & Updates"
 STRINGS_LIVEAREA_TOTAL_EXTRA =	"\n\nInstalled DLCs & Updates: "
 
@@ -249,7 +256,7 @@ STRINGS_POWEROFF_DESCR =		"Shutdown PSVita"
 STRINGS_UPDATE_DB_DESCR =		"Update your database without lose your iconlayout"
 STRINGS_REBUILD_DB_DESCR =		"Rebuild the database (losing your iconlayout)"
 STRINGS_CUSTOMTHEMES_DESCR =	"You can uninstall CustomThemes (not official themes)"
-STRINGS_VIDEO_PLAYER_DESCR =	" Simple video player (Only reproduce videos with compatibility)"
+STRINGS_VIDEO_PLAYER_DESCR =	"Simple video player (Only reproduce videos with compatibility)"
 
 STRINGS_SHOW_PIC_DESCR =		"Show every bubble pic"
 STRINGS_SLIDES_DESCR =			"Change the style of the icons on ONEMenu"
