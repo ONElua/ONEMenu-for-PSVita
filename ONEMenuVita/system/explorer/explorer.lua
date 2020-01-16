@@ -18,7 +18,7 @@ scroll = {
 xtitle,movx = 35,0
 title_scr_x = 5
 maxim_files=16
-backl, explorer, multi = {},{},{} -- All explorer functions
+backl, explorer, multi, multi_delete = {},{},{},{} -- All explorer functions
 slidex=0
 
 -- ## Explorer Drawer List ## --
@@ -156,6 +156,7 @@ function ctrls_explorer_list()
 
 		if check_root() then return end
 
+		if not action then multi = {} end
 		Root[Dev]=files.nofile(Root[Dev])
 		explorer.refresh(false)
 
@@ -167,6 +168,7 @@ function ctrls_explorer_list()
 			end
 			backl[#backl] = nil
 		end
+		multi_delete = {}
 	end
 
 	if scroll.list.maxim > 0 then -- Is exists any?
@@ -181,6 +183,8 @@ function ctrls_explorer_list()
 				Root[Dev]=explorer.list[scroll.list.sel].path
 				explorer.refresh(false)
 			end
+			multi_delete = {}
+			if not action then multi = {} end
 		end
 	end
 
@@ -196,13 +200,18 @@ function ctrls_explorer_list()
 	end
 
 	-- Multi-Selection
-	if buttons.square then
+	if buttons.square and scroll.list.maxim > 0 then
 		explorer.list[scroll.list.sel].multi = not explorer.list[scroll.list.sel].multi
 		if explorer.list[scroll.list.sel].multi then
 			table.insert(multi, explorer.list[scroll.list.sel].path)
 			explorer.list[scroll.list.sel].index = #multi
+			
+			table.insert(multi_delete, explorer.list[scroll.list.sel].path)
+			
+			
 		else
 			table.remove(multi, explorer.list[scroll.list.sel].index)
+			table.remove(multi_delete, explorer.list[scroll.list.sel].index)
 		end
 	end
 
@@ -307,17 +316,18 @@ local paste_callback = function ()
     elseif explorer.action == 3 then                     --Extract
         if #multi>0 then
             reboot=false
+			local res = 0
             for i=1,#multi do
                 if os.message(multi[i]+"\n"+STRINGS_PASS ,1)==1 then
                     local pass = osk.init(STRINGS_OS_PASS , "" , 50, __OSK_TYPE_LATIN, __OSK_MODE_PASSW)
                     if pass then
                         buttons.homepopup(0)
-                            files.extract(multi[i],explorer.dst,pass)
+                            if files.extract(multi[i],explorer.dst,pass) == 1 then os.message(STRINGS_SUCCESSFUL) else os.message(STRINGS_INSTALL_ERROR) end
                         buttons.homepopup(1)
                     end
                 else
                     buttons.homepopup(0)
-                        files.extract(multi[i],explorer.dst)
+                       if files.extract(multi[i],explorer.dst) == 1 then os.message(STRINGS_SUCCESSFUL) else os.message(STRINGS_INSTALL_ERROR) end
                     buttons.homepopup(1)
                 end
             end
@@ -333,7 +343,7 @@ local paste_callback = function ()
     explorer.action = 0
 	menu_ctx.wait_action = __ACTION_WAIT_NOTHING
     explorer.dst = ""
-    multi={}
+    multi, multi_delete = {},{}
 end
  
 local delete_callback = function () -- TODO: add move to -1 pos of the deleted element in list
@@ -344,11 +354,11 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
     if #explorer.list > 0 then
 		local del=false
         if explorer.list[scroll.list.sel].multi then
-            if #multi>0 then
-                if os.message(STRINGS_SUBMENU_DELETE.." "..#multi.."\n"..STRINGS_FILES_FOLDERS.."(s) ?",1) == 1 then
+            if #multi_delete>0 then
+                if os.message(STRINGS_SUBMENU_DELETE.." "..#multi_delete.."\n"..STRINGS_FILES_FOLDERS.."(s) ?",1) == 1 then
 					del=true
                     reboot=false
-                        for i=1,#multi do files.delete(multi[i]) end
+                        for i=1,#multi_delete do files.delete(multi_delete[i]) end
                     reboot=true
                 end
             end
@@ -367,7 +377,9 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
 			action = false
 			explorer.refresh(true)
 			explorer.action = 0
-			multi={}
+			menu_ctx.wait_action = __ACTION_WAIT_NOTHING
+			explorer.dst = ""
+			multi, multi_delete = {},{}
 		end
 	end
 
@@ -390,7 +402,7 @@ local rename_callback = function ()
             menu_ctx.close = true
             action = false
             explorer.action = 0
-			multi={}
+			multi, multi_delete = {},{}
 			explorer.list = files.listsort(Root[Dev])
         end
     end
@@ -412,7 +424,7 @@ local newfile_callback = function () -- Added suport multi-new-folder
         action = false
         explorer.refresh(true)
         explorer.action = 0
-        multi={}
+        multi, multi_delete = {},{}
     end
 end
  
@@ -432,7 +444,7 @@ local makedir_callback = function () -- Added suport multi-new-folder
         action = false
         explorer.refresh(true)
         explorer.action = 0
-        multi={}
+        multi, multi_delete = {},{}
     end
 end
  
@@ -586,7 +598,7 @@ local installgame_callback = function ()
         action = false
         explorer.refresh(true)
         explorer.action = 0
-        multi={}
+        multi, multi_delete = {},{}
     end
 	os.delay(15)
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
@@ -669,7 +681,7 @@ local installtheme_callback = function ()
         action = false
         explorer.refresh(true)
         explorer.action = 0
-        multi={}
+        multi, multi_delete = {},{}
     end
 	os.delay(15)
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
@@ -772,7 +784,7 @@ local filesexport_callback = function ()
 		if ext == "mp4" then
 			action = false
 			explorer.refresh(true)
-			multi={}
+			multi, multi_delete = {},{}
 			explorer.action = 0
 		end
 
@@ -791,7 +803,7 @@ local cancel_callback = function ()
 	action = false
 	explorer.refresh(false)
 	explorer.action = 0
-	multi={}
+	multi, multi_delete = {},{}
 end
 
 ---------------------------------- SubMenu Contextual 2 ---------------------------------------------------
@@ -817,7 +829,7 @@ local ftp_callback = function ()
 --clean
 		action = false
 		explorer.refresh(true)
-		multi={}
+		multi, multi_delete = {},{}
 		explorer.action = 0
     end
 	buttons.homepopup(1)
@@ -842,6 +854,54 @@ local shutdown_callback = function ()
     power.shutdown()
 end
 
+local makezip_callback = function ()
+	if #explorer.list > 0 then
+	
+		local name = osk.init(STRINGS_FILENAME, STRINGS_FILENAME, 128, __OSK_TYPE_DEFAULT, __OSK_MODE_TEXT)
+        if name then
+			name = name .. ".zip"
+		end
+		if not name or name == "" then name = "MakeZip.zip" end
+
+		local pass = nil
+		if os.message("\n"..STRINGS_PASS,1)==1 then
+			pass = osk.init(STRINGS_OS_PASS , "" , 50, __OSK_TYPE_LATIN, __OSK_MODE_TEXT)
+            if pass == "" then pass = false end
+		end
+
+		local res = 2
+        if explorer.list[scroll.list.sel].multi then
+            if #multi_delete>0 then
+				reboot=false
+					if pass then
+						res = files.makezip(Root[Dev].."/"..name, multi_delete,pass)
+					else
+						res = files.makezip(Root[Dev].."/"..name, multi_delete)
+					end
+				reboot=true
+					if res then os.message(STRINGS_SUCCESSFUL) else os.message(STRINGS_INSTALL_ERROR) end
+            end
+        else
+			reboot=false
+				if pass then
+					res = files.makezip(Root[Dev].."/"..name, explorer.list[scroll.list.sel].path, pass)
+				else
+					res = files.makezip(Root[Dev].."/"..name, explorer.list[scroll.list.sel].path)
+				end
+			reboot=true
+				if res then os.message(STRINGS_SUCCESSFUL) else os.message(STRINGS_INSTALL_ERROR) end
+        end
+--clean
+		menu_ctx.wakefunct()
+		menu_ctx.close = true
+		action = false
+		explorer.refresh(true)
+		explorer.action = 0
+		multi, multi_delete = {},{}
+		--explorer.list = files.listsort(Root[Dev])
+    end
+end
+
 menu_ctx = { -- Creamos un objeto menu contextual
     h = 544,				-- Height of menu
     w = 190,				-- Width of menu--170
@@ -863,6 +923,7 @@ function menu_ctx.wakefunct()
 
 		{ text = STRINGS_NEW_FILE,       		funct = newfile_callback },
 		{ text = STRINGS_SUBMENU_MAKEDIR,       funct = makedir_callback },
+		{ text = STRINGS_SUBMENU_MAKEZIP,		funct = makezip_callback },
 
 		{ text = STRINGS_SUBMENU_INSTALL_GAME, 	funct = installgame_callback },
 		{ text = STRINGS_SUBMENU_INSTALLCTHEME,	funct = installtheme_callback },
@@ -929,7 +990,7 @@ function menu_ctx.draw()
 			end
 			screen.clip()
 
-			if (i == 3 or i == 6 or i == 8 or i == 11) then
+			if (i == 3 or i == 6 or i == 9 or i == 11) then
 				h += 35
 			else
 				h += 26

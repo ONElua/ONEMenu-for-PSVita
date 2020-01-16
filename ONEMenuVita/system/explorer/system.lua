@@ -184,7 +184,6 @@ local themesLiveArea_callback = function ()
 end
 
 local video_callback = function ()
-	os.delay(25)
 	while true do
 		buttons.read()
 

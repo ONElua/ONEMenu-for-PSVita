@@ -50,12 +50,7 @@ _update = STRINGS_APP_NO
 if __UPDATE == 1 then _update = STRINGS_APP_YES end
 
 dofile("git/shared.lua")
-if __UPDATE == 1 then
-    local wstrength = wlan.strength()
-    if wstrength then
-        if wstrength > 55 then dofile("git/updater.lua") end
-    end
-end
+if __UPDATE == 1 then dofile("git/updater.lua") end
 
 SYMBOL_SQUARE	= string.char(0xe2)..string.char(0x96)..string.char(0xa1)
 SYMBOL_TRIANGLE	= string.char(0xe2)..string.char(0x96)..string.char(0xb3)

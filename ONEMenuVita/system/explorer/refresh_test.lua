@@ -94,6 +94,26 @@ function refresh_init(img)
 		end
 	end
 
+	--Scanning ux0:psm
+	local tmp = files.listdirs("ux0:psm")
+	local list_psm = {}
+	if tmp and #tmp > 0 then
+		table.sort(tmp ,function (a,b) return string.lower(a.name)<string.lower(b.name) end)
+		for i=1, #tmp do
+			if game.exists(tmp[i].name) then
+				os.message(tmp[i].name)
+				if not game.rif_psm(tmp[i].name) then
+					os.message("RIF2 no existe "..tmp[i].name)
+					tmp[i].psm = true
+					table.insert(list_psm, tmp[i])
+				end
+			else
+				tmp[i].psm = true
+				table.insert(list_psm, tmp[i])
+			end
+		end
+	end
+
 	--Installing
 	local count = 0
 
@@ -182,69 +202,83 @@ function refresh_init(img)
 		os.message(STRINGS_LIVEAREA_NO_GAMES)
 	end
 
-	if count > 0 then os.message(STRINGS_LIVEAREA_GAMES..count) end
-	__TITTLEAPP, __IDAPP = "",""
+	--1st PSM
+	if #list_psm > 0 then
+		for i=1, #list_psm do
+			
+			__TITTLEAPP, __IDAPP = "",""
+			if img then img:blit(0,0) end
+			__TITTLEAPP, __IDAPP = "PSM GAME", list_psm[i].name
 
-	count = 0
-	--Scanning ux0:psm
-	local tmp = files.listdirs("ux0:psm")
-	local list_psm = {}
-	if tmp and #tmp > 0 then
-		table.sort(tmp ,function (a,b) return string.lower(a.name)<string.lower(b.name) end)
-		for i=1, #tmp do
-			if not game.exists(tmp[i].name) then
-				table.insert(list_psm, tmp[i])
-			end
-		end
-	end
+			buttons.homepopup(0)
+				local result = game.refresh_psm(list_psm[i].path)
+			buttons.homepopup(1)
 
-	for i=1,#list_psm do
-		if img then img:blit(0,0) end
-		__TITTLEAPP, __IDAPP = list_psm[i].path, list_psm[i].name
-		buttons.homepopup(0)
-			local result = game.refresh_psm(list_psm[i].path)
-		buttons.homepopup(1)
+			os.message(tostring(result))
+
 			if result == 1 then
 
+				local info_psm = game.details(list_psm[i].name)
+				os.message(tostring(#info_psm))
 				count += 1
-
 				list_psm[i].dev = "ux0"
-				list_psm[i].id = list_psm[i].name
+
 				--Size
 				list_psm[i].size = files.size(list_psm[i].path)
 				list_psm[i].sizef = files.sizeformat(list_psm[i].size or 0)
+ 
+				--Update appman[].list_psm
+				local icon0 = image.load("ur0:appmeta/"..list_psm[i].id.."/pic0.png")
+				if icon0 then
+					list_psm[i].img = icon0
+					list_psm[i].img:resize(120,100)
+					list_psm[i].img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
+				else
+					list_psm[i].img = theme.data["icodef"]
+				end
+				list_psm[i].path_pic = "ur0:appmeta/"..list_psm[i].id.."/pic0.png"
 
-				local tmp_db = game.details(list_psm[i].name)
-				if tmp_db then
-					list_psm[i].img = image.load("ur0:appmeta/"..tmp_db[i].id.."/pic0.png")
-					if list_psm[i].img then
-						list_psm[i].img:resize(120,100)
-						list_psm[i].img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
-					else
-						list_psm[i].img = theme.data["icodef"]
+				--list_psm[i].region = 5
+				--list_psm[i].Nregion = ""
+				list_psm[i].index = 5
+
+				--Search game in appman[index].list_psm
+				local search = 0
+				for j=1,appman[list_psm[i].index].scroll.maxim do
+					if list_psm[i].id == appman[list_psm[i].index].list_psm[j].id then search = j break end
+				end
+
+				if search == 0 then
+					table.insert(appman[list_psm[i].index].list, list_psm[i])
+					SortGeneric(appman[list_psm[i].index].list,appman[list_psm[i].index].sort,appman[list_psm[i].index].asc)
+					appman[list_psm[i].index].scroll:set(appman[list_psm[i].index].list,limit)
+				else
+					--Update
+					appman[list_psm[i].index].list[search].dev = "ux0"
+					appman[list_psm[i].index].list[search].img = list_psm[i].img	--Icon New ??...Maybe
+					if info_psm then
+						appman[list_psm[i].index].list[search].type = info_psm[i].type
+						appman[list_psm[i].index].list[search].version = info_psm[i].version
+						appman[list_psm[i].index].list[search].title = info_psm[i].title
+						appman[list_psm[i].index].list[search].sdk = info_psm[i].sdk
 					end
 				end
 
-				if not list_psm[i].img then
-					list_psm[i].img = theme.data["icodef"]
-				end
-				list_psm[i].path_pic = "ur0:appmeta/"..list_psm[i].name.."/pic0.png"
+				appman.len+=1
 
-				list_psm[i].region = 5
-				list_psm[i].Nregion = ""
-				list_psm[i].type = tmp_db[i].type or "mba"
-				list_psm[i].version = tmp_db[i].version or "01.00"
-				list_psm[i].title = tmp_db[i].title:gsub("\n"," ") or list_psm[i].name
-				list_psm[i].sdk = tmp_db[i].sdk
-
-				table.insert(appman[5].list, list_psm[i])
-				SortGeneric(appman[5].list,appman[5].sort,appman[5].asc)
-				appman[5].scroll:set(appman[5].list,limit)
+			else
+				os.message(STRINGS_LIVEAREA_NOTINSTALLED.." PSM "..list_psm[i].id)
 			end
+
+		end
+
+	else
+		os.message(STRINGS_LIVEAREA_NO_GAMES.." PSM")
 	end
 
-	if count > 0 then os.message(STRINGS_LIVEAREA_GAMES_PSM..count) end
 	__TITTLEAPP, __IDAPP = "",""
+
+	if count > 0 then os.message(STRINGS_LIVEAREA_GAMES..count) end
 
 	if img then img:blit(0,0) elseif vbuff then vbuff:blit(0,0) end
 	message_wait(STRINGS_LIVEAREA_EXTRAREFRESH)

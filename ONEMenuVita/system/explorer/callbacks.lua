@@ -50,11 +50,18 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 		draw.fillrect(0,0,960,30, theme.style.CBACKSBARCOLOR)
 
 		screen.print(10,10,STRINGS_UNPACK_VPK)
-		screen.print(925,10,STRINGS_CALLBACKS_PERCENT_ALL..math.floor((totalwritten*100)/totalsize).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
-		screen.print(10,70,STRINGS_CALLBACKS_FILE..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-		screen.print(10,90,STRINGS_CALLBACKS_PERCENT..math.floor((written*100)/size_argv).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+
+		l = (written*940)/size_argv
+			screen.print(3+l,495,math.floor((written*100)/size_argv).."%",0.8,0xFFFFFFFF,0x0,__ACENTER)
+				draw.fillrect(10,524,l,6,color.new(0,255,0))
+					draw.circle(10+l,526,6,color.new(0,255,0),30)
 		
-		draw.fillrect(0,544-30,(totalwritten*960)/totalsize,30, color.new(0,255,0))
+		
+		screen.print(925,10,STRINGS_CALLBACKS_PERCENT_ALL..math.floor((totalwritten*100)/totalsize).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+		--screen.print(10,70,STRINGS_CALLBACKS_FILE..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+		--screen.print(10,90,STRINGS_CALLBACKS_PERCENT..math.floor((written*100)/size_argv).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+
+		--draw.fillrect(0,544-30,(totalwritten*960)/totalsize,30, color.new(0,255,0))
 
 		screen.flip()
 	elseif step == 4 then -- Promote o install :P
@@ -80,9 +87,45 @@ function onExtractFiles(size,written,file,totalsize,totalwritten)
 		screen.print(10,10,STRINGS_EXTRACTION)
 	end
 
+	l = (written*940)/size
+		screen.print(3+l,495,math.floor((written*100)/size).."%",0.8,0xFFFFFFFF,0x0,__ACENTER)
+			draw.fillrect(10,524,l,6,color.new(0,255,0))
+				draw.circle(10+l,526,6,color.new(0,255,0),30)
+
 	screen.print(925,10,STRINGS_CALLBACKS_PERCENT_ALL..math.floor((totalwritten*100)/totalsize).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
 	screen.print(10,70,STRINGS_CALLBACKS_FILE..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
-	screen.print(10,90,STRINGS_CALLBACKS_PERCENT..math.floor((written*100)/size).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+	--screen.print(10,90,STRINGS_CALLBACKS_PERCENT..math.floor((written*100)/size).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+
+	local Xa = "O: "
+	local Oa = "X: "
+	if accept_x == 1 then Xa,Oa = "X: ","O: " end
+	screen.print(925,35,Oa..STRINGS_SUBMENU_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)--515
+
+	screen.flip()
+	
+	buttons.read()
+	if buttons.cancel then return 0 end
+	return 1
+end
+
+function onCompressZip(size,written,file)
+
+	if theme.data["list"] then theme.data["list"]:blit(0,0)	end
+	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
+
+	l = (written*940)/size
+		screen.print(3+l,495,math.floor((written*100)/size).."%",0.8,0xFFFFFFFF,0x0,__ACENTER)
+			draw.fillrect(10,524,l,6,color.new(0,255,0))
+				draw.circle(10+l,526,6,color.new(0,255,0),30)
+
+	screen.print(10,10,STRINGS_COMPRESS)
+	screen.print(10,70,STRINGS_CALLBACKS_FILE..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+	--screen.print(10,90,STRINGS_CALLBACKS_PERCENT..math.floor((written*100)/size).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+
+	local Xa = "O: "
+	local Oa = "X: "
+	if accept_x == 1 then Xa,Oa = "X: ","O: " end
+	screen.print(925,10,Oa..STRINGS_SUBMENU_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)--515
 
 	screen.flip()
 	
@@ -175,10 +218,19 @@ function onNetGetFile(size,written,speed)
 	screen.print(10,10,STRINGS_DOWNLOAD)
 	screen.print(10,80,STRINGS_CALLBACKS_FILE.." "..__NAME_DOWNLOAD)
 	screen.print(10,105,STRINGS_CALLBACKS_SIZE_ALL..tostring(files.sizeformat(size) or 0))
-	screen.print(10,130,STRINGS_CALLBACKS_PERCENT_ALL..math.floor((written*100)/size).."%")
+	--screen.print(10,130,STRINGS_CALLBACKS_PERCENT_ALL..math.floor((written*100)/size).."%")
 
-	draw.fillrect(0,520,((written*960)/size),24,color.new(0,255,0))
+	l = (written*940)/size
+		screen.print(3+l,495,math.floor((written*100)/size).."%",0.8,0xFFFFFFFF,0x0,__ACENTER)
+			draw.fillrect(10,524,l,6,color.new(0,255,0))
+				draw.circle(10+l,526,6,color.new(0,255,0),30)
+
+	--draw.fillrect(0,520,((written*960)/size),24,color.new(0,255,0))
 	screen.flip()
+
+	local Oa = "X: "
+	if accept_x == 1 then Oa = "O: " end
+	screen.print(925,10,Oa..STRINGS_SUBMENU_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)--515
 
 	buttons.read()
 	if buttons.cancel then return 0 end --Cancel or Abort
@@ -197,4 +249,20 @@ function onMusicExportFile(progress)
 	--buttons.read()
 	--if buttons.cancel then return 0 end --Cancel or Abort
 	return 1
+end
+
+function onPbpUnpack(size,written,file)
+	if theme.data["list"] then theme.data["list"]:blit(0,0) end
+	draw.fillrect(0,0,960,35, theme.style.CBACKSBARCOLOR)
+
+	screen.print(10,10,STRINGS_CALLBACKS_FILE.." "..file)
+
+	l = (written*940)/size
+		screen.print(3+l,495,math.floor((written*100)/size).."%",0.8,0xFFFFFFFF,0x0,__ACENTER)
+			draw.fillrect(10,524,l,6,color.new(0,255,0))
+				draw.circle(10+l,526,6,color.new(0,255,0),30)
+
+	os.delay(750)
+	screen.flip()
+
 end

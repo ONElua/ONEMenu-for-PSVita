@@ -11,19 +11,19 @@
 
 --Functions Commons
 Dev = 1
-partitions = {"ux0:", "ur0:", "uma0:", "imc0:", "xmc0:", "ud0:", "gro0:", "grw0:" }--"music0:", "photo0:", "video0:" }
+partitions = {"ux0:", "ur0:", "uma0:", "imc0:", "xmc0:", "ud0:", "gro0:", "grw0:", "photo0:", }--"music0:", "video0:", "savedata0:" }
 Root,Root2 ={},{}
 
 function Refresh_Partitions()
     Root,Root2 ={},{}
 	for i=1,#partitions do
-if files.exists(partitions[i]) then
-			local device_info = os.devinfo(partitions[i])
-if device_info then
+		if files.exists(partitions[i]) then
+			--local device_info = os.devinfo(partitions[i])
+			--if device_info then
 				table.insert(Root,partitions[i])
 				table.insert(Root2,partitions[i])
-end
-end
+			--end
+		end
 	end
 end
 Refresh_Partitions()
@@ -378,7 +378,9 @@ function show_msg_pbp(handle)
         if sfo then
             if launch then
                 screen.print(960/2,y+15,STRINGS_LAUNCH_GAME,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-                screen.print(960/2,y+400,Xa..STRINGS_CONFIRM.." | "..Oa..STRINGS_SUBMENU_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+                screen.print(960/2,y+400,Xa..STRINGS_CONFIRM.." | "..Oa..STRINGS_SUBMENU_CANCEL.." | "..SYMBOL_TRIANGLE..": "..STRINGS_UNPACK,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			else
+				screen.print(960/2,y+400,SYMBOL_TRIANGLE..": "..STRINGS_UNPACK,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
             end
 
             if screen.textwidth(tostring(sfo.TITLE) or "UNK") > 380 then
@@ -402,6 +404,20 @@ function show_msg_pbp(handle)
         screen.flip()
 
         if buttons.cancel then break end
+
+		--Extract Resources
+		if buttons.triangle then
+			if handle.ext == "pbp" then
+				game.unpack(handle.path,files.nofile(handle.path))
+			elseif handle.ext == "iso" or handle.ext == "cso" then
+				image.save(icon0,files.nofile(handle.path).."/"..sfo.DISC_ID.."_icon0.png")
+				local pic1 = game.getpic1(handle.path)
+				if pic1 then
+					image.save(pic1,files.nofile(handle.path).."/"..sfo.DISC_ID.."_pic1.png")
+				end
+			end
+			explorer.refresh(true)
+		end
 
         if buttons.accept and launch then
             if sfo.CATEGORY == "ME" then game.open(sfo.DISC_ID)
@@ -456,7 +472,7 @@ function VideoPlayer(obj)
 			local w = video.getrealw()
 			local h = video.getrealh()
 
-			if buttons.square and ( w<960 or h<544 ) then
+			if buttons.square then--and ( w<960 or h<544 ) then
 				r_mode += 1
 				if r_mode > 2 then r_mode = 1 end
 			end
