@@ -19,6 +19,11 @@
 Shrink Game is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDRM-modding/wiki#saving-memory-space-while-using-mods
 * NOTE: Be very careful after using this option, because if the folders/files get deleted from ux0:patch/(GAMEID) or ux0:rePatch/(GAMEID) the game will stop booting cause there won't be any folders/files left at ux0:app/(GAMEID)
 
+### Changelog 3.15 ###
+- Added support for firmware 3.71/3.72.<br>
+- Added Refresh Content for PSM games. Thanks to Kuromesan<br>
+- New option to create .zip.<br>
+
 ### Changelog 3.14 ###
 - Added support for firmware 3.71/3.72.<br>
 - Added a simple video player (Only plays compatible videos with the PSVita).<br>
@@ -129,6 +134,7 @@ Shrink Game is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDR
 *Team Molecule* for Henkaku.<br>
 *WZ-JK* For Graphics.<br>
 *Yizhi gai* For the text editor.<br>
+*Kuromesan* for Refresh PSM games
 Translate:<br>
 *([Z3R0](https://twitter.com/Z3R0N3__)).*<br>
 Testers:<br>
