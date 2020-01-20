@@ -205,12 +205,14 @@ local uninstall_callback = function ()
 			message_wait()
 
 			--Backup Save from ux0:user/00/savedata
-			if files.exists("ux0:user/00/savedata/"..appman[cat].list[focus_index].save) and appman[cat].cats == "psvita" then--cat == 1 then
-				if os.message(STRINGS_APP_BACKUP_SAVE, 1) == 1 then
-					--game.umount()
-						--game.mount("ux0:user/00/savedata/"..appman[cat].list[focus_index].save)
-						files.copy("ux0:user/00/savedata/"..appman[cat].list[focus_index].save, "ux0:data/ONEMenu/Saves/")
-					--game.umount()
+			if appman[cat].cats == "psvita" and appman[cat].list[focus_index].save then
+				if files.exists("ux0:user/00/savedata/"..appman[cat].list[focus_index].save) then--cat == 1 then
+					if os.message(STRINGS_APP_BACKUP_SAVE, 1) == 1 then
+						--game.umount()
+							--game.mount("ux0:user/00/savedata/"..appman[cat].list[focus_index].save)
+							files.copy("ux0:user/00/savedata/"..appman[cat].list[focus_index].save, "ux0:data/ONEMenu/Saves/")
+						--game.umount()
+					end
 				end
 			end
 
