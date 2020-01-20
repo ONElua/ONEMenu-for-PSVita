@@ -25,7 +25,7 @@ Shrink Game is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDR
 - New option to create .zip.<br>
 
 ### Changelog 3.14 ###
-- Added support for firmware 3.71/3.72.<br>
+- Added support for firmware 3.73.<br>
 - Added a simple video player (Only plays compatible videos with the PSVita).<br>
 - In the game screen (Bubbles) you have to press the square button to access to system aplications.<br>
 - Now, to access to the system options of ONEMenu you have to press the start buttom.<br>
