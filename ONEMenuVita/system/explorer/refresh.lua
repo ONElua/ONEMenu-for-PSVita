@@ -216,12 +216,10 @@ function refresh_init(img)
 
 				local tmp_db = game.details(list_psm[i].name)
 				if tmp_db then
-					list_psm[i].img = image.load("ur0:appmeta/"..tmp_db[i].id.."/pic0.png")
+					list_psm[i].img = image.load("ur0:appmeta/"..tmp_db.id.."/pic0.png")
 					if list_psm[i].img then
 						list_psm[i].img:resize(120,100)
 						list_psm[i].img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
-					else
-						list_psm[i].img = theme.data["icodef"]
 					end
 				end
 
@@ -232,10 +230,10 @@ function refresh_init(img)
 
 				list_psm[i].region = 5
 				list_psm[i].Nregion = ""
-				list_psm[i].type = tmp_db[i].type or "mba"
-				list_psm[i].version = tmp_db[i].version or "01.00"
-				list_psm[i].title = tmp_db[i].title:gsub("\n"," ") or list_psm[i].name
-				list_psm[i].sdk = tmp_db[i].sdk
+				list_psm[i].type = tmp_db.type or "mba"
+				list_psm[i].version = tmp_db.version or "01.00"
+				list_psm[i].title = tmp_db.title:gsub("\n"," ") or list_psm[i].name
+				list_psm[i].sdk = tmp_db.sdk
 
 				table.insert(appman[5].list, list_psm[i])
 				SortGeneric(appman[5].list,appman[5].sort,appman[5].asc)

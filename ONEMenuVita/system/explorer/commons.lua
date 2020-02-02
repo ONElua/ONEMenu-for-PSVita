@@ -11,18 +11,18 @@
 
 --Functions Commons
 Dev = 1
-partitions = {"ux0:", "ur0:", "uma0:", "imc0:", "xmc0:", "ud0:", "gro0:", "grw0:", "photo0:", }--"music0:", "video0:", "savedata0:" }
+partitions = {"ux0:", "ur0:", "uma0:", "imc0:", "xmc0:", "ud0:", "gro0:", "grw0:", }--"photo0:", }--"music0:", "video0:", "savedata0:" }
 Root,Root2 ={},{}
 
 function Refresh_Partitions()
     Root,Root2 ={},{}
 	for i=1,#partitions do
 		if files.exists(partitions[i]) then
-			--local device_info = os.devinfo(partitions[i])
-			--if device_info then
+			local device_info = os.devinfo(partitions[i])
+			if device_info then
 				table.insert(Root,partitions[i])
 				table.insert(Root2,partitions[i])
-			--end
+			end
 		end
 	end
 end
