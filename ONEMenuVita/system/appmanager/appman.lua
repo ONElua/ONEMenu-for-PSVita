@@ -173,6 +173,7 @@ function appman.launch()
 					end
 				end
 			end
+			game.umount()
 			show_explorer_list()
 		end--to Explorer
 
@@ -282,7 +283,7 @@ local shrink_callback = function ()
 
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-		local list_patch, list_app = {},{}
+		local list_patch, list_app, string_total = {},{},""
 
 		function getlist(_path, _list, substring)
 			local tmp = files.list(_path)	
@@ -312,13 +313,17 @@ local shrink_callback = function ()
 					if list_patch[i].path == list_app[j].path then
 						size_del += list_app[j].size
 						table.insert(list_del,list_app[j].path)
+						if theme.data["back"] then theme.data["back"]:blit(0,0) end
+							message_wait(list_app[j].path)
+							string_total += list_app[j].path.."\n"
+						os.delay(75)
 					end
 				end
 			end
 		end
 
 		if #list_del > 0 then
-			if os.message(STRINGS_APP_SHRINK.."\n                        ux0:patch\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+			if os.dialog(STRINGS_APP_SHRINK.."\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE.."\n\n"..string_total, "ux0:patch/"..appman[cat].list[focus_index].id, __DIALOG_MODE_OK_CANCEL) == true then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -344,6 +349,7 @@ local shrink_callback = function ()
 		end
 	end
 
+	string_total = ""
 	if Repatch_Find then
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 		message_wait(Repatch_Find)
@@ -361,13 +367,17 @@ local shrink_callback = function ()
 					if list_patch[i].path == list_app[j].path then
 						size_del += list_app[j].size
 						table.insert(list_del,list_app[j].path)
+						if theme.data["back"] then theme.data["back"]:blit(0,0) end
+							message_wait(list_app[j].path)
+							string_total += list_app[j].path.."\n"
+						os.delay(75)
 					end
 				end
 			end
 		end
 
 		if #list_del > 0 then
-			if os.message(STRINGS_APP_SHRINK.."\n                        "..Repatch_Find.."\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+			if os.dialog(STRINGS_APP_SHRINK.."\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE.."\n\n"..string_total, "ux0:RePatch/"..appman[cat].list[focus_index].id, __DIALOG_MODE_OK_CANCEL) == true then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -394,6 +404,7 @@ local shrink_callback = function ()
 		end
 	end
 
+	string_total = ""
 	if ReAddcont_Find then
 
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
@@ -427,13 +438,17 @@ local shrink_callback = function ()
 					if list_patch[i].path == list_app[j].path then
 						size_del += list_app[j].size
 						table.insert(list_del,list_app[j].path)
+						if theme.data["back"] then theme.data["back"]:blit(0,0) end
+							message_wait(list_app[j].path)
+							string_total += list_app[j].path.."\n"
+						os.delay(75)
 					end
 				end
 			end
 		end
 
 		if #list_del > 0 then
-			if os.message(STRINGS_APP_SHRINK.."\n                        "..ReAddcont_Find.."\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+			if os.dialog(STRINGS_APP_SHRINK.."\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE.."\n\n"..string_total, "ux0:ReAddcont/"..appman[cat].list[focus_index].id, __DIALOG_MODE_OK_CANCEL) == true then
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
@@ -447,6 +462,7 @@ local shrink_callback = function ()
 		os.delay(15)
 
 	end
+	string_total = ""
 
 ----------------sce_sys/manual/
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
@@ -469,7 +485,7 @@ local shrink_callback = function ()
 		end
 
 		if scesys_manual or patch_manual then
-			if os.message(STRINGS_APP_DELETE_MANUAL.."\n"..STRINGS_COUNT..files_manual.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_manual or 0).." "..STRINGS_APP_SHRINK_FREE,1) == 1 then
+			if os.dialog(STRINGS_COUNT..files_manual.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_manual or 0).." "..STRINGS_APP_SHRINK_FREE,STRINGS_APP_DELETE_MANUAL, __DIALOG_MODE_OK_CANCEL) == true then
 				if scesys_manual then
 					reboot=false
 						files.delete(pathmanual)
@@ -701,22 +717,24 @@ local editsfo_callback = function ()
 
 end
 
+Mount,MountPath = false,false
 local openfolder_callback = function ()
 
 	local options = { }
 
+	Mount,MountPath = false,false
 	if appman[cat].cats == "psvita" or appman[cat].cats == "hbvita" or appman[cat].cats == "adrbb" then
 		table.insert(options, { text = "App", path = appman[cat].list[focus_index].dev..":/app/"..appman[cat].list[focus_index].id, exit=false })
 
 		if appman[cat].cats == "psvita" then
 			--Patch
-			if files.exists(appman[cat].list[focus_index].dev.."/patch/"..appman[cat].list[focus_index].id) then
+			if files.exists(appman[cat].list[focus_index].dev..":/patch/"..appman[cat].list[focus_index].id) then
 				table.insert(options, { text = "Patch", path = appman[cat].list[focus_index].dev..":/patch/"..appman[cat].list[focus_index].id, exit = false })
 			end
 
 			--Repatch
 			local Repatch_Find = nil
-			local path_RePatch = { "ux0:RePatch", "uma0:RePatch", "imc0:RePatch", "xmc0:RePatch" }
+			local path_RePatch = { "ux0:/RePatch", "uma0:/RePatch", "imc0:/RePatch", "xmc0:/RePatch" }
 
 			for i=1,#path_RePatch do
 				if files.exists(path_RePatch[i].."/"..appman[cat].list[focus_index].id) then
@@ -730,7 +748,7 @@ local openfolder_callback = function ()
 
 			--ReAddcont
 			local ReAddcont_Find = nil
-			local path_ReAddcont = { "ux0:ReAddcont", "uma0:ReAddcont", "imc0:ReAddcont", "xmc0:ReAddcont" }
+			local path_ReAddcont = { "ux0:/ReAddcont", "uma0:/ReAddcont", "imc0:/ReAddcont", "xmc0:/ReAddcont" }
 
 			for i=1,#path_ReAddcont do
 				if files.exists(path_ReAddcont[i].."/"..appman[cat].list[focus_index].id) then
@@ -788,6 +806,12 @@ local openfolder_callback = function ()
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 				return
 			end
+			
+			if appman[cat].cats == "psvita" then
+				if (options[scroll_op.sel].text == "App" or options[scroll_op.sel].text == "Patch") then
+					Mount, MountPath = appman[cat].list[focus_index].id, "ux0:/app/"..appman[cat].list[focus_index].id
+				end
+			end
 			break
 		end
 
@@ -808,8 +832,32 @@ local openfolder_callback = function ()
 		end
 	end
 
-	show_explorer_list(options[scroll_op.sel].path)
+	--Init load prkxs
+	if not __kernel then
+		if files.exists("modules/kernel.skprx") then
+			if os.requirek("modules/kernel.skprx")==1 then __kernel = true end
+		else
+			if os.requirek("ux0:VitaShell/module/kernel.skprx")==1 then	__kernel = true end
+		end
+	end
 
+	if not __user then
+		if files.exists("modules/user.suprx") then
+			if os.requireu("modules/user.suprx")==1 then __user = true end
+		else
+			if os.requireu("ux0:VitaShell/module/user.suprx")==1 then __user = true end
+		end
+	end
+
+	if Mount then
+		game.umount()
+		--Mount Patch/ID is Mount App/ID
+		game.mount(MountPath)
+	end
+
+	show_explorer_list(options[scroll_op.sel].path)
+	game.umount()
+	Mount,MountPath = false,false
 end
 
 local sort_callback = function ()

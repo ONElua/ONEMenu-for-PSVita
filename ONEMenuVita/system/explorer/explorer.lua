@@ -160,6 +160,13 @@ function ctrls_explorer_list()
 		Root[Dev]=files.nofile(Root[Dev])
 		explorer.refresh(false)
 
+		if Mount then
+			local x1,x2 = string.find(Root[Dev]:lower(), Mount:lower(), 1, true)
+			--if x1 then os.message("SI")
+			--else os.message("NO") end
+			if not x1 then game.umount() end
+		end
+
 		if #backl>0 then
 			if scroll.list.maxim == backl[#backl].maxim then
 				scroll.list.ini = backl[#backl].ini
@@ -219,6 +226,7 @@ function ctrls_explorer_list()
 	if buttons.select and menu_ctx.open==false then
 		submenu_ctx.close = true
 		restart_cronopic()
+		game.umount()
 		appman.launch()
 	end
 
@@ -265,12 +273,14 @@ end
 __ACTION_WAIT_NOTHING = 0
 __ACTION_WAIT_PASTE = 1
 __ACTION_WAIT_EXTRACT = 2
- 
+
+__ACTION_MOUNT = false
 local src_path_callback = function ()
    if #explorer.list > 0 then
       local ext = explorer.list[scroll.list.sel].ext or ""
       if menu_ctx.scroll.sel != 3 or (menu_ctx.scroll.sel == 3 and (ext:lower()=="zip" or ext:lower()=="rar" or ext:lower()=="vpk")) then
          if not multi or #multi < 1 then
+			if Mount then __ACTION_MOUNT = MountPath end
             table.insert(multi, explorer.list[scroll.list.sel].path)
          end
          explorer.action = menu_ctx.scroll.sel
@@ -290,9 +300,11 @@ local paste_callback = function ()
         if #multi>0 then
             buttons.homepopup(0)
             reboot=false
+			if __ACTION_MOUNT then game.mount(MountPath) end
             for i=1,#multi do
                 files.copy(multi[i],explorer.dst)
             end
+			game.umount()
             buttons.homepopup(1)
             reboot=true
         end
@@ -344,6 +356,7 @@ local paste_callback = function ()
 	menu_ctx.wait_action = __ACTION_WAIT_NOTHING
     explorer.dst = ""
     multi, multi_delete = {},{}
+	Mount,MountPath,__ACTION_MOUNT = false,false,false
 end
  
 local delete_callback = function () -- TODO: add move to -1 pos of the deleted element in list
