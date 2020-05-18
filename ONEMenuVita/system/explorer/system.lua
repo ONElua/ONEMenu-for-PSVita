@@ -34,6 +34,7 @@ local ftp_callback = function ()
 end
 
 function Search_ReFolders(path,mount)
+
 	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 		message_wait(path)
 	os.delay(750)
@@ -183,6 +184,7 @@ local themesLiveArea_callback = function ()
 	customthemes()
 end
 
+--[[
 local video_callback = function ()
 	while true do
 		buttons.read()
@@ -201,6 +203,7 @@ local video_callback = function ()
 	end
 	os.delay(25)
 end
+]]
 
 function SubOptions2()
 
@@ -223,7 +226,7 @@ function SubOptions2()
 
 		{ text = STRINGS_SUBMENU_CUSTOMTHEMES,	funct = themesLiveArea_callback,				descr = STRINGS_CUSTOMTHEMES_DESCR },
 
-		{ text = STRINGS_VIDEO_PLAYER,			funct = video_callback,							descr = STRINGS_VIDEO_PLAYER_DESCR },
+		--{ text = STRINGS_VIDEO_PLAYER,			funct = video_callback,							descr = STRINGS_VIDEO_PLAYER_DESCR },
     }
 
 end

@@ -67,7 +67,7 @@ function fillappman(obj)
 		obj.path_img = "ur0:appmeta/"..obj.id.."/livearea/contents/startup.png"
 	else
 
-		if obj.id == "PSPEMUCFW" then index = 3
+		if obj.id == "PSPEMUCFW" then index = 2
 		else
 
 			if tonumber(obj.sdk) > 661 then

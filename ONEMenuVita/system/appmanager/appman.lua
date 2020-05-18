@@ -163,6 +163,25 @@ function appman.launch()
 
 		if buttons.square and not submenu_ctx.open and (not buttons.held.l or buttons.held.r)  then
 			system.run()
+		else
+			if buttons.cancel and not submenu_ctx.open then
+				while true do
+					buttons.read()
+
+					local mp4 = video.import(theme.data["back"])
+					if mp4 != -1 then
+						video.mount()
+							VideoPlayer(mp4)
+						video.umount()
+					else
+						break
+					end
+
+					if buttons.released.cancel then break end
+
+				end
+				os.delay(25)
+			end
 		end
 
 		if buttons.select and not submenu_ctx.open then
@@ -173,7 +192,6 @@ function appman.launch()
 					end
 				end
 			end
-			game.umount()
 			show_explorer_list()
 		end--to Explorer
 
@@ -717,12 +735,10 @@ local editsfo_callback = function ()
 
 end
 
-Mount,MountPath = false,false
 local openfolder_callback = function ()
 
 	local options = { }
 
-	Mount,MountPath = false,false
 	if appman[cat].cats == "psvita" or appman[cat].cats == "hbvita" or appman[cat].cats == "adrbb" then
 		table.insert(options, { text = "App", path = appman[cat].list[focus_index].dev..":/app/"..appman[cat].list[focus_index].id, exit=false })
 
@@ -806,12 +822,6 @@ local openfolder_callback = function ()
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 				return
 			end
-			
-			if appman[cat].cats == "psvita" then
-				if (options[scroll_op.sel].text == "App" or options[scroll_op.sel].text == "Patch") then
-					Mount, MountPath = appman[cat].list[focus_index].id, "ux0:/app/"..appman[cat].list[focus_index].id
-				end
-			end
 			break
 		end
 
@@ -832,32 +842,8 @@ local openfolder_callback = function ()
 		end
 	end
 
-	--Init load prkxs
-	if not __kernel then
-		if files.exists("modules/kernel.skprx") then
-			if os.requirek("modules/kernel.skprx")==1 then __kernel = true end
-		else
-			if os.requirek("ux0:VitaShell/module/kernel.skprx")==1 then	__kernel = true end
-		end
-	end
-
-	if not __user then
-		if files.exists("modules/user.suprx") then
-			if os.requireu("modules/user.suprx")==1 then __user = true end
-		else
-			if os.requireu("ux0:VitaShell/module/user.suprx")==1 then __user = true end
-		end
-	end
-
-	if Mount then
-		game.umount()
-		--Mount Patch/ID is Mount App/ID
-		game.mount(MountPath)
-	end
-
 	show_explorer_list(options[scroll_op.sel].path)
-	game.umount()
-	Mount,MountPath = false,false
+
 end
 
 local sort_callback = function ()

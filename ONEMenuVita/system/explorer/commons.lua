@@ -417,6 +417,8 @@ function show_msg_pbp(handle)
 				end
 			end
 			explorer.refresh(true)
+			os.delay(15)
+			break
 		end
 
         if buttons.accept and launch then

@@ -9,8 +9,6 @@
     Collaborators: BaltazaR4 & Wzjk.
 ]]
 
-game.close()
-
 --Obtener iconos en modo hilo
 dofile("init.lua")
 
