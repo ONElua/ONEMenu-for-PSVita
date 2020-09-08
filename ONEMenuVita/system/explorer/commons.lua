@@ -443,9 +443,12 @@ function VideoPlayer(obj)
 		local flag = false
 		local crono_mp4 = timer.new()
 
+		swipe.disableContV=false
+		swipe.set(30, 640,20,300,504)
 		while video.actived() do
 			buttons.read()
-			touch.read()
+				touch.read()
+			swipe.read()
 
 			if video.playing() then power.tick(__POWER_TICK_ALL) end
 
@@ -496,14 +499,17 @@ function VideoPlayer(obj)
 				if loop then video.looping(0) else video.looping(1) end
 			end
 
+			--Vol+ Vol-
+			if swipe.up then hw.volume(hw.volume()+1) elseif swipe.down then hw.volume(hw.volume()-1) end
+
 			video.render(x,y,w,h)
 
 			if flag or (video.percent() > 0 and not video.playing()) then
 				os.infobar(1,0,1)
 				screen.print(955,32, files.nopath(obj.path), 1, color.new(255, 255, 255), color.new(64, 64, 64), __ARIGHT)
-				screen.print(20,520,tostring(video.time()).." / "..tostring(video.totaltime()).."  "..tostring(video.percent()) .. " %", 1, color.new(255, 255, 255), color.new(64, 64, 64))
+				screen.print(20,520,tostring(video.time()).." / "..tostring(video.totaltime()).."  "..tostring(video.percent()) .. " %".." Vol "..tostring(hw.volume()), 1, color.new(255, 255, 255), color.new(64, 64, 64))
 				if video.looping() then
-					screen.print(190,520, "∞", 1, color.green, color.new(64, 64, 64))
+					screen.print(255,520, "∞", 1, color.green, color.new(64, 64, 64))
 				end
 				draw.fillrect(0,540,math.map(video.percent(), 0, 100, 0, 960),5, color.new(0,0,255))
 			else
@@ -518,6 +524,8 @@ function VideoPlayer(obj)
 		os.infobar()
 		video.term()
 	end
+	swipe.set(30,255,70,695,430)
+	swipe.disableContV=true
 end
 
 -- ## Music Player ##

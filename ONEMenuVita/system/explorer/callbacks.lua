@@ -165,6 +165,7 @@ fileant = ""
 total_size,files_move, cont = 0,0,0
 
 function onCopyFiles(size,written,file)
+	power.tick(__POWER_TICK_ALL)
 	if _print then
 
 		if theme.data["list"] then theme.data["list"]:blit(0,0)	end
@@ -200,6 +201,7 @@ end
 
 -- CallBack DeleteFiles
 function onDeleteFiles(file)
+	power.tick(__POWER_TICK_ALL)
 	if not game_move then
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
 		draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)

@@ -865,7 +865,7 @@ local makezip_callback = function ()
         if name then
 			name = name .. ".zip"
 		end
-		if not name or name == "" then name = "MakeZip.zip" end
+		if not name or name == "" then return end
 
 		local pass = nil
 		if os.message("\n"..STRINGS_PASS,1)==1 then
