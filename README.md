@@ -19,6 +19,11 @@
 Shrink Game is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDRM-modding/wiki#saving-memory-space-while-using-mods
 * NOTE: Be very careful after using this option, because if the folders/files get deleted from ux0:patch/(GAMEID) or ux0:rePatch/(GAMEID) the game will stop booting cause there won't be any folders/files left at ux0:app/(GAMEID)
 
+### Changelog 3.17 ###
+- Move Adrenaline to Homebrews category instead of Adrenaline Bubbles category<br>
+- Launch video player with the Cancel button onthe Games/Apps section<br>
+- On screen volume controls added and touch enabled<br>
+
 ### Changelog 3.16 ###
 - Fixed bug to Refresh Content for several PSM games. Thanks to Kuromesan<br>
 - Add Unpack Resources from EBOOT.PBP/ISO (icon0.png, pic0, param.sfo)<br>
@@ -147,4 +152,3 @@ Testers:<br>
 *([Applelo1](https://twitter.com/Applelo1)).*<br>
 *([Tuto Pro Play](https://twitter.com/Tuto_Pro_Play)).*<br>
 *([TheRadziu](https://twitter.com/AluProductions)).*<br>
-
