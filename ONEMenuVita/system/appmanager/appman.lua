@@ -303,26 +303,26 @@ local shrink_callback = function ()
 
 		local list_patch, list_app, string_total = {},{},""
 
-		function getlist(_path, _list, substring)
+		function getlist(_path, _list, substring, __path)
 			local tmp = files.list(_path)	
 			if tmp and #tmp > 0 then
 				for i=1, #tmp do
 					if tmp[i].directory then
-						if not tmp[i].name:find("sce_",1) then getlist(tmp[i].path, _list, substring) end
+						if not tmp[i].name:find("sce_",1) then getlist(tmp[i].path, _list, substring, __path) end
 					else
 						if tmp[i].name != "eboot.bin" then
 							local _size = (tmp[i].size or files.size(tmp[i].path))
-							table.insert(_list, {path = tmp[i].path:gsub(substring,'ux0:app'):lower(), size = _size})
+							table.insert(_list, {path = tmp[i].path:gsub(substring, __path):lower(), size = _size})
 						end
 					end
 				end
 			end
 		end
-		message_wait("ux0:Patch")
+		message_wait("App vs Patch")
 		os.delay(25)
 
-		getlist("ux0:patch/"..appman[cat].list[focus_index].id, list_patch, "ux0:patch")
-		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, "ux0:patch")
+		getlist("ux0:patch/"..appman[cat].list[focus_index].id, list_patch, "ux0:patch", 'ux0:app')
+		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, "ux0:patch", 'ux0:app')
 
 		local size_del,list_del = 0,{}
 		if #list_patch > 0 and #list_app > 0 then
@@ -369,14 +369,15 @@ local shrink_callback = function ()
 
 	string_total = ""
 	if Repatch_Find then
+
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
-		message_wait(Repatch_Find)
+		message_wait("App vs "..Repatch_Find)
 		os.delay(15)
 
 		list_patch, list_app = {},{}
 
-		getlist(Repatch_Find.."/"..appman[cat].list[focus_index].id, list_patch, Repatch_Find)
-		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, Repatch_Find)
+		getlist(Repatch_Find.."/"..appman[cat].list[focus_index].id, list_patch, Repatch_Find, 'ux0:app')
+		getlist("ux0:app/"..appman[cat].list[focus_index].id, list_app, Repatch_Find, 'ux0:app')
 
 		local size_del,list_del = 0,{}
 		if #list_patch > 0 and #list_app > 0 then
@@ -402,6 +403,46 @@ local shrink_callback = function ()
 				--update size
 				appman[cat].list[focus_index].size = files.size(appman[cat].list[focus_index].path)
 				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
+			end
+		else
+			os.message(STRINGS_APP_SHRINK_NO_FILES.."\n"..Repatch_Find)
+		end
+		os.delay(15)
+
+		string_total = ""
+
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
+		message_wait("Patch vs Repatch")
+		os.delay(15)
+
+		list_repatch, list_patch = {},{}
+
+		getlist(Repatch_Find.."/"..appman[cat].list[focus_index].id, list_repatch, Repatch_Find, 'ux0:patch')
+		getlist("ux0:patch/"..appman[cat].list[focus_index].id, list_patch, Repatch_Find, 'ux0:patch')
+
+		local size_del,list_del = 0,{}
+		if #list_repatch > 0 and #list_patch > 0 then
+			for i=1,#list_repatch do
+				for j=1,#list_patch do
+					if list_repatch[i].path == list_patch[j].path then
+						size_del += list_patch[j].size
+						table.insert(list_del,list_patch[j].path)
+						if theme.data["back"] then theme.data["back"]:blit(0,0) end
+							message_wait(list_patch[j].path)
+							string_total += list_patch[j].path.."\n"
+						os.delay(75)
+					end
+				end
+			end
+		end
+
+		if #list_del > 0 then
+			if os.dialog(STRINGS_APP_SHRINK.."\n"..STRINGS_COUNT..#list_del.." "..STRINGS_CALLBACKS_MOVE_FILES.." "..files.sizeformat(size_del or 0).." "..STRINGS_APP_SHRINK_FREE.."\n\n"..string_total, "ux0:Patch/"..appman[cat].list[focus_index].id, __DIALOG_MODE_OK_CANCEL) == true then
+				for i=1,#list_del do
+					files.delete(list_del[i])
+				end
+				--update size patch
+				appman[cat].list[focus_index].sizef_patch = files.sizeformat(files.size("ux0:patch/"..appman[cat].list[focus_index].id or 0))
 			end
 		else
 			os.message(STRINGS_APP_SHRINK_NO_FILES.."\n"..Repatch_Find)
@@ -519,7 +560,7 @@ local shrink_callback = function ()
 				appman[cat].list[focus_index].size = files.size(appman[cat].list[focus_index].path)
 				appman[cat].list[focus_index].sizef = files.sizeformat((appman[cat].list[focus_index].size or 0))
 
-				--update sizef in patch
+				--update size patch
 				appman[cat].list[focus_index].sizef_patch = files.sizeformat(files.size("ux0:patch/"..appman[cat].list[focus_index].id or 0))
 			end
 		else
