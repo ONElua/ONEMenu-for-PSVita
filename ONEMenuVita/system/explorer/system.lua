@@ -40,7 +40,7 @@ function Search_ReFolders(path,mount)
 	os.delay(750)
 
 	local size = 0
-	local tmp, tb = files.listdirs(path), {}
+	local tmp, tb, string_total = files.listdirs(path), {}, ""
 	if tmp and #tmp > 0 then
 		for i=1, #tmp do
 			if tmp[i].directory then
@@ -57,6 +57,8 @@ function Search_ReFolders(path,mount)
 						if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 							message_wait(path.."\n"..tmp[i].name)
 						os.delay(750)
+						--os.message(path.."\n"..tmp[i].name)
+						string_total += tmp[i].path.."\n"
 						table.insert(tb, { path = tmp[i].path, name = tmp[i].name, size = _size })
 					end
 
@@ -67,7 +69,7 @@ function Search_ReFolders(path,mount)
 
 	--Delete?
 	if #tb > 0 then
-		if os.message(STRINGS_APP_FOUND_REFOLDERS.." : "..#tb.." "..STRINGS_APP_REFOLDERS_GAME.." "..path.."\n"..STRINGS_CALLBACKS_SIZE_ALL..files.sizeformat(size or 0).."\n"..STRINGS_APP_REFOLDERS_DELETE,1) == 1 then
+		if os.dialog(STRINGS_APP_FOUND_REFOLDERS.." : "..#tb.." "..STRINGS_APP_REFOLDERS_GAME.." "..path.."\n"..STRINGS_CALLBACKS_SIZE_ALL..files.sizeformat(size or 0).."\n\n"..STRINGS_APP_REFOLDERS_DELETE.."\n\n"..string_total, STRINGS_REFOLDERS_CLEANUP, __DIALOG_MODE_OK_CANCEL) == true then
 			for i=1,#tb do
 				files.delete(tb[i].path)
 			end
