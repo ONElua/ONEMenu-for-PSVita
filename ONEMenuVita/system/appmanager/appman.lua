@@ -441,7 +441,7 @@ local shrink_callback = function ()
 				for i=1,#list_del do
 					files.delete(list_del[i])
 				end
-				--update size patch
+				--update sizef patch
 				appman[cat].list[focus_index].sizef_patch = files.sizeformat(files.size("ux0:patch/"..appman[cat].list[focus_index].id or 0))
 			end
 		else

@@ -183,7 +183,7 @@ function personalize_savedata(path)
 end
 
 function show_msg_vpk(obj_vpk)
-    bufftmp = screen.toimage()
+    bufftmp = screen.buffertoimage()
     local x,y = (960-420)/2,(544-420)/2
 
     reboot=false

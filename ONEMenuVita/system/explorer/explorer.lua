@@ -237,9 +237,92 @@ function ctrls_explorer_list()
 
 end
 
+function launch_Retrovita(gameid,core,obj)
+
+	local vbuff = screen.buffertoimage()
+
+	local limit_roms = 8
+	if #core > limit_roms then limit_roms = 8 else limit_roms = #core end
+	local scroll_tmp = newScroll(core,limit_roms)
+
+	while true do
+		buttons.read()
+		if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+
+		local x,y = 687,75
+
+		draw.fillrect(687,65,250,(limit_roms * 45)+45, color.new(0x2f,0x2f,0x2f,0xff))
+		draw.framerect(687,65,250,(limit_roms * 45)+45, color.black, color.shine,6)
+
+		for i=scroll_tmp.ini, scroll_tmp.lim do
+
+			if i == scroll_tmp.sel then draw.offsetgradrect(x+5,y-5,240,38,theme.style.SELCOLOR,theme.style.BARCOLOR,0x0,0x0,21) end
+
+			screen.print(x+(250/2),y, core[i].name, 1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)--x+80,y+16
+			y+=45
+		end
+		screen.print(x+(250/2),75+(limit_roms * 45)+13, "RETROARCH", 1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)--x+70
+            
+		screen.flip()
+
+		if scroll_tmp.maxim > 0 then
+
+			if buttons.left or buttons.right then xscroll = 10 end
+
+			if buttons.up or buttons.analogly < -60 then
+				scroll_tmp:up()
+			end
+			if buttons.down or buttons.analogly > 60 then
+				scroll_tmp:down()
+			end
+
+			if buttons.accept then
+				game.launchp(gameid,core[scroll_tmp.sel].self,obj.path)
+			end
+			if buttons.cancel then break end
+		end
+	end
+end
+
+nes = {
+	{ self = "app0:nestopia_libretro.self", name = "Nestopia" },
+	{ self = "app0:fceumm_libretro.self",   name = "Fceumm"   },
+	{ self = "app0:quicknes_libretro.self", name = "QuickNes" },
+}
+
+snes = {
+	{ self = "app0:snes9x2002_libretro.self",      name = "Snes9x 2002"      },
+	{ self = "app0:snes9x2005_libretro.self",      name = "Snes9x 2005"      },
+	{ self = "app0:snes9x2005_plus_libretro.self", name = "Snes9x 2005 Plus" },
+	{ self = "app0:snes9x2010_libretro.self",      name = "Snes9x 2010"      },
+}
+
+gbc = {
+	{ self = "app0:gambatte_libretro.self", name = "Gambatte" },
+	{ self = "app0:gearboy_libretro.self",  name = "Gearboy"  },
+	{ self = "app0:tgbdual_libretro.self",  name = "TGB Dual" },
+}
+
+gba = {
+	{ self = "app0:gpsp_libretro.self",     name = "gpSP"     },
+	{ self = "app0:vba_next_libretro.self", name = "VBA Next" },
+}
+
 function handle_files(cnt)
+
 	local extension = cnt.ext
-	if extension == "png" or extension == "jpg" or extension == "jpeg" or extension == "bmp" or extension == "gif" then
+
+	if extension == "nes" and game.exists("RETROVITA") then
+		launch_Retrovita("RETROVITA",nes,cnt)
+	elseif (extension == "sfc" or extension == "smc") and game.exists("RETROVITA") then
+		launch_Retrovita("RETROVITA",snes,cnt)
+	elseif (extension == "gb" or extension == "gbc") and game.exists("RETROVITA") then
+		launch_Retrovita("RETROVITA",gbc,cnt)
+	elseif extension == "gba" and game.exists("RETROVITA") then
+		launch_Retrovita("RETROVITA",gba,cnt)
+	elseif (extension == "v64" or extension == "z64" or extension == "n64" or extension == "rom") and game.exists("DEDALOX64") then
+		game.launchp("DEDALOX64",cnt.path)
+	elseif extension == "png" or extension == "jpg" or extension == "jpeg" or extension == "bmp" or extension == "gif" then
 		visorimg(cnt.path)
 	elseif extension == "vpk" then
 		buttons.homepopup(0)

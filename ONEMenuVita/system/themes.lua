@@ -130,6 +130,10 @@ function theme.load()
 				 iso = theme.style.BINCOLOR, pbp = theme.style.BINCOLOR, cso = theme.style.BINCOLOR, dax = theme.style.BINCOLOR, bin = theme.style.BINCOLOR, suprx = theme.style.BINCOLOR, skprx = theme.style.BINCOLOR,
 				 zip = theme.style.ARCHIVECOLOR, rar = theme.style.ARCHIVECOLOR, vpk = theme.style.ARCHIVECOLOR, gz = theme.style.ARCHIVECOLOR,
 				 sfo = theme.style.SFOCOLOR,
+				 nes = theme.style.NESROMSCOLOR or theme.style.TXTCOLOR,
+				 snes = theme.style.SNESROMSCOLOR or theme.style.TXTCOLOR,
+				 v64 = theme.style.N64ROMSCOLOR or theme.style.TXTCOLOR, z64 = theme.style.N64ROMSCOLOR or theme.style.TXTCOLOR, n64 = theme.style.N64ROMSCOLOR or theme.style.TXTCOLOR,
+						rom = theme.style.N64ROMSCOLOR or theme.style.TXTCOLOR,
 			}
 
 	--Load Slides
