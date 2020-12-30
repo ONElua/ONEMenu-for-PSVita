@@ -237,6 +237,35 @@ function ctrls_explorer_list()
 
 end
 
+function launch_Daedalus64(obj)
+
+	local vbuff = screen.buffertoimage()
+
+	local limit_roms = 1
+	while true do
+		buttons.read()
+		if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+
+		local x,y = 687,75
+
+		draw.fillrect(687,65,250,(limit_roms * 45), color.new(0x2f,0x2f,0x2f,0xff))
+		draw.framerect(687,65,250,(limit_roms * 45), color.black, color.shine,6)
+
+		draw.offsetgradrect(x+5,y-5,240,38,theme.style.SELCOLOR,theme.style.BARCOLOR,0x0,0x0,21)
+		screen.print(x+(250/2),(limit_roms * 45)+33, "DAEDALUS", 1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)--x+70
+            
+		screen.flip()
+
+		if buttons.accept then
+			game.launchp("DEDALOX64",obj.path)
+		end
+
+		if buttons.cancel then break end
+
+	end
+
+end
+
 function launch_Retrovita(gameid,core,obj)
 
 	local vbuff = screen.buffertoimage()
@@ -308,6 +337,10 @@ gba = {
 	{ self = "app0:vba_next_libretro.self", name = "VBA Next" },
 }
 
+psx = {
+	{ self = "app0:pcsx_rearmed_libretro.self", name = "PCSX" },
+}
+
 function handle_files(cnt)
 
 	local extension = cnt.ext
@@ -321,7 +354,7 @@ function handle_files(cnt)
 	elseif extension == "gba" and game.exists("RETROVITA") then
 		launch_Retrovita("RETROVITA",gba,cnt)
 	elseif (extension == "v64" or extension == "z64" or extension == "n64" or extension == "rom") and game.exists("DEDALOX64") then
-		game.launchp("DEDALOX64",cnt.path)
+		launch_Daedalus64(cnt)
 	elseif extension == "png" or extension == "jpg" or extension == "jpeg" or extension == "bmp" or extension == "gif" then
 		visorimg(cnt.path)
 	elseif extension == "vpk" then

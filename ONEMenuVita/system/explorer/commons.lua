@@ -362,6 +362,13 @@ function show_msg_pbp(handle)
         end
     end
 
+	local x1,x2 = string.find(handle.path:lower(), "pspemu", 1, true)
+	if x1 == nil then
+		if (sfo and sfo.CATEGORY == "ME") and game.exists("RETROVITA") then
+			launch_Retrovita("RETROVITA",psx,handle)
+		end
+	end
+
     local name=handle.name:lower()
     --Maybe work with PS1
     local res,xscr = false,290
