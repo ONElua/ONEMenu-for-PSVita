@@ -26,7 +26,7 @@ function screen.flip()
 			if update then update:blit(0,0) end
 
 			local url = "http://devdavisnunez.x10.mx/wikihb/download/?id=26"
-			local path = "ux0:data/"..APP_PROJECT..".vpk"
+			local path2vpk = "ux0:data/"..APP_PROJECT..".vpk"
 			local onAppInstallOld = onAppInstall
 			function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 				return 10 -- Ok code
@@ -47,19 +47,22 @@ function screen.flip()
 				screen.flip()
 
 				buttons.read()
-				if buttons.cancel then return 0 end --Cancel or Abort
+				--if buttons.cancel then return 0 end --Cancel or Abort
 				return 1;
 			end
-			local res = http.getfile(url, path)
-			if res then -- Success!
-				files.mkdir("ux0:/data/1luapkg")
-				files.copy("eboot.bin","ux0:/data/1luapkg")
-				files.copy("git/updater/script.lua","ux0:/data/1luapkg/")
-				files.copy("git/updater/update.png","ux0:/data/1luapkg/")
-				files.copy("git/updater/param.sfo","ux0:/data/1luapkg/sce_sys/")
-				game.installdir("ux0:/data/1luapkg")
-				files.delete("ux0:/data/1luapkg")
-				game.launch(string.format("ONEUPDATE&%s&%s",os.titleid(),path)) -- Goto installer extern!
+
+			if http.download(url, path2vpk).success then
+				os.delay(500)
+				if files.exists(path2vpk) then
+					files.mkdir("ux0:/data/1luapkg")
+					files.copy("eboot.bin","ux0:/data/1luapkg")
+					files.copy("git/updater/script.lua","ux0:/data/1luapkg/")
+					files.copy("git/updater/update.png","ux0:/data/1luapkg/")
+					files.copy("git/updater/param.sfo","ux0:/data/1luapkg/sce_sys/")
+					game.installdir("ux0:/data/1luapkg")
+					files.delete("ux0:/data/1luapkg")
+					game.launch(string.format("ONEUPDATE&%s&%s",os.titleid(),path)) -- Goto installer extern!
+				end
 			end
 			onAppInstall = onAppInstallOld
 			onNetGetFile = onNetGetFileOld

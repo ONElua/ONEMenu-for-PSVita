@@ -56,7 +56,7 @@ function customthemes()
 				if buttons.down or buttons.analogly > 60 then livetheme:down() end
 
 				if buttons.square then
-					if os.message(STRINGS_CUSTOMTHEMES_DELETE.."\n"..list[livetheme.sel].info.title.." ?",1)==1 then
+					if os.dialog(STRINGS_CUSTOMTHEMES_DELETE.."?\n"..(list[livetheme.sel].info.title or "unk").."\n"..(list[livetheme.sel].info.author or "unk"), STRINGS_CUSTOMTHEMES_TITLE, __DIALOG_MODE_OK_CANCEL) == true then
 						themes.delete(list[livetheme.sel].id)
 						if os.message(STRINGS_CUSTOMTHEMES_DELFILES,1)==1 then
 							files.delete(list[livetheme.sel].id)

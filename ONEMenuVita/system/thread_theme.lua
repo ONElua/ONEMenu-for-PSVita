@@ -20,7 +20,7 @@ while true do
 		local entry = THEME_PORT_I:pop()
 		local icon = nil;
 		while true do
-			if (not files.exists(__PATH_THEMES..entry.id..".png") and http.getfile("https://raw.githubusercontent.com/ONElua/ONEMenu-for-PSVita/master/Themes/"..entry.id..".png", __PATH_THEMES..entry.id..".png")) or (files.exists(__PATH_THEMES..entry.id..".png")) then
+			if (not files.exists(__PATH_THEMES..entry.id..".png") and http.download("https://raw.githubusercontent.com/ONElua/ONEMenu-for-PSVita/master/Themes/"..entry.id..".png", __PATH_THEMES..entry.id..".png")) or (files.exists(__PATH_THEMES..entry.id..".png")) then
 				icon = image.load(__PATH_THEMES..entry.id..".png")
 				THEME_PORT_O:push({icon = icon, id = entry.id})
 				icon:lost()

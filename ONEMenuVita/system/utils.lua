@@ -92,7 +92,7 @@ function getavatar(path)
 		f:close()
 
 		local databin = nil
-		databin = http.get(profile)
+		databin = http.down(profile)
 		if databin then
 			avatar = image.loadfromdata(databin,__IMAGE_TYPE_PNG)
 			if avatar then

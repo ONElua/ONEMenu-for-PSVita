@@ -267,11 +267,11 @@ function theme.manager()
 					local vbuff = screen.toimage()
 					if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 					message_wait()
-					os.delay(15)
+					os.delay(150)
 
 					-- Call Download themes...
 					local onNetGetFileOld = onNetGetFile; onNetGetFile = nil
-					local raw = http.get(string.format("https://raw.githubusercontent.com/%s/%s/master/Themes/database.json", APP_REPO, APP_PROJECT))
+					local raw = http.down(string.format("https://raw.githubusercontent.com/%s/%s/master/Themes/database.json", APP_REPO, APP_PROJECT))
 					onNetGetFile = onNetGetFileOld
 					if raw then
 						local not_err = true
@@ -296,11 +296,11 @@ function theme.manager()
 				local vbuff = screen.toimage()
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 				message_wait()
-				os.delay(15)
+				os.delay(150)
 
 				local url_themes = string.format("https://raw.githubusercontent.com/%s/%s/master/Themes/%s.zip", APP_REPO, APP_PROJECT, list[sect][scr[sect].sel].id)
 				local path = string.format("ux0:data/ONEMENU/tmp/%s.zip", list[sect][scr[sect].sel].id)
-				if http.getfile(url_themes, path) then
+				if http.download(url_themes, path) then
 					if files.extract(path, __PATH_THEMES) == 1 then
 						changes = true
 						os.message(STRINGS_THEMES_INSTALLED)

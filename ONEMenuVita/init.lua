@@ -120,6 +120,12 @@ function fillappman(obj)
 
 end
 
+function draw.offsetgradrect(x,y,sx,sy,c1,c2,c3,c4,offset)
+	local sizey = sy/2
+		draw.gradrect(x,y,sx,sizey + offset,c1,c2,c3,c4)
+			draw.gradrect(x,y + sizey - offset,sx,sizey + offset,c3,c4,c1,c2)
+end
+
 --Asia,Eur,Jpn,Usa,Unk	<-- Asc: 1,2,3,4,5
 --Unk,Usa,Jpn,Eur,Asia	<-- Des: 5,4,3,2,1
 

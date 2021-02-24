@@ -77,7 +77,7 @@ function show_scan(infovpk)
     local vpk = {scan = {}, len = 0 }
 
     reboot=false
-    vpk.scan = files.scan(infovpk.path,1)
+    vpk.scan = files.scan(infovpk.path)
 
     if not vpk.scan then return end
     if not #vpk.scan or #vpk.scan<=0 then return end

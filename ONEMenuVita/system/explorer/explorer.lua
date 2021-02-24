@@ -471,7 +471,13 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
 		local del=false
         if explorer.list[scroll.list.sel].multi then
             if #multi_delete>0 then
-                if os.message(STRINGS_SUBMENU_DELETE.." "..#multi_delete.."\n"..STRINGS_FILES_FOLDERS.."(s) ?",1) == 1 then
+			
+				local strgcat = ""
+				for i=1,#multi_delete do
+					strgcat += multi_delete[i].."\n"
+				end
+			
+                if os.dialog(STRINGS_DELETE_QUESTION.."\n\n"..#multi_delete.." "..STRINGS_FILES_FOLDERS.."(s): ".."\n\n"..strgcat, STRINGS_SUBMENU_DELETE, __DIALOG_MODE_OK_CANCEL) == true then
 					del=true
                     reboot=false
                         for i=1,#multi_delete do files.delete(multi_delete[i]) end
@@ -479,7 +485,7 @@ local delete_callback = function () -- TODO: add move to -1 pos of the deleted e
                 end
             end
         else
-            if os.message(STRINGS_SUBMENU_DELETE.."\n"..explorer.list[scroll.list.sel].path.." ?",1) == 1 then
+			if os.dialog(STRINGS_DELETE_QUESTION.."\n\n"..explorer.list[scroll.list.sel].path, STRINGS_SUBMENU_DELETE, __DIALOG_MODE_OK_CANCEL) == true then
 				del=true
                 reboot=false
                     files.delete(explorer.list[scroll.list.sel].path)

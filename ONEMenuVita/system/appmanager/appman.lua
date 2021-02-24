@@ -219,7 +219,7 @@ local uninstall_callback = function ()
 		local vbuff = screen.toimage()
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
-		if os.message(STRINGS_APP_REMOVE + appman[cat].list[focus_index].id + "?",1) == 1 then
+		if os.dialog(STRINGS_APP_REMOVE.."?\n"..appman[cat].list[focus_index].title, appman[cat].list[focus_index].id, __DIALOG_MODE_OK_CANCEL) == true then
 			if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 			message_wait()
 
