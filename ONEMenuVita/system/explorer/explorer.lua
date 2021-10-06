@@ -340,6 +340,11 @@ gba = {
 psx = {
 	{ self = "app0:pcsx_rearmed_libretro.self", name = "PCSX" },
 }
+--[[
+sega = {
+	{ self = "app0:pcsx_rearmed_libretro.self", name = "PCSX" },
+}
+]]
 
 function handle_files(cnt)
 
@@ -347,7 +352,7 @@ function handle_files(cnt)
 
 	if extension == "nes" and game.exists("RETROVITA") then
 		launch_Retrovita("RETROVITA",nes,cnt)
-	elseif (extension == "sfc" or extension == "smc") and game.exists("RETROVITA") then
+	elseif (extension == "sfc" or extension == "smc" or extension == "fig") and game.exists("RETROVITA") then
 		launch_Retrovita("RETROVITA",snes,cnt)
 	elseif (extension == "gb" or extension == "gbc") and game.exists("RETROVITA") then
 		launch_Retrovita("RETROVITA",gbc,cnt)
@@ -364,7 +369,7 @@ function handle_files(cnt)
 		buttons.homepopup(1)
 	elseif extension == "zip" or extension == "rar" then
 		show_scan(cnt)
-	elseif extension == "pbp" or extension == "iso" or extension == "cso" then
+	elseif extension == "pbp" or extension == "iso" or extension == "cso" or extension == "bin" then
 		show_msg_pbp(cnt)
 	elseif extension == "mp3" or extension == "wav" or extension == "ogg" then
 		MusicPlayer(cnt)
@@ -589,12 +594,15 @@ local sizedir_callback = function ()
 					sizedir += files.size(multi[i])
 				end--for
 				os.message(STRINGS_CALLBACKS_SIZE_ALL.." "..files.sizeformat(sizedir or 0))
+				--os.dialog2(STRINGS_CALLBACKS_SIZE_ALL.." "..files.sizeformat(sizedir or 0))
 			end
 		else
 			if not explorer.list[scroll.list.sel].size then                -- Its Dir
 				message_wait()
+				--os.dialog2(explorer.list[scroll.list.sel].name+"\n"+STRINGS_SIZE_IS+files.sizeformat(files.size(explorer.list[scroll.list.sel].path) or 0))
 				os.message(explorer.list[scroll.list.sel].name+"\n"+STRINGS_SIZE_IS+files.sizeformat(files.size(explorer.list[scroll.list.sel].path) or 0))
 			else
+				--os.dialog2(explorer.list[scroll.list.sel].name+"\n"+STRINGS_SIZE_IS+explorer.list[scroll.list.sel].size)
 				os.message(explorer.list[scroll.list.sel].name+"\n"+STRINGS_SIZE_IS+explorer.list[scroll.list.sel].size)
 			end
 		end
@@ -711,7 +719,7 @@ local installgame_callback = function ()
 			end
 
 			fillappmanlist(tmp_vpk, info)
-			appman.len +=1
+			--appman.len +=1
 			infodevices()
 
 		else

@@ -157,6 +157,7 @@ function fillappmanlist(objin, info_sfo)
 
     --No Exist!!!
 	if search == 0 then
+		appman.len += 1
 		table.insert(appman[index].list, objin)
 		SortGeneric(appman[index].list, appman[index].sort, appman[index].asc)
 		appman[index].scroll:set(appman[index].list,limit)
@@ -335,7 +336,6 @@ function show_msg_vpk(obj_vpk)
         end
 
         fillappmanlist(tmp_vpk, scan_vpk.sfo)
-        appman.len +=1
         infodevices()
 
     else
@@ -352,22 +352,24 @@ function show_msg_pbp(handle)
     bufftmp = screen.toimage()
     local x,y = (960-420)/2,(544-420)/2
 
-    local icon0 = game.geticon0(handle.path)
+    if handle.ext == "bin" and ((string.find(handle.path:lower(), "ur0", 1, true) ) or (string.find(handle.path:lower(), "pspemu", 1, true) == nil) )
+	then launch_Retrovita("RETROVITA",psx,handle) return end
+
+	local icon0 = game.geticon0(handle.path)
     local sfo = game.info(handle.path)
 
     local launch=false
     if sfo and (sfo.CATEGORY == "EG" or sfo.CATEGORY == "ME") then
         if sfo.DISC_ID and game.exists(sfo.DISC_ID) then
-            launch=true
+            launch = true
+		else
+			if sfo.CATEGORY == "ME" then
+				if ( (string.find(handle.path:lower(), "ur0", 1, true) ) or (string.find(handle.path:lower(), "pspemu", 1, true) == nil)  ) then
+					launch_Retrovita("RETROVITA",psx,handle)
+				end
+			end
         end
     end
-
-	local x1,x2 = string.find(handle.path:lower(), "pspemu", 1, true)
-	if x1 == nil then
-		if (sfo and sfo.CATEGORY == "ME") and game.exists("RETROVITA") then
-			launch_Retrovita("RETROVITA",psx,handle)
-		end
-	end
 
     local name=handle.name:lower()
     --Maybe work with PS1
@@ -631,7 +633,7 @@ function MusicPlayer(handle)
         snd:stop()
         snd,coverimg,musicimg = nil,nil,nil
         collectgarbage("collect")
-        os.delay(250)
+        os.delay(500)
     else
         os.message(STRINGS_MUSIC_ERROR)
     end

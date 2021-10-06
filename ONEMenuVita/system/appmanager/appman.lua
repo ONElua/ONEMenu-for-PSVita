@@ -242,6 +242,7 @@ local uninstall_callback = function ()
 			buttons.homepopup(1)
 
 			if result_rmv == 1 then
+				appman.len -= 1
 				if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 				local path_ReAddcont = { "ux0:ReAddcont/", "uma0:ReAddcont/", "imc0:ReAddcont/", "xmc0:ReAddcont/" }
@@ -285,7 +286,6 @@ local uninstall_callback = function ()
 						appman[cat].scroll.lim-=1
 					end
 				end
-				appman.len -= 1
 				infodevices()
 			end
 			submenu_ctx.close = true
@@ -698,6 +698,385 @@ local switch_callback = function ()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 end
 
+function image.startup(img)
+    local w,h = img:getw(), img:geth()
+
+	if w != 280 or h != 158 then
+		w,h = 280,158
+		img = img:copyscale(w,h)
+	end
+
+	local px,py = 0, 192-h --34
+	local sheet = image.new(280, 192, 0x0)
+	for y=0,h-1 do
+		for x=0,w-1 do
+			local c = img:pixel(x,y)
+			if c:a() == 0 then c = 0x0 end 
+			sheet:pixel(px+x, py+y, c)
+		end
+	end
+	return sheet
+end
+
+function editbubbles(obj)
+
+	local tmp = files.listdirs("ux0:ABM/")
+
+	if tmp then table.sort(tmp,function(a,b) return string.lower(a.name)<string.lower(b.name) end)
+	else tmp = {} end
+
+	local resources = { 
+		{ name = "ICON0.PNG", 	 w = 128,	h = 128,	dest = "/sce_sys/icon0.png", },
+		{ name = "STARTUP.PNG",  w = 280,	h = 158,	dest = "/sce_sys/livearea/contents/startup.png", },
+		{ name = "PIC0.PNG", 	 w = 960,	h = 544,	dest = "/sce_sys/pic0.png", },
+		{ name = "BG0.PNG", 	 w = 840,	h = 500,	dest = "/sce_sys/livearea/contents/bg0.png", },
+		{ name = "BG.PNG", 	 	 w = 840,	h = 500,	dest = "/sce_sys/livearea/contents/bg.png" },
+		{ name = "BOOT.PNG", 	 w = 480,	h = 272,	dest = "/data/boot.png", },
+		{ name = "TEMPLATE.XML", w = 0,		h = 0,		dest = "/sce_sys/livearea/contents/", },
+	}
+
+	--FRAMEX.PNG 1 to 10
+	for i=1,10 do
+		table.insert(resources, { name = "FRAME"..i..".PNG", w = 0,	h = 0, dest = "/sce_sys/livearea/contents/", })
+	end
+
+	local find_png, inside, backl, manual_flag = false,false,{},false
+	local bubble_color = 1
+	local maximset = 10
+	local scrids, newpath = newScroll(tmp, maximset),"ux0:ABM/"
+	buttons.interval(12,5)
+	while true do
+		buttons.read()
+
+		if theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+--		draw.fillrect(0,0,960,30, 0x64545353) --UP
+		screen.print(480,5, STRINGS_EDIT_BUBBLE, 1, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ACENTER)
+
+		if scrids.maxim > 0 then
+
+			screen.print(15,35, newpath, 1, color.white,color.blue)
+			local y = 75
+			for i=scrids.ini, scrids.lim do
+
+				if i == scrids.sel then
+					if not inside then draw.fillrect(14,y-3,936,25, theme.style.SELCOLOR)
+					else draw.fillrect(14,y-3,682,25,theme.style.SELCOLOR) end
+				end
+				screen.print(20,y,tmp[i].name,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ALEFT)
+
+				y += 32
+			end
+
+			--Bar Scroll
+			local ybar, h = 70, (maximset*32)-2
+			draw.fillrect(3, ybar-2, 8, h, color.shine)
+			--if scrids.maxim >= maximset then -- Draw Scroll Bar
+				local pos_height = math.max(h/scrids.maxim, maximset)
+				draw.fillrect(3, ybar-2 + ((h-pos_height)/(scrids.maxim-1))*(scrids.sel-1), 8, pos_height, color.new(0,255,0))
+			--end
+
+			if tmp[scrids.sel].img then
+				tmp[scrids.sel].img:blit(700,84)
+			end
+
+			screen.print(10,450, obj.id, 1, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
+			screen.print(10,480, obj.title, 1, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ALEFT)
+
+			if inside and (find_png or manual_flag) then
+				screen.print(480,523,STRINGS_EDIT_BUBBLE_PROCESS,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ACENTER)
+			end
+
+		else
+			screen.print(480,230, STRINGS_APP_EMPTY, 1, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ACENTER)
+		end
+
+		if inside then
+			screen.print(950,520, SYMBOL_CIRCLE..": "..STRINGS_BACK, 1, theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
+		end
+
+		--draw.fillrect(0,516,960,30, 0x64545353)--Down
+
+		screen.flip()
+
+		--Controls
+		if buttons.cancel then
+			if inside then
+				newpath = files.nofile(newpath)
+				tmp = files.listdirs(newpath)
+
+				if tmp then table.sort(tmp,function(a,b) return string.lower(a.name)<string.lower(b.name) end)
+				else tmp = {} end
+
+				os.delay(750)
+
+				find_png, inside, backlist, manual_flag = false,false,{},false
+				maximset = 10
+				scrids:set(tmp,maximset)
+				if #backl>0 then
+					if scrids.maxim == backl[#backl].maxim then
+						scrids.ini = backl[#backl].ini
+						scrids.lim = backl[#backl].lim
+						scrids.sel = backl[#backl].sel
+					end
+					backl[#backl] = nil
+				end
+
+			else
+				buttons.read() break
+			end
+		end
+
+		if scrids.maxim > 0 then
+
+			if (buttons.up or buttons.analogly < -60) then scrids:up() end
+			if (buttons.down or buttons.analogly > 60) then scrids:down() end
+
+			if buttons.accept and tmp[scrids.sel].directory then
+				table.insert(backl, {maxim = scrids.maxim, ini = scrids.ini, sel = scrids.sel, lim = scrids.lim })
+				inside = true
+				newpath = "ux0:ABM/"..tmp[scrids.sel].name
+
+				--MANUAL folder
+				manual_flag = false
+				if files.exists(newpath.."/Manual/") then manual_flag = true end
+
+				tmp = {}
+				local png = files.listfiles(newpath)
+				if png and #png > 0 then
+					table.sort(png,function(a,b) return string.lower(a.name)<string.lower(b.name) end)
+					for i=1,#png do
+						if png[i].ext:upper() == "PNG" or png[i].ext:upper() == "XML" then
+							find_png = true
+							for j=1,#resources do
+
+								if (png[i].name:upper() == resources[j].name) then
+
+									local noscaled = false
+									if png[i].ext:upper() == "PNG" then
+
+										png[i].img = image.load(png[i].path)
+
+										if png[i].img then
+											if png[i].name:upper() == "ICON0.PNG" then
+												if png[i].img:getrealw() == 128 and png[i].img:getrealw() == 128 then
+													noscaled = true
+												end
+											end
+											png[i].img:resize(252,151)
+											png[i].img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
+										end
+
+									end
+									table.insert(tmp, { name = png[i].name, path = png[i].path, ext = png[i].ext, img = png[i].img or nil,
+														directory = png[i].directory or false })
+									tmp.nostretched = true
+									tmp.noscaled = noscaled
+
+								end
+							end--for resources
+
+						end
+					end--for png
+				end
+
+				if manual_flag then
+					table.insert(tmp, { name = "Manual" })
+				end
+
+				maximset = #tmp
+				scrids = newScroll(tmp, maximset)
+			end
+
+			if buttons.start and inside and (find_png or manual_flag) then--hacer la reinstalación
+
+				buttons.homepopup(0)
+
+				local img = nil
+				local path_tmp = "ux0:data/vpk_abm/"
+				files.delete(path_tmp)
+				files.mkdir(path_tmp)
+
+				if theme.data["back"] then theme.data["back"]:blit(0,0) end
+				draw.fillrect(0,0,960,30, color.shine)
+				screen.print(10,10,STRINGS_BACKUP)
+				os.delay(250)
+				screen.flip()
+
+				local onCopyFilesOld = onCopyFiles
+				function onCopyFiles(size,written,file)
+					return 10 -- Ok code
+				end
+				--Backup All
+				files.copy(obj.path.."/sce_sys/livearea/", path_tmp.."sce_sys/")
+				files.copy(obj.path.."/sce_sys/package/", path_tmp.."sce_sys/")
+				files.copy(obj.path.."/sce_sys/icon0.png", path_tmp.."sce_sys/")
+				files.copy(obj.path.."/sce_sys/param.sfo", path_tmp.."sce_sys/")
+				files.copy(obj.path.."/sce_sys/pic0.png", path_tmp.."sce_sys/")
+				files.copy(obj.path.."/data/", path_tmp)
+
+				for i=1,#resources do
+					for j=1,#tmp do
+
+						if tmp[j].name:upper() == resources[i].name then
+
+							--Resources to 8bits
+							if theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+							if i < 7 then--no mayor a xml y frames
+
+								img = image.load(tmp[j].path)
+								if img then
+									img:scale(75)
+									img:center()
+									img:blit(480,272)
+								end
+
+								draw.fillrect(0,0,960,30, color.shine)
+								screen.print(10,10,STRINGS_CONVERTING)
+								screen.print(950,10,resources[i].name,1, color.white, color.blue, __ARIGHT)
+								screen.flip()
+
+								if img then
+									img:reset()
+
+									local scale = false
+									if tmp[j].name:upper() != "ICON0.PNG" then
+										if img:getrealw() != resources[i].w or img:getrealh() != resources[i].h then
+											img=img:copyscale(resources[i].w, resources[i].h)
+											scale = true
+										end
+									end
+
+									--i==2 STARTUP.PNG
+									if i == 2 then
+										--Fix Startup.png Forzar 8bits
+										image.save(image.startup(img), obj.path..resources[i].dest, 1)
+									else
+										if tmp[j].name:upper() == "ICON0.PNG" then
+											if tmp.nostretched then
+												if img:getrealw() != resources[i].w or img:getrealh() != resources[i].h then
+													image.save(img:copyscale(128,128), obj.path..resources[i].dest, 1)
+												else
+													image.save(img, obj.path..resources[i].dest, 1)
+												end
+											else
+												image.save(image.nostretched(img, colors[bubble_color]), obj.path..resources[i].dest, 1)
+											end
+										else
+											if tmp[j].name:upper() == "BOOT.PNG" then
+												image.save(img, obj.path..resources[i].dest)
+											else
+												image.save(img, obj.path..resources[i].dest, 1)
+											end
+										end
+									end
+
+								end--if img
+
+							else
+
+								files.copy(tmp[j].path, obj.path..resources[i].dest)
+									
+								if i > 7 then
+									img = image.load(tmp[j].path)
+									if img then
+										img:scale(75)
+										img:center()
+										img:blit(480,272)
+									end
+
+									draw.fillrect(0,0,960,30, color.shine)
+									screen.print(10,10,STRINGS_CONVERTING)
+									screen.print(950,10,resources[i].name,1, color.white, color.blue, __ARIGHT)
+									screen.flip()
+
+									image.save(img, obj.path..resources[i].dest, 1)
+								end
+
+							end
+						end
+					end
+				end--for
+
+				--MANUAL folder
+				if files.exists(newpath.."/Manual/") then
+					if theme.data["back"] then theme.data["back"]:blit(0,0) end
+					draw.fillrect(0,0,960,30, color.shine)
+						screen.print(10,10,STRINGS_INSTALL_MANUAL)
+					screen.flip()
+					files.move(obj.path.."/sce_sys/Manual/", path_tmp.."sce_sys/")
+					files.copy(newpath.."/Manual/", obj.path.."/sce_sys/")
+				else
+					--check Manual Bubble ?
+					if files.exists(obj.path.."/sce_sys/Manual/001.png") then
+						if theme.data["back"] then theme.data["back"]:blit(0,0) end
+						draw.fillrect(0,0,960,30, color.shine)
+						if os.dialog(STRINGS_MANUAL_KEEP, STRINGS_INSTALL_MANUAL, __DIALOG_MODE_OK_CANCEL) == false then
+							files.move(obj.path.."/sce_sys/Manual/", path_tmp.."sce_sys/")
+						end
+					end
+				end
+
+				--Install Bubble
+				files.copy("ur0:shell/db/app.db",path_tmp)
+				bubble_id,reinstall = obj.id,true
+				
+				local onAppInstallOld = onAppInstall
+				function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
+					return 10 -- Ok code
+				end
+
+				local result = game.installdir(obj.path)
+				if result != 1 then
+					--Restore
+					files.copy(path_tmp.."app.db", "ur0:shell/db/")
+					files.move(path_tmp.."sce_sys/",obj.path)
+					files.move(path_tmp.."data/",obj.path)
+					os.message(STRINGS_ERROR_INST,0)
+				end
+				onAppInstall = onAppInstallOld
+				onCopyFiles = onCopyFilesOld
+				buttons.read()--flush
+				
+				local onDeleteFilesOld = onDeleteFiles
+				function onDeleteFiles(file)
+					return 10 -- Ok code
+				end
+				files.delete(path_tmp)
+				onDeleteFiles = onDeleteFilesOld
+
+				obj.img = image.load(obj.path_img)
+
+				infodevices()
+				
+				buttons.homepopup(1)
+				buttons.read() break
+			end
+
+		end
+
+	end--while
+
+end
+
+--PIGS000001,SONIC0001,SONIC0002,GRVA00007
+local bubble_edit_callback = function ()
+
+	if appman[cat].list[focus_index].dev == "gro0" then return end
+
+	local pos_menu = submenu_ctx.scroll.sel
+	local vbuff = screen.toimage()
+
+	editbubbles(appman[cat].list[focus_index])
+
+	submenu_ctx.wakefunct()
+	submenu_ctx.scroll.sel = pos_menu
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+
+end
+
 local editsfo_callback = function ()
 
 	--Init load prkxs
@@ -1017,6 +1396,10 @@ function submenu_ctx.wakefunct()
 
 	if appman[cat].cats == "hbvita" then
 		table.insert(submenu_ctx.options, { text = STRINGS_APP_SWITCH, funct = switch_callback })
+	end
+
+	if appman[cat].cats == "hbvita" or appman[cat].cats == "adrbb" then
+		table.insert(submenu_ctx.options, { text = STRINGS_APP_EDIT_RESOURCES, funct = bubble_edit_callback })
 	end
 
 	if appman[cat].cats == "psvita" or appman[cat].cats == "hbvita" or appman[cat].cats == "adrbb" then

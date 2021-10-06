@@ -145,9 +145,9 @@ function refresh_init(img)
 
 				if search == 0 then
 					table.insert(appman[list[i].index].list, list[i])
-					--table.sort(appman[list[i].index].list ,function (a,b) return string.lower(a.dev)<string.lower(b.dev) end)
 					SortGeneric(appman[list[i].index].list,appman[list[i].index].sort,appman[list[i].index].asc)
 					appman[list[i].index].scroll:set(appman[list[i].index].list,limit)
+					appman.len += 1
 				else
 					--Update
 					appman[list[i].index].list[search].dev = "ux0"
@@ -170,7 +170,7 @@ function refresh_init(img)
 							game.umount()
 						end
 				end
-				appman.len+=1
+				--appman.len += 1
 
 			else
 				os.message(STRINGS_LIVEAREA_NOTINSTALLED..list[i].id)
