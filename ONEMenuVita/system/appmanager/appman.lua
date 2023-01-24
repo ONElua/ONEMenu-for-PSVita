@@ -1063,7 +1063,7 @@ end
 --PIGS000001,SONIC0001,SONIC0002,GRVA00007
 local bubble_edit_callback = function ()
 
-	if appman[cat].list[focus_index].dev == "gro0" then return end
+	if appman[cat].list[focus_index].dev == "gro0" or appman[cat].list[focus_index].id == "PCSG90096" then return end
 
 	local pos_menu = submenu_ctx.scroll.sel
 	local vbuff = screen.toimage()

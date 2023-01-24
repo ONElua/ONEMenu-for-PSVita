@@ -352,9 +352,10 @@ function show_msg_pbp(handle)
     bufftmp = screen.toimage()
     local x,y = (960-420)/2,(544-420)/2
 
+--[[
     if handle.ext == "bin" and ((string.find(handle.path:lower(), "ur0", 1, true) ) or (string.find(handle.path:lower(), "pspemu", 1, true) == nil) )
 	then launch_Retrovita("RETROVITA",psx,handle) return end
-
+]]
 	local icon0 = game.geticon0(handle.path)
     local sfo = game.info(handle.path)
 
@@ -362,14 +363,16 @@ function show_msg_pbp(handle)
     if sfo and (sfo.CATEGORY == "EG" or sfo.CATEGORY == "ME") then
         if sfo.DISC_ID and game.exists(sfo.DISC_ID) then
             launch = true
-		else
-			if sfo.CATEGORY == "ME" then
-				if ( (string.find(handle.path:lower(), "ur0", 1, true) ) or (string.find(handle.path:lower(), "pspemu", 1, true) == nil)  ) then
-					launch_Retrovita("RETROVITA",psx,handle)
-				end
+		elseif sfo.CATEGORY == "UG" or sfo.CATEGORY == "EG" or sfo.CATEGORY == "MG" then
+			
+		
+		elseif sfo.CATEGORY == "ME" then
+			if ( (string.find(handle.path:lower(), "ur0", 1, true) ) or (string.find(handle.path:lower(), "uma0", 1, true) ) or (string.find(handle.path:lower(), "pspemu", 1, true) == nil)  ) then
+				launch_Retrovita("RETROVITA",psx,handle)
 			end
-        end
-    end
+		end
+	end
+ 
 
     local name=handle.name:lower()
     --Maybe work with PS1
@@ -956,7 +959,7 @@ function visortxt(handle, flag_edit)
                     --Update file (info)
                     local info = files.info(handle.path)
                     if info then
-                        if handle.size then    handle.size = files.sizeformat(info.size or 0) end
+                        if handle.size then handle.size = files.sizeformat(info.size or 0) end
                         if handle.mtime then handle.mtime = info.mtime end
                     end
                     infodevices()

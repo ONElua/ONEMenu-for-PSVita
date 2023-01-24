@@ -308,7 +308,9 @@ function launch_Retrovita(gameid,core,obj)
 			if buttons.accept then
 				game.launchp(gameid,core[scroll_tmp.sel].self,obj.path)
 			end
-			if buttons.cancel then break end
+			if buttons.cancel then
+				os.delay(250) break
+			end
 		end
 	end
 end
@@ -330,27 +332,30 @@ gbc = {
 	{ self = "app0:gambatte_libretro.self", name = "Gambatte" },
 	{ self = "app0:gearboy_libretro.self",  name = "Gearboy"  },
 	{ self = "app0:tgbdual_libretro.self",  name = "TGB Dual" },
+	{ self = "app0:mgba_libretro.self",     name = "mGBA" },
 }
 
 gba = {
 	{ self = "app0:gpsp_libretro.self",     name = "gpSP"     },
 	{ self = "app0:vba_next_libretro.self", name = "VBA Next" },
+	{ self = "app0:vbam_libretro.self",     name = "VBA-M" },
 }
 
 psx = {
 	{ self = "app0:pcsx_rearmed_libretro.self", name = "PCSX" },
 }
---[[
+
 sega = {
-	{ self = "app0:pcsx_rearmed_libretro.self", name = "PCSX" },
+	{ self = "app0:genesis_plus_gx_libretro.self", name = "Genesis GX Plus" },
+	{ self = "app0:genesis_plus_gx_wide_libretro.self", name = "Genesis GX Wide" },
+	{ self = "app0:picodrive_libretro.self", name = "Picodrive" },
 }
-]]
 
 function handle_files(cnt)
 
 	local extension = cnt.ext
 
-	if extension == "nes" and game.exists("RETROVITA") then
+	if (extension == "nes" or extension == "fds") and game.exists("RETROVITA") then
 		launch_Retrovita("RETROVITA",nes,cnt)
 	elseif (extension == "sfc" or extension == "smc" or extension == "fig") and game.exists("RETROVITA") then
 		launch_Retrovita("RETROVITA",snes,cnt)
@@ -369,15 +374,21 @@ function handle_files(cnt)
 		buttons.homepopup(1)
 	elseif extension == "zip" or extension == "rar" then
 		show_scan(cnt)
-	elseif extension == "pbp" or extension == "iso" or extension == "cso" or extension == "bin" then
-		show_msg_pbp(cnt)
 	elseif extension == "mp3" or extension == "wav" or extension == "ogg" then
 		MusicPlayer(cnt)
-	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "inf" or extension == "cfg" then
+	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "inf" or extension == "cfg" or extension == "lpl" then
 		visortxt(cnt,true)
 	elseif extension == "mp4" then
 		VideoPlayer(cnt)
 	end
+	if extension == "pbp" or extension == "iso" or extension == "cso" or extension == "bin" then
+		show_msg_pbp(cnt)
+	end
+	if (extension == "md" or extension == "bin") and game.exists("RETROVITA") then
+		--launch_Retrovita("RETROVITA",sega,cnt)
+	end
+
+
 
 end
 
@@ -783,16 +794,16 @@ local installtheme_callback = function ()
 		buttons.read()
 
 		if install_in == __THEMES_UX0 and Root2[Dev] != "ux0:" then
-			if files.copy(explorer.list[scroll.list.sel].path,"ux0:data/customtheme")==1 then files.delete(explorer.list[scroll.list.sel].path) end
-            path_tmp = "ux0:data/customtheme/"..explorer.list[scroll.list.sel].name
+			if files.copy(explorer.list[scroll.list.sel].path,"ux0:/data/customtheme/")==1 then files.delete(explorer.list[scroll.list.sel].path) end
+            path_tmp = "ux0:/data/customtheme/"..explorer.list[scroll.list.sel].name
 		end
 		if install_in == __THEMES_UR0 and Root2[Dev] != "ur0:" then
-			if files.copy(explorer.list[scroll.list.sel].path,"ur0:data/customtheme")==1 then files.delete(explorer.list[scroll.list.sel].path) end
-            path_tmp = "ur0:data/customtheme/"..explorer.list[scroll.list.sel].name
+			if files.copy(explorer.list[scroll.list.sel].path,"ur0:/data/customtheme/")==1 then files.delete(explorer.list[scroll.list.sel].path) end
+            path_tmp = "ur0:/data/customtheme/"..explorer.list[scroll.list.sel].name
 		end
 		if install_in == __THEMES_UMA0 and Root2[Dev] != "uma0:" then
-			if files.copy(explorer.list[scroll.list.sel].path,"uma0:data/customtheme")==1 then files.delete(explorer.list[scroll.list.sel].path) end
-            path_tmp = "uma0:data/customtheme/"..explorer.list[scroll.list.sel].name
+			if files.copy(explorer.list[scroll.list.sel].path,"uma0:/data/customtheme/")==1 then files.delete(explorer.list[scroll.list.sel].path) end
+            path_tmp = "uma0:/data/customtheme/"..explorer.list[scroll.list.sel].name
 		end
 
         buttons.homepopup(0)

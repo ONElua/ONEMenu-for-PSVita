@@ -67,7 +67,8 @@ function fillappman(obj)
 		obj.path_img = "ur0:appmeta/"..obj.id.."/livearea/contents/startup.png"
 	else
 
-		if obj.id == "PSPEMUCFW" then index = 2
+		if obj.id == "PSPEMUCFW" or obj.id == "PIGS00001" or obj.id == "SONIC0001" or obj.id == "SONIC0002" or
+			obj.id == "GRVA00007" then index = 2
 		else
 
 			if tonumber(obj.sdk) > 661 then
@@ -110,7 +111,6 @@ function fillappman(obj)
 	obj.img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
 
 	appman.len += 1
-
 	table.insert(appman[index].list,obj)
 
 	-- Push request of icon! :D
@@ -173,9 +173,9 @@ function Scanning()
 
 	-- Init with Max CPU/GPU
 	__CPU = os.cpu()
-	os.cpu(444)
+	--os.cpu(444)
 	__GPU = os.gpuclock()
-	os.gpuclock(166)
+--	os.gpuclock(166)
 
 	--id, type, version, dev, path, title
 	local list_tmp = game.list(__GAME_LIST_ALL)
@@ -190,7 +190,7 @@ function Scanning()
 			else
 				table.insert(list,list_tmp[i])
 			end
-		end
+end
 	end
 
 	for i=1,#list do
@@ -205,8 +205,8 @@ function Scanning()
 	end
 
 	--return CPU/GPU
-	os.cpu(__CPU)
-	os.gpuclock(__GPU)
+--	os.cpu(__CPU)
+	--os.gpuclock(__GPU)
 
 end
 ------------------Busqueda y peticion de Iconos en modo hilo------------------
