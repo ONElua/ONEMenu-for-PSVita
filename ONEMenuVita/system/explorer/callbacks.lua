@@ -96,15 +96,16 @@ function onExtractFiles(size,written,file,totalsize,totalwritten)
 	screen.print(10,70,STRINGS_CALLBACKS_FILE..tostring(file),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 	--screen.print(10,90,STRINGS_CALLBACKS_PERCENT..math.floor((written*100)/size).." %",1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
 
+--[[
 	local Xa = "O: "
 	local Oa = "X: "
 	if accept_x == 1 then Xa,Oa = "X: ","O: " end
 	screen.print(925,35,Oa..STRINGS_SUBMENU_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)--515
-
+]]
 	screen.flip()
 	
 	buttons.read()
-	if buttons.cancel then return 0 end
+	--if buttons.cancel then return 0 end
 	return 1
 end
 

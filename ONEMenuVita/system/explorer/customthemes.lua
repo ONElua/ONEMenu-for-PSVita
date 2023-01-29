@@ -17,7 +17,7 @@ function customthemes()
 	if list.len >0 then
 		local i = list.len
 		while i > 0 do
-			if list[i].id:sub(1,9) != "ux0:theme" then
+			if list[i].id:sub(1,9) != "ux0:/theme" then
 				list[i].info = themes.info(list[i].id.."/".."theme.xml")
 				if list[i].home then
 					list[i].preview = image.load(list[i].id.."/"..list[i].home)

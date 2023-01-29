@@ -749,87 +749,156 @@ local installgame_callback = function ()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
 
+
+function customthemes_install(path,id)
+
+	local path_tmp = path
+
+	local install_in = __THEMES_UX0
+	local title = string.format(STRINGS_SUBMENU_INSTALLCTHEME)
+	local w,h = screen.textwidth(title,1) + 120,170
+	local x,y = 480 - (w/2), 272 - (h/2)
+
+	local uma0_in = false
+	if files.exists("uma0:") then
+		local device_uma0 = os.devinfo("uma0:")
+		if device_uma0 then uma0_in = true end
+	end
+	local imc0_in = false
+	if files.exists("imc0:") then
+		local device_imc0 = os.devinfo("imc0:")
+		if device_imc0 then imc0_in = true end
+	end
+
+	while true do
+		buttons.read()
+		power.tick()
+		if theme.data["list"] then theme.data["list"]:blit(0,0) end 
+
+		draw.fillrect(x, y, w, h, theme.style.BARCOLOR)
+		draw.rect(x,y,w,h,color.white)
+			screen.print(480,y+12, title,1,color.white,color.black, __ACENTER)
+			screen.print(480,y+40,SYMBOL_CROSS.."  -  ".."UX0:", 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+65,SYMBOL_SQUARE.."  -  ".."UR0:", 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+90,SYMBOL_TRIANGLE.."  -  ".."UMA0:", 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+115,"L".."  -  ".."IMC0:", 1,color.white,color.black, __ACENTER)
+			screen.print(480,y+145,SYMBOL_CIRCLE.." "..STRINGS_SUBMENU_CANCEL, 1,color.white,color.black, __ACENTER)
+		screen.flip()
+
+		if buttons.accept or buttons.triangle or buttons.square or buttons.cancel or buttons.l then
+			if buttons.accept then install_in = __THEMES_UX0
+			elseif buttons.square then install_in = __THEMES_UR0
+			elseif buttons.triangle then
+				if uma0_in then	install_in = __THEMES_UMA0 else os.message(STRINGS_THEMES_NO_PARTITION) return false end
+			elseif buttons.l then
+				if imc0_in then	install_in = __THEMES_IMC0 else os.message(STRINGS_THEMES_NO_PARTITION) return false end
+			else return false end
+			break
+		end
+
+	end--while
+	buttons.read()
+
+	if install_in == __THEMES_UX0 and Root2[Dev] != "ux0:" then
+		if files.copy(path,"ux0:/data/customtheme/")==1 then files.delete(path) end
+		path_tmp = "ux0:/data/customtheme/"..id
+	end
+	if install_in == __THEMES_UR0 and Root2[Dev] != "ur0:" then
+		if files.copy(path,"ur0:/data/customtheme/")==1 then files.delete(path) end
+		path_tmp = "ur0:/data/customtheme/"..id
+	end
+	if install_in == __THEMES_UMA0 and Root2[Dev] != "uma0:" then
+		if files.copy(path,"uma0:/data/customtheme/")==1 then files.delete(path) end
+		path_tmp = "uma0:/data/customtheme/"..id
+	end
+	if install_in == __THEMES_IMC0 and Root2[Dev] != "imc0:" then
+		if files.copy(path,"imc0:/data/customtheme/")==1 then files.delete(path) end
+		path_tmp = "imc0:/data/customtheme/"..id
+	end
+
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+		message_wait(STRINGS_SUBMENU_INSTALLCTHEME)
+	os.delay(150)
+	
+	buttons.homepopup(0)
+		reboot=false
+			local result = themes.install(path_tmp, install_in)
+	buttons.homepopup(1)
+		reboot=true
+ 
+	--os.message(STRINGS_SUBMENU_INSTALLCTHEME.."\n"..STRINGS_RESULT..result)
+	if result == 1 then
+		if os.message(STRINGS_THEMES_SETTINGS,1)==1 then
+			os.delay(150)
+			os.uri("settings_dlg:custom_themes")
+		end
+	end
+	return
+end
+
 local installtheme_callback = function ()
     if #explorer.list > 0 then
- 
-        if not files.exists(string.format("%s/theme.xml",explorer.list[scroll.list.sel].path)) then return end
-       
-        local path_tmp = explorer.list[scroll.list.sel].path
 
-		local install_in = __THEMES_UX0
-		local title = string.format(STRINGS_SUBMENU_INSTALLCTHEME)
-		local w,h = screen.textwidth(title,1) + 120,145
-		local x,y = 480 - (w/2), 272 - (h/2)
+		bufftmp = screen.toimage()
+		local x,y = (960-420)/2,(544-420)/2
 
-		local uma0_in = false
-		if files.exists("uma0:") then
-			local device_uma0 = os.devinfo("uma0:")
-			if device_uma0 then uma0_in = true end
-		end
+		if not files.exists(string.format("%s/theme.xml",explorer.list[scroll.list.sel].path)) then return end
 
-		while true do
+		local info = themes.info(string.format("%s/theme.xml",explorer.list[scroll.list.sel].path))
+		local prev = nil
+		if info and info.package then prev = image.load(explorer.list[scroll.list.sel].path.."/"..info.package)	end
+
+		local Xa = "O: "
+		local Oa = "X: "
+		if accept_x == 1 then Xa,Oa = "X: ","O: " end
+
+	    while true do
 			buttons.read()
-			power.tick()
-			if theme.data["list"] then theme.data["list"]:blit(0,0) end 
+			if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 
-			draw.fillrect(x, y, w, h, theme.style.BARCOLOR)
-			draw.rect(x,y,w,h,color.white)
-				screen.print(480, y+12, title,1,color.white,color.black, __ACENTER)
-					screen.print(480,y+40,SYMBOL_CROSS.." ".."UX0:", 1,color.white,color.black, __ACENTER)
-					screen.print(480,y+65,SYMBOL_SQUARE.." ".."UR0:", 1,color.white,color.black, __ACENTER)
-					screen.print(480,y+90,SYMBOL_TRIANGLE.." ".."UMA0:", 1,color.white,color.black, __ACENTER)
-				screen.print(480,y+115,SYMBOL_CIRCLE.." "..STRINGS_SUBMENU_CANCEL, 1,color.white,color.black, __ACENTER)
-			screen.flip()
+			draw.fillrect(x,y,420,420,color.new(0x2f,0x2f,0x2f,0xff))
+			draw.framerect(x,y,420,420,color.black, color.shine,6)
 
-			if buttons.accept or buttons.triangle or buttons.square or buttons.cancel then
-				if buttons.accept then install_in = __THEMES_UX0
-				elseif buttons.square then install_in = __THEMES_UR0
-				elseif buttons.triangle then
-					if uma0_in then	install_in = __THEMES_UMA0 else os.message(STRINGS_THEMES_NO_PARTITION) return false end
-				else return false end
-				break
+			if prev then
+				-- prev:scale(150)
+				prev:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
+				prev:center()
+				prev:blit(960/2,544/2)
 			end
 
+			screen.print(960/2,y+15,STRINGS_SUBMENU_INSTALLCTHEME,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			if info and info.title then
+				screen.print(960/2,y+340,info.title,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			end
+			if info and info.author then
+				screen.print(960/2,y+360,info.author,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			end
+			screen.print(960/2,y+395,Xa..STRINGS_CONFIRM.." | "..Oa..STRINGS_SUBMENU_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+
+			screen.flip()
+
+			if buttons.accept then
+				buttons.homepopup(0)
+					--This!!!
+					customthemes_install(explorer.list[scroll.list.sel].path,explorer.list[scroll.list.sel].name)
+				buttons.homepopup(1)
+				
+				--clean
+				menu_ctx.wakefunct()
+				menu_ctx.close = true
+				action = false
+				explorer.refresh(true)
+				explorer.action = 0
+				multi, multi_delete = {},{}
+				break
+			end
+			if buttons.cancel then break end
+
 		end--while
-		buttons.read()
 
-		if install_in == __THEMES_UX0 and Root2[Dev] != "ux0:" then
-			if files.copy(explorer.list[scroll.list.sel].path,"ux0:/data/customtheme/")==1 then files.delete(explorer.list[scroll.list.sel].path) end
-            path_tmp = "ux0:/data/customtheme/"..explorer.list[scroll.list.sel].name
-		end
-		if install_in == __THEMES_UR0 and Root2[Dev] != "ur0:" then
-			if files.copy(explorer.list[scroll.list.sel].path,"ur0:/data/customtheme/")==1 then files.delete(explorer.list[scroll.list.sel].path) end
-            path_tmp = "ur0:/data/customtheme/"..explorer.list[scroll.list.sel].name
-		end
-		if install_in == __THEMES_UMA0 and Root2[Dev] != "uma0:" then
-			if files.copy(explorer.list[scroll.list.sel].path,"uma0:/data/customtheme/")==1 then files.delete(explorer.list[scroll.list.sel].path) end
-            path_tmp = "uma0:/data/customtheme/"..explorer.list[scroll.list.sel].name
-		end
-
-        buttons.homepopup(0)
-            reboot=false
-                local result = themes.install(path_tmp, install_in)
-            buttons.homepopup(1)
-        reboot=true
- 
-        os.message(STRINGS_SUBMENU_INSTALLCTHEME.."\n"..STRINGS_RESULT..result)
-        if result == 1 then
-            if os.message(STRINGS_THEMES_SETTINGS,1)==1 then
-                os.delay(150)
-                os.uri("settings_dlg:custom_themes")
-            end
-        end
- 
---clean
-        menu_ctx.wakefunct()
-        menu_ctx.close = true
-        action = false
-        explorer.refresh(true)
-        explorer.action = 0
-        multi, multi_delete = {},{}
-    end
-	os.delay(15)
-	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+		os.delay(15)
+		if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+	end
 end
 
 local filesexport_callback = function ()

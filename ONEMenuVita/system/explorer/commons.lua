@@ -69,7 +69,7 @@ function shortcuts()
 end
 
 --===============================   vpk      ==========================================================================
-function show_scan(infovpk)
+function show_scan(obj)
     bufftmp = screen.toimage()
     local x,y = (960-420)/2,(544-420)/2
 
@@ -77,13 +77,41 @@ function show_scan(infovpk)
     local vpk = {scan = {}, len = 0 }
 
     reboot=false
-    vpk.scan = files.scan(infovpk.path)
+    vpk.scan = files.scan(obj.path)
 
     if not vpk.scan then return end
     if not #vpk.scan or #vpk.scan<=0 then return end
 
+	local onExtractFilesOld = onExtractFiles
+	onExtractFiles = nil
+
+	local customtheme,prev,icon_pos = false,nil,0
+	local info = nil
+	for i=1,#vpk.scan do
+		if vpk.scan[i].name:lower() == "theme.xml" then
+			local buf = files.extractbuffer(obj.path,vpk.scan[i].pos)
+			info = themes.infobuffer(buf)
+			customtheme = true break
+		end
+	end
+ 
+	if info and info.package then
+		for i=1,#vpk.scan do
+			if vpk.scan[i].name:lower() == info.package then
+				--os.message(info.package.." "..vpk.scan[i].pos)
+				local datimg = files.extractbuffer(obj.path, vpk.scan[i].pos)
+				if datimg then prev = image.loadfromdata(datimg,__IMAGE_TYPE_PNG) break end
+			end
+		end
+	end
+	onExtractFiles = onExtractFilesOld
+
     vpk.len = #vpk.scan
     reboot=true
+
+	local Xa = "O: "
+	local Oa = "X: "
+	if accept_x == 1 then Xa,Oa = "X: ","O: " end
 
     local realsize = files.sizeformat(vpk.scan.realsize or 0)
     while true do
@@ -93,18 +121,57 @@ function show_scan(infovpk)
         draw.fillrect(x,y,420,420,color.new(0x2f,0x2f,0x2f,0xff))
         draw.framerect(x,y,420,420,color.black, color.shine,6)
 
-        screen.print(960/2,y+35,infovpk.name,1,color.white,color.blue,__ACENTER)
-        screen.print(960/2,y+85,STRINGS_VPK_TOTAL_SIZE..tostring(realsize),1,color.white,color.blue,__ACENTER)
-        screen.print(960/2,y+115,STRINGS_COUNT..tostring(vpk.len),1,color.white,color.blue,__ACENTER)
-        screen.flip()
-
-        if buttons.accept or buttons.cancel then
-            break
+        if prev then
+           -- prev:scale(150)
+            prev:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
+            prev:center()
+            prev:blit(960/2,544/2)
         end
 
+        screen.print(960/2,y+35,obj.name,1,color.white,color.blue,__ACENTER)
+        screen.print(960/2,y+85,STRINGS_VPK_TOTAL_SIZE..tostring(realsize),1,color.white,color.blue,__ACENTER)
+        screen.print(960/2,y+115,STRINGS_COUNT..tostring(vpk.len),1,color.white,color.blue,__ACENTER)
+		if customtheme then
+			screen.print(960/2,y+300,STRINGS_SUBMENU_INSTALLCTHEME,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			if info and info.title then
+				screen.print(960/2,y+340,info.title,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			end
+			if info and info.author then
+				screen.print(960/2,y+360,info.author,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			end
+			screen.print(960/2,y+395,Xa..STRINGS_CONFIRM.." | "..Oa..STRINGS_SUBMENU_CANCEL,1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+		end
+        screen.flip()
+
+		if customtheme and buttons.accept then
+			local i=0
+			while files.exists("ux0:/data/customtheme/"..string.format("%s%03d",string.sub("VITATHEMES00",1,-3),i)) do i+=1 end
+			lastid = "ux0:/data/customtheme/"..string.format("%s%03d",string.sub("VITATHEMES00",1,-3),i)
+			--os.message(lastid)
+			buttons.homepopup(0)
+				files.extract(obj.path,lastid)
+				--This!!!
+				customthemes_install(lastid,string.format("%s%03d",string.sub("VITATHEMES00",1,-3),i))
+			buttons.homepopup(1)
+			break
+		end
+
+		if buttons.cancel then
+            break
+        end
+ 
+--clean
+        menu_ctx.wakefunct()
+        menu_ctx.close = true
+        action = false
+        explorer.refresh(true)
+        explorer.action = 0
+        multi, multi_delete = {},{}
     end
-    os.delay(15)
-    if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+
 end
 
 function fillappmanlist(objin, info_sfo)
