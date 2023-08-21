@@ -169,7 +169,7 @@ STRINGS_UNPACK_VPK =			"Desempacando VPK..."
 STRINGS_INSTALLING =			"Instalando..."
 
 --onExtractFiles
-STRINGS_START_EXTRACTION =      "Inicnado extracción"
+STRINGS_START_EXTRACTION =      "Iniciando extracción"
 STRINGS_EXTRACTION =			"Extrayendo..."
 
 --onScanningFiles
