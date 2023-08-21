@@ -451,6 +451,7 @@ local shrink_callback = function ()
 
 	end
 
+--[[
 ----------------ReAddcont
 
 	local ReAddcont_Find = nil
@@ -521,6 +522,7 @@ local shrink_callback = function ()
 		os.delay(15)
 
 	end
+]]
 	string_total = ""
 
 ----------------sce_sys/manual/
@@ -1303,11 +1305,7 @@ local sort_callback = function ()
 			return
 		end
 
-		if buttons.accept then
-			if scroll_op.sel == 1 then mov = 1
-				elseif scroll_op.sel == 2 then mov = 2
-					elseif scroll_op.sel == 3 then mov = 3
-			end
+		if buttons.accept then mov = scroll_op.sel
 			break
 		end
 

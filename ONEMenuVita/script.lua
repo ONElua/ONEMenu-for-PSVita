@@ -41,5 +41,6 @@ dofile("system/explorer/callbacks.lua")   -- Callbacks
 dofile("system/explorer/refresh.lua")     -- Refresh LiveaArea
 dofile("system/explorer/customthemes.lua")-- Livearea Customthemes
 dofile("system/explorer/system.lua")
+dofile("system/mf.lua")
 
 appman.launch()                           -- Main Cycle :D

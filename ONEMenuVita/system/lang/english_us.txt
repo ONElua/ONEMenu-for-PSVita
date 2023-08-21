@@ -40,8 +40,12 @@ STRINGS_SUBMENU_RESET =			"Power Reset"
 STRINGS_SUBMENU_POWEROFF =		"Shutdown"
 STRINGS_SUBMENU_QR =			"QR DownLoader"
 STRINGS_SUBMENU_QR_SCAN =		"QR Scanning"
+STRINGS_SUBMENU_QR_ACTIVE =     "Active download in the LiveArea"
 STRINGS_SUBMENU_QR_DOWNLOAD =	"File to download"
 STRINGS_SUBMENU_QR_FILENAME =	"Input full name+ext here"
+STRINGS_SUBMENU_QR_START_DL =   "Starting Interrnal Download"
+STRINGS_SUBMENU_QR_CANCEL_DL =  "The download has been canceled"
+STRINGS_SUBMENU_QR_DL_FAILED =  "Download Failed"
 
 STRINGS_SEL_ITEMS =				"Sel Items: "
 
@@ -132,7 +136,6 @@ STRINGS_APP_SORT_ASCENDENT =	"Asc"
 STRINGS_APP_SORT_DESCENDENT =	"Desc"
 STRINGS_APP_LIST_REFRESH =		"Refresh..."
 STRINGS_APP_EDIT =		        "Edit"
-STRINGS_APP_EDIT =		        "Edit"
 STRINGS_APP_EDIT_BUBBLE =		"Edit Bubble Title"
 STRINGS_APP_EDIT_RESOURCES =	"Edit Bubble Resources"
 STRINGS_EDIT_BUBBLE =           "Resources"
@@ -155,6 +158,7 @@ STRINGS_CALLBACKS_PERCENT =		"Percent: "
 STRINGS_CALLBACKS_PERCENT_ALL = "Percent Total: "
 STRINGS_CALLBACKS_SIZE_ALL =	"Total Size: "
 STRINGS_CALLBACKS_MOVE_FILES =	"File"
+STRINGS_CALLBACKS_SIZE =	    "Size: "
 STRINGS_CALLBACKS_UPDATE_DB =	"Update db..."
 
 --onAppInstall
@@ -165,6 +169,7 @@ STRINGS_UNPACK_VPK =			"Unpacking VPK..."
 STRINGS_INSTALLING =			"Installing..."
 
 --onExtractFiles
+STRINGS_START_EXTRACTION =      "Starting extraction"
 STRINGS_EXTRACTION =			"Extraction..."
 
 --onScanningFiles
@@ -201,7 +206,7 @@ STRINGS_THEMES_ERROR_BASE =		"Error Get Database of Themes!"
 STRINGS_THEMES_INSTALLED =		"Theme Installed!"
 STRINGS_THEMES_ERROR_UNPACK =	"Error Unpack theme!"
 STRINGS_THEMES_ERROR_DOWNLOAD =	"Error Downloading Theme!"
-STRINGS_THEMES_NO_PARTITION =	"Partition no Encontrada"
+STRINGS_THEMES_NO_PARTITION =	"Partition not found"
 
 ------------	Advanced	---------------------------------------------------------------------------------
 STRINGS_ADVANCED =				"Advanced"

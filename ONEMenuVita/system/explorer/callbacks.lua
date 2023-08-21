@@ -76,13 +76,40 @@ function onAppInstall(step, size_argv, written, file, totalsize, totalwritten)
 end
 
 -- CallBack Extraction
-function onExtractFiles(size,written,file,totalsize,totalwritten)
+function onExtract7zFiles(filename,size,num,numfiles)
 
-	if theme.data["list"] then theme.data["list"]:blit(0,0)	end
+	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 	if explorer.dst then
-		screen.print(10,10,STRINGS_EXTRACTION+" <- -> "+explorer.dst)
+		screen.print(10,10,STRINGS_EXTRACTION.." <- -> "..explorer.dst)
+	else
+		screen.print(10,10,STRINGS_EXTRACTION)
+	end
+
+	screen.print(950,10,num.." / "..numfiles,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ARIGHT)
+	screen.print(10,70,STRINGS_CALLBACKS_FILE..tostring(filename),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+	screen.print(10,95,STRINGS_CALLBACKS_SIZE..tostring(files.sizeformat(size) or 0),1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR)
+
+	l = (num*940)/numfiles
+		screen.print(3+l,495,math.floor((num*100)/numfiles).."%",0.8,0xFFFFFFFF,0x0,__ACENTER)
+			draw.fillrect(10,524,l,6,color.new(0,255,0))
+				draw.circle(10+l,526,6,color.new(0,255,0),30)
+
+	screen.flip()
+	
+	buttons.read()
+	--if buttons.cancel then return 0 end
+	return 1
+end
+
+function onExtractFiles(size,written,file,totalsize,totalwritten)
+
+	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
+
+	if explorer.dst then
+		screen.print(10,10,STRINGS_EXTRACTION.." <- -> "..explorer.dst)
 	else
 		screen.print(10,10,STRINGS_EXTRACTION)
 	end

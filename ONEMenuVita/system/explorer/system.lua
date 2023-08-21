@@ -39,8 +39,8 @@ function Search_ReFolders(path,mount)
 		message_wait(path)
 	os.delay(750)
 
-	local size = 0
-	local tmp, tb, string_total = files.listdirs(path), {}, ""
+	local _count = 0
+	local tmp = files.listdirs(path)
 	if tmp and #tmp > 0 then
 		for i=1, #tmp do
 			if tmp[i].directory then
@@ -50,16 +50,14 @@ function Search_ReFolders(path,mount)
 					if not files.exists(mount.."app/"..tmp[i].name) then
 						flg = true
 					end
-				
+
 					if flg then
 						local _size = files.size(tmp[i].path) or 0
-						size += _size
-						if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-							message_wait(path.."\n"..tmp[i].name)
-						os.delay(750)
 						--os.message(path.."\n"..tmp[i].name)
-						string_total += tmp[i].path.."\n"
-						table.insert(tb, { path = tmp[i].path, name = tmp[i].name, size = _size })
+						_count += 1
+						if os.dialog(STRINGS_APP_FOUND_REFOLDERS.." "..STRINGS_APP_REFOLDERS_GAME.." "..path.."\n\n"..path.."/"..tmp[i].name.."\n"..STRINGS_CALLBACKS_SIZE_ALL..files.sizeformat(_size or 0).."\n\n"..STRINGS_APP_REFOLDERS_DELETE, STRINGS_REFOLDERS_CLEANUP, __DIALOG_MODE_OK_CANCEL) == true then
+							files.delete(tmp[i].path)
+						end
 					end
 
 				end--not game.exists
@@ -67,14 +65,7 @@ function Search_ReFolders(path,mount)
 		end
 	end
 
-	--Delete?
-	if #tb > 0 then
-		if os.dialog(STRINGS_APP_FOUND_REFOLDERS.." : "..#tb.." "..STRINGS_APP_REFOLDERS_GAME.." "..path.."\n"..STRINGS_CALLBACKS_SIZE_ALL..files.sizeformat(size or 0).."\n\n"..STRINGS_APP_REFOLDERS_DELETE.."\n\n"..string_total, STRINGS_REFOLDERS_CLEANUP, __DIALOG_MODE_OK_CANCEL) == true then
-			for i=1,#tb do
-				files.delete(tb[i].path)
-			end
-		end
-	else
+	if _count == 0 then
 		if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 			message_wait(STRINGS_APP_NO.." "..STRINGS_APP_REFOLDERS_GAME.." "..path)
 		os.delay(1000)
@@ -109,7 +100,7 @@ local Re_Folders_Cleanup_callback = function ()
 		Search_ReFolders(path_RePatch[i].path, path_RePatch[i].mount)
 	end
 
-	os.delay(15)
+	os.delay(1000)
 	if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 end
 

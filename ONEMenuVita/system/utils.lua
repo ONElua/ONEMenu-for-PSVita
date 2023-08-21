@@ -36,12 +36,13 @@ langs = {	JAPANESE = 		"00",
  
 
 -- Creamos carpeta de trabajo para los idiomas
-files.mkdir(__PATH_LANG)
+if not files.exists(__PATH_LANG) then files.mkdir(__PATH_LANG) end
 
 -- Loading language file
-dofile("system/lang/english_us.txt")
 if not files.exists(__PATH_LANG.."english_us.txt") then files.copy("system/lang/english_us.txt",__PATH_LANG) end
+dofile("system/lang/english_us.txt")
 if files.exists(__PATH_LANG..__LANG..".txt") then dofile(__PATH_LANG..__LANG..".txt") end
+
 
 color.loadpalette()
 

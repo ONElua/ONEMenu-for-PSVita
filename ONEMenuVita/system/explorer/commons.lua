@@ -153,6 +153,14 @@ function show_scan(obj)
 				--This!!!
 				customthemes_install(lastid,string.format("%s%03d",string.sub("VITATHEMES00",1,-3),i))
 			buttons.homepopup(1)
+
+			--clean
+			menu_ctx.wakefunct()
+			menu_ctx.close = true
+			action = false
+			explorer.refresh(true)
+			explorer.action = 0
+			multi, multi_delete = {},{}
 			break
 		end
 
@@ -160,13 +168,6 @@ function show_scan(obj)
             break
         end
  
---clean
-        menu_ctx.wakefunct()
-        menu_ctx.close = true
-        action = false
-        explorer.refresh(true)
-        explorer.action = 0
-        multi, multi_delete = {},{}
     end
 
 	os.delay(15)
@@ -1148,6 +1149,7 @@ function usbMassStorage()
 
     if not usb then os.requireusb() end
 
+--[[
     while usb.actived() != 1 do
         buttons.read()
         --power.tick(__POWER_TICK_SUSPEND)
@@ -1167,7 +1169,7 @@ function usbMassStorage()
 
         if buttons.cancel then return false end
     end
-
+]]
     --[[
         // 0:    USBDEVICE_MODE_MEMORY_CARD
         // 1:    USBDEVICE_MODE_GAME_CARD

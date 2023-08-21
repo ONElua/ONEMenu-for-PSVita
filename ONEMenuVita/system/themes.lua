@@ -17,6 +17,16 @@ theme = {
 	style = {},	-- Handle of colors
 }
 
+
+function files.read(path,mode)
+	local fp = io.open(path, mode or "r")
+	if not fp then return nil end
+
+	local data = fp:read("*a")
+	fp:close()
+	return data
+end
+
 function theme.load()
 
 	-- Get the id of theme pack
@@ -128,7 +138,7 @@ function theme.load()
 	isopened = { png = theme.style.IMAGECOLOR, jpg = theme.style.IMAGECOLOR, jpeg = theme.style.IMAGECOLOR, gif = theme.style.IMAGECOLOR, bmp = theme.style.IMAGECOLOR,
 				 mp3 = theme.style.MUSICCOLOR, ogg = theme.style.MUSICCOLOR, wav = theme.style.MUSICCOLOR, mp4 = theme.style.MUSICCOLOR,
 				 iso = theme.style.BINCOLOR, pbp = theme.style.BINCOLOR, cso = theme.style.BINCOLOR, dax = theme.style.BINCOLOR, bin = theme.style.BINCOLOR, suprx = theme.style.BINCOLOR, skprx = theme.style.BINCOLOR,
-				 zip = theme.style.ARCHIVECOLOR, rar = theme.style.ARCHIVECOLOR, vpk = theme.style.ARCHIVECOLOR, gz = theme.style.ARCHIVECOLOR,
+				 zip = theme.style.ARCHIVECOLOR, rar = theme.style.ARCHIVECOLOR, vpk = theme.style.ARCHIVECOLOR, gz = theme.style.ARCHIVECOLOR, gz = theme.style.ARCHIVECOLOR,
 				 sfo = theme.style.SFOCOLOR,
 				 nes = theme.style.NESROMSCOLOR or theme.style.TXTCOLOR,
 				 snes = theme.style.SNESROMSCOLOR or theme.style.TXTCOLOR,
@@ -183,9 +193,11 @@ function reload_theme()
 end
 
 -- Thread Theme Vars
+--[[
 THEME_PORT_I = channel.new("THEME_PORT_I")
 THEME_PORT_O = channel.new("THEME_PORT_O")
 THID_THEME = thread.new("system/thread_theme.lua")
+]]
 
 function theme.manager()
 	
@@ -223,10 +235,13 @@ function theme.manager()
 				else
 					draw.fillrect(700,84, 252,151, color.shine)
 					if sect == 2 then
+						list[sect][i].preview = image.load(__PATH_THEMES..list[sect][i].id..".png")
+						--[[
 						if THEME_PORT_I:available() > 0 then
 							local entry = THEME_PORT_I:pop()
 							list[2].mask[entry.id].preview = entry.icon;
 						end
+						]]
 					end
 				end
 				screen.print(700+126,240,list[sect][i].author or "unk",1.0,theme.style.TITLECOLOR,color.gray,__ACENTER)
@@ -271,17 +286,30 @@ function theme.manager()
 
 					-- Call Download themes...
 					local onNetGetFileOld = onNetGetFile; onNetGetFile = nil
-					local raw = http.down(string.format("https://raw.githubusercontent.com/%s/%s/master/Themes/database.json", APP_REPO, APP_PROJECT))
+					local raw = nil
+					files.delete("ux0:data/ONEMENU/database.json")
+					http.download(string.format("https://raw.githubusercontent.com/%s/%s/master/Themes/database.json", APP_REPO, APP_PROJECT), 
+													"ux0:data/ONEMENU/database.json")
+					if files.exists("ux0:data/ONEMENU/database.json") then raw = files.read("ux0:data/ONEMENU/database.json") end
+					--local raw = http.down(string.format("https://raw.githubusercontent.com/%s/%s/master/Themes/database.json", APP_REPO, APP_PROJECT))
 					onNetGetFile = onNetGetFileOld
 					if raw then
 						local not_err = true
 						not_err, list[2] = pcall(json.decode, raw)
 						if not_err then
 							sect = 2
-							list[2].mask = {}
 							scr[2]:set(list[2], 15)
-							local j = 1
-							while list[2][j] do list[2].mask[list[2][j].id] = list[2][j]; THEME_PORT_O:push({id = list[2][j].id}); j+=1; end
+							if #list[2] and #list[2] > 0 then
+								--if vbuff then vbuff:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
+								--	message_wait()
+								--	os.delay(150)
+							
+								for i=1,#list[2] do
+									if not files.exists(__PATH_THEMES..list[2][i].id..".png") then
+										http.download("https://raw.githubusercontent.com/ONElua/ONEMenu-for-PSVita/master/Themes/"..list[2][i].id..".png", __PATH_THEMES..list[2][i].id..".png")
+									end
+								end
+							end
 						else
 							os.message(STRINGS_THEMES_ERROR_DECODE)
 						end

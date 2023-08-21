@@ -322,6 +322,8 @@ nes = {
 }
 
 snes = {
+
+	{ self = "app0:mednafen_supafaust_libretro.self",      name = "Mednafen Supafaust"      },
 	{ self = "app0:snes9x2002_libretro.self",      name = "Snes9x 2002"      },
 	{ self = "app0:snes9x2005_libretro.self",      name = "Snes9x 2005"      },
 	{ self = "app0:snes9x2005_plus_libretro.self", name = "Snes9x 2005 Plus" },
@@ -401,7 +403,7 @@ __ACTION_WAIT_EXTRACT = 2
 local src_path_callback = function ()
    if #explorer.list > 0 then
       local ext = explorer.list[scroll.list.sel].ext or ""
-      if menu_ctx.scroll.sel != 3 or (menu_ctx.scroll.sel == 3 and (ext:lower()=="zip" or ext:lower()=="rar" or ext:lower()=="vpk")) then
+      if menu_ctx.scroll.sel != 3 or (menu_ctx.scroll.sel == 3 and (ext:lower()=="7z" or ext:lower()=="zip" or ext:lower()=="rar" or ext:lower()=="vpk")) then
          if not multi or #multi < 1 then
             table.insert(multi, explorer.list[scroll.list.sel].path)
          end
@@ -448,20 +450,24 @@ local paste_callback = function ()
     elseif explorer.action == 3 then                     --Extract
         if #multi>0 then
             reboot=false
+			message_wait(STRINGS_START_EXTRACTION)
+			os.delay(1500)
 			local res = 0
             for i=1,#multi do
-                if os.message(multi[i]+"\n"+STRINGS_PASS ,1)==1 then
-                    local pass = osk.init(STRINGS_OS_PASS , "" , 50, __OSK_TYPE_LATIN, __OSK_MODE_PASSW)
-                    if pass then
-                        buttons.homepopup(0)
-                            if files.extract(multi[i],explorer.dst,pass) == 1 then os.message(STRINGS_SUCCESSFUL) else os.message(STRINGS_INSTALL_ERROR) end
-                        buttons.homepopup(1)
-                    end
-                else
-                    buttons.homepopup(0)
-                       if files.extract(multi[i],explorer.dst) == 1 then os.message(STRINGS_SUCCESSFUL) else os.message(STRINGS_INSTALL_ERROR) end
-                    buttons.homepopup(1)
-                end
+				buttons.homepopup(0)
+				if string.lower(files.ext(multi[i])) == "7z" then
+					if files.extract(multi[i],explorer.dst) == 1 then os.message(STRINGS_SUCCESSFUL) else os.message(STRINGS_INSTALL_ERROR) end
+				else
+					if os.message(multi[i]+"\n"+STRINGS_PASS ,1)== 1 then
+						local pass = osk.init(STRINGS_OS_PASS , "" , 50, __OSK_TYPE_LATIN, __OSK_MODE_PASSW)
+						if pass then
+							if files.extract(multi[i],explorer.dst,pass) == 1 then os.message(STRINGS_SUCCESSFUL) else os.message(STRINGS_INSTALL_ERROR) end
+						end
+					else
+						if files.extract(multi[i],explorer.dst) == 1 then os.message(STRINGS_SUCCESSFUL) else os.message(STRINGS_INSTALL_ERROR) end
+					end
+				end
+				buttons.homepopup(1)
             end
             reboot=true
         end
@@ -1009,6 +1015,157 @@ local filesexport_callback = function ()
 	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 end
 
+--Parse MF
+local parseMF_callback = function (link)
+	local onNetGetFileOld = onNetGetFile
+	onNetGetFile = nil
+	if http.download(link,'tmp').success then
+		onNetGetFile = onNetGetFileOld
+		local tmp = mf.getDirectLink('tmp')
+		if tmp.link and tmp.name then
+			download_checking(tmp.link,tmp.name)
+		end
+
+	end
+end
+
+function download_checking(url,name)
+
+	local down,ext = false,files.ext(name)
+
+	if string.len(ext) >= 3 then
+
+		local _type = nil
+		if ext:lower() == "mp4" then _type = os.VIDEO
+		elseif ext:lower() == "mp3" then _type,down = os.AUDIO,true
+			message_wait(STRINGS_SUBMENU_QR_ACTIVE)
+			os.delay(1500)
+		elseif ext:lower() == "jpg" or ext:lower() == "png" then _type = os.IMAGE
+		end
+
+		if _type != nil then
+			local icon = "ux0:data/ONEMENU/avatar.png"
+			if files.exists(icon) then
+				os.downloader(url:gsub("https","http"),_type,name,icon)
+			else
+				os.downloader(url:gsub("https","http"),_type,name)
+			end
+
+			message_wait(STRINGS_WAIT_MGE)
+			os.delay(1500)
+
+			--Chequeo si Cap en Descarga :D
+			local folders = files.listdirs("ux0:bgdl/t/")
+			if folders and #folders > 0 then
+				for i=1,#folders do
+					if files.exists(folders[i].path.."/"..name) then
+						message_wait(STRINGS_SUBMENU_QR_ACTIVE)
+						os.delay(1500)
+						down = true
+						i=#folders+1
+					end
+				end
+			end
+		end
+	end
+
+	--Descarga 1er plano
+	if not down then
+		buttons.homepopup(0)
+			local resd = false
+
+			if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+			message_wait(STRINGS_SUBMENU_QR_START_DL)
+			os.delay(750)
+
+			__NAME_DOWNLOAD = name
+			resd = http.download(url, "ux0:download/"..name).success
+
+			if not resd or CancelDownload then
+				files.delete("ux0:download/"..name)
+				if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+				if CancelDownload then
+					message_wait(STRINGS_SUBMENU_QR_CANCEL_DL)
+				else
+					message_wait(STRINGS_SUBMENU_QR_DL_FAILED)
+				end
+				os.delay(1000)
+				CancelDownload = false
+				return false
+			end
+		buttons.homepopup(1)
+		os.message(STRINGS_DOWNLOAD_SUCCESS.." ux0:downloads\n\n")
+		explorer.refresh(true)
+		return true
+	end
+
+end
+
+__NAME_DOWNLOAD = ""
+local qr_callback = function ()
+
+	__NAME_DOWNLOAD = ""
+	--files.delete("ux0:download/")
+	if not wlan.isconnected() then wlan.connect() end
+
+	local vbuff = screen.toimage()
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+
+	local pos_menu = menu_ctx.scroll.sel
+	menu_ctx.wakefunct()
+
+	url = cam.scanqr(STRINGS_SUBMENU_QR_SCAN,theme.style.TXTBKGCOLOR)
+
+	local url_backup,pflag = "",false
+	if url then
+
+		url_backup = url
+
+		if string.find(url:lower(), "mediafire", 1, true) then
+			parseMF_callback(url)
+			pflag = true
+		end
+
+		local res,filename = "",false
+		if not pflag then
+
+			res,filename = http.getfile(url_backup,"ux0:download/")
+
+			if not res then
+				filename = osk.init(STRINGS_SUBMENU_QR_DOWNLOAD, STRINGS_SUBMENU_QR_FILENAME)
+				if filename then
+					__NAME_DOWNLOAD = filename
+					tmp = filename
+				else tmp = "file"
+					__NAME_DOWNLOAD = "file"
+				end
+
+				http.download(url_backup,"ux0:download/"..filename)
+			end
+			if filename then tmp = filename else tmp = "file" end
+
+			if files.exists("ux0:download/"..tmp) then
+				os.message(STRINGS_DOWNLOAD_SUCCESS.." ux0:download\n\n"..tmp)
+				explorer.refresh(true)
+			else
+				files.delete("ux0:download/"..tmp)
+				os.message(STRINGS_DOWNLOAD_FAILED.." ux0:download\n\n"..tmp)
+			end
+		end
+	end
+	--files.delete("ux0:downloads/tmp")
+
+--clean
+	__NAME_DOWNLOAD = ""
+	action = false
+	explorer.action = 0
+	multi={}
+	menu_ctx.scroll.sel = pos_menu
+	os.delay(15)
+	if vbuff then vbuff:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+	os.delay(50)
+end
+
 local cancel_callback = function ()
 	menu_ctx.wait_action = __ACTION_WAIT_NOTHING
 	menu_ctx.wakefunct()
@@ -1027,6 +1184,13 @@ local usb_callback = function ()
 	local pos_menu = menu_ctx.scroll.sel
 	usbMassStorage()
 	buttons.read()
+
+	--clean
+		action = false
+		explorer.refresh(true)
+		multi, multi_delete = {},{}
+		explorer.action = 0
+
 	menu_ctx.wakefunct2()
 	menu_ctx.scroll.sel = pos_menu
 
@@ -1142,6 +1306,7 @@ function menu_ctx.wakefunct()
 		{ text = STRINGS_SUBMENU_INSTALL_GAME, 	funct = installgame_callback },
 		{ text = STRINGS_SUBMENU_INSTALLCTHEME,	funct = installtheme_callback },
         { text = STRINGS_SUBMENU_EXPORT,        funct = filesexport_callback },
+		{ text = STRINGS_SUBMENU_QR,            funct = qr_callback },
 
 		{ text = STRINGS_SUBMENU_CANCEL,        funct = cancel_callback },
 

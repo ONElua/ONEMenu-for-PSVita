@@ -67,7 +67,7 @@ function fillappman(obj)
 		obj.path_img = "ur0:appmeta/"..obj.id.."/livearea/contents/startup.png"
 	else
 
-		if obj.id == "PSPEMUCFW" or obj.id == "PIGS00001" or obj.id == "SONIC0001" or obj.id == "SONIC0002" or
+		if obj.id == "PSPEMUCFW" or obj.id == "PIGS00001" or obj.id == "SONIC0001" or obj.id == "SONIC0002" or obj.id == "BHBB00001" or
 			obj.id == "GRVA00007" then index = 2
 		else
 
@@ -190,7 +190,7 @@ function Scanning()
 			else
 				table.insert(list,list_tmp[i])
 			end
-end
+		end
 	end
 
 	for i=1,#list do
