@@ -11,15 +11,19 @@ STRINGS_PASS =					"¿Usar contraseña?"
 STRINGS_OS_PASS =				"CONTRASEÑA"
 
 --SubMenu
+STRINGS_SUBMENU_TITLE =			"Ajustes Sistema"
 STRINGS_SUBMENU_COPY =			"Copiar"
 STRINGS_SUBMENU_DELETE =		"Eliminar"
+STRINGS_DELETE_QUESTION =       "Deseas eliminar ?"
 STRINGS_SUBMENU_MAKEDIR =		"Crear carpeta"
+STRINGS_SUBMENU_MAKEZIP =		"Crear zip"
 STRINGS_SUBMENU_RENAME =		"Renombrar"
 STRINGS_SUBMENU_EXTRACT =		"Extraer"
 STRINGS_SUBMENU_CANCEL =		"Cancelar"
 STRINGS_SUBMENU_INSTALL_GAME =	"Instalar juego"
 STRINGS_SUBMENU_INSTALLCTHEME =	"Instalar tema personalizado"
 STRINGS_SUBMENU_EXTRACT_TO =	"Extraer a"
+STRINGS_COMPRESS =				"Comprimiendo..."
 STRINGS_SUBMENU_PASTE =			"Pegar"
 STRINGS_SUBMENU_MOVE =			"Mover"
 STRINGS_SUBMENU_SIZE =			"Tamaño Total"
@@ -27,13 +31,21 @@ STRINGS_SUBMENU_EXPORT =		"Exportar multimedia"
 STRINGS_SUBMENU_THEMES =		"Temas ONEMenu"
 STRINGS_SUBMENU_CUSTOMTHEMES =	"Temas personalizados de LiveArea"
 STRINGS_SUBMENU_FTP =			"FTP"
+STRINGS_REFOLDERS_CLEANUP =		"Limpieza carpetas REPATCH"
+STRINGS_MULTIMEDIA_CLEANUP =	"Limpieza carpetas Multimedia"
+STRINGS_MESSAGE_DELETE =		"Eliminando..."
+STRINGS_FOLDERS_DELETE =		"Carpetas eliminadas"
 STRINGS_SUBMENU_RESTART =		"Reiniciar ONEMenu"
 STRINGS_SUBMENU_RESET =			"Reiniciar PS Vita"
 STRINGS_SUBMENU_POWEROFF =		"Apagar"
 STRINGS_SUBMENU_QR =			"Descargar código QR"
 STRINGS_SUBMENU_QR_SCAN =		"Escaneando código QR"
+STRINGS_SUBMENU_QR_ACTIVE =     "Descarga activa en el LiveArea"
 STRINGS_SUBMENU_QR_DOWNLOAD =	"Archivo que descargar"
-STRINGS_SUBMENU_QR_FILENAME =	"Pon aquí el nombre entero"
+STRINGS_SUBMENU_QR_FILENAME =	"Pon aquí el titulo completo"
+STRINGS_SUBMENU_QR_START_DL =   "Comenzando descarga interna"
+STRINGS_SUBMENU_QR_CANCEL_DL =  "La descarga fue cancelada"
+STRINGS_SUBMENU_QR_DL_FAILED =  "Fallo la descarga"
 
 STRINGS_SEL_ITEMS =				"Objetos elegidos: "
 
@@ -55,6 +67,7 @@ STRINGS_USB_GAMECARD =			"Tarjeta de juego"
 
 STRINGS_ERROR_PREVIEW_IMG =		"Error: imagen no soportada"
 STRINGS_BACKGROUND_IMG =		"Fondo: presiona △"
+STRINGS_EXPORT_IMAGE =			"Exportar img: presiona △"
 
 -- ## Visor TXT ##
 STRINGS_EDIT_LINE =				"Editar línea"
@@ -68,6 +81,9 @@ STRINGS_STITLE_RESTART = 		"Para aplicar el cambio en el STITLE es necesario rei
 STRINGS_STITLE_MGE =			"Tras editar el STITLE es necesario reiniciar la PS Vita"
 STRINGS_TITLE_MGE = 			"Tras editar el TITLE es necesario hacer una actualización de la BD para reflejar los cambios"
 
+-- ## Video Player ##
+STRINGS_VIDEO_PLAYER =			"Reproductor de Videos"
+
 -- ## Music Player ##
 STRINGS_MUSIC_PLAYING =			"Reproduciendo"
 STRINGS_MUSIC_PAUSED =			"Pausado"
@@ -79,6 +95,8 @@ STRINGS_MUSIC_LOCK_DISPLAY =	"Apagar visualización"
 --ONEMenu
 STRINGS_WAIT_MGE =				"Por favor, espere..."
 
+STRINGS_FILENAME =				"Archivo"
+STRINGS_UNPACK =				"Desempacar"
 STRINGS_APP_NOT_MEMORY =		"No hay memoria suficiente..."
 STRINGS_APP_REMOVE =			"Realmente quieres desinstalar: "
 STRINGS_APP_BACKUP_SAVE =		"¿Deseas crear una copia de seguridad de la partida de este juego\n\na ux0:data/ONEMenu/Saves?"
@@ -96,6 +114,9 @@ STRINGS_APP_OPEN_FOLDER =		"Abrir carpeta App"
 STRINGS_APP_PARTITIONS =		"Particiones"
 STRINGS_APP_VERSION =			"Versión"
 STRINGS_APP_SIZE_IND =			"Tamaño"
+STRINGS_APP_FOUND_REFOLDERS =	"Encontradas"
+STRINGS_APP_REFOLDERS_GAME =    "carpetas de juegos en"
+STRINGS_APP_REFOLDERS_DELETE =  "Proceder a eliminar?"
 STRINGS_APP_GET_SIZE = 			"Calculando..."
 STRINGS_APP_SLIDES =			"Tema: "
 STRINGS_APP_SHOW_PIC =			"Mostrar PIC1s: "
@@ -114,7 +135,11 @@ STRINGS_APP_SORT_REGION =		"Región"
 STRINGS_APP_SORT_ASCENDENT =	"Asc"
 STRINGS_APP_SORT_DESCENDENT =	"Desc"
 STRINGS_APP_LIST_REFRESH =		"Actualizando..."
-STRINGS_APP_EDIT_BUBBLE =		"Editar burbuja"
+STRINGS_APP_EDIT =		        "Editar"
+STRINGS_APP_EDIT_BUBBLE =		"Editar titulo burbuja"
+STRINGS_APP_EDIT_RESOURCES =	"Editar recursos burbuja"
+STRINGS_EDIT_BUBBLE =           "Recursos"
+STRINGS_EDIT_BUBBLE_PROCESS =   "Presiona START para comenzar"
 
 ------------	ThemesLivearea		-------------------------------------------------------------------------
 STRINGS_CUSTOMTHEMES_TITLE =	"Temas personalizados de LiveArea"
@@ -133,6 +158,7 @@ STRINGS_CALLBACKS_PERCENT =		"Porcentaje: "
 STRINGS_CALLBACKS_PERCENT_ALL = "Porcentaje total: "
 STRINGS_CALLBACKS_SIZE_ALL =	"Tamaño total: "
 STRINGS_CALLBACKS_MOVE_FILES =	"Archivo"
+STRINGS_CALLBACKS_SIZE =	    "Tamaño: "
 STRINGS_CALLBACKS_UPDATE_DB =	"Actualizando BD..."
 
 --onAppInstall
@@ -143,10 +169,12 @@ STRINGS_UNPACK_VPK =			"Desempacando VPK..."
 STRINGS_INSTALLING =			"Instalando..."
 
 --onExtractFiles
+STRINGS_START_EXTRACTION =      "Inicnado extracción"
 STRINGS_EXTRACTION =			"Extrayendo..."
 
 --onScanningFiles
 STRINGS_SCANNING =				"Revisando..."
+STRINGS_SUCCESSFUL =			"Logrado"
 
 --onNetGetFile
 STRINGS_DOWNLOAD =				"Descargando..."
@@ -178,6 +206,7 @@ STRINGS_THEMES_ERROR_BASE =		"¡Error al obtener la base de datos de temas!"
 STRINGS_THEMES_INSTALLED =		"Tema instalado!"
 STRINGS_THEMES_ERROR_UNPACK =	"¡Error al extraer el tema!"
 STRINGS_THEMES_ERROR_DOWNLOAD =	"¡Error al descargar el tema!"
+STRINGS_THEMES_NO_PARTITION =	"Partición no Encontrada"
 
 ------------	Advanced	---------------------------------------------------------------------------------
 STRINGS_ADVANCED =				"Avanzado"
@@ -215,13 +244,35 @@ STRINGS_EXPORT_MP4 =			"Archivo(s)  MP4 : "
 STRINGS_EXPORT_IMG =			"Archivos(s) IMG : "
 STRINGS_EXPORT_OPEN =			"\n\n¡Exportación completa, por favor ejecute la aplicación de Música/Fotos/Vídeos\n\nAplicación para ver los archivos!"
 STRINGS_EXPORT_FAIL =			"Error"
+STRINGS_EXPORT_REBOOT =			"Es necesario reiniciar la PS vita"
 
 ------------	Refresh LiveArea	-------------------------------------------------------------------------
 STRINGS_LIVEAREA_NOTINSTALLED =	"\n\nJuego no instalado: "
 STRINGS_LIVEAREA_GAMES =		"\n\nTotal de juegos instalados: "
+STRINGS_LIVEAREA_GAMES_PSM =	"\n\nTotal de juegos PSM instalados: "
 STRINGS_LIVEAREA_NO_GAMES =		"\n\nNingún juego detectado"
+STRINGS_LIVEAREA_NO_PSM =		"\n\nNingún juego PSM detectado"
 STRINGS_LIVEAREA_EXTRAREFRESH =	"Buscando actualizaciones & DLCs"
 STRINGS_LIVEAREA_TOTAL_EXTRA =	"\n\nActualizaciones & DLCs instalados: "
+
+------------	System SubMenu	-----------------------------------------------------------------------------
+STRINGS_RELOAD_CONTENT_DESCR =	"Permite instalar contenido Nompdrm"
+STRINGS_USB_DESCR =				"Permite usar la conexión USB"
+STRINGS_FTP_DESCR =				"Permite usar la conexión FTP"
+STRINGS_REFOLDERS_DESCR =		"Elimina contenido en los directorios Readdcont y Repatch (ux0,uma0,imc0,xmc0) de juegos no instalados"
+STRINGS_MULTIMEDIA_DESCR =		"Elimina carpetas vacias en los directorios: ux0:music/, ux0:picture/ALL/, ux0:picture/CAMERA/, ux0:picture/SCREENSHOT/, ux0:video/"
+STRINGS_RESTART_DESCR =			"Reiniciar ONEMenu"
+STRINGS_REBOOT_DESCR =			"Reiniciar PSVita"
+STRINGS_POWEROFF_DESCR =		"Apagar PSVita"
+STRINGS_UPDATE_DB_DESCR =		"Actualizar DB sin perder el acomodo de tus iconos"
+STRINGS_REBUILD_DB_DESCR =		"Reconstruir DB (se perderán el acomodo de tus iconos)"
+STRINGS_CUSTOMTHEMES_DESCR =	"Permite desinstalar CustomThemes (no temas oficiales, solo personalizados)"
+STRINGS_VIDEO_PLAYER_DESCR =	"Reproductor de Videos (reproduce videos compatibles)"
+
+STRINGS_SHOW_PIC_DESCR =		"Muestra el PIC de cada burbuja"
+STRINGS_SLIDES_DESCR =			"Cambia el estilo de los iconos en ONEMenu"
+STRINGS_THEMES1MENU_DESCR =		"Permite descargar/instalar/cambiar Custom Themes en ONEMenu"
+STRINGS_ENABLE_UPDATE_DESCR =	"Activar/Desactivar auto-actualización ONEMenu"
 
 ------------	Updater	-------------------------------------------------------------------------
 STRINGS_UPDATER_QUESTION = 		" Ahora está disponible.\n\n¿Desea actualizar la aplicación?"
@@ -230,3 +281,10 @@ STRINGS_UPDATER_SIZE = 			"Tamaño: "
 STRINGS_UPDATER_WRITTEN = 		"Escrito: "
 STRINGS_UPDATER_SPEED = 		"Velocidad: "
 STRINGS_UPDATER_PERCENT = 		"Porcentaje: "
+
+STRINGS_CONVERTING =			"Conviertiendo recursos..."
+STRINGS_INSTALL_MANUAL =		"Instalando manual del juego..."
+STRINGS_MANUAL_KEEP =           "La burbuja cuenta con MANUAL, quieres mantener el manual ?"
+STRINGS_ERROR_INST =			"Lo siento, hubo un error en la instalación"
+STRINGS_UNK =					"Desc"
+STRINGS_BACKUP =				"Creando copia burbuja"
