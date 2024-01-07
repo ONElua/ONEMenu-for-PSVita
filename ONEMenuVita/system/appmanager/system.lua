@@ -71,6 +71,26 @@ local update_callback = function ()
 	SubOptions()
 end
 
+local restart_callback = function ()
+    os.delay(150)
+    os.restart()
+end
+
+local reboot_callback = function ()
+    os.delay(1000)
+    power.restart()
+end
+
+local shutdown_callback = function ()
+    os.delay(1000)
+    power.shutdown()
+end
+
+local exit_callback = function ()
+    os.delay(500)
+    os.exit()
+end
+
 function SubOptions()
 	if __PIC1 == 1 then showpic = STRINGS_APP_YES else showpic = STRINGS_APP_NO end
 	if __SLIDES == 100 then var = STRINGS_APP_SLIDE_ORIGINAL else var = STRINGS_APP_SLIDE_PS4 end
@@ -84,6 +104,13 @@ function SubOptions()
 		{ text = STRINGS_SUBMENU_THEMES,            funct = themesONEMenu_callback,			descr = STRINGS_THEMES1MENU_DESCR },
 
 		{ text = STRINGS_ENABLE_UPDATE.._update,   	funct = update_callback,    pad = true,	descr = STRINGS_ENABLE_UPDATE_DESCR },
+
+		{ text = STRINGS_SUBMENU_RESTART,   	funct = restart_callback,						descr = STRINGS_RESTART_DESCR },
+        { text = STRINGS_SUBMENU_RESET,     	funct = reboot_callback,						descr = STRINGS_REBOOT_DESCR },
+        { text = STRINGS_SUBMENU_POWEROFF,  	funct = shutdown_callback,						descr = STRINGS_POWEROFF_DESCR },
+
+		{ text = STRINGS_SUBMENU_EXIT,  	    funct = exit_callback,						    descr = STRINGS_EXIT_DESCR },
+
     }
 
 end
@@ -109,7 +136,7 @@ function SubSystem()
 
 			screen.print(480,y, Sub_Options[i].text,1.0,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
 
-			if i == 1 or i == 4 or i == 6 or i == 8 then
+			if i == 1 or i == 4 or i == 5 or i == 8 then
 				y+=36
 			else
 				y+=26

@@ -71,12 +71,11 @@ function refresh_init(img)
 	end
 
 	if img then img:blit(0,0) end
-	message_wait()
+	message_wait(STRINGS_LIVEAREA_SEARCH_GAMES)
 	os.delay(15)
 
 	local vbuff = screen.toimage()
 	if vbuff then vbuff:blit(0,0) elseif img then img:blit(0,0) end
-
 
 	local list = {}
 	--Scanning ux0:app
@@ -179,12 +178,103 @@ function refresh_init(img)
 		end
 
 	else
-		os.message(STRINGS_LIVEAREA_NO_GAMES)
+		--os.message(STRINGS_LIVEAREA_NO_GAMES)
 	end
 
-	if count > 0 then os.message(STRINGS_LIVEAREA_GAMES..count) end
-	__TITTLEAPP, __IDAPP = "",""
+	if count > 0 then os.message(STRINGS_LIVEAREA_GAMES..count) else os.message(STRINGS_LIVEAREA_NO_GAMES) end
 
+	__TITTLEAPP, __IDAPP = "",""
+	count = 0
+
+	if img then img:blit(0,0) elseif vbuff then vbuff:blit(0,0) end
+	message_wait(STRINGS_LIVEAREA_EXTRAREFRESH)
+	os.delay(15)
+
+	local installs = game.extrarefresh()
+	os.message(STRINGS_LIVEAREA_TOTAL_EXTRA..installs)
+
+	if img then img:blit(0,0) elseif vbuff then vbuff:blit(0,0) end
+	message_wait(STRINGS_LIVEAREA_SEARCH_PSP)
+	os.delay(15)
+
+	__NOPSPEMUDRM = os.lmodule("NoPspEmuDrm_kern")
+	
+	--os.message("pspemu: "..tostring(__NOPSPEMUDRM))
+	if __NOPSPEMUDRM then
+		--Scanning ux0:pspemu
+		local tmp = files.listdirs("ux0:pspemu/PSP/GAME")
+		local list_psp = {}
+		if tmp and #tmp > 0 then
+			table.sort(tmp ,function (a,b) return string.lower(a.name)<string.lower(b.name) end)
+			for i=1, #tmp do
+				if not game.exists(tmp[i].name) and tmp[i].name:len() == 9 then
+					--os.message(tmp[i].name)
+					local sfo = game.info(tmp[i].path.."/EBOOT.PBP")
+					if sfo and sfo.TITLE then tmp[i].title = sfo.TITLE end
+					table.insert(list_psp, tmp[i])
+				end
+			end
+		end
+
+		for i=1,#list_psp do
+			if img then img:blit(0,0) end
+			__TITTLEAPP, __IDAPP = list_psp[i].title, list_psp[i].name
+			--buttons.homepopup(0)
+				--os.message("path: "..list_psp[i].path.."\nname: "..list_psp[i].name)
+				local result = game.refresh_psp(list_psp[i].path,list_psp[i].name)
+			--buttons.homepopup(1)
+				if result == 1 then
+					local _pic1 = game.getpic1(list_psp[i].path.."/EBOOT.PBP")
+					if _pic1 then
+						--os.message("save\n"..list_psp[i].path)
+						image.save(_pic1,"ur0:appmeta/"..list_psp[i].name.."/pic0.png")
+					end
+
+					count += 1
+					list_psp[i].dev = "ux0"
+					list_psp[i].id = list_psp[i].name
+					--Size
+					list_psp[i].size = files.size(list_psp[i].path)
+					list_psp[i].sizef = files.sizeformat(list_psp[i].size or 0)
+
+					local tmp_db = game.details(list_psp[i].name)
+					if tmp_db then
+						list_psp[i].img = image.load("ur0:appmeta/"..list_psp[i].name.."/livearea/contents/startup.png")
+						if list_psp[i].img then
+							list_psp[i].img:resize(120,100)
+							list_psp[i].img:setfilter(__IMG_FILTER_LINEAR, __IMG_FILTER_LINEAR)
+						end
+					end
+
+					if not list_psp[i].img then
+						list_psp[i].img = theme.data["icodef"]
+					end
+					list_psp[i].path_pic = "ur0:appmeta/"..list_psp[i].name.."/pic0.png"
+
+					list_psp[i].region = 4
+					list_psp[i].Nregion = ""
+					list_psp[i].type = tmp_db.type
+					list_psp[i].version = tmp_db.version or "01.00"
+					list_psp[i].title = tmp_db.title:gsub("\n"," ") or list_psp[i].name
+					list_psp[i].sdk = tmp_db.sdk
+
+					table.insert(appman[4].list, list_psp[i])
+					SortGeneric(appman[4].list,appman[4].sort,appman[4].asc)
+					appman[4].scroll:set(appman[4].list,limit)
+					
+				else
+					--os.message(STRINGS_LIVEAREA_NOTINSTALLED..list_psp[i].name)
+				end
+		end
+		--if count > 0 then os.message(STRINGS_LIVEAREA_PSP..count) end
+	end
+	if count > 0 then os.message(STRINGS_LIVEAREA_PSP..count) else os.message(STRINGS_LIVEAREA_NO_PSP) end
+
+	if img then img:blit(0,0) elseif vbuff then vbuff:blit(0,0) end
+	message_wait(STRINGS_LIVEAREA_SEARCH_PSM)
+	os.delay(15)
+
+	__TITTLEAPP, __IDAPP = "",""
 	count = 0
 	--Scanning ux0:psm
 	local tmp = files.listdirs("ux0:psm")
@@ -241,15 +331,8 @@ function refresh_init(img)
 			end
 	end
 
-	if count > 0 then os.message(STRINGS_LIVEAREA_GAMES_PSM..count) end
+	if count > 0 then os.message(STRINGS_LIVEAREA_GAMES_PSM..count) else os.message(STRINGS_LIVEAREA_NO_PSM) end
 	__TITTLEAPP, __IDAPP = "",""
-
-	if img then img:blit(0,0) elseif vbuff then vbuff:blit(0,0) end
-	message_wait(STRINGS_LIVEAREA_EXTRAREFRESH)
-	os.delay(15)
-
-	local installs = game.extrarefresh()
-	os.message(STRINGS_LIVEAREA_TOTAL_EXTRA..installs)
 
 	infodevices()
 	os.delay(15)

@@ -172,8 +172,12 @@ function ctrls_explorer_list()
 	end
 
 	if scroll.list.maxim > 0 then -- Is exists any?
-		if buttons.up or buttons.analogly < -60 then scroll.list:up() end
-		if buttons.down or buttons.analogly > 60 then scroll.list:down() end
+		if buttons.up or buttons.analogly < -60 then
+			if scroll.list:up() then xtitle=35 end
+		end
+		if buttons.down or buttons.analogly > 60 then
+			if scroll.list:down() then xtitle=35 end
+		end
 
 		if buttons.accept then
 			if explorer.list[scroll.list.sel].size then
