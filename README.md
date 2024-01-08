@@ -19,6 +19,9 @@
 Shrink Game is based on TheRadziu's Tutorial https://github.com/TheRadziu/NoNpDRM-modding/wiki#saving-memory-space-while-using-mods
 * NOTE: Be very careful after using this option, because if the folders/files get deleted from ux0:patch/(GAMEID) or ux0:rePatch/(GAMEID) the game will stop booting cause there won't be any folders/files left at ux0:app/(GAMEID)
 
+### Changelog 3.20 ###
+- Add PSP and PS1 games detection on Reload Content.
+
 ### Changelog 3.19 ###
 - [FIX] icons for psm games<br>
 - Extraction 7z and rar5 files
