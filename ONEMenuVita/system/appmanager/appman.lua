@@ -128,6 +128,8 @@ function appman.launch()
 			touch.read()
 		swipe.read()
 
+		if snow then stars.render() end
+
 		while IMAGE_PORT_I:available() > 0 do -- While have availables request.
 			local entry = IMAGE_PORT_I:pop() -- Recibimos peticiones..
 			if static_void[entry.y][entry.x].path_img == entry.path then -- Check ident

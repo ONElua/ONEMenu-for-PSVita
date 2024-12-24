@@ -67,6 +67,8 @@ function main_draw()
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
 	end
 
+	if snow then stars.render() end
+
 	for i=appman[cat].scroll.ini,appman[cat].scroll.lim do
 
 		if i==appman[cat].scroll.sel then

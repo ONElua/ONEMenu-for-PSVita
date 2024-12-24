@@ -73,7 +73,7 @@ function system.run()
 	while true do
 		buttons.read()
 		touch.read()
-
+		if snow then stars.render() end
 		if pic1_sys then
 
 			if crono_alpha < 155 then

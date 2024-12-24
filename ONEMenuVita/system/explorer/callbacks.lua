@@ -77,8 +77,8 @@ end
 
 -- CallBack Extraction
 function onExtract7zFiles(filename,size,num,numfiles)
-
-	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+	if theme.data["list"] then theme.data["list"]:blit(0,0)	end
+--	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 	if explorer.dst then
@@ -104,8 +104,8 @@ function onExtract7zFiles(filename,size,num,numfiles)
 end
 
 function onExtractFiles(size,written,file,totalsize,totalwritten)
-
-	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+	if theme.data["list"] then theme.data["list"]:blit(0,0)	end
+--	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 	if explorer.dst then
@@ -163,7 +163,8 @@ function onCompressZip(size,written,file)
 end
 
 function onScanningFiles(file,unsize,position,unsafe)
-	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
+	if theme.data["list"] then theme.data["list"]:blit(0,0)	end
+--	if bufftmp then bufftmp:blit(0,0) elseif theme.data["list"] then theme.data["list"]:blit(0,0) end
 	draw.fillrect(0,0,__DISPLAYW,30, theme.style.CBACKSBARCOLOR)
 
 	local ccc=color.white

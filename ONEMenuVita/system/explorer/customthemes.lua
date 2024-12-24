@@ -19,11 +19,16 @@ function customthemes()
 		while i > 0 do
 			if list[i].id:sub(1,9) != "ux0:/theme" then
 				list[i].info = themes.info(list[i].id.."/".."theme.xml")
-				if list[i].home then
-					list[i].preview = image.load(list[i].id.."/"..list[i].home)
-					if list[i].preview then
-						list[i].preview:resize(252,151)
+				if list[i].info then	
+					if list[i].home then
+						list[i].preview = image.load(list[i].id.."/"..list[i].home)
+						if list[i].preview then
+							list[i].preview:resize(252,151)
+						end
 					end
+				else
+					themes.delete(list[i].id)
+					table.remove(list,i)
 				end
 			else
 				table.remove(list,i)
@@ -46,7 +51,7 @@ function customthemes()
 		while true do
 
 			buttons.read()
-
+			if snow then stars.render() end
 			if themesimg then themesimg:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
 
 			screen.print(480,15,STRINGS_CUSTOMTHEMES_TITLE,1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)

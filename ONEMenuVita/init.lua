@@ -172,9 +172,9 @@ end
 function Scanning()
 
 	-- Init with Max CPU/GPU
-	__CPU = os.cpu()
+	--__CPU = os.cpu()
 	--os.cpu(444)
-	__GPU = os.gpuclock()
+	--__GPU = os.gpuclock()
 --	os.gpuclock(166)
 
 	--id, type, version, dev, path, title
@@ -182,6 +182,34 @@ function Scanning()
 	table.sort(list_tmp,SortSdkId)
 
 	local list = {}
+	
+--[[
+	--Detected gamecard
+	if files.exists("gro0:") then
+		local device_info = os.devinfo("gro0:")
+		if device_info then
+			local listf = files.listdirs("gro0:app")
+			if listf then
+				local sfo = game.info(listf[1].path.."/sce_sys/param.sfo")
+				if sfo then
+					res = game.details(sfo.ID)
+					if res then
+						os.message(" version :"..res.version.." sdk: "..res.sdk)
+					else
+						os.message("no detecta game.details")
+					end
+				end
+				
+				
+				--	table.insert(list,
+				--			{ id = sfo.TITLE_ID or listf[1].name, type = sfo.CATEGORY, version = sfo.APP_VER, dev = "gro0", path = listf[1].path, title = sfo.TITLE,
+				--			  sdk = sfo.TITLE_ID  }
+				--		)
+			end
+		end
+	end
+]]
+
 	for i=1,#list_tmp do
 		if files.exists(list_tmp[i].path) then
 			if list_tmp[i].title then list_tmp[i].title = list_tmp[i].title:gsub("\n"," ") end

@@ -225,7 +225,7 @@ function theme.manager()
 	while true do
 		buttons.read()
 		if themesimg then themesimg:blit(0,0) elseif theme.data["back"] then theme.data["back"]:blit(0,0) end
-		
+		if snow then stars.render() end
 		screen.print(480,15,({STRINGS_SUBMENU_THEMES, STRINGS_THEMES_ONLINE })[sect],1,theme.style.TITLECOLOR,color.gray,__ACENTER)
 		local y = 70
 		for i=scr[sect].ini,scr[sect].lim do

@@ -20,6 +20,12 @@ if __UPDATE == 1 then
 	dofile("git/updater.lua")
 end
 
+day = tonumber(os.date("%d"))
+month = tonumber(os.date("%m"))
+snow = false
+if (month == 12 and (day >= 20 and day <= 25)) then snow = true end
+dofile("addons/stars.lua")
+
 dofile("system/scroll.lua")
 
 -- Load Theme Application

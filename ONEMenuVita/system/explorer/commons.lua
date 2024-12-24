@@ -469,8 +469,11 @@ function show_msg_pbp(handle)
                 screen.print(960/2,y+40,tostring(sfo.TITLE) or "UNK",1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
             end
             screen.print(960/2,y+60,tostring(sfo.DISC_ID) or tostring(sfo.TITLE_ID),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
-            if sfo.CATEGORY then
-                screen.print(960/2,y+80,tostring(sfo.CATEGORY) or "UNK",1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			if sfo.CATEGORY then
+				screen.print(960/2,y+80,tostring(sfo.CATEGORY) or "UNK",1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
+			end
+			if sfo.APP_VER then
+                screen.print(960/2,y+100,tostring(sfo.APP_VER) or "UNK",1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR,__ACENTER)
             end
         end
 

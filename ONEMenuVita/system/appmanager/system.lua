@@ -126,7 +126,7 @@ function SubSystem()
 	while true do
 		buttons.read()
 		if theme.data["back"] then theme.data["back"]:blit(0,0) end
-
+		if snow then stars.render() end
 		draw.fillrect(0,0,960,544,color.black:a(105))
 
 		screen.print(480,15,STRINGS_SUBMENU_TITLE,1,theme.style.TITLECOLOR,theme.style.TXTBKGCOLOR,__ACENTER)

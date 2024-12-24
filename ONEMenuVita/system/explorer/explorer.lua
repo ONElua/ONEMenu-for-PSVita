@@ -78,7 +78,7 @@ function show_explorer_list(first_path)
 
 		buttons.read()
 		if theme.data["list"] then theme.data["list"]:blit(0,0) end
-
+		if snow then stars.render() end
 		movx = menu_ctx.x + menu_ctx.w
 
 		if screen.textwidth(Root[Dev] or "",1) > 860 then 
@@ -382,7 +382,7 @@ function handle_files(cnt)
 		show_scan(cnt)
 	elseif extension == "mp3" or extension == "wav" or extension == "ogg" then
 		MusicPlayer(cnt)
-	elseif extension == "txt" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "inf" or extension == "cfg" or extension == "lpl" then
+	elseif extension == "txt" or extension == "psv" or extension == "lua" or extension == "ini" or extension == "sfo" or extension == "xml" or extension == "inf" or extension == "cfg" or extension == "lpl" then
 		visortxt(cnt,true)
 	elseif extension == "mp4" then
 		VideoPlayer(cnt)
@@ -390,8 +390,8 @@ function handle_files(cnt)
 	if extension == "pbp" or extension == "iso" or extension == "cso" or extension == "bin" then
 		show_msg_pbp(cnt)
 	end
-	if (extension == "md" or extension == "bin") and game.exists("RETROVITA") then
-		--launch_Retrovita("RETROVITA",sega,cnt)
+	if extension == "md" and game.exists("RETROVITA") then
+		launch_Retrovita("RETROVITA",sega,cnt)
 	end
 
 
