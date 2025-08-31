@@ -113,10 +113,12 @@ function fillappman(obj)
 	appman.len += 1
 	table.insert(appman[index].list,obj)
 
+--[[
 	-- Push request of icon! :D
 	local tempo = appman[index].list[ #appman[index].list ]
 	static_void[index][#appman[index].list] = tempo
 	IMAGE_PORT_O:push( { x = #appman[index].list, y = index, path = tempo.path_img, resize = tempo.resize or false } )
+]]
 
 end
 
@@ -169,13 +171,8 @@ function SortSdkTitle(a,b)
 	return (tonumber(a.sdk) > tonumber(b.sdk)) or (tonumber(a.sdk) == tonumber(b.sdk) and a.title < b.title)
 end
 
+--sorts: ID,title,Region  Asc/Desc     1,2,3   1/0
 function Scanning()
-
-	-- Init with Max CPU/GPU
-	--__CPU = os.cpu()
-	--os.cpu(444)
-	--__GPU = os.gpuclock()
---	os.gpuclock(166)
 
 	--id, type, version, dev, path, title
 	local list_tmp = game.list(__GAME_LIST_ALL)
@@ -184,7 +181,7 @@ function Scanning()
 	local list = {}
 
 	for i=1,#list_tmp do
-		if files.exists(list_tmp[i].path) then
+		if files.exists(list_tmp[i].path) or list_tmp[i].dev == "gro0" then
 			if list_tmp[i].title then list_tmp[i].title = list_tmp[i].title:gsub("\n"," ") end
 			if tonumber(list_tmp[i].sdk) > 661 or tonumber(list_tmp[i].sdk) == 0 then
 				fillappman(list_tmp[i])
@@ -205,9 +202,32 @@ function Scanning()
 		end
 	end
 
-	--return CPU/GPU
---	os.cpu(__CPU)
-	--os.gpuclock(__GPU)
+	--Asignamos limites y las img para nuestras categorias, asi como el Sort de nuestras categorias
+	for i=1,#appman do
+
+		appman[i].scroll = newScroll(appman[i].list,limit)
+
+		if i==1 then
+			appman[i].sort = tonumber(ini.read(__PATH_INI,"sort","sort","0"))
+			appman[i].asc = tonumber(ini.read(__PATH_INI,"sort","asc","1"))
+		else
+			appman[i].sort = tonumber(ini.read(__PATH_INI,"sort","sort"..i,"0"))
+			appman[i].asc = tonumber(ini.read(__PATH_INI,"sort","asc"..i,"1"))
+		end
+
+		if #appman[i].list > 0 then
+			--os.message("cat: "..i.." sort: "..appman[i].sort.." Type: "..appman[i].asc)
+			SortGeneric(appman[i].list, appman[i].sort, appman[i].asc)
+
+			for j=1,#appman[i].list do
+				local tempo = appman[i].list[j]
+				static_void[i][j] = tempo
+				-- Push request of icon! :D
+				IMAGE_PORT_O:push( { x = j, y = i, path = tempo.path_img, resize = tempo.resize or false } )
+			end--for
+
+		end
+	end
 
 end
 ------------------Busqueda y peticion de Iconos en modo hilo------------------
