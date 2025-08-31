@@ -19,14 +19,16 @@ local crono, clicked = timer.new(), false
 cronopic, show_pic = timer.new(), false
 pic_alpha = 0
 
-limit,movx=7,0
+movx=0
 elev = 0
 sorting=""
 
 function launch_game()
-	if appman[cat].list[focus_index].uri then os.uri(appman[cat].list[focus_index].uri)
-	elseif appman[cat].list[focus_index].type == "ME" then game.open(appman[cat].list[focus_index].id)
-	else game.launch(appman[cat].list[focus_index].id) end
+	if game.exists(appman[cat].list[focus_index].id) then
+		if appman[cat].list[focus_index].uri then os.uri(appman[cat].list[focus_index].uri)
+			elseif appman[cat].list[focus_index].type == "ME" then game.open(appman[cat].list[focus_index].id)
+				else game.launch(appman[cat].list[focus_index].id) end
+	end
 end
 
 function restart_cronopic()

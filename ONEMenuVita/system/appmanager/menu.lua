@@ -9,24 +9,6 @@
 	Collaborators: BaltazaR4 & Wzjk.
 ]]
 
---Asignamos limites y las img para nuestras categorias, asi como el Sort de nuestras categorias
-for i=1,#appman do
-
-	appman[i].scroll = newScroll(appman[i].list,limit)
-
-	if i==1 then
-		appman[i].sort = tonumber(ini.read(__PATH_INI,"sort","sort","0"))
-		appman[i].asc = tonumber(ini.read(__PATH_INI,"sort","asc","1"))
-	else
-		appman[i].sort = tonumber(ini.read(__PATH_INI,"sort","sort"..i,"0"))
-		appman[i].asc = tonumber(ini.read(__PATH_INI,"sort","asc"..i,"1"))
-	end
-
-	if #appman[i].list > 0 then
-		SortGeneric(appman[i].list, appman[i].sort, appman[i].asc)
-	end
-end
-
 --Blit Slides
 function slides_efect()
 

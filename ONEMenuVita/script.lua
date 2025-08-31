@@ -9,6 +9,8 @@
     Collaborators: BaltazaR4 & Wzjk.
 ]]
 
+limit = 7
+dofile("system/scroll.lua")
 --Obtener iconos en modo hilo
 dofile("init.lua")
 
@@ -25,8 +27,6 @@ month = tonumber(os.date("%m"))
 snow = false
 if (month == 12 and (day >= 20 and day <= 25)) then snow = true end
 dofile("addons/stars.lua")
-
-dofile("system/scroll.lua")
 
 -- Load Theme Application
 dofile("system/themes.lua")

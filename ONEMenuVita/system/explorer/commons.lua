@@ -260,7 +260,7 @@ function show_msg_vpk(obj_vpk)
         if not scan_vpk then return end
         if not #scan_vpk or #scan_vpk<=0 then return end
     reboot=true
-
+	
     local bin_pos,icon_pos,sfo_pos = -1,-1,-1
     local unsafe=0
     local dang,dangname=false,""
@@ -875,7 +875,7 @@ function visortxt(handle, flag_edit)
     local texteditorText_x = texteditorDefaultText_x
     local texteditorTextDefaultWidth = 960 - texteditorOrdinalWidth - texteditorOrdinal_x
     local texteditorTextWidth = texteditorTextDefaultWidth
-    local textHadChange, hold, changes, limit = false,false,{},16
+    local textHadChange, hold, changes, textlimit = false,false,{},16
 
     local editorimg = image.load(__PATH_THEMES..__THEME.."/editor.png") or image.load("system/theme/default/editor.png")
 
@@ -893,7 +893,7 @@ function visortxt(handle, flag_edit)
 
         local list_y = 70
         if texteditorInfo.list and #texteditorInfo.list > 0 then
-            local listShowCount = limit
+            local listShowCount = textlimit
 
             if texteditorInfo.top > texteditorInfo.focus then
                 texteditorInfo.top = texteditorInfo.focus
@@ -928,10 +928,10 @@ function visortxt(handle, flag_edit)
             end
 
             ---- Draw Scroll Bar
-            local ybar,hbar = 70, (limit*26)-2
+            local ybar,hbar = 70, (textlimit*26)-2
             draw.fillrect(950,ybar-2,8,hbar,color.shine)
-            if #texteditorInfo.list > limit then -- Draw Scroll Bar
-                local pos_height = math.max(hbar/#texteditorInfo.list, limit)
+            if #texteditorInfo.list > textlimit then -- Draw Scroll Bar
+                local pos_height = math.max(hbar/#texteditorInfo.list, textlimit)
                 --Bar Scroll
                 draw.fillrect(950, ybar-2 + ((hbar-pos_height)/(#texteditorInfo.list-1))*(texteditorInfo.focus-1), 8, pos_height, color.new(0,255,0))
             end
@@ -981,7 +981,7 @@ function visortxt(handle, flag_edit)
             end
 
             if buttons.l then
-                local tmpTop = texteditorInfo.top - limit
+                local tmpTop = texteditorInfo.top - textlimit
                 if tmpTop < 1 then tmpTop = 1 end
                 if texteditorInfo.top ~= tmpTop then
                     texteditorInfo.focus = tmpTop + (texteditorInfo.focus - texteditorInfo.top)
@@ -990,9 +990,9 @@ function visortxt(handle, flag_edit)
             end
 
             if buttons.r then
-                local tmpTop = texteditorInfo.top + limit
+                local tmpTop = texteditorInfo.top + textlimit
                 if tmpTop <= #texteditorInfo.list then
-                    if tmpTop > #texteditorInfo.list - (limit - 1) then tmpTop = #texteditorInfo.list - (limit - 1) end
+                    if tmpTop > #texteditorInfo.list - (textlimit - 1) then tmpTop = #texteditorInfo.list - (textlimit - 1) end
                     texteditorInfo.focus = tmpTop + (texteditorInfo.focus - texteditorInfo.top)
                     if texteditorInfo.focus > #texteditorInfo.list then texteditorInfo.focus = #texteditorInfo.list end
                     texteditorInfo.top = tmpTop
