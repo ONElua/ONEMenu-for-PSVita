@@ -39,6 +39,7 @@ function theme.load()
 		{name="buttons1",	sprite=true, w=20,h=20},	-- 120*20
 		{name="buttons2",	sprite=true, w=30,h=20},	-- 120*20
 		{name="wifi",		sprite=true, w=22,h=22},	-- 132*22
+		{name="gamecard",	sprite=true, w=18,h=20},	-- 36*20
 
 		{name="psvita"},
 		{name="hbvita"},

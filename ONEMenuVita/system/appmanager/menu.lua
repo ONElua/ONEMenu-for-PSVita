@@ -105,6 +105,14 @@ function blit_icons(i,x1)
 			end
 			appman[cat].list[i].img:blit(x1,y_init,210)--175
 
+			if appman[cat].list[i].dev == "gro0" then
+				if files.exists("gro0:/app/"..appman[cat].list[i].id) then
+					theme.data["gamecard"]:blitsprite(x1,y_init,0,150)
+				else
+					theme.data["gamecard"]:blitsprite(x1,y_init,1,150)
+				end
+			end
+
 			-----------------------------------Mirror-------------------------------------------------------------------
 			if __SLIDES == 100 then
 				appman[cat].list[i].img:flipv()
@@ -165,6 +173,13 @@ function focus_icon()
 
 			appman[cat].list[focus_index].img:blit(100+movx,(y_init - (elev/2)- 35))			-- aqui debo dar mas para q suba mas el focus
 
+			if appman[cat].list[focus_index].dev == "gro0" then
+				if files.exists("gro0:/app/"..appman[cat].list[focus_index].id) then
+					theme.data["gamecard"]:blitsprite(100+movx,(y_init - (elev/2)- 35),0,150)
+				else
+					theme.data["gamecard"]:blitsprite(100+movx,(y_init - (elev/2)- 35),1,150)
+				end
+			end
 			-----------------------------------Mirror-------------------------------------------------------------------
 			appman[cat].list[focus_index].img:flipv()
 				if appman[cat].list[focus_index].img:geth() == 140 then y2_init= y_init+120+10 else y2_init= y_init+100+10 end
@@ -194,6 +209,13 @@ function focus_icon()
 			end
 
 			appman[cat].list[focus_index].img:blit(100+movx,y_init + (elev/2))
+			if appman[cat].list[focus_index].dev == "gro0" then
+				if files.exists("gro0:/app/"..appman[cat].list[focus_index].id) then
+					theme.data["gamecard"]:blitsprite(100+movx,y_init + (elev/2),0,150)
+				else
+					theme.data["gamecard"]:blitsprite(100+movx,y_init + (elev/2),1,150)
+				end
+			end
 
 		end
 

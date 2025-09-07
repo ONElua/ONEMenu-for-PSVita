@@ -196,6 +196,7 @@ function appman.launch()
 					end
 				end
 			end
+			Refresh_Partitions()
 			show_explorer_list()
 		end--to Explorer
 
@@ -1593,7 +1594,6 @@ function submenu_ctx.draw()
 			screen.print(340,h,(appman[cat].list[focus_index].sizef_readdcont or STRINGS_APP_GET_SIZE),1,theme.style.TXTCOLOR,theme.style.TXTBKGCOLOR, __ARIGHT)
 
 		end
-
 	else
 		submenu_ctx.open = false
 	end
